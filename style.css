@@ -65,7 +65,11 @@ header { padding: 2.5rem 3rem 1rem 3rem; }
 .search-bar input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color); padding: 1rem 1rem 1rem 3rem; border-radius: 12px; color: var(--text-primary); }
 .dict-term { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; }
 .dict-kor { color: var(--purple); font-weight: 600; background: rgba(139, 92, 246, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; }
-.dict-meaning { color: var(--text-secondary); line-height: 1.6; margin-top:1rem; }
+.dict-meaning { color: var(--text-secondary); line-height: 1.6; margin-top:1rem; font-size: 0.9rem; }
+.dict-meaning strong { color: var(--text-primary); }
+.textbook-meaning { margin-bottom: 1rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1rem; }
+.easy-meaning { background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; border-left: 3px solid #f59e0b; color: #fef3c7; }
+.easy-meaning strong { color: #fcd34d; margin-bottom: 0.3rem; display: inline-block;}
 .code-container { background: #1e1e1e; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; margin-top: 0.5rem; }
 .code-header { background: #2d2d2d; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444; }
 .copy-prompt-btn { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;}

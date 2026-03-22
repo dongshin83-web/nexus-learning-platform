@@ -84,14 +84,21 @@ domain.add_validator(validator)`
 ];
 
 const dictionaryData = [
-    { term: "Surrogate Model", kor: "대리 모델", meaning: "고비용 수치 해석 시뮬레이터를 대신하여 실시간에 가까운 속도로 근사 결과를 도출하도록 훈련된 AI 모델." },
-    { term: "Residual", kor: "잔차 (오차)", meaning: "AI 모델 예측값을 지배 방정식(PDE)에 대입했을 때 완전히 0이 되지 않고 남는 오류. 모델은 이를 0에 수렴하도록 학습함." },
-    { term: "Automatic Differentiation", kor: "자동 미분", meaning: "신경망 입력 좌표에 대한 출력값의 미분(기울기)을 수학적으로 직접 연산하는 기술." },
-    { term: "Collocation Points", kor: "콜로케이션 포인트", meaning: "물리 법칙 손실을 평가하기 위해 도메인 내부에 흩뿌리는 점들의 집합." },
-    { term: "Zero-shot Generalization", kor: "제로샷 일반화", meaning: "관측되지 않은 새로운 형상/조건이 주어져도 재학습 없이 물리적 해를 예측하는 능력." },
-    { term: "Signed Distance Field", kor: "SDF (거리장)", meaning: "공간의 점이 경계로부터 얼마나 떨어져 있는지 부호로 나타내어 신경망이 3D 형태를 인식하게 돕는 기법." },
-    { term: "Meshless Finite Derivative", kor: "메쉬 없는 유한 차분", meaning: "동적으로 스텐실을 구성해 자동 미분을 대체하고 메모리를 절약하며 수 배 가속하는 기술." },
-    { term: "Digital Twin", kor: "디지털 트윈", meaning: "현실의 물리적 시스템을 컴퓨터 상에 동일하게 구현한 것으로, PhysicsNeMo가 AI 엔진을 제공함." }
+    { term: "Collocation Points", kor: "콜로케이션 포인트 (격자점/배치점)", meaning_textbook: "편미분 방정식(PDE) 잔차 함수를 평가하기 위해 도메인 내부와 경계에 샘플링된 점들의 집합.", meaning_easy: "머신러닝에서 일반적인 '학습 데이터의 Label'이 없는 빈 공간에, \"여기서도 물리 법칙을 지켜!\"라고 감시카메라(점)를 마구 뿌려놓는 것과 같습니다. 이 점들이 많을수록 AI가 농땡이를 피우지 못하고 룰(방정식)을 엄격하게 따르게 됩니다." },
+    { term: "Forward Problem", kor: "순방향 문제", meaning_textbook: "물리 시스템의 초기 조건, 경계 조건 및 지배 방정식의 매개변수가 모두 주어졌을 때, 시스템의 숨겨진 상태나 최종 결과(해)를 예측하는 문제.", meaning_easy: "게임 엔진에서 물리 엔진의 세팅값(중력, 마찰력, 물체 무게 등)을 모두 하드코딩해 넣은 뒤, \"이 상태에서 공을 던지면 어디로 떨어질까?\"를 시뮬레이션하는 가장 기본적인 '결과 예측' 과정입니다." },
+    { term: "Inverse Problem", kor: "역방향 문제", meaning_textbook: "관측된 결과 데이터(측정값)를 바탕으로, 그 결과를 만들어낸 물리 시스템의 알 수 없는 초기 조건, 경계 조건 또는 매개변수(예: 유체 점성, 열 확산률)를 역으로 추정하는 문제.", meaning_easy: "시스템 로그(결과 데이터)만 보고 역추적하여 \"도대체 어떤 환경 설정값(원인 매개변수) 때문에 이런 결과가 나왔을까?\"를 찾아내는 디버깅 및 원인 분석 과정과 같습니다. PINN은 코드를 거의 바꾸지 않고도 순방향과 역방향 문제를 동일하게 풀 수 있어 각광받습니다." },
+    { term: "Nondimensionalization", kor: "무차원화", meaning_textbook: "물리 방정식의 변수들을 특성 척도(Characteristic scale)로 나누어 물리적 단위(kg, m, s 등)를 제거하고, 스케일링된 형태로 모델 손실 함수에 통합하여 안정성을 높이는 수학적 기법.", meaning_easy: "딥러닝에서 데이터 스케일이 제각각이면 학습이 터져버리므로 적용하는 MinMaxScaler나 StandardScaler의 물리 버전입니다. 압력 100만(Pa)과 길이 0.01(m)을 그대로 신경망에 넣으면 그래디언트 폭발이 일어나므로, 단위를 떼고 0과 1 사이의 비율로 스케일을 맞추는 필수 전처리입니다." },
+    { term: "Boundary Condition (BC)", kor: "경계 조건", meaning_textbook: "미분 방정식을 풀 때, 해석하고자 하는 시공간적 도메인의 경계(테두리)에서 반드시 만족해야 하는 물리적 상태나 값.", meaning_easy: "게임 맵(Domain)의 '투명 벽'이나 '끝부분'에서 일어나는 하드코딩된 규칙입니다. \"이 벽의 온도는 항상 100도다(Dirichlet BC)\" 혹은 \"이 벽으로는 열이 빠져나가지 못한다(Neumann BC)\"처럼 시스템의 외곽을 통제하며, AI 모델에게는 MSE 손실 함수의 한 축으로 작용합니다." },
+    { term: "Navier-Stokes Equations", kor: "나비에-스토크스 방정식", meaning_textbook: "점성이 있는 유체의 운동(속도와 압력)을 질량 보존과 운동량 보존의 법칙을 통해 기술하는 비선형 편미분 방정식.", meaning_easy: "물이나 공기가 어떻게 움직이는지 완벽하게 설명하는 '유체역학의 바이블' 같은 공식입니다. 수학적으로 풀기가 너무 악랄해서 기존에는 슈퍼컴퓨터를 갈아 넣어야 했지만, Physics-ML은 이 공식을 AI의 손실 함수(Loss)로 사용하여 치트키처럼 흐름을 예측합니다." },
+    { term: "Fourier Transform / Spectral Layer", kor: "푸리에 변환 / 스펙트럴 레이어", meaning_textbook: "공간이나 시간에 대한 복잡한 신호를 주파수 도메인으로 변환하는 기법으로, 푸리에 신경 연산자(FNO)에서 전역적인 공간 의존성(Global convolution)을 학습하기 위해 사용됨.", meaning_easy: "믹서기에 갈린 스무디(데이터)를 원래의 재료인 딸기, 바나나(주파수)로 분리해내는 마법입니다. 합성곱(CNN)이 이미지의 작은 픽셀(국소적)만 본다면, 푸리에 변환은 맵 전체의 큰 뼈대(저주파)를 한 번에 싹 훑기 때문에 연산 속도가 미친 듯이 빨라집니다." },
+    { term: "Reynolds Number (Re)", kor: "레이놀즈 수", meaning_textbook: "유체 유동에서 관성력(Inertial force)과 점성력(Viscous force)의 비율을 나타내는 무차원 수로, 층류(Laminar)와 난류(Turbulent)를 구분하는 기준.", meaning_easy: "유체가 '얌전하게 흐르는가(꿀)' 아니면 '미친 듯이 소용돌이치며 흐르는가(폭포수)'를 나타내는 '시뮬레이션 난이도 수치'입니다. 이 숫자가 커질수록 난류가 심해져 AI가 예측하기 매우 까다로워지며, 모델의 한계 성능을 테스트하는 주요 지표가 됩니다." },
+    { term: "Meshless Method", kor: "무격자 (메쉬리스) 기법", meaning_textbook: "도메인을 요소(Elements)나 격자(Grid)로 분할(Meshing)하지 않고, 신경망과 자동 미분을 활용해 연속적인 시공간 좌표에서 편미분 방정식을 직접 푸는 수치 해석 방법.", meaning_easy: "3D 그래픽스에서 물체를 수많은 다각형(폴리곤 메쉬)으로 복잡하게 쪼개어 계산하는 대신, 허공의 아무 좌표(x, y, t)나 찔러 넣으면 정답이 나오는 함수 자체를 만드는 방식입니다. 끔찍한 메쉬 생성 막노동을 없애주어 PINN이 사랑받는 가장 큰 이유입니다." },
+    { term: "Partial Differential Equation (PDE)", kor: "편미분 방정식", meaning_textbook: "여러 개의 독립 변수(공간 좌표, 시간 등)에 대한 다변수 함수의 편미분을 포함하는 방정식으로, 물리량의 시공간적 변화율과 상호작용을 기술.", meaning_easy: "우주 만물의 변화를 다루는 '규칙 기반의 룰셋(Rule-set)'입니다. 일반 비전 AI가 고양이 사진의 '정답 픽셀'을 찾는다면, Physics-ML은 이 PDE라는 룰셋을 정답지(Loss) 대신 사용하여 \"이 룰을 어기지 않는 최적의 값을 찾아라!\"라고 학습합니다." },
+    { term: "Surrogate Model", kor: "대리 모델 (대체 모델)", meaning_textbook: "계산 비용이 막대한 전통적인 고정밀 수치 해석 시뮬레이터를 대신하여, 근사적인 결과를 실시간에 가까운 속도로 도출하도록 훈련된 AI/ML 모델.", meaning_easy: "복잡한 수학 증명 문제를 며칠에 걸려 푸는 '수학 교수님(기존 시뮬레이터)'의 패턴을 완벽히 모방하도록 학습된 '초고속 챗봇(AI)'입니다. 정확도는 기존 방식과 유사하지만 속도는 10만 배 빠르기 때문에 수만 번의 설계 옵션을 순식간에 테스트할 때 사용합니다." },
+    { term: "Residual", kor: "잔차 (오차)", meaning_textbook: "AI 모델이 예측한 결과값을 지배 방정식(PDE)에 대입했을 때, 방정식이 완벽히 0이 되지 않고 남는 값.", meaning_easy: "수학 시험에서 모델이 제출한 답안으로 '검산'을 했을 때 양변이 딱 맞아떨어지지 않고 남는 '오답의 크기'입니다. Physics-ML에서는 이 잔차를 'Loss(손실)' 그 자체로 사용하므로, 잔차를 0으로 깎아나가는 과정이 곧 AI가 물리 법칙을 터득하는 과정입니다." },
+    { term: "Automatic Differentiation (AutoDiff)", kor: "자동 미분", meaning_textbook: "체인 룰(Chain Rule)을 사용하여 컴퓨터 프로그램 연산 그래프상에서 모든 함수의 미분값을 정확하고 메모리 효율적으로 계산하는 알고리즘.", meaning_easy: "일반적인 AI에서는 '오차를 가중치(Weight)로 미분해서 파라미터를 업데이트할 때'만 쓰이는 백엔드 기술입니다. 하지만 Physics-ML에서는 이를 해킹(?)하여 '네트워크의 출력(속도)을 입력 좌표(공간 x, 시간 t)로 직접 미분'하는 데 사용함으로써, 복잡한 물리 방정식(PDE) 계산을 공짜로 처리하는 핵심 치트키입니다." },
+    { term: "Signed Distance Field (SDF)", kor: "부호 있는 거리장", meaning_textbook: "공간 상의 특정 점이 기하학적 형상의 경계(표면)로부터 얼마나 직교하여 떨어져 있는지를 계산하고, 내부와 외부를 부호(+, -)로 나타낸 공간 인코딩 스칼라 장.", meaning_easy: "맵의 모든 위치 좌표에 \"가장 가까운 벽까지의 거리\"를 적어놓은 네비게이션 데이터입니다. AI가 3D 물체(예: 자동차)의 복잡한 모양을 픽셀이 아니라 \"여긴 차 표면에서 2cm 떨어졌구나\"라는 거리 정보로 입체감을 이해하게 돕는 필수 기법입니다. (경계면 근처의 학습 가중치를 조절할 때도 쓰입니다)." },
+    { term: "Neural Operator", kor: "신경 연산자", meaning_textbook: "유한 차원의 유클리드 공간 매핑이 아닌, 무한 차원의 함수 공간(Function spaces) 사이의 매핑(Operator) 자체를 학습하여 데이터 해상도나 격자에 독립적인 예측을 수행하는 신경망 아키텍처.", meaning_easy: "특정 해상도(예: 100x100 픽셀)의 배열 사이즈에 하드코딩된 일반 딥러닝 모델과 달리, '수식 변환기' 자체를 학습한 모델입니다. 비트맵 이미지가 아니라 벡터 이미지 작동하여, 한 번 훈련시키면 나중에 해상도를 무한대로 늘려 쿼리해도 재학습 없이 바로 결과를 뱉어내는 궁극의 아키텍처입니다." }
 ];
 
 const codeSnippet = `import torch
@@ -264,7 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="dict-card">
                     <h3 class="dict-term">${item.term}</h3>
                     <span class="dict-kor">${item.kor}</span>
-                    <p class="dict-meaning">${item.meaning}</p>
+                    <p class="dict-meaning textbook-meaning"><i class='bx bx-book-open'></i> <strong>교과서적 의미:</strong><br>${item.meaning_textbook}</p>
+                    <div class="dict-meaning easy-meaning"><i class='bx bx-bulb' style="color: #fcd34d;"></i> <strong>엔지니어용 쉬운 비유:</strong><br>${item.meaning_easy}</div>
                 </div>
             `;
         });
@@ -274,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('term-search');
     searchInput.addEventListener('input', (e) => {
         const q = e.target.value.toLowerCase();
-        renderDict(dictionaryData.filter(i => i.term.toLowerCase().includes(q) || i.kor.toLowerCase().includes(q) || i.meaning.toLowerCase().includes(q)));
+        renderDict(dictionaryData.filter(i => i.term.toLowerCase().includes(q) || i.kor.toLowerCase().includes(q) || i.meaning_textbook.toLowerCase().includes(q) || i.meaning_easy.toLowerCase().includes(q)));
     });
 
     // 4. Render Code Snippet
