@@ -143,6 +143,47 @@ const effectsData = [
     }
 ];
 
+    const measurementData = [
+        {
+            title: "광학적 기판 곡률 측정 (Wafer Curvature)",
+            icon: "bx-bullseye",
+            content: "<p>박막 증착 전후의 기판(Wafer) 곡률 반경 변화를 레이저 스캐닝 등으로 측정합니다. 측정된 변화량은 <strong>스토니 공식(Stoney Equation)</strong>에 대입되어 기판의 물성과 두께 정보만으로 거시적 잔류 응력을 도출합니다.</p><ul><li><strong>장점:</strong> 소자에 손상을 주지 않는 완전 비파괴 검사이자 넓은 면적의 인-시튜(In-situ) 실시간 측정이 가능해 산업계 표준으로 쓰입니다.</li><li><strong>한계점:</strong> 위치별 국부적 응력 분포를 파악하기 불가능하고, 휨이 비구형(안장 형태)일 경우 오차가 발생하며 깊이 방향 구배를 알 수 없습니다.</li></ul>"
+        },
+        {
+            title: "미세 기계 가공 포인터 (Micro-machined Pointers)",
+            icon: "bx-compass",
+            content: "<p>기판에서 분리된(Released) 독립적인 미세 구조물(브릿지, 링, 포인터 등)을 제작하여, 내재된 응력이 구조물을 변형시키는 현상을 시각적으로 기하학적 증폭시킵니다.</p><ul><li><strong>Guckel 링 & 포인터:</strong> 응력에 의한 미세한 힘을 포인터 빔의 거시적인 회전이나 링의 좌굴(Buckling)로 변환시켜 고해상도로 응력을 역산합니다.</li><li><strong>활용 가치:</strong> 초소형 면적에서의 국부적 인장/압축 응력을 정밀 매핑하거나 외팔보(Cantilever) 휨을 통해 두께 방향 응력 구배(Stress Gradient)를 얻는 필수 기술입니다.</li></ul>"
+        },
+        {
+            title: "X-선 회절 분석 (XRD)",
+            icon: "bx-scan",
+            content: "<p>단파장의 X-선을 결정질 박막에 조사하여 <strong>브래그 법칙(Bragg's Law)</strong>에 따른 회절 패턴을 분석합니다. 격자 상수($d$)의 미세한 변형이 회절 피크의 이동(Shift)으로 나타나 절대 응력으로 환산됩니다.</p><ul><li><strong>강점:</strong> 응력 측정과 더불어 상변태, 결정립 크기 등 재료의 미세구조적 진화를 동시에 분석할 수 있는 독보적 비파괴 기법입니다.</li><li><strong>주요 기능:</strong> 나노 스케일의 변형률을 정확히 읽어내며, 입사각 조절을 통해 박막 특정 깊이의 표면 응력을 선택적으로 타겟팅할 수 있습니다.</li></ul>"
+        },
+        {
+            title: "미세 압입 및 홀 드릴링",
+            icon: "bx-target-lock",
+            content: "<p><strong>홀 드릴링</strong>과 <strong>미세 압입</strong>을 통해 박막 표면에 기계적 결함을 인가하고, 체적이 이완되며 주변 재료가 겪는 변형률(Load-displacement)을 측정하여 원래 응력을 역산합니다.</p><ul><li><strong>단점:</strong> 표면에 물리적 흔적을 남기는 파괴적(Destructive) 검사 방식입니다.</li><li><strong>핵심 가치:</strong> 깊이를 늘리며 데이터를 수집할 수 있어 곡률 파악이 힘든 정밀한 '깊이별 잔류 응력 프로파일(Through-thickness Profile)' 확보에 가장 용이합니다.</li></ul>"
+        }
+    ];
+
+    const modelingData = [
+        {
+            title: "열-구조 연성 FEM 해석",
+            icon: "bx-cube",
+            content: "<p>공정 중 발생하는 온도 구배, 탄소성 변형, 상변태 등 다물리적(Multi-physics) 현상을 연계하여 3차원 공간상에서 응력 분포와 균열을 사전에 예측합니다.</p><ul><li>하지만 수십만 개의 층상 모델을 해석해야 하는 경우 연산에만 수일이 소요되는 속도 한계가 존재합니다.</li></ul>"
+        },
+        {
+            title: "물리 기반 기계학습(PINN) 시뮬레이션",
+            icon: "bx-network-chart",
+            content: "<p>강력한 연산 속도를 위해 물리적 법칙(지배 방정식)과 경계 조건을 손실 함수에 내재화한 <strong>인공지능 신경망(Physics-Informed Neural Network)</strong>이 도입되었습니다.</p><ul><li>비선형적 시공간 응력 분포 예측 속도를 대폭 단축하며, 실험계 기반의 딥러닝과 달리 물리적으로 타당한 예측 신뢰성을 입증합니다.</li></ul>"
+        },
+        {
+            title: "능동적 디지털 트윈(Digital Twin) 제어",
+            icon: "bx-share-alt",
+            content: "<p>훈련된 AI 시뮬레이션 모델을 실제 센서 모니터링 데이터와 통합하면 완벽한 '디지털 트윈'을 구축할 수 있습니다.</p><ul><li>공정 중 이상 변수를 감지하고 기하학적 뒤틀림을 보상하는 예측 파라미터 궤적을 즉각 반영하여 잔류 응력을 스스로 억제하는 스마트 다이내믹 제조를 달성합니다.</li></ul>"
+        }
+    ];
+
 document.addEventListener('DOMContentLoaded', () => {
     // Generic Render Function
     function renderSection(gridId, data) {
@@ -166,6 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSection('thinfilm-grid', thinfilmData);
     renderSection('mechanism-grid', mechanismData);
     renderSection('effects-grid', effectsData);
+    renderSection('measurement-grid', measurementData);
+    renderSection('modeling-grid', modelingData);
 
     // Navigation Logic
     const navLinks = document.querySelectorAll('.nav-links li');
@@ -177,8 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'overview-section': { title: 'Core Overview', sub: '잔류 응력의 핵심 개념 및 요약' },
         'thinfilm-section': { title: 'Thin Film Processes', sub: '반도체·디스플레이 구동 로직 및 증착 공정별 응력 기구' },
         'mechanism-section': { title: 'Mechanisms', sub: '다물리적 발생 메커니즘 심층 분석' },
-        'effects-section': { title: 'Effects & Impacts', sub: '구조물의 수명과 변형에 미치는 영향' },
-        'modeling-section': { title: 'AI & Simulation', sub: 'PINN 및 유한요소해석 기반 디지털 트윈' }
+        'effects-section': { title: 'Effects & Impacts', sub: '구조물의 수명과 변형에 미치는 치명적인 영향' },
+        'measurement-section': { title: 'Measurement Methods', sub: '미세구조 및 스크래치를 통한 응력 측정/평가 기술' },
+        'modeling-section': { title: 'AI & Simulation', sub: 'PINN 및 유한요소해석 기반 다물리 시뮬레이션과 디지털 트윈' }
     };
 
     navLinks.forEach(link => {
