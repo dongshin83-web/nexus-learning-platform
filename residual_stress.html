@@ -21,9 +21,44 @@
         
         .overview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
+        }
+
+        /* 2-Column Layout for Sections with Infographics */
+        .section-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: start;
+            margin-top: 1.5rem;
+        }
+        
+        .infographic-column {
+            position: sticky;
+            top: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .infographic-column img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .section-layout {
+                grid-template-columns: 1fr;
+            }
+            .infographic-column {
+                position: static;
+            }
         }
         
         .overview-card {
@@ -177,22 +212,29 @@
                         </div>
                     </div>
                     
-                    <!-- Infographic Banner for Overview -->
-                    <div class="infographic-banner" style="margin-top: 1.5rem;">
-                        <img src="info1.jpg" alt="마이크로/나노 시스템 인포그래픽" style="width:100%; height:auto; border-radius: calc(var(--radius) + 4px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.25); display:block; object-fit: contain; max-height: 500px; background: rgba(0,0,0,0.2);" onerror="this.style.display='none'">
-                    </div>
+                    <div class="section-layout">
+                        <!-- Infographic Column (Left) -->
+                        <div class="infographic-column">
+                            <img src="info1.jpg" alt="마이크로/나노 시스템 인포그래픽" onerror="this.parentElement.style.display='none'">
+                        </div>
 
-                    <div class="overview-grid" id="overview-grid">
-                        <!-- Populated by JS -->
+                        <!-- Cards Column (Right) -->
+                        <div class="overview-grid" id="overview-grid" style="margin-top: 0;">
+                            <!-- Populated by JS -->
+                        </div>
                     </div>
                 </section>
 
                 <section id="thinfilm-section" class="content-section">
-                    <!-- Infographic Banner for Thin Film -->
-                    <div class="infographic-banner" style="margin-bottom: 1.5rem;">
-                        <img src="info2.jpg" alt="반도체/디스플레이 박막 공정 인포그래픽" style="width:100%; height:auto; border-radius: calc(var(--radius) + 4px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.25); display:block; object-fit: contain; max-height: 500px; background: rgba(0,0,0,0.2);" onerror="this.style.display='none'">
+                    <div class="section-layout">
+                        <!-- Infographic Column (Left) -->
+                        <div class="infographic-column">
+                            <img src="info2.jpg" alt="반도체/디스플레이 박막 공정 인포그래픽" onerror="this.parentElement.style.display='none'">
+                        </div>
+
+                        <!-- Cards Column (Right) -->
+                        <div class="overview-grid" id="thinfilm-grid" style="margin-top: 0;"></div>
                     </div>
-                    <div class="overview-grid" id="thinfilm-grid"></div>
                 </section>
 
                 <section id="mechanism-section" class="content-section">
