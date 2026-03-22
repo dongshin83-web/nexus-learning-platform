@@ -93,12 +93,17 @@
 
                 <!-- Section 4: Code Snippet -->
                 <section id="code-section" class="content-section">
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-tab="config">config.yaml</button>
+                        <button class="tab-btn" data-tab="geometry">geometry_pde.py</button>
+                        <button class="tab-btn" data-tab="main">main.py</button>
+                    </div>
                     <div class="code-container">
                         <div class="code-header">
-                            <span>physicsnemo_2d_pinn.py</span>
+                            <span id="code-filename">conf/config.yaml</span>
                             <button id="copy-btn"><i class='bx bx-copy'></i> Copy</button>
                         </div>
-                        <pre><code class="language-python" id="code-block"></code></pre>
+                        <pre><code class="language-yaml" id="code-block"></code></pre>
                     </div>
                 </section>
 

@@ -101,74 +101,126 @@ const dictionaryData = [
     { term: "Neural Operator", kor: "신경 연산자", meaning_textbook: "유한 차원의 유클리드 공간 매핑이 아닌, 무한 차원의 함수 공간(Function spaces) 사이의 매핑(Operator) 자체를 학습하여 데이터 해상도나 격자에 독립적인 예측을 수행하는 신경망 아키텍처.", meaning_easy: "특정 해상도(예: 100x100 픽셀)의 배열 사이즈에 하드코딩된 일반 딥러닝 모델과 달리, '수식 변환기' 자체를 학습한 모델입니다. 비트맵 이미지가 아니라 벡터 이미지 작동하여, 한 번 훈련시키면 나중에 해상도를 무한대로 늘려 쿼리해도 재학습 없이 바로 결과를 뱉어내는 궁극의 아키텍처입니다." }
 ];
 
-const codeSnippet = `import torch
-from sympy import Symbol
-from modulus.sym.hydra import ModulusConfig
-import modulus.sym.main
-from modulus.sym.geometry.primitives_2d import Rectangle
-from modulus.sym.eq.pdes.navier_stokes import NavierStokes
-from modulus.sym.models.fully_connected import FullyConnectedArch
-from modulus.sym.models.activation import Activation
-from modulus.sym.key import Key
-from modulus.sym.domain import Domain
-from modulus.sym.domain.constraint import PointwiseBoundaryConstraint, PointwiseInteriorConstraint
-from modulus.sym.solver import Solver
+const codeSnippets = {
+    'config': {
+        filename: 'conf/config.yaml',
+        language: 'language-yaml',
+        code: `# ==========================================
+# 파일명: conf/config.yaml
+# ==========================================
+defaults:
+  - modulus_default
+  - scheduler: tf_exponential_lr
+  - optimizer: adam
+  - loss: sum
+  - _self_
 
-# [A] Configuration 로드: Hydra를 사용하여 conf/config.yaml의 설정을 주입합니다.
-@modulus.sym.main(config_path="conf", config_name="config")
-def run(cfg: ModulusConfig):
+# 학습률(Learning Rate) 감소 스케줄러 설정
+scheduler:
+  decay_rate: 0.95      # 0.95 비율로 학습률을 점진적으로 줄입니다.
+  decay_steps: 2000     # 매 2000 스텝마다 학습률 감소가 일어납니다.
+
+# 모델 훈련 관련 파라미터 설정
+training:
+  max_steps: 100000         # 총 학습 스텝 수입니다.
+  rec_results_freq: 1000    # 매 1000 스텝마다 TensorBoard 및 VTK 결과를 저장합니다.
+  save_network_freq: 1000   # 매 1000 스텝마다 모델 체크포인트(가중치)를 저장합니다.
+  print_stats_freq: 100     # 매 100 스텝마다 콘솔에 손실(Loss) 통계를 출력합니다.
+
+# 모델 아키텍처 설정 (Fully Connected Neural Network)
+arch:
+  fully_connected:
+    layer_size: 512         # 각 은닉층(Hidden Layer)의 뉴런 수입니다.
+    nr_layers: 6            # 총 은닉층의 개수입니다.`
+    },
+    'geometry': {
+        filename: 'geometry_pde.py',
+        language: 'language-python',
+        code: `# ==========================================
+# 파일명: geometry_pde.py
+# ==========================================
+from physicsnemo.sym.geometry.primitives_2d import Rectangle
+from physicsnemo.sym.eq.pdes.navier_stokes import NavierStokes
+from physicsnemo.sym.models.fully_connected import FullyConnectedArch
+from physicsnemo.sym.models.activation import Activation
+from physicsnemo.sym.key import Key
+
+def get_geometry_and_nodes(cfg):
+    """기하학적 형태(Geometry)와 계산 노드(방정식+신경망)를 생성하여 반환합니다."""
     
-    # [B] 신경망 모델(Architecture) 정의
-    # 입력(x, y)을 받아 출력(u, v, p)을 예측하는 완전 연결 신경망(FCNN)을 생성합니다.
+    # 1. 기하학적 형상(Geometry) 정의: (0, 0)에서 (0.1, 0.1)까지의 2D 사각형
+    rec = Rectangle((0, 0), (0.1, 0.1))
+    
+    # 2. 지배 방정식(PDE) 정의: 비압축성 나비에-스토크스 방정식
+    # nu: 동점성계수(Kinematic viscosity), rho: 밀도(Density), time=False: 정상 상태
+    ns = NavierStokes(nu=0.01, rho=1.0, dim=2, time=False)
+    
+    # 3. 신경망(Neural Network) 아키텍처 정의
+    # 활성화 함수로는 2차 미분이 가능한 SiLU(Swish)를 사용 (ReLU 불가)
     flow_net = FullyConnectedArch(
         input_keys=[Key("x"), Key("y")],
         output_keys=[Key("u"), Key("v"), Key("p")],
-        layer_size=512,
-        nr_layers=6,
-        activation_fn=Activation.SILU # 2차 미분을 위해 ReLU 대신 SiLU 사용
+        activation_fn=Activation.SILU 
     )
     
-    # [C] 기하학적 형상(Geometry) 및 지배 방정식(PDE) 정의
-    # 1. 2D 사각형 도메인 생성 (가로세로 0~0.1)
-    rec = Rectangle((0, 0), (0.1, 0.1))
-    
-    # 2. 비압축성 나비에-스토크스 방정식 호출 (동점성계수 nu, 밀도 rho 설정)
-    ns = NavierStokes(nu=0.01, rho=1.0, dim=2, time=False)
-    
-    # 3. 모델과 방정식에서 사용할 연산 노드(Node)들을 결합하여 추론 그래프 생성
+    # 4. 연산 노드(Nodes) 결합
     nodes = ns.make_nodes() + [flow_net.make_node(name="flow_network")]
     
-    # [D] 제약 조건(Constraints) 추가
-    # 1. 경계 조건 (Boundary Condition): 위쪽 벽이 1m/s로 움직인다고 가정 (Lid-Driven Cavity)
+    return rec, nodes`
+    },
+    'main': {
+        filename: 'main.py',
+        language: 'language-python',
+        code: `# ==========================================
+# 파일명: main.py
+# 실행 방법: python main.py
+# ==========================================
+from sympy import Symbol
+import physicsnemo.sym.main
+from physicsnemo.sym.domain import Domain
+from physicsnemo.sym.domain.constraint import PointwiseBoundaryConstraint, PointwiseInteriorConstraint
+from physicsnemo.sym.solver import Solver
+from geometry_pde import get_geometry_and_nodes
+
+# Hydra 설정을 불러오는 데코레이터입니다. 'conf' 폴더 안의 'config.yaml'을 읽어옵니다.
+@physicsnemo.sym.main(config_path="conf", config_name="config")
+def run(cfg):
+    # 1. Geometry와 Nodes 초기화
+    rec, nodes = get_geometry_and_nodes(cfg)
+    x, y = Symbol("x"), Symbol("y")
+    
+    # 2. 도메인(Domain) 객체 생성
+    domain = Domain()
+    
+    # 3. 제약 조건 - 경계 조건 (Lid-Driven Cavity. 위쪽 벽면 u=1.0)
     top_wall = PointwiseBoundaryConstraint(
         nodes=nodes,
         geometry=rec,
-        outvar={"u": 1.0, "v": 0.0}, # 목표 출력값 설정
+        outvar={"u": 1.0, "v": 0.0},     # 예측해야 할 정답 값
         batch_size=1000,
-        criteria=Symbol("y") == 0.1  # y=0.1인 위쪽 벽면만 샘플링
+        criteria=y == 0.1                # 위쪽 벽만 선택
     )
+    domain.add_constraint(top_wall, "top_wall")
     
-    # 2. 내부 조건 (Interior Constraint): 도메인 내부에서 PDE 잔차가 0이 되도록 강제
+    # 4. 제약 조건 - 내부 PDE 조건 (잔차=0 강제)
     interior = PointwiseInteriorConstraint(
         nodes=nodes,
         geometry=rec,
-        outvar={"continuity": 0, "momentum_x": 0, "momentum_y": 0}, # PDE 잔차=0
+        outvar={"continuity": 0, "momentum_x": 0, "momentum_y": 0},
         batch_size=4000,
-        bounds={Symbol("x"): (0, 0.1), Symbol("y"): (0, 0.1)},
-        lambda_weighting={"continuity": 1.0, "momentum_x": "sdf", "momentum_y": "sdf"} # SDF 가중치 적용
+        # [매우 중요] SDF 가중치 적용 (벽면 근처 기울기 발산 방지)
+        lambda_weighting={"continuity": 1.0, "momentum_x": "sdf", "momentum_y": "sdf"}
     )
-    
-    # [E] 도메인(Domain) 구성 및 솔버(Solver) 실행
-    domain = Domain()
-    domain.add_constraint(top_wall, "top_wall")
     domain.add_constraint(interior, "interior")
     
-    # 훈련 루프 실행
+    # 5. Solver 초기화 및 훈련 시작
     solver = Solver(cfg, domain)
     solver.solve()
 
 if __name__ == "__main__":
-    run()`;
+    run()`
+    }
+};
 
 const tuningData = [
     { title: "SDF 공간적 가중치 (Spatial Weighting)", issue: "벽면(Boundary)에서 속도가 급격히 변하는 불연속성으로 인해 학습 초기에 그래디언트가 폭발하거나 수렴이 지연됨.", solution: "경계면으로부터의 거리(SDF)에 비례하여 PDE 손실 가중치(lambda_weighting)를 부여합니다. 벽면 근처는 가중치를 줄이고, 내부 중앙은 가중치를 높여 방정식 학습에 집중시킵니다.", icon: "bx-outline" },
@@ -287,11 +339,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Render Code Snippet
     const codeBlock = document.getElementById('code-block');
-    codeBlock.textContent = codeSnippet;
-    hljs.highlightElement(codeBlock);
+    const codeFilename = document.getElementById('code-filename');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    
+    let currentSnippetCode = '';
+
+    function switchCodeTab(tabId) {
+        tabBtns.forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+        
+        const data = codeSnippets[tabId];
+        codeFilename.textContent = data.filename;
+        codeBlock.className = data.language;
+        codeBlock.textContent = data.code;
+        currentSnippetCode = data.code;
+        
+        codeBlock.removeAttribute('data-highlighted');
+        hljs.highlightElement(codeBlock);
+    }
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            switchCodeTab(e.target.getAttribute('data-tab'));
+        });
+    });
+
+    if (tabBtns.length > 0) switchCodeTab('config'); // Initialize
 
     document.getElementById('copy-btn').addEventListener('click', () => {
-        navigator.clipboard.writeText(codeSnippet);
+        navigator.clipboard.writeText(currentSnippetCode);
         const btn = document.getElementById('copy-btn');
         btn.innerHTML = "<i class='bx bx-check'></i> Copied!";
         setTimeout(() => btn.innerHTML = "<i class='bx bx-copy'></i> Copy", 2000);
