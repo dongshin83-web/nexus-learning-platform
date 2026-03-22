@@ -144,12 +144,12 @@ header { padding: 2.5rem 3rem 1rem 3rem; }
 
 .agent-output { margin-top: 2rem; display: none; }
 .agent-output.visible { display: block; animation: fadeIn 0.4s ease forwards; }
-.prompt-box { background: #1e1e1e; padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); position: relative; margin-bottom: 1.5rem; }
+.prompt-box { background: #1e1e1e; padding: 3.5rem 1.5rem 1.5rem 1.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); position: relative; margin-bottom: 1.5rem; }
 .prompt-box pre { white-space: pre-wrap; font-family: Consolas, monospace; color: #e2e8f0; line-height: 1.5; font-size: 0.85rem; max-height: 400px; overflow-y: auto;}
 
 .notebook-guide { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 1.5rem; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.notebook-guide p { color: #bfdbfe; font-size: 0.95rem; margin: 0; display: flex; align-items: center; gap: 0.5rem; line-height: 1.5; flex: 1; }
-.notebook-guide p i { font-size: 1.2rem; color: var(--blue); }
+.notebook-guide p { color: #bfdbfe; font-size: 0.95rem; margin: 0; display: block; line-height: 1.6; flex: 1; }
+.notebook-guide p i { font-size: 1.2rem; color: var(--blue); margin-right: 0.4rem; vertical-align: baseline; top: 2px; position:relative; }
 .notebook-link-btn { background: var(--blue); color: #fff; text-decoration: none; padding: 0.8rem 1.2rem; border-radius: 8px; font-weight: 800; font-size: 0.9rem; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
 .notebook-link-btn:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
 
