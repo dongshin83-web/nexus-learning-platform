@@ -50,7 +50,7 @@ const thinfilmData = [
         title: "마이크로 및 나노 시스템(MNS)의 박막 응력 기원",
         icon: "bx-microchip",
         content: `
-            <p><strong>외인성 응력 (Extrinsic Stress):</strong> 주로 기판과 박막 간의 열팽창 계수(TCE) 불일치에 기인합니다. 고온 증착 후 냉각 과정에서 수축률 차이 발생 시, 박막의 TCE가 크면 인장 응력(+), 기판이 크면 압축 응력(-)이 발생합니다.</p>
+            <p><strong>외인성 응력 (Extrinsic Stress):</strong> 주로 기판과 박막 간의 열팽창 계수(CTE) 불일치에 기인합니다. 고온 증착 후 냉각 과정에서 수축률 차이 발생 시, 박막의 CTE가 크면 인장 응력(+), 기판이 크면 압축 응력(-)이 발생합니다.</p>
             <p><strong>내인성 응력 (Intrinsic Stress):</strong> 격자 불일치(Lattice Mismatch), 결정립 경계 및 불순물 혼입 등의 미세 구조적 결함으로 인해 발생합니다.</p>
         `
     },
@@ -99,8 +99,8 @@ const mechanismData = [
         content: `
             <p>서로 다른 물리적 특성을 가진 재료 간의 인터랙션에 의해 외부 공과정에서 발생합니다.</p>
             <ul>
-                <li><strong>열팽창 계수(TCE) 미스매치:</strong> 공정 온도(예: CVD 고온)에서 상온으로 냉각될 때 기판과 박막은 서서히 수축합니다.</li>
-                <li><strong>수축률 차이:</strong> 박막이 기판보다 더 수축하려고 하면(TCE_film > TCE_sub), 기판이 이를 억제하므로 박막 내부에는 <strong>인장 응력(Tensile)</strong>이 걸립니다. 반대의 경우에는 <strong>압축 응력(Compressive)</strong>이 걸립니다.</li>
+                <li><strong>열팽창 계수(CTE) 미스매치:</strong> 공정 온도(예: CVD 고온)에서 상온으로 냉각될 때 기판과 박막은 서서히 수축합니다.</li>
+                <li><strong>수축률 차이:</strong> 박막이 기판보다 더 수축하려고 하면(CTE_film > CTE_sub), 기판이 이를 억제하므로 박막 내부에는 <strong>인장 응력(Tensile)</strong>이 걸립니다. 반대의 경우에는 <strong>압축 응력(Compressive)</strong>이 걸립니다.</li>
             </ul>
         `
     },
