@@ -7,12 +7,80 @@ const theoryData = [
 ];
 
 const workflowData = [
-    { step: 1, title: "환경 세팅 및 인프라 구축", action: "딥러닝 라이브러리(PyTorch, CUDA, NCCL, PhysicsNeMo)를 설치합니다.", note: "프로덕션 환경에서는 NVIDIA NGC 컨테이너 사용이 강력히 권장됩니다.", icon: "bx-server" },
-    { step: 2, title: "실험 구성 및 파라미터 정의", action: "conf/config.yaml로 옵티마이저, 훈련 스텝, 모델 크기를 정의합니다.", note: "Hydra를 사용하여 커맨드라인에서 변수를 쉽게 제어할 수 있습니다.", icon: "bx-slider-alt" },
-    { step: 3, title: "기하학적 도메인 및 PDE 정의", action: "시뮬레이션 대상의 형태와 적용될 물리 법칙을 선언합니다.", note: "안정적인 학습을 위해 물리량을 단위 없는 상태로 스케일링하는 무차원화 필수.", icon: "bx-shape-polygon" },
-    { step: 4, title: "제약 조건 / 손실 함수 구성", action: "신경망이 학습할 기준점을 도메인에 샘플링하여 배치합니다.", note: "SDF(Signed Distance Field) 가중치를 적용해 학습 수렴 속도를 높여야 합니다.", icon: "bx-target-lock" },
-    { step: 5, title: "도메인 조립 및 훈련 실행", action: "제약 조건, 트레이너 등을 Domain에 추가하고 Solver를 실행합니다.", note: "TF32 켜기, CUDA Graphs 활용, 도메인 병렬화(ShardTensor) 적용", icon: "bx-play-circle" },
-    { step: 6, title: "결과 시각화 및 모델 추론", action: "잔차 수렴 확인 후, 대리 모델로 실제 예측을 수행합니다.", note: "결과 .vtp 파일은 ParaView로 기존 CFD처럼 시각화할 수 있습니다.", icon: "bx-bar-chart-alt-2" }
+    { 
+        step: 1, title: "환경 세팅 및 아키텍처 (Environment)", action: "딥러닝 라이브러리를 설치하고 신경망 아키텍처를 초기화합니다.", note: "클릭하여 상세 구현 가이드 및 코드 보기", icon: "bx-server",
+        goal: "GPU 가속에 최적화된 PhysicsNeMo 환경을 셋업하고, 입력 좌표(x, y, t 등)를 받아 물리량(유속, 압력 등)을 예측하는 신경망 아키텍처를 초기화합니다.",
+        modules: "physicsnemo.sym.models.fully_connected.FullyConnectedArch, physicsnemo.sym.models.activation.Activation",
+        gotchas: "활성화 함수 선택의 오류입니다. 나비에-스토크스 같은 2차 미분이 필요한 방정식(PDE)을 풀 때 ReLU를 사용하면 2차 미분값이 0이 되어 학습이 발산하거나 불가능해집니다. 반드시 무한 번 미분이 가능한 SiLU(Swish)나 Tanh를 사용해야 합니다.",
+        snippet: `from physicsnemo.sym.models.fully_connected import FullyConnectedArch
+from physicsnemo.sym.models.activation import Activation
+
+# 2개의 입력(x,y)을 받아 3개의 출력(u,v,p)을 내는 신경망 생성
+flow_net = FullyConnectedArch(
+    input_keys=[Key("x"), Key("y")], 
+    output_keys=[Key("u"), Key("v"), Key("p")], 
+    activation_fn=Activation.SILU
+)`
+    },
+    { 
+        step: 2, title: "Hydra 기반 파라미터 정의 (Configuration)", action: "config.yaml로 실험의 하이퍼파라미터를 정의합니다.", note: "클릭하여 상세 구현 가이드 및 코드 보기", icon: "bx-slider-alt",
+        goal: "Python 코드 수정 없이 실험의 하이퍼파라미터(학습률, 옵티마이저, 최대 학습 횟수 등)를 config.yaml 파일로 관리하고 동적으로 주입합니다.",
+        modules: "physicsnemo.sym.hydra.ModulusConfig, @physicsnemo.sym.main 데코레이터",
+        gotchas: "설정 파일을 수동으로 파싱하려고 시도하는 것입니다. PhysicsNeMo는 분산 학습 및 로깅 설정이 복잡하게 얽혀 있으므로, 반드시 프레임워크가 제공하는 @physicsnemo.sym.main 데코레이터를 사용하여 안전하게 Configuration을 로드해야 합니다.",
+        snippet: `import physicsnemo.sym.main
+from physicsnemo.sym.hydra import ModulusConfig
+
+@physicsnemo.sym.main(config_path="conf", config_name="config")
+def run(cfg: ModulusConfig):
+    # 이 내부에서 cfg.optimizer, cfg.training.max_steps 등에 접근`
+    },
+    { 
+        step: 3, title: "기하학적 형상 및 PDE 정의 (Geometry & PDE)", action: "시뮬레이션 대상의 도메인 형태와 물리 법칙을 선언합니다.", note: "클릭하여 상세 구현 가이드 및 코드 보기", icon: "bx-shape-polygon",
+        goal: "학습이 이루어질 물리적 공간(Geometry)을 정의하고, 손실 함수로 작용할 물리 법칙(지배 방정식, PDE)을 선언합니다.",
+        modules: "physicsnemo.sym.geometry.primitives_2d.Rectangle, physicsnemo.sym.eq.pdes.navier_stokes.NavierStokes",
+        gotchas: "물리 단위의 무차원화(Nondimensionalization) 생략입니다. 밀도, 점성, 기하학적 크기 등의 스케일 차이가 클 경우, 텐서의 계산 범위가 신경망의 선형 범위를 벗어나 그래디언트가 폭발합니다. 모든 물리량은 0~1 사이의 단위 없는 값으로 스케일링해야 합니다.",
+        snippet: `# 2D 사각형 도메인 생성 및 나비에-스토크스 방정식 초기화
+rec = Rectangle((0, 0), (0.1, 0.1))
+ns = NavierStokes(nu=0.01, rho=1.0, dim=2, time=False)
+
+# 신경망과 PDE를 결합하여 연산 그래프(Nodes) 생성
+nodes = ns.make_nodes() + [flow_net.make_node(name="flow_network")]`
+    },
+    {
+        step: 4, title: "제약 조건 및 손실 함수 샘플링 (Constraints & SDF)", action: "신경망이 학습할 기준점을 도메인 경계와 내부에 샘플링합니다.", note: "클릭하여 상세 구현 가이드 및 코드 보기", icon: "bx-target-lock",
+        goal: "기하학적 형상의 경계(Boundary)와 내부(Interior)에 점(Collocation points)을 뿌려 경계 조건과 PDE 잔차(Residual)가 0이 되도록 강제합니다.",
+        modules: "PointwiseBoundaryConstraint, PointwiseInteriorConstraint",
+        gotchas: "경계면 근처의 급격한 값의 변화로 인한 학습 지연입니다. 이를 방지하기 위해 내부 PDE 손실 함수에 경계로부터의 거리장(SDF)을 가중치로 부여하는 lambda_weighting을 누락하면 안 됩니다. 이를 통해 경계 불연속성 문제를 해결해야 합니다.",
+        snippet: `interior = PointwiseInteriorConstraint(
+    nodes=nodes,
+    geometry=rec,
+    outvar={"continuity": 0, "momentum_x": 0, "momentum_y": 0}, # PDE 잔차가 0이 되도록 강제
+    batch_size=4000,
+    lambda_weighting={"continuity": 1.0, "momentum_x": "sdf", "momentum_y": "sdf"} # SDF 가중치
+)`
+    },
+    {
+        step: 5, title: "도메인 조립 및 Solver 훈련 (Domain & Training)", action: "제약 조건 구성을 모두 마치고 딥러닝 최적화를 실행합니다.", note: "클릭하여 상세 구현 가이드 및 코드 보기", icon: "bx-play-circle",
+        goal: "정의된 모든 제약 조건(Constraints)을 하나의 도메인에 담고, Solver를 실행해 신경망 가중치 최적화 루프를 가동합니다.",
+        modules: "physicsnemo.sym.domain.Domain, physicsnemo.sym.solver.Solver",
+        gotchas: "GPU 병목 현상 방치입니다. PINN 학습은 가벼운 연산을 수없이 반복하므로 CPU가 GPU에 작업을 지시하는 지연 시간(Launch latency)이 병목이 됩니다. config.yaml에서 반드시 CUDA Graphs를 활성화하여 이 오버헤드를 완벽히 제거해야 합니다.",
+        snippet: `domain = Domain()
+domain.add_constraint(interior, "interior") # 도메인에 제약조건 추가
+
+solver = Solver(cfg=cfg, domain=domain)
+solver.solve() # 훈련 루프 시작`
+    },
+    {
+        step: 6, title: "예측 결과 추론 및 시각화 (Inference & Visualization)", action: "모델 예측 정확도를 평가하고 파라뷰(ParaView) 파일을 출력합니다.", note: "클릭하여 상세 구현 가이드 및 코드 보기", icon: "bx-bar-chart-alt-2",
+        goal: "학습 중인 모델의 예측이 정답(또는 실제 물리적 현상)과 얼마나 일치하는지 평가하고 결과를 3D 시각화 포맷으로 추출합니다.",
+        modules: "PointwiseValidator, PointwiseInferencer",
+        gotchas: "출력 파일 확장자와 툴의 미스매치입니다. 초보자들은 텍스트나 일반 이미지 뷰어로 결과를 보려 하지만, PhysicsNeMo가 뱉어내는 검증/추론 데이터는 .vtp 또는 .npz 형식입니다. 결과를 시각화하려면 반드시 ParaView와 같은 전문 과학 데이터 시각화 소프트웨어를 사용해야 합니다.",
+        snippet: `# 검증을 위한 외부 데이터(invar, outvar)와 노드를 매핑하여 Validator 생성
+validator = PointwiseValidator(
+    nodes=nodes, invar=invar_dict, true_outvar=outvar_dict, batch_size=1000
+)
+domain.add_validator(validator)`
+    }
 ];
 
 const dictionaryData = [
@@ -128,18 +196,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Render Workflow Timeline
     const workflowTimeline = document.getElementById('workflow-timeline');
-    workflowData.forEach(item => {
+    workflowData.forEach((item, index) => {
         workflowTimeline.innerHTML += `
-            <div class="timeline-step">
+            <div class="timeline-step" onclick="openImplModal(${index})">
                 <div class="step-icon"><i class='bx ${item.icon}'></i></div>
                 <div class="step-content">
                     <span class="step-number">Step ${item.step}</span>
                     <h3>${item.title}</h3>
                     <p class="step-action">${item.action}</p>
-                    <div class="step-note"><i class='bx bx-info-circle' style="color:var(--purple); margin-right:5px;"></i> ${item.note}</div>
+                    <div class="step-note"><i class='bx bx-pointer' style="color:var(--purple); margin-right:5px;"></i> ${item.note}</div>
                 </div>
             </div>
         `;
+    });
+
+    // 2-1. Modal Logic
+    window.openImplModal = function(index) {
+        const item = workflowData[index];
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <div class="modal-header">
+                <span class="modal-step-badge">Step ${item.step}</span>
+                <h2>${item.title}</h2>
+            </div>
+            
+            <div class="modal-section">
+                <h4><i class='bx bx-bullseye'></i> 핵심 목표</h4>
+                <p>${item.goal}</p>
+            </div>
+            
+            <div class="modal-section">
+                <h4><i class='bx bx-grid-alt'></i> 필수 모듈 / 클래스</h4>
+                <p><code>${item.modules}</code></p>
+            </div>
+            
+            <div class="modal-gotchas">
+                <h4><i class='bx bx-error'></i> 실무 주의사항 (Gotchas)</h4>
+                <p>${item.gotchas}</p>
+            </div>
+            
+            <div class="modal-section" style="margin-top:2rem;">
+                <h4><i class='bx bx-terminal'></i> 최소 작동 코드 (Snippet)</h4>
+                <div class="modal-code-wrapper">
+                    <pre><code class="language-python">${item.snippet}</code></pre>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('impl-modal').classList.add('active');
+        // Re-run highlightjs for dynamically added block
+        const domBlocks = modalBody.querySelectorAll('pre code');
+        domBlocks.forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    };
+    
+    document.getElementById('close-modal').addEventListener('click', () => {
+        document.getElementById('impl-modal').classList.remove('active');
     });
 
     // 3. Render Dictionary Grid
