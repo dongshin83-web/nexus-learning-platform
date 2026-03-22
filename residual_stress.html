@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residual Stress Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Override primary colors for Mechanics Theme */
+        :root {
+            --primary: #10b981; /* Emerald */
+            --primary-hover: #059669;
+            --accent: #34d399;
+        }
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+        
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .overview-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .overview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .overview-card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .overview-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        .overview-card ul {
+            padding-left: 1.5rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        .overview-card li { margin-bottom: 0.5rem; }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            margin-top: 2rem;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.2);
+            margin-bottom: 1rem;
+        }
+        .empty-state h3 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        .empty-state p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-layer' style="color:var(--primary)"></i>
+                <span>Residual Stress</span>
+            </div>
+            
+            <p class="sidebar-category">FOUNDATION</p>
+            <ul class="nav-links">
+                <li class="active" data-target="overview-section">
+                    <i class='bx bx-book-open'></i>
+                    <span>Core Overview</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">DEEP DIVE</p>
+            <ul class="nav-links">
+                <li data-target="thinfilm-section">
+                    <i class='bx bx-layer-plus'></i>
+                    <span>Thin Film Processes</span>
+                </li>
+                <li data-target="mechanism-section">
+                    <i class='bx bx-cog'></i>
+                    <span>Mechanisms</span>
+                </li>
+                <li data-target="effects-section">
+                    <i class='bx bx-line-chart-down'></i>
+                    <span>Effects & Impacts</span>
+                </li>
+                <li data-target="modeling-section">
+                    <i class='bx bx-network-chart'></i>
+                    <span>AI & Simulation</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>Mechanics Module</small>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1 id="page-title">Core Overview</h1>
+                    <p id="page-subtitle">잔류 응력의 핵심 개념 및 시뮬레이션 기반 예측 분석</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                
+                <!-- Section 1: Overview -->
+                <section id="overview-section" class="content-section active">
+                    <div class="notebooklm-banner" style="background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent); border-left-color: var(--primary);">
+                        <div class="notebooklm-info">
+                            <i class='bx bx-brain' style="color:var(--primary);"></i>
+                            <span>이 페이지는 사용자가 <strong>NotebookLM</strong>에서 연구한 결과를 바탕으로 단계적(Step-by-step)으로 조립되는 지식의 거점입니다.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="overview-grid" id="overview-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <section id="thinfilm-section" class="content-section">
+                    <div class="overview-grid" id="thinfilm-grid"></div>
+                </section>
+
+                <section id="mechanism-section" class="content-section">
+                    <div class="overview-grid" id="mechanism-grid"></div>
+                </section>
+
+                <section id="effects-section" class="content-section">
+                    <div class="overview-grid" id="effects-grid"></div>
+                </section>
+
+                <!-- Section 4: Modeling -->
+                <section id="modeling-section" class="content-section">
+                    <div class="empty-state">
+                        <i class='bx bx-time-five'></i>
+                        <h3>데이터 대기 중</h3>
+                        <p>유한요소해석(FEM) 및 물리 정보 신경망(PINN) 기반 예측 모델링에 대한 세부 방법론을 기다리고 있습니다.</p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="residual_stress.js"></script>
+</body>
+</html>
