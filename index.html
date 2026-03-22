@@ -3,120 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhysicsNeMo Learning Dashboard</title>
+    <title>Nexus Learning Platform</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Boxicons for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- Highlight.js for Code Formatting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 </head>
-<body>
-    <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <div class="logo">
-                <i class='bx bx-cube-alt'></i>
-                <span>PhysicsNeMo</span>
+<body class="landing-body">
+    <nav class="top-nav">
+        <div class="nav-brand"><i class='bx bx-brain'></i><span>Nexus Learning Platform</span></div>
+        <div class="nav-links-horiz">
+            <a href="#workflow">The 3-Agent Loop</a>
+            <a href="#topics" class="btn-primary">Explore Modules</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">A Human-AI Symbiosis</div>
+            <h1>주체적 학습을 위한 <span>무한 루프 플랫폼</span></h1>
+            <p>사용자 스스로가 AI 연구자(Agent)가 되어 지식을 탐색하고, 언어모델(NotebookLM)이 이를 집대성하며, 개발 에이전트(저)가 인터랙티브한 대시보드로 영구 보존합니다.</p>
+        </div>
+        <div class="hero-glow"></div>
+    </header>
+
+    <section class="landing-section" id="workflow">
+        <div class="section-header">
+            <h2>The 3-Agent Loop Cycle</h2>
+            <p>질문을 던지고(Step 1), 지식을 합성하고(Step 2), 결과를 구축하는(Step 3) 자가 증식 지식 파이프라인입니다.</p>
+        </div>
+        
+        <div class="workflow-flex">
+            <!-- Step 1: Interactive Agent Card -->
+            <div class="workflow-card step1-card">
+                <div class="agent-tag">Step 1: AI Prompting</div>
+                <div class="w-icon"><i class='bx bx-message-square-edit'></i></div>
+                <h3>Deep Research Agent</h3>
+                <p>무엇을 깊게 알고 싶나요? 버튼을 눌러 채팅창을 열고 주제를 적으면 맞춤형 노트북LM 프롬프트를 뱉어냅니다.</p>
+                
+                <button id="toggle-agent-btn" class="chat-toggle-btn"><i class='bx bx-chat'></i> 시작하기</button>
             </div>
             
-            <p class="sidebar-category">CONCEPTS</p>
-            <ul class="nav-links">
-                <li class="active" data-target="theory-section">
-                    <i class='bx bx-book-open'></i>
-                    <span>Core Theory</span>
-                </li>
-                <li data-target="workflow-section">
-                    <i class='bx bx-git-repo-forked'></i>
-                    <span>Implementation</span>
-                </li>
-                <li data-target="dictionary-section">
-                    <i class='bx bx-search-alt'></i>
-                    <span>Terminology</span>
-                </li>
-            </ul>
+            <div class="flow-arrow"><i class='bx bx-right-arrow-alt'></i></div>
 
-            <p class="sidebar-category mt-2">PRACTICAL</p>
-            <ul class="nav-links">
-                <li data-target="code-section">
-                    <i class='bx bx-code-block'></i>
-                    <span>Code Snippet</span>
-                </li>
-                <li data-target="tuning-section">
-                    <i class='bx bx-test-tube'></i>
-                    <span>Loss & Tuning</span>
-                </li>
-                <li data-target="troubleshoot-section">
-                    <i class='bx bx-error'></i>
-                    <span>Troubleshooting</span>
-                </li>
-            </ul>
+            <div class="workflow-card" style="border-color: rgba(139, 92, 246, 0.5); box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);">
+                <div class="agent-tag" style="background:var(--purple); color:#fff; border:none;">Step 2: User Agent</div>
+                <div class="w-icon" style="color:var(--purple);"><i class='bx bx-search-alt'></i></div>
+                <h3 style="color:#d8b4fe;">Deep Research & Synthesis</h3>
+                <p>생성된 프롬프트를 복사하여 논문이 담긴 NotebookLM에 넣으세요! AI가 스스로 판단하여 가장 중요한 핵심 데이터를 구조화 및 추출해 냅니다.</p>
+            </div>
 
-            <div class="sidebar-bottom">
-                <div class="user-info">
-                    <p>Learning Dashboard</p>
-                    <small>v2.0.0 Pro</small>
+            <div class="flow-arrow"><i class='bx bx-right-arrow-alt'></i></div>
+
+            <div class="workflow-card">
+                <div class="agent-tag">Step 3: AI (Antigravity)</div>
+                <div class="w-icon"><i class='bx bx-layer-plus'></i></div>
+                <h3>Knowledge Stacking</h3>
+                <p>사용자가 추출해온 인사이트나 결과를 AI에게 던져주면, 방대한 지식을 시각적인 웹 앱 프레임워크로 즉각 코딩하여 플랫폼에 쌓아올립니다.</p>
+            </div>
+        </div>
+
+        <!-- Full Width Agent UI (Appears below the 3 cards) -->
+        <div class="agent-box compact-agent full-width-agent" id="compact-agent" style="display:none;">
+            <div class="api-settings-small" id="api-indicator">
+                <i class='bx bx-key'></i> API Key 상태 확인 시도 중...
+            </div>
+
+            <div class="example-pills">
+                <span>💡 추천 주제:</span>
+                <button class="pill" onclick="setTopic('Residual Stress의 종류 및 생성 메커니즘')">Residual Stress 메커니즘</button>
+                <button class="pill" onclick="setTopic('PhysicsNemo의 구조 및 적용 사례')">PhysicsNeMo 활용 사례</button>
+                <button class="pill" onclick="setTopic('최신 RAG 아키텍처 패턴 분석')">최신 RAG 패턴 분석</button>
+            </div>
+
+            <div class="agent-input-group mt-2">
+                <input type="text" id="topic-input" placeholder="알고 싶은 주제를 자유롭게 작성하세요...">
+                <button id="generate-btn" title="프롬프트 생성"><i class='bx bx-send'></i></button>
+            </div>
+
+            <div class="agent-output" id="agent-output">
+                <div class="prompt-box">
+                    <button class="copy-prompt-btn" id="copy-prompt-btn"><i class='bx bx-copy'></i> 복사</button>
+                    <pre id="prompt-result">결과가 생성됩니다...</pre>
+                </div>
+                
+                <div class="notebook-guide">
+                    <p><i class='bx bx-info-circle'></i> 위 프롬프트를 복사한 뒤, NotebookLM의 <strong>[새 노트]</strong> 버튼을 누르고 논문이나 소스 자료들을 업로드합니다. 그 다음 하단 <strong>[채팅 입력란]</strong>에 프롬프트를 붙여넣으세요!</p>
+                    <a href="https://notebooklm.google.com/" target="_blank" class="notebook-link-btn"><i class='bx bx-link-external'></i> NotebookLM 바로 열기</a>
                 </div>
             </div>
-        </nav>
+        </div>
+    </section>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <header>
-                <div class="header-text">
-                    <h1 id="page-title">Core Theory</h1>
-                    <p id="page-subtitle">PhysicsNeMo 이해를 위한 필수 이론 가이드</p>
+    <!-- Topics Summary List -->
+    <section class="landing-section" id="topics">
+        <div class="section-header">
+            <h2>Repository of Modules</h2>
+            <p>지금까지 구축된 학습 대시보드 목록입니다.</p>
+        </div>
+
+        <div class="topic-grid">
+            <a href="physicsnemo.html" class="topic-card">
+                <div class="topic-image"><i class='bx bx-cube-alt'></i></div>
+                <div class="topic-content">
+                    <div class="topic-tag">Physics-ML</div>
+                    <h3>PhysicsNeMo (NVIDIA Modulus)</h3>
+                    <p>물리 정보 신경망(PINN), Neural Operator 이론부터 실전 구성, 트러블슈팅 가이드.</p>
+                    <div class="topic-footer"><span><i class='bx bx-time-five'></i> Mar 2026</span><span class="enter-btn">Open Dashboard <i class='bx bx-right-arrow-alt'></i></span></div>
                 </div>
-            </header>
+            </a>
+        </div>
+    </section>
 
-            <div class="content-wrapper">
-                <!-- Section 1: Theory Cards -->
-                <section id="theory-section" class="content-section active">
-                    <div class="theory-grid" id="theory-grid"></div>
-                </section>
+    <footer><p>© 2026 Nexus Learning Platform. Powered by Human-AI Symbiosis.</p></footer>
 
-                <!-- Section 2: Implementation Workflow -->
-                <section id="workflow-section" class="content-section">
-                    <div class="timeline" id="workflow-timeline"></div>
-                </section>
+    <!-- Config & Scripts -->
+    <script src="config.js"></script>
+    <script>
+        function setTopic(val) { document.getElementById('topic-input').value = val; }
 
-                <!-- Section 3: Terminology Dictionary -->
-                <section id="dictionary-section" class="content-section">
-                    <div class="search-bar">
-                        <i class='bx bx-search'></i>
-                        <input type="text" id="term-search" placeholder="용어 검색...">
-                    </div>
-                    <div class="dictionary-grid" id="dictionary-grid"></div>
-                </section>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('toggle-agent-btn');
+            const compactAgent = document.getElementById('compact-agent');
+            
+            toggleBtn.addEventListener('click', () => {
+                const step1Card = document.querySelector('.step1-card');
+                if(compactAgent.style.display === 'none') {
+                    compactAgent.style.display = 'block';
+                    toggleBtn.innerHTML = "<i class='bx bx-x'></i> 닫기";
+                    toggleBtn.style.background = 'rgba(255,255,255,0.1)';
+                    setTimeout(() => compactAgent.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                } else {
+                    compactAgent.style.display = 'none';
+                    toggleBtn.innerHTML = "<i class='bx bx-chat'></i> 시작하기";
+                    toggleBtn.style.background = 'linear-gradient(90deg, var(--blue), var(--purple))';
+                }
+            });
 
-                <!-- Section 4: Code Snippet -->
-                <section id="code-section" class="content-section">
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span>physicsnemo_2d_pinn.py</span>
-                            <button id="copy-btn"><i class='bx bx-copy'></i> Copy</button>
-                        </div>
-                        <pre><code class="language-python" id="code-block"></code></pre>
-                    </div>
-                </section>
+            // Handle API Key presence
+            const apiIndicator = document.getElementById('api-indicator');
+            let apiKey = CONFIG.GEMINI_API_KEY;
+            
+            if(!apiKey) apiKey = localStorage.getItem('gemini_api_key');
+            
+            if(apiKey) {
+                apiIndicator.innerHTML = "<i class='bx bx-check-shield'></i> Gemini API 연결됨 (Ready)";
+                apiIndicator.style.color = 'var(--accent)';
+                apiIndicator.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+            } else {
+                apiIndicator.innerHTML = "<i class='bx bx-error'></i> config.js 나 LocalStorage에 Gemini API Key를 세팅해주세요.";
+                apiIndicator.style.color = '#f87171';
+                apiIndicator.style.borderColor = 'rgba(248, 113, 113, 0.3)';
+            }
 
-                <!-- Section 5: Loss & Tuning -->
-                <section id="tuning-section" class="content-section">
-                    <div class="tuning-grid" id="tuning-grid"></div>
-                </section>
+            // Handle Prompt Generation
+            const generateBtn = document.getElementById('generate-btn');
+            const topicInput = document.getElementById('topic-input');
+            const outputBox = document.getElementById('agent-output');
+            const promptResult = document.getElementById('prompt-result');
 
-                <!-- Section 6: Troubleshooting -->
-                <section id="troubleshoot-section" class="content-section">
-                    <div class="trouble-grid" id="trouble-grid"></div>
-                </section>
-            </div>
-        </main>
-    </div>
+            generateBtn.addEventListener('click', async () => {
+                if(!apiKey) {
+                    const promptKey = prompt("config.js에 API Key가 없습니다. 임시로 브라우저에 저장할 Gemini API Key를 입력하세요:");
+                    if(promptKey) {
+                        localStorage.setItem('gemini_api_key', promptKey);
+                        apiKey = promptKey;
+                        apiIndicator.innerHTML = "<i class='bx bx-check-shield'></i> API 연결됨 (Session)";
+                        apiIndicator.style.color = 'var(--accent)';
+                    } else return;
+                }
+                
+                const topic = topicInput.value.trim();
+                if(!topic) return alert("주제를 입력해주세요!");
 
-    <!-- Highlight.js JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
-    <script src="script.js"></script>
+                generateBtn.innerHTML = "<i class='bx bx-loader bx-spin'></i>";
+                outputBox.classList.remove('visible');
+
+                const systemPrompt = `당신은 AI 연구를 돕는 시니어 '마스터 프롬프트 엔지니어'입니다. 
+사용자는 당신이 제작해 준 프롬프트를 'NotebookLM'에 입력할 것입니다. 당신의 목표는 사용자가 제시한 [주제]에 맞추어, NotebookLM이 가장 완벽하게 지식을 구조화하여 추출할 수 있는 **'맞춤형 마크다운 목차 가이드'**를 동적으로 설계하여 프롬프트 안에 포함시키는 것입니다.
+
+[지시 사항]
+1. 주제가 '개념/이론적'인지, '기술/개발적'인지, '비즈니스 사례'인지 파악하세요.
+2. 그 특성에 맞게 5~7개의 가장 효과적인 마크다운 핵심 목차(예: 이론 지향적이면 원리/사례/비교 위주로, 기술 지향적이면 아키텍처/코드/트러블슈팅 위주로)를 유연하게 설계하여 NotebookLM에게 이 목차대로 출력하라고 지시하세요.
+3. 첫인사나 부연 설명 없이, 오직 사용자가 복사해서 바로 쓸 수 있는 프롬프트 원문만 마크다운 텍스트 블록으로 출력하세요.`;
+
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            contents: [{ parts: [{ text: `주제: ${topic}` }] }],
+                            generationConfig: { temperature: 0.7 }
+                        })
+                    });
+                    const data = await response.json();
+                    if(data.error) throw new Error(data.error.message);
+                    
+                    const text = data.candidates[0].content.parts[0].text;
+                    promptResult.textContent = text.replace(/```markdown|```/g, '').trim();
+                    outputBox.classList.add('visible');
+                    setTimeout(() => outputBox.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                } catch (error) {
+                    alert("API 요청 중 오류가 발생했습니다: " + error.message);
+                } finally {
+                    generateBtn.innerHTML = "<i class='bx bx-send'></i>";
+                }
+            });
+
+            document.getElementById('copy-prompt-btn').addEventListener('click', () => {
+                navigator.clipboard.writeText(promptResult.textContent);
+                const btn = document.getElementById('copy-prompt-btn');
+                btn.innerHTML = "<i class='bx bx-check'></i> 복사됨";
+                setTimeout(() => btn.innerHTML = "<i class='bx bx-copy'></i> 복사", 2000);
+            });
+            topicInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') generateBtn.click(); });
+        });
+    </script>
 </body>
 </html>
