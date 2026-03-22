@@ -223,8 +223,11 @@ if __name__ == "__main__":
 };
 
 const tuningData = [
-    { title: "SDF 공간적 가중치 (Spatial Weighting)", issue: "벽면(Boundary)에서 속도가 급격히 변하는 불연속성으로 인해 학습 초기에 그래디언트가 폭발하거나 수렴이 지연됨.", solution: "경계면으로부터의 거리(SDF)에 비례하여 PDE 손실 가중치(lambda_weighting)를 부여합니다. 벽면 근처는 가중치를 줄이고, 내부 중앙은 가중치를 높여 방정식 학습에 집중시킵니다.", icon: "bx-outline" },
-    { title: "동적 손실 균형 알고리즘 (Dynamic Loss Balancing)", issue: "물리 방정식의 잔차 손실과 데이터/경계조건 손실 간의 스케일 차이로 인해 모델이 특정 손실에 편향되거나 수렴이 실패함.", solution: "PhysicsNeMo의 내장 알고리즘(Grad Norm, Soft Adapt, ReLoBRaLo, NTK 분석)을 통해 각 항의 수렴 속도를 동적으로 평가하여 가중치를 자동 할당합니다. config.yaml에서 플래그로 켭니다.", icon: "bx-slider-alt" }
+    { title: "Nondimensionalization (물리량 무차원화 및 스케일링)", issue: "압력은 10<sup>5</sup> Pa, 길이는 10<sup>-3</sup> m 등 스케일 차이가 극심한 데이터를 그대로 넣으면 활성화 함수가 즉시 포화되어 미분값이 0이 되거나 폭발해 Loss가 NaN이 됨.", solution: "모든 물리량을 특성 척도로 나누어 0~1 또는 -1~1 사이의 단위 없는(Dimensionless) 값으로 정규화하고, 방정식(PDE)을 스케일링된 변수로 재설계해야 함.", icon: "bx-ruler" },
+    { title: "Dynamic Loss Balancing (동적 손실 균형)", issue: "L = L_PDE + L_BC + L_Data 에서 손실 간 스케일이 다르면(예: PDE=0.001, BC=10), 옵티마이저가 덩치가 큰 BC만 학습하고 물리 법칙(PDE)을 무시해 '가짜 해'가 도출됨.", solution: "수동 가중치 조절을 멈추고 내장 알고리즘(Grad Norm, ReLoBRaLo)이나 NTK 분석을 도입해, 각 컴포넌트의 그래디언트를 평가하여 최적의 가중치를 자동 할당.", icon: "bx-scale" },
+    { title: "Learning Rate Annealing (학습률 어닐링)", issue: "학습 중반부터 경계조건과 물리 법칙이 서로 가중치를 반대로 업데이트하려는 '그래디언트 충돌'이 발생하여 로스가 심하게 진동하고 정체됨.", solution: "전역 학습률 어닐링을 통해 손실 가중치(ω)를 미세 조정하고, tf_exponential_lr 스케줄링 및 인과적 가중치(Causal weighting scheme)를 적용해 날카로운 최소값에 도달 유도.", icon: "bx-trending-down" },
+    { title: "Spatial Weighting using SDF (공간적 가중치 적용)", issue: "경계면 근처 유속 불연속성 때문에, 모델이 도메인 내부 유동은 학습하지 않고 벽면 근처 에러를 잡는 데만 모든 학습 용량을 낭비함.", solution: "PointwiseInteriorConstraint에 lambda_weighting={'momentum_x': 'sdf'} 파라미터를 추가하여 벽면에 가까운 점의 PDE 가중치는 줄이고, 중앙일수록 높여 내부 유동 집중 학습 유도.", icon: "bx-layer" },
+    { title: "Fourier Features / Positional Encoding", issue: "난류나 소용돌이 같은 고주파수(High-frequency) 현상 시, 일반 퍼셉트론(MLP)의 스펙트럴 편향(Spectral Bias)으로 인해 디테일이 뭉개지고 저주파수만 학습됨.", solution: "좌표 (x, y, z, t)를 번거롭게 넣지 말고, FourierNetArch를 선택하여 frequencies=('axis', [0, ... 9]) 셋팅으로 고차원 주파수 인코딩을 거쳐 미세 현상까지 날카롭게 잡아냄.", icon: "bx-pulse" }
 ];
 
 const troubleData = [
