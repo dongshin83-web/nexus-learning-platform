@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhysicsNeMo Learning Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Highlight.js for Code Formatting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class='bx bx-cube-alt'></i>
+                <span>PhysicsNeMo</span>
+            </div>
+            
+            <p class="sidebar-category">CONCEPTS</p>
+            <ul class="nav-links">
+                <li class="active" data-target="theory-section">
+                    <i class='bx bx-book-open'></i>
+                    <span>Core Theory</span>
+                </li>
+                <li data-target="workflow-section">
+                    <i class='bx bx-git-repo-forked'></i>
+                    <span>Implementation</span>
+                </li>
+                <li data-target="dictionary-section">
+                    <i class='bx bx-search-alt'></i>
+                    <span>Terminology</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">PRACTICAL</p>
+            <ul class="nav-links">
+                <li data-target="code-section">
+                    <i class='bx bx-code-block'></i>
+                    <span>Code Snippet</span>
+                </li>
+                <li data-target="tuning-section">
+                    <i class='bx bx-test-tube'></i>
+                    <span>Loss & Tuning</span>
+                </li>
+                <li data-target="troubleshoot-section">
+                    <i class='bx bx-error'></i>
+                    <span>Troubleshooting</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>v2.0.0 Pro</small>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1 id="page-title">Core Theory</h1>
+                    <p id="page-subtitle">PhysicsNeMo 이해를 위한 필수 이론 가이드</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Section 1: Theory Cards -->
+                <section id="theory-section" class="content-section active">
+                    <div class="theory-grid" id="theory-grid"></div>
+                </section>
+
+                <!-- Section 2: Implementation Workflow -->
+                <section id="workflow-section" class="content-section">
+                    <div class="timeline" id="workflow-timeline"></div>
+                </section>
+
+                <!-- Section 3: Terminology Dictionary -->
+                <section id="dictionary-section" class="content-section">
+                    <div class="search-bar">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="term-search" placeholder="용어 검색...">
+                    </div>
+                    <div class="dictionary-grid" id="dictionary-grid"></div>
+                </section>
+
+                <!-- Section 4: Code Snippet -->
+                <section id="code-section" class="content-section">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>physicsnemo_2d_pinn.py</span>
+                            <button id="copy-btn"><i class='bx bx-copy'></i> Copy</button>
+                        </div>
+                        <pre><code class="language-python" id="code-block"></code></pre>
+                    </div>
+                </section>
+
+                <!-- Section 5: Loss & Tuning -->
+                <section id="tuning-section" class="content-section">
+                    <div class="tuning-grid" id="tuning-grid"></div>
+                </section>
+
+                <!-- Section 6: Troubleshooting -->
+                <section id="troubleshoot-section" class="content-section">
+                    <div class="trouble-grid" id="trouble-grid"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Highlight.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
