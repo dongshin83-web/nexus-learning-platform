@@ -184,6 +184,7 @@ const effectsData = [
         }
     ];
 
+
 document.addEventListener('DOMContentLoaded', () => {
     // Generic Render Function
     function renderSection(gridId, data) {
@@ -209,6 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSection('effects-grid', effectsData);
     renderSection('measurement-grid', measurementData);
     renderSection('modeling-grid', modelingData);
+
+
 
     // Navigation Logic
     const navLinks = document.querySelectorAll('.nav-links li');

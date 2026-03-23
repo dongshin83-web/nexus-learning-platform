@@ -83,6 +83,54 @@ domain.add_validator(validator)`
     }
 ];
 
+const surrogatePipelineData = [
+    {
+        step: 1,
+        title: "데이터 생성 및 포맷팅 (Data Generation & Formatting)",
+        action: "전통 솔버의 시뮬레이션 결과를 추출하여 AI 포맷으로 변환합니다.",
+        icon: "bx-data",
+        concept: "전통적인 유한요소해석(FEM) 솔버(Ansys, COMSOL, Abaqus 등)가 계산한 물리적 시뮬레이션 결과를 AI 모델이 읽을 수 있는 형태로 추출하는 첫 단추입니다.",
+        requirements: "<ul><li><strong>포맷:</strong> 일반적으로 솔버에서 내보낸 <code>.vtk</code>, <code>.vtu</code>(볼륨 데이터), <code>.vtp</code>(표면 데이터) 파일이 가장 많이 사용되며, 이를 파이썬에서 다루기 쉬운 <code>.npy</code>(NumPy)나 딥러닝에 최적화된 <code>.tfrecord</code>로 변환하여 준비합니다.</li><li><strong>필수 물리량:</strong> 각 노드의 <strong>3D 공간 좌표, 속도, 가속도, 변위, 응력</strong> 정보가 포함되어야 합니다.</li><li><strong>노드 타입 및 경계 조건:</strong> 원핫 인코딩 형태의 노드 타입(고정, 자유 등) 정보가 필수적입니다.</li></ul>",
+        gotchas: "<strong>단위 통일과 무차원화(Nondimensionalization)를 잊지 마세요.</strong> 응력은 수백만(MPa) 단위이고 변위는 밀리미터 단위일 경우 스케일 차이로 신경망이 발산(NaN)할 수 있습니다."
+    },
+    {
+        step: 2,
+        title: "데이터 전처리 및 그래프 변환",
+        action: "좌표 데이터를 물리적 상호작용 가능한 형태의 그래프로 만듭니다.",
+        icon: "bx-share-alt",
+        concept: "단순 좌표 나열을 AI가 물리적 '상호작용'으로 인식할 수 있도록 <strong>그래프 구조 G(V, E, U) (노드 V, 엣지 E, 글로벌 변수 U)</strong>로 변환하는 과정입니다.",
+        requirements: "<ul><li><strong>엣지(Edge) 생성 로직:</strong> 원본 메쉬 위상을 바탕으로 '메쉬 엣지'를 만들고, 반경 내 이웃 노드를 연결하는 '월드 엣지'를 생성합니다.</li><li><strong>정규화(Normalization):</strong> 학습 안정성을 위해 노드의 속도/변위 값 평균을 0, 분산을 1로 맞추는 표준화를 수행합니다.</li></ul>",
+        gotchas: "<strong>One-hot 인코딩된 '노드 타입' 데이터는 절대 정규화하면 안 됩니다.</strong> 범주형 데이터가 정규화되면 모델이 경계 조건을 구분하지 못해 예측 형상이 무너집니다."
+    },
+    {
+        step: 3,
+        title: "모델 아키텍처 및 하이퍼파라미터 설정",
+        action: "대규모 변형에 맞는 GNN 아키텍처와 설정을 정의합니다.",
+        icon: "bx-brain",
+        concept: "구조 역학 시뮬레이션에는 불규칙한 메쉬(Unstructured Mesh)와 대규모 변형을 다루는 데 탁월한 <strong>GNN(Graph Neural Network) 아키텍처</strong>를 사용해야 합니다.",
+        requirements: "<ul><li><strong>HybridMeshGraphNet 특징:</strong> 고정된 메쉬 엣지와 동적으로 변하는 월드 엣지를 각각 다른 인코더로 처리해 대규모 변형과 충돌을 학습합니다.</li><li><strong>config.yaml 설정:</strong> <code>input_dim</code>, <code>processor_size</code>(은닉층 크기), <code>learning_rate</code>.</li></ul>",
+        gotchas: "<strong>OOM(Out of Memory)에 대비하세요.</strong> <code>config.yaml</code>에서 <code>recompute_activation</code>이나 <code>gradient_checkpointing</code>을 True로 켜서 메모리를 대폭 절약하십시오."
+    },
+    {
+        step: 4,
+        title: "모델 학습 (Training)",
+        action: "손실 함수를 최소화하며 자기 회귀(Auto-Regressive) 학습을 개시합니다.",
+        icon: "bx-play-circle",
+        concept: "현재 타임 스텝(t)의 상태를 보고 다음 타임 스텝(t+1)의 변화량을 예측하는 <strong>자기 회귀(Auto-Regressive)</strong> 방식으로 학습됩니다.",
+        requirements: "<ul><li><strong>손실 함수:</strong> 예측된 물리량과 실제 정답 간의 MSE를 주로 사용합니다.</li><li><strong>다중 GPU 실행:</strong> 단일 GPU 한계를 넘기 위해 <code>mpirun -np N python train.py</code> 또는 torchrun 커맨드로 DDP 모드를 실행합니다.</li></ul>",
+        gotchas: "<strong>오차 누적(Error Accumulation) 현상을 방지해야 합니다.</strong> 추론 시 궤도 이탈을 자체 회복할 수 있도록 <strong>학습 시 입력 데이터에 의도적으로 미세 노이즈를 주입</strong>해야 합니다."
+    },
+    {
+        step: 5,
+        title: "추론(Inference) 및 3D 시각화",
+        action: "가중치를 불러와 롤아웃 수행 후 ParaView 형식으로 출력합니다.",
+        icon: "bx-cube",
+        concept: "학습된 가중치 모델을 시뮬레이터 대비 수천 배 이상 빠르게 <strong>연속 예측(Rollout)</strong>한 뒤 시각화합니다.",
+        requirements: "<ul><li><strong>Rollout 연계:</strong> t 예측값을 다음 스텝의 입력으로 연속 주입.</li><li><strong>PyVista 시각화:</strong> 텐서 결과를 3D 메쉬 파일 객체로 매핑한 뒤 <code>.vtp</code>나 <code>.vtu</code> 확장자로 변환 및 저장합니다.</li></ul>",
+        gotchas: "<strong>출력값의 역정규화(De-normalization)를 절대 빼먹지 마세요.</strong> 모든 노드 배열을 저장해 둔 평균과 표준편차로 원상복구해야 ParaView에서 물리적 응력과 변위가 제대로 렌더링됩니다."
+    }
+];
+
 const dictionaryData = [
     { term: "Collocation Points", kor: "콜로케이션 포인트 (격자점/배치점)", meaning_textbook: "편미분 방정식(PDE) 잔차 함수를 평가하기 위해 도메인 내부와 경계에 샘플링된 점들의 집합.", meaning_easy: "머신러닝에서 일반적인 '학습 데이터의 Label'이 없는 빈 공간에, \"여기서도 물리 법칙을 지켜!\"라고 감시카메라(점)를 마구 뿌려놓는 것과 같습니다. 이 점들이 많을수록 AI가 농땡이를 피우지 못하고 룰(방정식)을 엄격하게 따르게 됩니다." },
     { term: "Forward Problem", kor: "순방향 문제", meaning_textbook: "물리 시스템의 초기 조건, 경계 조건 및 지배 방정식의 매개변수가 모두 주어졌을 때, 시스템의 숨겨진 상태나 최종 결과(해)를 예측하는 문제.", meaning_easy: "게임 엔진에서 물리 엔진의 세팅값(중력, 마찰력, 물체 무게 등)을 모두 하드코딩해 넣은 뒤, \"이 상태에서 공을 던지면 어디로 떨어질까?\"를 시뮬레이션하는 가장 기본적인 '결과 예측' 과정입니다." },
@@ -272,6 +320,21 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 
+    const surrogateTimeline = document.getElementById('surrogate-timeline');
+    surrogatePipelineData.forEach((item, index) => {
+        surrogateTimeline.innerHTML += `
+            <div class="timeline-step" onclick="openSurrogateModal(${index})">
+                <div class="step-icon"><i class='bx ${item.icon}' style="color:var(--accent); background:rgba(52, 211, 153, 0.1);"></i></div>
+                <div class="step-content">
+                    <span class="step-number" style="color:var(--accent);">Step ${item.step}</span>
+                    <h3 style="color:var(--text-light);">${item.title}</h3>
+                    <p class="step-action" style="color:var(--text-muted);">${item.action}</p>
+                    <div class="step-note" style="color:var(--accent);"><i class='bx bx-pointer' style="margin-right:5px;"></i> 클릭하여 상세 가이드 보기</div>
+                </div>
+            </div>
+        `;
+    });
+
     // 2-1. Modal Logic
     window.openImplModal = function(index) {
         const item = workflowData[index];
@@ -316,6 +379,33 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-modal').addEventListener('click', () => {
         document.getElementById('impl-modal').classList.remove('active');
     });
+
+    window.openSurrogateModal = function(index) {
+        const item = surrogatePipelineData[index];
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <div class="modal-header">
+                <span class="modal-step-badge" style="background:var(--accent);">Step ${item.step}</span>
+                <h2>${item.title}</h2>
+            </div>
+            
+            <div class="modal-section" style="margin-top:1.5rem;">
+                <h4 style="color:var(--text-light);"><i class='bx bx-bullseye' style="color:var(--accent);"></i> 핵심 개념</h4>
+                <p style="color:var(--text-muted); line-height:1.6;">${item.concept}</p>
+            </div>
+            
+            <div class="modal-section">
+                <h4 style="color:var(--text-light);"><i class='bx bx-data' style="color:var(--accent);"></i> 요구되는 데이터 및 설정</h4>
+                <div style="color:var(--text-muted); line-height:1.6; margin-left: 0.5rem;" class="pipeline-reqs">${item.requirements}</div>
+            </div>
+            
+            <div class="modal-gotchas">
+                <h4><i class='bx bx-error'></i> 주의할 점 (Gotchas)</h4>
+                <p>${item.gotchas}</p>
+            </div>
+        `;
+        document.getElementById('impl-modal').classList.add('active');
+    };
 
     // 3. Render Dictionary Grid
     const dictionaryGrid = document.getElementById('dictionary-grid');
