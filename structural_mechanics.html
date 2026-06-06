@@ -50,14 +50,14 @@
             gap: 1rem;
         }
 
-        .sim-card, .roadmap-card, .review-card, .case-card, .term-card, .workflow-step, .foundation-card, .agenda-card, .deliverable-card {
+        .sim-card, .roadmap-card, .review-card, .case-card, .term-card, .workflow-step, .foundation-card, .agenda-card, .deliverable-card, .output-card, .decision-card {
             background: rgba(255,255,255,0.035);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 8px;
             padding: 1.4rem;
         }
 
-        .sim-card h3, .review-card h3, .case-card h3, .term-card h3, .foundation-card h3, .agenda-card h3, .deliverable-card h3 {
+        .sim-card h3, .review-card h3, .case-card h3, .term-card h3, .foundation-card h3, .agenda-card h3, .deliverable-card h3, .output-card h3, .decision-card h3 {
             display: flex;
             align-items: center;
             gap: 0.55rem;
@@ -66,8 +66,8 @@
             margin-bottom: 0.75rem;
         }
 
-        .sim-card h3 i, .review-card h3 i, .case-card h3 i, .term-card h3 i, .foundation-card h3 i, .agenda-card h3 i, .deliverable-card h3 i { color: var(--primary); }
-        .sim-card p, .roadmap-card p, .review-card p, .case-card p, .term-card p, .workflow-step p, .foundation-card p, .agenda-card p, .deliverable-card p {
+        .sim-card h3 i, .review-card h3 i, .case-card h3 i, .term-card h3 i, .foundation-card h3 i, .agenda-card h3 i, .deliverable-card h3 i, .output-card h3 i, .decision-card h3 i { color: var(--primary); }
+        .sim-card p, .roadmap-card p, .review-card p, .case-card p, .term-card p, .workflow-step p, .foundation-card p, .agenda-card p, .deliverable-card p, .output-card p, .decision-card p {
             color: var(--text-secondary);
             line-height: 1.65;
             font-size: 0.92rem;
@@ -82,13 +82,48 @@
         }
         .foundation-hero h2 { color: #fff; font-size: 1.35rem; margin-bottom: 0.6rem; }
         .foundation-hero p { color: var(--text-secondary); line-height: 1.7; max-width: 980px; }
+        .foundation-hero-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.6rem;
+        }
+        .detail-back-btn {
+            color: #111827;
+            background: var(--primary);
+            border-radius: 6px;
+            padding: 0.48rem 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+        }
+        .detail-back-btn:hover { filter: brightness(1.08); }
+        .section-kicker {
+            color: var(--cyan);
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 1.7rem 0 0.6rem;
+        }
+        .section-kicker + .section-copy {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 980px;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
         .foundation-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1rem;
             margin-bottom: 1.25rem;
         }
-        .foundation-card small, .agenda-card small, .deliverable-card small {
+        .foundation-card small, .agenda-card small, .deliverable-card small, .output-card small, .decision-card small {
             display: inline-flex;
             color: var(--primary);
             background: var(--primary-soft);
@@ -98,20 +133,20 @@
             font-weight: 800;
             margin-bottom: 0.75rem;
         }
-        .foundation-card ul, .agenda-card ul, .deliverable-card ul {
+        .foundation-card ul, .agenda-card ul, .deliverable-card ul, .output-card ul, .decision-card ul {
             list-style: none;
             display: grid;
             gap: 0.55rem;
             margin-top: 0.85rem;
         }
-        .foundation-card li, .agenda-card li, .deliverable-card li {
+        .foundation-card li, .agenda-card li, .deliverable-card li, .output-card li, .decision-card li {
             color: rgba(255,255,255,0.85);
             line-height: 1.55;
             font-size: 0.9rem;
             padding-left: 1.05rem;
             position: relative;
         }
-        .foundation-card li::before, .agenda-card li::before, .deliverable-card li::before {
+        .foundation-card li::before, .agenda-card li::before, .deliverable-card li::before, .output-card li::before, .decision-card li::before {
             content: "";
             position: absolute;
             left: 0;
@@ -133,17 +168,83 @@
             border-radius: 8px;
             padding: 1rem;
         }
-        .equation-box code {
-            color: #fde68a;
-            font-size: 0.95rem;
-            display: block;
-            margin-bottom: 0.5rem;
+        .equation-box h3 {
+            color: #fff;
+            font-size: 0.94rem;
+            margin-bottom: 0.75rem;
         }
-        .equation-box span {
+        .math-formula {
+            min-height: 74px;
+            border: 1px solid rgba(245, 158, 11, 0.22);
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.08);
+            color: #fde68a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            font-family: "Times New Roman", serif;
+            font-size: 1.55rem;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+        .math-frac {
+            display: inline-grid;
+            grid-template-rows: auto auto;
+            text-align: center;
+            min-width: 2.2rem;
+            transform: translateY(-0.05rem);
+        }
+        .math-frac span:first-child {
+            border-bottom: 1px solid #fde68a;
+            padding: 0 0.3rem 0.18rem;
+        }
+        .math-frac span:last-child { padding: 0.18rem 0.3rem 0; }
+        .math-vector, .math-matrix {
+            border: 1px solid rgba(253, 230, 138, 0.45);
+            border-radius: 4px;
+            padding: 0.25rem 0.45rem;
+        }
+        .math-read {
+            color: #fef3c7;
+            font-size: 0.84rem;
+            line-height: 1.55;
+            margin-bottom: 0.4rem;
+        }
+        .equation-box p {
             color: var(--text-secondary);
             line-height: 1.55;
             font-size: 0.86rem;
         }
+        .output-card { border-left: 3px solid var(--cyan); }
+        .decision-card { border-left: 3px solid var(--primary); }
+        .output-meta {
+            color: #bfdbfe;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 6px;
+            padding: 0.75rem;
+            line-height: 1.55;
+            font-size: 0.86rem;
+            margin-top: 0.8rem;
+        }
+        .output-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .result-rule {
+            display: grid;
+            gap: 0.45rem;
+            margin-top: 0.75rem;
+        }
+        .result-rule div {
+            color: rgba(255,255,255,0.84);
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+        .result-rule strong { color: #fff; }
 
         .signal-list {
             list-style: none;
@@ -167,6 +268,33 @@
             gap: 1rem;
         }
         .roadmap-card { position: relative; overflow: hidden; }
+        .roadmap-link-card {
+            display: block;
+            width: 100%;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+            text-decoration: none;
+            cursor: pointer;
+            appearance: none;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .roadmap-link-card:hover,
+        .roadmap-link-card:focus-visible {
+            transform: translateY(-3px);
+            border-color: var(--primary-border);
+            box-shadow: 0 12px 26px rgba(245, 158, 11, 0.14);
+            outline: none;
+        }
+        .roadmap-card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--primary);
+            font-size: 0.86rem;
+            font-weight: 800;
+            margin-top: 1rem;
+        }
         .phase-badge {
             display: inline-flex;
             align-items: center;
@@ -278,6 +406,7 @@
             .main-content { min-height: auto; }
             .content-wrapper, header { padding-left: 1.25rem; padding-right: 1.25rem; }
             .leader-hero { grid-template-columns: 1fr; padding: 1.25rem; }
+            .foundation-hero-header { flex-direction: column; }
             .header-text h1 { font-size: 1.7rem; }
         }
     </style>
@@ -296,10 +425,6 @@
                 <li class="active" data-target="objective-section">
                     <i class='bx bx-compass'></i>
                     <span>Leader Objective</span>
-                </li>
-                <li data-target="foundation-section">
-                    <i class='bx bx-book-open'></i>
-                    <span>Weeks 1-2</span>
                 </li>
                 <li data-target="roadmap-section">
                     <i class='bx bx-map-alt'></i>
@@ -363,19 +488,6 @@
                     <div class="dashboard-grid" id="leader-grid"></div>
                 </section>
 
-                <section id="foundation-section" class="content-section">
-                    <div class="foundation-hero">
-                        <h2>Weeks 1-2: 구조역학과 FEA 판단 언어 정렬</h2>
-                        <p>첫 2주는 Abaqus 버튼을 외우기 전에, 팀원이 만든 모델을 같은 언어로 읽기 위한 물리/수치 해석 감각을 맞추는 구간입니다. 목표는 stress contour를 해석하는 것이 아니라, 왜 그런 stress가 생겼는지 load path, element, boundary condition, mesh sensitivity 관점에서 설명하는 것입니다.</p>
-                    </div>
-
-                    <div class="equation-strip" id="foundation-equations"></div>
-                    <div class="foundation-grid" id="foundation-concepts"></div>
-                    <div class="foundation-grid" id="background-bridges"></div>
-                    <div class="foundation-grid" id="week12-agenda"></div>
-                    <div class="foundation-grid" id="week12-deliverables"></div>
-                </section>
-
                 <section id="roadmap-section" class="content-section">
                     <div class="roadmap-layout" id="roadmap-grid"></div>
                 </section>
@@ -415,6 +527,6 @@
         </main>
     </div>
 
-    <script src="structural_mechanics.js"></script>
+    <script src="structural_mechanics.js?v=weeks-detail-page"></script>
 </body>
 </html>

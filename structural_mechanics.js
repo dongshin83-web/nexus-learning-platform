@@ -7,10 +7,6 @@ const pageMeta = {
         title: "12-Week Learning Plan",
         subtitle: "Abaqus와 HyperMesh를 리더십 리뷰 능력 중심으로 학습하는 12주 계획"
     },
-    "foundation-section": {
-        title: "Weeks 1-2 Foundation",
-        subtitle: "구조역학과 FEA 판단 언어를 팀원과 맞추는 첫 2주"
-    },
     "workflow-section": {
         title: "Abaqus + HyperMesh Workflow",
         subtitle: "외부 요구를 계산 전략으로 번역하고 결과를 의사결정 자료로 만드는 흐름"
@@ -78,20 +74,197 @@ const leaderCards = [
 
 const foundationEquations = [
     {
-        formula: "sigma = F / A",
+        title: "응력: 하중이 단면에 남기는 세기",
+        formulaHtml: `
+            <span>&sigma;</span>
+            <span>=</span>
+            <span class="math-frac"><span>F</span><span>A</span></span>
+        `,
+        readAs: "stress = force / area",
         note: "응력은 단순한 색깔값이 아니라 하중이 단면을 통해 전달되는 방식입니다. 팀장 질문은 '이 힘은 실제로 어디로 흘러가는가?'입니다."
     },
     {
-        formula: "epsilon = Delta L / L",
+        title: "변형률: 늘어난 양을 원래 길이로 나눈 값",
+        formulaHtml: `
+            <span>&epsilon;</span>
+            <span>=</span>
+            <span class="math-frac"><span>&Delta;L</span><span>L</span></span>
+        `,
+        readAs: "strain = length change / original length",
         note: "변형률은 재료가 국부적으로 얼마나 늘거나 줄었는지 보는 언어입니다. MD의 원자 변위 감각을 연속체 스케일로 올린 값입니다."
     },
     {
-        formula: "sigma = E epsilon",
+        title: "선형 탄성: 응력과 변형률의 비례 관계",
+        formulaHtml: `
+            <span>&sigma;</span>
+            <span>=</span>
+            <span>E</span>
+            <span>&epsilon;</span>
+        `,
+        readAs: "stress = elastic modulus x strain",
         note: "선형 탄성의 가장 단순한 constitutive law입니다. 이 관계가 깨지는 순간 plasticity, damage, nonlinear material 질문이 시작됩니다."
     },
     {
-        formula: "K u = f",
+        title: "FEA 균형식: 강성, 변위, 하중의 관계",
+        formulaHtml: `
+            <span class="math-matrix">K</span>
+            <span class="math-vector">u</span>
+            <span>=</span>
+            <span class="math-vector">f</span>
+        `,
+        readAs: "stiffness matrix x displacement vector = force vector",
         note: "FEA의 기본 균형식입니다. stiffness, displacement, load의 관계를 보면 solver 결과를 그림이 아니라 방정식으로 읽게 됩니다."
+    }
+];
+
+const resultLanguage = [
+    {
+        tag: "Stress",
+        icon: "bx-pulse",
+        title: "Stress는 '어디가 위험한가'의 언어",
+        body: "하중이 구조 내부에서 어떤 방향과 크기로 전달되는지를 나타냅니다. 단순히 빨간색이 크다는 뜻이 아니라, 재료의 failure mode와 비교해야 의미가 생깁니다.",
+        bullets: [
+            "Abaqus 기본 변수: S, 전체 stress tensor.",
+            "구성 성분: S11, S22, S33, S12, S13, S23.",
+            "Principal stress는 SP, stress invariant는 SINV 또는 S의 invariant로 확인합니다.",
+            "대표값은 Mises, Max Principal, Min Principal, Tresca, Pressure 중 failure mode에 맞게 고릅니다."
+        ],
+        meta: "보고서 기본값: ductile metal은 Mises, brittle/tension crack은 Max Principal, 방향성 검토는 S11/S22 같은 component."
+    },
+    {
+        tag: "Displacement",
+        icon: "bx-move",
+        title: "Displacement는 '얼마나 움직였는가'의 언어",
+        body: "구조물이 하중을 받은 뒤 node가 이동한 양입니다. 기능 요구사항, clearance, 조립 간섭, 변형 허용치와 직접 연결됩니다.",
+        bullets: [
+            "Abaqus 기본 변수: U, nodal displacement.",
+            "구성 성분: U1, U2, U3, 그리고 magnitude인 U, Magnitude.",
+            "beam/shell 회전 자유도가 중요하면 UR1, UR2, UR3도 같이 봅니다."
+        ],
+        meta: "보고서 기본값: 요구사항 방향이 있으면 해당 component, 전체 처짐이면 U magnitude와 deformed shape."
+    },
+    {
+        tag: "Stiffness",
+        icon: "bx-line-chart",
+        title: "Stiffness는 '얼마나 버티는가'의 언어",
+        body: "하중을 줬을 때 변위가 얼마나 생기는지의 비율입니다. Abaqus contour에 바로 나오는 일반 결과라기보다, 반력과 변위 history에서 계산하는 결과입니다.",
+        bullets: [
+            "선형: k = F / delta.",
+            "비선형 secant stiffness: 특정 하중점에서 F / delta.",
+            "비선형 tangent stiffness: load-displacement curve의 국부 기울기 dF / ddelta."
+        ],
+        meta: "보고서 기본값: 기준 node 또는 reference point의 U와 support/prescribed point의 RF로 load-displacement curve를 만들고 slope를 계산."
+    }
+];
+
+const abaqusOutputGuide = [
+    {
+        tag: "S: Components",
+        icon: "bx-grid-alt",
+        title: "S11, S22, S33, S12, S13, S23",
+        body: "좌표계 방향의 normal/shear stress입니다. 부품 좌표계, 재료 방향, weld line, fiber direction처럼 방향 자체가 의사결정 기준일 때 씁니다.",
+        bullets: [
+            "장점: load path와 방향성 설명이 명확합니다.",
+            "주의: 좌표계가 바뀌면 의미도 바뀝니다.",
+            "추천: composite, anisotropic material, 특정 방향 허용응력 검토.",
+            "Abaqus 이름: S for all components, Sij for individual history components."
+        ]
+    },
+    {
+        tag: "Mises",
+        icon: "bx-certification",
+        title: "Von Mises Equivalent Stress",
+        body: "3D stress tensor를 ductile yielding 판단용 scalar로 줄인 값입니다. 금속 구조물의 일반적인 항복 검토에서는 가장 안전한 기본 보고값입니다.",
+        bullets: [
+            "추천: ductile metal, plasticity, bracket/frame 일반 강도 검토.",
+            "이유: hydrostatic pressure보다 distortion energy가 항복을 지배한다는 가정과 맞습니다.",
+            "주의: brittle crack이나 접촉 압축 파손에는 단독 기준으로 부족합니다.",
+            "Abaqus 이름: MISES, MISESONLY, shell/beam section envelope에는 MISESMAX."
+        ]
+    },
+    {
+        tag: "Max Principal",
+        icon: "bx-up-arrow-alt",
+        title: "Maximum Principal Stress",
+        body: "한 점에서 가능한 모든 면을 돌려봤을 때 가장 큰 인장 normal stress입니다. 사용자가 자주 보는 값이며, 균열이 인장으로 열리는 문제에 특히 직관적입니다.",
+        bullets: [
+            "추천: brittle material, glass/ceramic, crack opening, adhesive peel, tensile failure.",
+            "이유: 균열과 취성 파손은 전단보다 최대 인장 주응력에 민감한 경우가 많습니다.",
+            "주의: ductile metal yielding의 기본 대표값으로 쓰면 Mises보다 판단이 흔들릴 수 있습니다.",
+            "Abaqus 이름: SP for all principal stresses, SP3 for maximum principal stress history output."
+        ]
+    },
+    {
+        tag: "Min Principal",
+        icon: "bx-down-arrow-alt",
+        title: "Minimum Principal Stress",
+        body: "가장 큰 압축 방향의 principal stress입니다. 압축, crushing, contact bearing처럼 눌림이 주요한 문제에서 봅니다.",
+        bullets: [
+            "추천: compressive crushing, bearing/contact pressure 주변, 콘크리트/취성재 압축 검토.",
+            "이유: 최대 인장만 보면 압축 지배 failure를 놓칠 수 있습니다.",
+            "주의: 부호 convention과 좌표계를 확인해야 합니다.",
+            "Abaqus 이름: SP1 for minimum principal stress history output."
+        ]
+    },
+    {
+        tag: "Tresca",
+        icon: "bx-cut",
+        title: "Tresca / Maximum Shear 기준",
+        body: "principal stress 차이로부터 최대 전단 지배를 보는 값입니다. 보수적인 ductile yielding 또는 shear-driven failure 확인에 씁니다.",
+        bullets: [
+            "추천: shear failure, shaft/torsion, 보수적 금속 항복 검토.",
+            "이유: 최대 전단 응력이 항복을 지배한다고 보는 기준입니다.",
+            "주의: 일반 금속 설계 보고에서는 Mises와 함께 비교값으로 두는 편이 읽기 쉽습니다.",
+            "Abaqus 이름: TRESC."
+        ]
+    },
+    {
+        tag: "Pressure",
+        icon: "bx-collapse-alt",
+        title: "Hydrostatic Pressure Stress",
+        body: "응력 tensor의 평균 normal stress 성분입니다. 체적 압축/팽창, 공극 성장, gasket, fluid-solid pressure 성격의 문제에서 의미가 큽니다.",
+        bullets: [
+            "추천: hydrostatic compression, gasket/seal, porous material, void growth risk.",
+            "이유: Mises는 hydrostatic stress를 직접 failure driving force로 보지 않습니다.",
+            "주의: 일반 강도 contour의 대표값으로 내보내면 사용자가 오해하기 쉽습니다.",
+            "Abaqus 이름: PRESS 또는 PRESSONLY."
+        ]
+    }
+];
+
+const reportDecisionGuide = [
+    {
+        tag: "Primary Report Set",
+        icon: "bx-file-find",
+        title: "기본 보고 묶음",
+        body: "결과 한 장에는 응력 하나만 넣지 말고, displacement와 evidence를 함께 둬야 합니다.",
+        bullets: [
+            "Ductile metal: Mises max/region trend + U magnitude 또는 요구 방향 U component + RF balance.",
+            "Brittle/tension: Max Principal + crack/opening 방향 component + mesh sensitivity.",
+            "Stiffness: RF-U curve에서 secant 또는 tangent stiffness를 명시합니다."
+        ]
+    },
+    {
+        tag: "Peak Rule",
+        icon: "bx-error-circle",
+        title: "최대값 하나만 보고하지 않기",
+        body: "Peak stress는 singularity, sharp corner, point load, constraint 때문에 mesh를 조일수록 무한히 커질 수 있습니다.",
+        bullets: [
+            "최대값은 위치, averaging 여부, element/integration point 여부를 함께 적습니다.",
+            "hot spot 주변 path/area average와 mesh refinement trend를 같이 봅니다.",
+            "의사결정에는 peak보다 trend, margin, correlation evidence가 더 중요할 수 있습니다."
+        ]
+    },
+    {
+        tag: "Shell/Solid Rule",
+        icon: "bx-layer",
+        title: "Shell과 Solid의 결과 읽기 차이",
+        body: "Shell은 top/bottom section point가 중요하고, solid는 3D 응력상태와 mesh 품질이 더 직접적으로 드러납니다.",
+        bullets: [
+            "Shell bending 문제는 top/bottom surface stress envelope를 봅니다.",
+            "Solid는 local coordinate, integration point, extrapolated nodal average 차이를 확인합니다.",
+            "두 모델을 비교할 때 같은 물리 위치와 같은 stress measure인지 맞춥니다."
+        ]
     }
 ];
 
@@ -298,7 +471,8 @@ const roadmap = [
         title: "구조역학과 FEA 판단 언어 정렬",
         goal: "stress, strain, stiffness, load path, weak form, element, DOF를 팀원과 같은 언어로 말한다.",
         learn: "continuum mechanics 복습, 선형 탄성, plane stress/strain, beam/shell/solid element의 역할.",
-        output: "간단한 benchmark 3개에 대해 해석 목적, 지배 가정, 예상 결과를 한 페이지로 정리."
+        output: "간단한 benchmark 3개에 대해 해석 목적, 지배 가정, 예상 결과를 한 페이지로 정리.",
+        detailHref: "structural_mechanics_weeks_1_2.html"
     },
     {
         phase: "Weeks 3-4",
@@ -550,11 +724,52 @@ function renderLeaderCards() {
 
 function renderWeek12Foundation() {
     const equationGrid = document.getElementById("foundation-equations");
+    if (!equationGrid) return;
+
     equationGrid.innerHTML = foundationEquations.map(item => `
         <div class="equation-box">
-            <code>${item.formula}</code>
-            <span>${item.note}</span>
+            <h3>${item.title}</h3>
+            <div class="math-formula">${item.formulaHtml}</div>
+            <div class="math-read">${item.readAs}</div>
+            <p>${item.note}</p>
         </div>
+    `).join("");
+
+    const resultGrid = document.getElementById("result-language");
+    resultGrid.innerHTML = resultLanguage.map(item => `
+        <article class="output-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+            <div class="output-meta">${item.meta}</div>
+        </article>
+    `).join("");
+
+    const outputGuide = document.getElementById("abaqus-output-guide");
+    outputGuide.innerHTML = abaqusOutputGuide.map(item => `
+        <article class="output-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+        </article>
+    `).join("");
+
+    const decisionGuide = document.getElementById("report-decision-guide");
+    decisionGuide.innerHTML = reportDecisionGuide.map(item => `
+        <article class="decision-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+        </article>
     `).join("");
 
     const conceptGrid = document.getElementById("foundation-concepts");
@@ -608,8 +823,17 @@ function renderWeek12Foundation() {
 
 function renderRoadmap() {
     const grid = document.getElementById("roadmap-grid");
-    grid.innerHTML = roadmap.map(item => `
-        <article class="roadmap-card">
+    grid.innerHTML = roadmap.map(item => {
+        const tagName = item.detailHref ? "a" : "article";
+        const detailAttrs = item.detailHref
+            ? ` href="${item.detailHref}" aria-label="${item.phase} ${item.title} 세부 학습 페이지 열기"`
+            : "";
+        const action = item.detailHref
+            ? `<div class="roadmap-card-action">세부 학습 페이지 <i class='bx bx-right-arrow-alt'></i></div>`
+            : "";
+
+        return `
+        <${tagName} class="roadmap-card ${item.detailHref ? "roadmap-link-card" : ""}"${detailAttrs}>
             <span class="phase-badge"><i class='bx bx-calendar'></i>${item.phase}</span>
             <h3>${item.title}</h3>
             <p>${item.goal}</p>
@@ -617,8 +841,10 @@ function renderRoadmap() {
             <p>${item.learn}</p>
             <h4>Output</h4>
             <p>${item.output}</p>
-        </article>
-    `).join("");
+            ${action}
+        </${tagName}>
+    `;
+    }).join("");
 }
 
 function renderWorkflow() {
@@ -668,26 +894,69 @@ function renderTerms() {
     `).join("");
 }
 
-function bindNavigation() {
+function activateSection(targetId, options = {}) {
+    if (!pageMeta[targetId]) return;
+
     const navLinks = document.querySelectorAll(".nav-links li");
     const sections = document.querySelectorAll(".content-section");
     const pageTitle = document.getElementById("page-title");
     const pageSubtitle = document.getElementById("page-subtitle");
 
+    navLinks.forEach(item => {
+        item.classList.toggle("active", item.dataset.target === targetId);
+    });
+
+    sections.forEach(section => {
+        section.classList.toggle("active", section.id === targetId);
+    });
+
+    pageTitle.textContent = pageMeta[targetId].title;
+    pageSubtitle.textContent = pageMeta[targetId].subtitle;
+
+    if (options.updateHash !== false) {
+        const nextHash = `#${targetId}`;
+        if (window.location.hash !== nextHash) {
+            history.pushState(null, "", nextHash);
+        }
+    }
+
+    if (options.scrollTop !== false) {
+        const wrapper = document.querySelector(".content-wrapper");
+        wrapper.scrollTo({ top: 0, behavior: options.smooth ? "smooth" : "auto" });
+    }
+}
+
+function bindNavigation() {
+    const navLinks = document.querySelectorAll(".nav-links li");
+
     navLinks.forEach(link => {
         link.addEventListener("click", () => {
-            const targetId = link.dataset.target;
-            navLinks.forEach(item => item.classList.remove("active"));
-            link.classList.add("active");
-
-            sections.forEach(section => {
-                section.classList.toggle("active", section.id === targetId);
-            });
-
-            pageTitle.textContent = pageMeta[targetId].title;
-            pageSubtitle.textContent = pageMeta[targetId].subtitle;
+            activateSection(link.dataset.target, { smooth: true });
         });
     });
+}
+
+function bindSectionLinks() {
+    document.addEventListener("click", event => {
+        const link = event.target.closest("[data-target-section]");
+        if (!link) return;
+
+        event.preventDefault();
+        activateSection(link.dataset.targetSection, { smooth: true });
+    });
+}
+
+function bindHashRoute() {
+    const openHashSection = () => {
+        const targetId = window.location.hash.replace("#", "");
+        if (pageMeta[targetId]) {
+            activateSection(targetId, { updateHash: false, scrollTop: false });
+        }
+    };
+
+    window.addEventListener("hashchange", openHashSection);
+    window.addEventListener("popstate", openHashSection);
+    openHashSection();
 }
 
 function bindPromptCopy() {
@@ -745,5 +1014,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCases();
     renderTerms();
     bindNavigation();
+    bindSectionLinks();
+    bindHashRoute();
     bindPromptCopy();
 });

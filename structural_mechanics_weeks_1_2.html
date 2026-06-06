@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weeks 1-2 | Structural Mechanics Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --primary: #f59e0b;
+            --primary-soft: rgba(245, 158, 11, 0.16);
+            --primary-border: rgba(245, 158, 11, 0.35);
+            --cyan: #38bdf8;
+            --green: #34d399;
+        }
+
+        .logo i { color: var(--primary); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.35)); }
+        .nav-links li.active { background: linear-gradient(90deg, #d97706, #f59e0b); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25); }
+        .main-content { min-width: 0; }
+        .content-wrapper { padding-top: 1rem; }
+        .detail-hero {
+            border: 1px solid var(--primary-border);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.13), rgba(56, 189, 248, 0.08));
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .detail-hero h2 { color: #fff; font-size: 1.35rem; margin-bottom: 0.6rem; }
+        .detail-hero p { color: var(--text-secondary); line-height: 1.7; max-width: 980px; }
+        .detail-topline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.6rem;
+        }
+        .detail-back-btn {
+            color: #111827;
+            background: var(--primary);
+            border-radius: 6px;
+            padding: 0.48rem 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+        }
+        .detail-back-btn:hover { filter: brightness(1.08); }
+        .section-kicker {
+            color: var(--cyan);
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 1.7rem 0 0.6rem;
+        }
+        .section-copy {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 980px;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
+        .detail-grid, .output-grid, .equation-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .equation-strip { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .detail-card, .output-card, .decision-card, .equation-box {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.4rem;
+        }
+        .output-card { border-left: 3px solid var(--cyan); }
+        .decision-card { border-left: 3px solid var(--primary); }
+        .detail-card h3, .output-card h3, .decision-card h3, .equation-box h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #fff;
+            font-size: 1.04rem;
+            margin-bottom: 0.75rem;
+        }
+        .detail-card h3 i, .output-card h3 i, .decision-card h3 i { color: var(--primary); }
+        .detail-card p, .output-card p, .decision-card p, .equation-box p {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-size: 0.92rem;
+        }
+        .tag {
+            display: inline-flex;
+            color: var(--primary);
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-border);
+            border-radius: 999px;
+            padding: 0.2rem 0.65rem;
+            font-weight: 800;
+            font-size: 0.78rem;
+            margin-bottom: 0.75rem;
+        }
+        ul.clean-list {
+            list-style: none;
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.85rem;
+        }
+        .clean-list li {
+            color: rgba(255,255,255,0.85);
+            line-height: 1.55;
+            font-size: 0.9rem;
+            padding-left: 1.05rem;
+            position: relative;
+        }
+        .clean-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+        }
+        .math-formula {
+            min-height: 74px;
+            border: 1px solid rgba(245, 158, 11, 0.22);
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.08);
+            color: #fde68a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            font-family: "Times New Roman", serif;
+            font-size: 1.55rem;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+        .math-frac {
+            display: inline-grid;
+            grid-template-rows: auto auto;
+            text-align: center;
+            min-width: 2.2rem;
+        }
+        .math-frac span:first-child {
+            border-bottom: 1px solid #fde68a;
+            padding: 0 0.3rem 0.18rem;
+        }
+        .math-frac span:last-child { padding: 0.18rem 0.3rem 0; }
+        .math-vector, .math-matrix {
+            border: 1px solid rgba(253, 230, 138, 0.45);
+            border-radius: 4px;
+            padding: 0.25rem 0.45rem;
+        }
+        .math-read {
+            color: #fef3c7;
+            font-size: 0.84rem;
+            line-height: 1.55;
+            margin-bottom: 0.4rem;
+        }
+        .output-meta {
+            color: #bfdbfe;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 6px;
+            padding: 0.75rem;
+            line-height: 1.55;
+            font-size: 0.86rem;
+            margin-top: 0.8rem;
+        }
+        @media (max-width: 860px) {
+            body { overflow: auto; }
+            .app-container { display: block; height: auto; }
+            .sidebar { width: 100%; position: static; }
+            .main-content { min-height: auto; }
+            .content-wrapper, header { padding-left: 1.25rem; padding-right: 1.25rem; }
+            .detail-topline { flex-direction: column; }
+            .header-text h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-shape-square'></i>
+                <span>StructSim</span>
+            </div>
+
+            <p class="sidebar-category">LEADERSHIP</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#objective-section'">
+                    <i class='bx bx-compass'></i>
+                    <span>Leader Objective</span>
+                </li>
+                <li class="active" onclick="location.href='structural_mechanics.html#roadmap-section'">
+                    <i class='bx bx-map-alt'></i>
+                    <span>12-Week Plan</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#workflow-section'">
+                    <i class='bx bx-git-merge'></i>
+                    <span>Tool Workflow</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">REVIEW SYSTEM</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#review-section'">
+                    <i class='bx bx-check-shield'></i>
+                    <span>Review Checklist</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#cases-section'">
+                    <i class='bx bx-test-tube'></i>
+                    <span>Capstone Cases</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#terms-section'">
+                    <i class='bx bx-book-content'></i>
+                    <span>Key Terms</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#prompt-section'">
+                    <i class='bx bx-brain'></i>
+                    <span>NotebookLM Prompt</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>Abaqus + HyperMesh</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1>Weeks 1-2 Foundation</h1>
+                    <p>구조역학과 FEA 판단 언어를 팀원과 맞추는 첫 2주</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section class="detail-hero">
+                    <div class="detail-topline">
+                        <h2>구조역학과 FEA 판단 언어 정렬</h2>
+                        <a href="structural_mechanics.html#roadmap-section" class="detail-back-btn"><i class='bx bx-arrow-back'></i> 12-Week Plan</a>
+                    </div>
+                    <p>첫 2주는 Abaqus 버튼을 외우기 전에, 팀원이 만든 모델을 같은 언어로 읽기 위한 물리/수치 해석 감각을 맞추는 구간입니다. 목표는 stress contour를 해석하는 것이 아니라, 왜 그런 stress가 생겼는지 load path, element, boundary condition, mesh sensitivity 관점에서 설명하는 것입니다.</p>
+                </section>
+
+                <div class="section-kicker">Governing Ideas</div>
+                <div class="equation-strip">
+                    <article class="equation-box">
+                        <h3>응력: 하중이 단면에 남기는 세기</h3>
+                        <div class="math-formula"><span>&sigma;</span><span>=</span><span class="math-frac"><span>F</span><span>A</span></span></div>
+                        <div class="math-read">stress = force / area</div>
+                        <p>응력은 단순한 색깔값이 아니라 하중이 단면을 통해 전달되는 방식입니다. 팀장 질문은 "이 힘은 실제로 어디로 흘러가는가?"입니다.</p>
+                    </article>
+                    <article class="equation-box">
+                        <h3>변형률: 늘어난 양을 원래 길이로 나눈 값</h3>
+                        <div class="math-formula"><span>&epsilon;</span><span>=</span><span class="math-frac"><span>&Delta;L</span><span>L</span></span></div>
+                        <div class="math-read">strain = length change / original length</div>
+                        <p>변형률은 재료가 국부적으로 얼마나 늘거나 줄었는지 보는 언어입니다. MD의 원자 변위 감각을 연속체 스케일로 올린 값입니다.</p>
+                    </article>
+                    <article class="equation-box">
+                        <h3>선형 탄성: 응력과 변형률의 비례 관계</h3>
+                        <div class="math-formula"><span>&sigma;</span><span>=</span><span>E</span><span>&epsilon;</span></div>
+                        <div class="math-read">stress = elastic modulus x strain</div>
+                        <p>이 관계가 깨지는 순간 plasticity, damage, nonlinear material 질문이 시작됩니다.</p>
+                    </article>
+                    <article class="equation-box">
+                        <h3>FEA 균형식: 강성, 변위, 하중의 관계</h3>
+                        <div class="math-formula"><span class="math-matrix">K</span><span class="math-vector">u</span><span>=</span><span class="math-vector">f</span></div>
+                        <div class="math-read">stiffness matrix x displacement vector = force vector</div>
+                        <p>stiffness, displacement, load의 관계를 보면 solver 결과를 그림이 아니라 방정식으로 읽게 됩니다.</p>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Result Language</div>
+                <p class="section-copy">구조해석 결과는 보통 stress, displacement, stiffness 세 가지 언어로 정리됩니다. Abaqus에서는 stress와 displacement가 직접 output variable로 나오지만, stiffness는 대개 반력과 변위로 계산하는 derived result입니다.</p>
+                <div class="detail-grid">
+                    <article class="output-card">
+                        <span class="tag">Stress</span>
+                        <h3><i class='bx bx-pulse'></i>Stress는 "어디가 위험한가"의 언어</h3>
+                        <p>하중이 구조 내부에서 어떤 방향과 크기로 전달되는지를 나타냅니다. 재료의 failure mode와 비교해야 의미가 생깁니다.</p>
+                        <ul class="clean-list">
+                            <li>Abaqus 기본 변수: S, 전체 stress tensor.</li>
+                            <li>구성 성분: S11, S22, S33, S12, S13, S23.</li>
+                            <li>Principal stress는 SP, stress invariant는 SINV 또는 S의 invariant로 확인합니다.</li>
+                        </ul>
+                        <div class="output-meta">보고서 기본값: ductile metal은 Mises, brittle/tension crack은 Max Principal, 방향성 검토는 S11/S22 같은 component.</div>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Displacement</span>
+                        <h3><i class='bx bx-move'></i>Displacement는 "얼마나 움직였는가"의 언어</h3>
+                        <p>구조물이 하중을 받은 뒤 node가 이동한 양입니다. 기능 요구사항, clearance, 조립 간섭, 변형 허용치와 직접 연결됩니다.</p>
+                        <ul class="clean-list">
+                            <li>Abaqus 기본 변수: U, nodal displacement.</li>
+                            <li>구성 성분: U1, U2, U3, 그리고 magnitude인 U, Magnitude.</li>
+                            <li>beam/shell 회전 자유도가 중요하면 UR1, UR2, UR3도 같이 봅니다.</li>
+                        </ul>
+                        <div class="output-meta">보고서 기본값: 요구사항 방향이 있으면 해당 component, 전체 처짐이면 U magnitude와 deformed shape.</div>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Stiffness</span>
+                        <h3><i class='bx bx-line-chart'></i>Stiffness는 "얼마나 버티는가"의 언어</h3>
+                        <p>하중을 줬을 때 변위가 얼마나 생기는지의 비율입니다. Abaqus contour에 바로 나오는 일반 결과라기보다, 반력과 변위 history에서 계산합니다.</p>
+                        <ul class="clean-list">
+                            <li>선형: k = F / delta.</li>
+                            <li>비선형 secant stiffness: 특정 하중점에서 F / delta.</li>
+                            <li>비선형 tangent stiffness: load-displacement curve의 국부 기울기 dF / ddelta.</li>
+                        </ul>
+                        <div class="output-meta">보고서 기본값: 기준 node 또는 reference point의 U와 support/prescribed point의 RF로 load-displacement curve를 만들고 slope를 계산.</div>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Abaqus Output Choice</div>
+                <p class="section-copy">보고서의 대표 응력은 failure mode와 재료 모델에 맞춰 선택해야 합니다. Maximum Principal이 익숙하더라도, ductile metal yielding에는 Mises가 더 자연스러운 기본값입니다.</p>
+                <div class="output-grid">
+                    <article class="output-card">
+                        <span class="tag">Mises</span>
+                        <h3><i class='bx bx-certification'></i>Von Mises Equivalent Stress</h3>
+                        <p>3D stress tensor를 ductile yielding 판단용 scalar로 줄인 값입니다.</p>
+                        <ul class="clean-list">
+                            <li>추천: ductile metal, plasticity, bracket/frame 일반 강도 검토.</li>
+                            <li>이유: hydrostatic pressure보다 distortion energy가 항복을 지배한다는 가정과 맞습니다.</li>
+                            <li>Abaqus 이름: MISES, MISESONLY, shell/beam section envelope에는 MISESMAX.</li>
+                        </ul>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Max Principal</span>
+                        <h3><i class='bx bx-up-arrow-alt'></i>Maximum Principal Stress</h3>
+                        <p>한 점에서 가능한 모든 면을 돌려봤을 때 가장 큰 인장 normal stress입니다.</p>
+                        <ul class="clean-list">
+                            <li>추천: brittle material, glass/ceramic, crack opening, adhesive peel, tensile failure.</li>
+                            <li>이유: 균열과 취성 파손은 최대 인장 주응력에 민감한 경우가 많습니다.</li>
+                            <li>Abaqus 이름: SP for all principal stresses, SP3 for maximum principal stress history output.</li>
+                        </ul>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Min Principal</span>
+                        <h3><i class='bx bx-down-arrow-alt'></i>Minimum Principal Stress</h3>
+                        <p>가장 큰 압축 방향의 principal stress입니다. 압축, crushing, contact bearing 문제에서 봅니다.</p>
+                        <ul class="clean-list">
+                            <li>추천: compressive crushing, bearing/contact pressure 주변, 취성재 압축 검토.</li>
+                            <li>주의: 부호 convention과 좌표계를 확인해야 합니다.</li>
+                            <li>Abaqus 이름: SP1 for minimum principal stress history output.</li>
+                        </ul>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Tresca</span>
+                        <h3><i class='bx bx-shuffle'></i>Tresca / Maximum Shear 기준</h3>
+                        <p>principal stress 차이로부터 최대 전단 지배를 보는 값입니다.</p>
+                        <ul class="clean-list">
+                            <li>추천: shear failure, shaft/torsion, 보수적 금속 항복 검토.</li>
+                            <li>일반 금속 설계 보고에서는 Mises와 함께 비교값으로 두는 편이 읽기 쉽습니다.</li>
+                            <li>Abaqus 이름: TRESC.</li>
+                        </ul>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Pressure</span>
+                        <h3><i class='bx bx-collapse-alt'></i>Hydrostatic Pressure Stress</h3>
+                        <p>응력 tensor의 평균 normal stress 성분입니다. 체적 압축/팽창, gasket, porous material에서 의미가 큽니다.</p>
+                        <ul class="clean-list">
+                            <li>추천: hydrostatic compression, gasket/seal, porous material, void growth risk.</li>
+                            <li>주의: 일반 강도 contour의 대표값으로 내보내면 사용자가 오해하기 쉽습니다.</li>
+                            <li>Abaqus 이름: PRESS 또는 PRESSONLY.</li>
+                        </ul>
+                    </article>
+                    <article class="output-card">
+                        <span class="tag">Components</span>
+                        <h3><i class='bx bx-grid-alt'></i>S11, S22, S33, S12, S13, S23</h3>
+                        <p>좌표계 방향의 normal/shear stress입니다. 방향 자체가 의사결정 기준일 때 씁니다.</p>
+                        <ul class="clean-list">
+                            <li>추천: composite, anisotropic material, 특정 방향 허용응력 검토.</li>
+                            <li>주의: 좌표계가 바뀌면 의미도 바뀝니다.</li>
+                            <li>Abaqus 이름: S for all components, Sij for individual history components.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Report Rule</div>
+                <div class="detail-grid">
+                    <article class="decision-card">
+                        <span class="tag">Primary Report Set</span>
+                        <h3><i class='bx bx-file-find'></i>기본 보고 묶음</h3>
+                        <p>결과 한 장에는 응력 하나만 넣지 말고, displacement와 evidence를 함께 둬야 합니다.</p>
+                        <ul class="clean-list">
+                            <li>Ductile metal: Mises max/region trend + U magnitude 또는 요구 방향 U component + RF balance.</li>
+                            <li>Brittle/tension: Max Principal + crack/opening 방향 component + mesh sensitivity.</li>
+                            <li>Stiffness: RF-U curve에서 secant 또는 tangent stiffness를 명시합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="decision-card">
+                        <span class="tag">Peak Rule</span>
+                        <h3><i class='bx bx-error-circle'></i>최대값 하나만 보고하지 않기</h3>
+                        <p>Peak stress는 singularity, sharp corner, point load, constraint 때문에 mesh를 조일수록 무한히 커질 수 있습니다.</p>
+                        <ul class="clean-list">
+                            <li>최대값은 위치, averaging 여부, element/integration point 여부를 함께 적습니다.</li>
+                            <li>hot spot 주변 path/area average와 mesh refinement trend를 같이 봅니다.</li>
+                            <li>의사결정에는 peak보다 trend, margin, correlation evidence가 더 중요할 수 있습니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Two-Week Work Plan</div>
+                <div class="detail-grid">
+                    <article class="detail-card">
+                        <span class="tag">Week 1</span>
+                        <h3><i class='bx bx-book-open'></i>판단 언어 정렬</h3>
+                        <p>stress, strain, stiffness, load path, element, DOF를 같은 의미로 말할 수 있게 만듭니다.</p>
+                        <ul class="clean-list">
+                            <li>normal/shear stress, principal stress, von Mises stress 용도 구분.</li>
+                            <li>beam/shell/solid element 선택 기준 정리.</li>
+                            <li>BC와 load가 실제 load path를 바꾸는 사례 수집.</li>
+                        </ul>
+                    </article>
+                    <article class="detail-card">
+                        <span class="tag">Week 2</span>
+                        <h3><i class='bx bx-ruler'></i>Benchmark로 검증 감각 만들기</h3>
+                        <p>간단한 benchmark를 통해 손계산, mesh sensitivity, Abaqus output을 연결합니다.</p>
+                        <ul class="clean-list">
+                            <li>cantilever: tip displacement와 reaction balance 비교.</li>
+                            <li>plate with hole: stress concentration과 mesh sensitivity 확인.</li>
+                            <li>simple bracket: Mises, Max Principal, displacement를 함께 보고서화.</li>
+                        </ul>
+                    </article>
+                    <article class="detail-card">
+                        <span class="tag">Deliverable</span>
+                        <h3><i class='bx bx-message-square-detail'></i>팀 리뷰 질문 리스트</h3>
+                        <p>팀원이 결과를 가져왔을 때 바로 쓸 질문 세트를 남깁니다.</p>
+                        <ul class="clean-list">
+                            <li>이 모델이 현실을 가장 크게 단순화한 지점은 어디인가?</li>
+                            <li>이 stress peak는 failure risk인가, singularity인가?</li>
+                            <li>현재 mesh로 의사결정 가능한 결과와 불가능한 결과는 무엇인가?</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
