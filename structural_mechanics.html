@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Mechanics Simulation Learning Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --primary: #f59e0b;
+            --primary-soft: rgba(245, 158, 11, 0.16);
+            --primary-border: rgba(245, 158, 11, 0.35);
+            --cyan: #38bdf8;
+            --rose: #fb7185;
+            --violet: #a78bfa;
+            --green: #34d399;
+        }
+
+        .logo i { color: var(--primary); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.35)); }
+        .nav-links li.active { background: linear-gradient(90deg, #d97706, #f59e0b); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25); }
+        .content-wrapper { padding-top: 1rem; }
+
+        .leader-hero {
+            border: 1px solid var(--primary-border);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(56, 189, 248, 0.08));
+            border-radius: 8px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .leader-hero h2 { font-size: 1.5rem; margin-bottom: 0.8rem; color: #fff; }
+        .leader-hero p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
+        .north-star {
+            background: rgba(0, 0, 0, 0.24);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+        .north-star span { color: var(--primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+        .north-star strong { display: block; color: #fff; line-height: 1.55; margin-top: 0.5rem; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 1rem;
+        }
+
+        .sim-card, .roadmap-card, .review-card, .case-card, .term-card, .workflow-step {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.4rem;
+        }
+
+        .sim-card h3, .review-card h3, .case-card h3, .term-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #fff;
+            font-size: 1.08rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .sim-card h3 i, .review-card h3 i, .case-card h3 i, .term-card h3 i { color: var(--primary); }
+        .sim-card p, .roadmap-card p, .review-card p, .case-card p, .term-card p, .workflow-step p {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-size: 0.92rem;
+        }
+
+        .signal-list {
+            list-style: none;
+            display: grid;
+            gap: 0.65rem;
+            margin-top: 1rem;
+        }
+        .signal-list li {
+            border-left: 3px solid var(--primary);
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+            padding: 0.75rem 0.9rem;
+            color: rgba(255,255,255,0.86);
+            line-height: 1.55;
+            font-size: 0.9rem;
+        }
+
+        .roadmap-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+        .roadmap-card { position: relative; overflow: hidden; }
+        .phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--primary);
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-border);
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+        .roadmap-card h3 { font-size: 1.18rem; margin-bottom: 0.5rem; color: #fff; }
+        .roadmap-card h4 { color: var(--cyan); margin: 1rem 0 0.4rem; font-size: 0.9rem; }
+
+        .workflow-chain {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .workflow-step .step-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin: 0 0 1rem 0;
+            color: var(--primary);
+            border-color: var(--primary);
+            font-size: 1.3rem;
+        }
+        .workflow-step h3 { margin-bottom: 0.65rem; color: #fff; font-size: 1.05rem; }
+        .leader-question {
+            margin-top: 0.9rem;
+            padding: 0.8rem;
+            border-radius: 6px;
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 3px solid var(--cyan);
+            color: #bae6fd;
+            line-height: 1.55;
+            font-size: 0.88rem;
+        }
+
+        .review-card ul, .case-card ul {
+            list-style: none;
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.9rem;
+        }
+        .review-card li, .case-card li {
+            color: rgba(255,255,255,0.84);
+            line-height: 1.5;
+            font-size: 0.9rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .review-card li::before, .case-card li::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+        }
+
+        .prompt-panel {
+            background: #1e1e1e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prompt-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .prompt-toolbar button {
+            border: none;
+            background: var(--primary);
+            color: #111827;
+            border-radius: 6px;
+            padding: 0.55rem 0.9rem;
+            cursor: pointer;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        #notebook-prompt {
+            white-space: pre-wrap;
+            padding: 1.25rem;
+            color: #e2e8f0;
+            line-height: 1.65;
+            font-size: 0.88rem;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 860px) {
+            body { overflow: auto; }
+            .app-container { display: block; height: auto; }
+            .sidebar { width: 100%; position: static; }
+            .main-content { min-height: auto; }
+            .content-wrapper, header { padding-left: 1.25rem; padding-right: 1.25rem; }
+            .leader-hero { grid-template-columns: 1fr; padding: 1.25rem; }
+            .header-text h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-shape-square'></i>
+                <span>StructSim</span>
+            </div>
+
+            <p class="sidebar-category">LEADERSHIP</p>
+            <ul class="nav-links">
+                <li class="active" data-target="objective-section">
+                    <i class='bx bx-compass'></i>
+                    <span>Leader Objective</span>
+                </li>
+                <li data-target="roadmap-section">
+                    <i class='bx bx-map-alt'></i>
+                    <span>12-Week Plan</span>
+                </li>
+                <li data-target="workflow-section">
+                    <i class='bx bx-git-merge'></i>
+                    <span>Tool Workflow</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">REVIEW SYSTEM</p>
+            <ul class="nav-links">
+                <li data-target="review-section">
+                    <i class='bx bx-check-shield'></i>
+                    <span>Review Checklist</span>
+                </li>
+                <li data-target="cases-section">
+                    <i class='bx bx-test-tube'></i>
+                    <span>Capstone Cases</span>
+                </li>
+                <li data-target="terms-section">
+                    <i class='bx bx-book-content'></i>
+                    <span>Key Terms</span>
+                </li>
+                <li data-target="prompt-section">
+                    <i class='bx bx-brain'></i>
+                    <span>NotebookLM Prompt</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>Abaqus + HyperMesh</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1 id="page-title">Leader Objective</h1>
+                    <p id="page-subtitle">구조역학 Simulation 팀장이 가져야 할 판단 능력의 목표선</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section id="objective-section" class="content-section active">
+                    <div class="leader-hero">
+                        <div>
+                            <h2>목표는 최고 숙련자가 아니라 해석 의사결정권자입니다.</h2>
+                            <p>팀장은 Abaqus와 HyperMesh의 모든 버튼을 외울 필요는 없습니다. 대신 외부 기술 상황과 고객 요구를 내부 simulation campaign으로 번역하고, 실무자가 만든 모델의 핵심 가정과 약한 고리를 빠르게 드러낼 수 있어야 합니다.</p>
+                            <p>이 대시보드는 구조역학 해석 실무자를 대체하기 위한 과정이 아니라, 팀원이 가져온 해석 결과를 신뢰도, 물리성, 사업적 의미까지 포함해 리뷰할 수 있는 리더용 학습 계획입니다.</p>
+                        </div>
+                        <div class="north-star">
+                            <span>North Star</span>
+                            <strong>팀원이 결과를 가져왔을 때, 질문 5개만으로 모델의 물리 가정, 수치 리스크, 의사결정 가능 여부를 드러낸다.</strong>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid" id="leader-grid"></div>
+                </section>
+
+                <section id="roadmap-section" class="content-section">
+                    <div class="roadmap-layout" id="roadmap-grid"></div>
+                </section>
+
+                <section id="workflow-section" class="content-section">
+                    <div class="notebooklm-banner" style="border-left-color: var(--primary); background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(56, 189, 248, 0.05));">
+                        <div class="notebooklm-info">
+                            <i class='bx bx-brain' style="color:var(--primary);"></i>
+                            <span>HyperMesh는 모델 빌드와 메쉬 품질을, Abaqus는 물리 모델과 solver evidence를 보는 식으로 역할을 분리해 학습합니다.</span>
+                        </div>
+                    </div>
+                    <div class="workflow-chain" id="workflow-grid"></div>
+                </section>
+
+                <section id="review-section" class="content-section">
+                    <div class="dashboard-grid" id="review-grid"></div>
+                </section>
+
+                <section id="cases-section" class="content-section">
+                    <div class="dashboard-grid" id="cases-grid"></div>
+                </section>
+
+                <section id="terms-section" class="content-section">
+                    <div class="dashboard-grid" id="terms-grid"></div>
+                </section>
+
+                <section id="prompt-section" class="content-section">
+                    <div class="prompt-panel">
+                        <div class="prompt-toolbar">
+                            <span><i class='bx bx-copy-alt'></i> NotebookLM Deep Research에 붙여넣을 시작 프롬프트</span>
+                            <button id="copy-notebook-prompt" aria-label="Copy NotebookLM prompt"><i class='bx bx-copy'></i> Copy</button>
+                        </div>
+                        <pre id="notebook-prompt"></pre>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="structural_mechanics.js"></script>
+</body>
+</html>
