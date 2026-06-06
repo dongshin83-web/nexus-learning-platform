@@ -43,7 +43,7 @@ const dayPlan = [
         hours: 2,
         blocks: [
             ["1.5h", "학원 숙제", "국어·영어·수학 F/up"],
-            ["0.5h", "사회·도덕", "교과서 키워드 10개"]
+            ["0.5h", "사회·도덕", "1회독 및 요약노트 만들기"]
         ]
     },
     {
@@ -53,7 +53,7 @@ const dayPlan = [
         blocks: [
             ["1.5h", "학원 숙제", "국어·영어·수학 F/up"],
             ["0.8h", "수학 오답", "이번 주 틀린 문제 재풀이"],
-            ["0.7h", "과학·사회", "한 과목 집중 정리"]
+            ["0.7h", "과학·사회", "1회독 및 요약노트 만들기"]
         ]
     },
     {
@@ -63,7 +63,7 @@ const dayPlan = [
         blocks: [
             ["1.5h", "학원 숙제", "국어·영어·수학 F/up"],
             ["1.0h", "수학", "단원별 문제 세트"],
-            ["1.0h", "비주요 과목", "교과서 정리 또는 문제집"]
+            ["1.0h", "국영수 제외 과목", "1회독 및 요약노트 만들기"]
         ]
     },
     {
@@ -73,7 +73,7 @@ const dayPlan = [
         blocks: [
             ["1.5h", "학원 숙제", "국어·영어·수학 F/up"],
             ["0.8h", "과학 문제집", "채점 후 오답 표시"],
-            ["0.7h", "사회·도덕", "암기 카드 만들기"],
+            ["0.7h", "사회·도덕", "1회독 및 요약노트 만들기"],
             ["0.5h", "주간 점검", "부모와 다음 주 조정"]
         ]
     }
@@ -373,8 +373,37 @@ function getDefaultTasksForDate(date) {
 
 function getTasksForDate(dateKey) {
     const stored = getStored(getDateTasksKey(dateKey), null);
-    if (stored) return stored;
+    if (stored) return normalizeTasksForDate(dateKey, stored);
     return getDefaultTasksForDate(fromDateKey(dateKey));
+}
+
+function normalizeTasksForDate(dateKey, tasks) {
+    let changed = false;
+    const normalized = tasks.map(task => {
+        const title = task.title || "";
+        const detail = task.detail || "";
+        const isNonCoreMemoryTask =
+            title.includes("사회") ||
+            title.includes("도덕") ||
+            title.includes("기술") ||
+            title.includes("가정") ||
+            title.includes("비주요") ||
+            title.includes("국영수 제외") ||
+            title.includes("과학");
+
+        if (isNonCoreMemoryTask && (detail.includes("암기 카드") || detail.includes("키워드 10개") || detail.includes("교과서 정리 또는 문제집") || detail.includes("한 과목 집중 정리"))) {
+            changed = true;
+            return {
+                ...task,
+                detail: "1회독 및 요약노트 만들기"
+            };
+        }
+
+        return task;
+    });
+
+    if (changed) saveTasksForDate(dateKey, normalized);
+    return normalized;
 }
 
 function saveTasksForDate(dateKey, tasks) {
