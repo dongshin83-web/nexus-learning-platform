@@ -7,6 +7,10 @@ const pageMeta = {
         title: "12-Week Learning Plan",
         subtitle: "Abaqus와 HyperMesh를 리더십 리뷰 능력 중심으로 학습하는 12주 계획"
     },
+    "foundation-section": {
+        title: "Weeks 1-2 Foundation",
+        subtitle: "구조역학과 FEA 판단 언어를 팀원과 맞추는 첫 2주"
+    },
     "workflow-section": {
         title: "Abaqus + HyperMesh Workflow",
         subtitle: "외부 요구를 계산 전략으로 번역하고 결과를 의사결정 자료로 만드는 흐름"
@@ -68,6 +72,222 @@ const leaderCards = [
             "이 결과를 믿어도 되는 가장 강한 근거는 무엇인가?",
             "이 모델이 현실을 가장 크게 단순화한 지점은 어디인가?",
             "의사결정에 쓰기 전에 하나만 더 검증한다면 무엇인가?"
+        ]
+    }
+];
+
+const foundationEquations = [
+    {
+        formula: "sigma = F / A",
+        note: "응력은 단순한 색깔값이 아니라 하중이 단면을 통해 전달되는 방식입니다. 팀장 질문은 '이 힘은 실제로 어디로 흘러가는가?'입니다."
+    },
+    {
+        formula: "epsilon = Delta L / L",
+        note: "변형률은 재료가 국부적으로 얼마나 늘거나 줄었는지 보는 언어입니다. MD의 원자 변위 감각을 연속체 스케일로 올린 값입니다."
+    },
+    {
+        formula: "sigma = E epsilon",
+        note: "선형 탄성의 가장 단순한 constitutive law입니다. 이 관계가 깨지는 순간 plasticity, damage, nonlinear material 질문이 시작됩니다."
+    },
+    {
+        formula: "K u = f",
+        note: "FEA의 기본 균형식입니다. stiffness, displacement, load의 관계를 보면 solver 결과를 그림이 아니라 방정식으로 읽게 됩니다."
+    }
+];
+
+const foundationConcepts = [
+    {
+        tag: "Core Language",
+        icon: "bx-transfer-alt",
+        title: "Stress, Strain, Stiffness, Load Path",
+        body: "1~2주차의 중심 언어입니다. stress는 결과, strain은 변형의 측도, stiffness는 저항, load path는 힘이 구조물 안에서 흘러가는 길입니다.",
+        bullets: [
+            "stress contour를 보기 전에 load path를 먼저 예상합니다.",
+            "높은 stress가 실제 failure risk인지, singularity인지 구분합니다.",
+            "stiffness가 커진다는 말이 변형, 하중 분배, 고유진동수에 어떤 의미인지 연결합니다."
+        ]
+    },
+    {
+        tag: "Discretization",
+        icon: "bx-grid-alt",
+        title: "Weak Form, Element, DOF",
+        body: "FEA는 연속체를 element와 node의 자유도 문제로 바꿔 풉니다. 팀장은 상세 유도보다 '무엇을 이산화했는가'를 잡으면 됩니다.",
+        bullets: [
+            "node 값만 계산하고 element 내부는 shape function으로 보간합니다.",
+            "DOF는 모델이 움직일 수 있는 수치적 자유도입니다.",
+            "element 선택은 계산 편의가 아니라 물리 현상 표현력의 선택입니다."
+        ]
+    },
+    {
+        tag: "Model Idealization",
+        icon: "bx-shape-square",
+        title: "Beam, Shell, Solid",
+        body: "같은 구조물도 어떤 element로 이상화하느냐에 따라 결과와 계산 비용이 크게 달라집니다.",
+        bullets: [
+            "beam은 길이 방향 거동이 지배적일 때 유리합니다.",
+            "shell은 두께가 작고 면내/굽힘 거동이 중요한 구조에 적합합니다.",
+            "solid는 3D 응력상태가 필요하지만 mesh 비용과 결과 해석 부담이 큽니다."
+        ]
+    },
+    {
+        tag: "Boundary Reality",
+        icon: "bx-lock-alt",
+        title: "Boundary Condition과 Constraint",
+        body: "가장 강력하고 위험한 모델링 선택입니다. 잘못된 BC는 solver가 아니라 현실을 바꿉니다.",
+        bullets: [
+            "완전 고정 조건은 현실보다 구조를 과도하게 단단하게 만들 수 있습니다.",
+            "하중을 force, pressure, displacement 중 무엇으로 주는지에 따라 물리 의미가 달라집니다.",
+            "반력 합계와 하중 합계를 비교하는 습관을 첫 주부터 만듭니다."
+        ]
+    }
+];
+
+const backgroundBridges = [
+    {
+        tag: "DFT to FEA",
+        icon: "bx-atom",
+        title: "에너지 지형에서 constitutive law로",
+        body: "DFT가 원자/전자 수준에서 재료의 에너지와 물성을 이해하는 창이라면, FEA는 그 물성을 연속체 constitutive law로 받아 구조 스케일의 거동을 계산합니다.",
+        bullets: [
+            "DFT/MD 물성은 FEA의 E, nu, CTE, plastic law로 들어옵니다.",
+            "팀장 질문: 이 재료 물성은 해석 온도와 변형률 범위에서 유효한가?"
+        ]
+    },
+    {
+        tag: "MD to FEA",
+        icon: "bx-network-chart",
+        title: "원자 trajectory에서 연속체 field로",
+        body: "MD가 원자 위치와 속도의 시간 진화를 본다면, FEA는 displacement, strain, stress field를 요소 단위로 봅니다.",
+        bullets: [
+            "둘 다 경계조건과 시간/길이 스케일 선택이 결과를 지배합니다.",
+            "팀장 질문: 이 continuum 가정은 미세구조 효과를 무시해도 되는 스케일인가?"
+        ]
+    },
+    {
+        tag: "CFD to FEA",
+        icon: "bx-water",
+        title: "보존법칙과 residual 감각",
+        body: "CFD에서 residual, mesh independence, boundary layer를 보듯이 FEA에서도 residual, mesh sensitivity, stress gradient를 봅니다.",
+        bullets: [
+            "CFD의 유량/압력 경계조건 감각은 FEA의 force/displacement/constraint 감각과 닮아 있습니다.",
+            "팀장 질문: 수렴한 숫자인가, 물리적으로 균형 잡힌 해인가?"
+        ]
+    },
+    {
+        tag: "DSMC to FEA",
+        icon: "bx-scatter-chart",
+        title: "입자 관점에서 element 관점으로",
+        body: "DSMC가 분자/입자 샘플링으로 거시 유동량을 얻는다면, FEA는 element integration으로 연속체 장을 얻습니다.",
+        bullets: [
+            "둘 다 sampling 또는 integration 선택이 noise와 정확도를 바꿉니다.",
+            "팀장 질문: 해석 자유도와 계산 비용이 의사결정에 필요한 해상도를 만족하는가?"
+        ]
+    }
+];
+
+const week12Agenda = [
+    {
+        tag: "Week 1",
+        icon: "bx-compass",
+        title: "Day 1-2: 문제를 구조역학 문장으로 바꾸기",
+        body: "외부 요구를 '어떤 하중에서 어떤 failure mode를 확인할 것인가'로 번역합니다.",
+        bullets: [
+            "관심 결과를 stress, displacement, stiffness, natural frequency, fatigue risk 중 하나로 분류합니다.",
+            "하중, 지지, 접촉, 재료 비선형 중 결과를 지배할 후보를 적습니다."
+        ]
+    },
+    {
+        tag: "Week 1",
+        icon: "bx-book-open",
+        title: "Day 3-4: continuum mechanics 최소 복습",
+        body: "응력/변형률/강성/평형을 Abaqus 결과를 읽는 언어로 정리합니다.",
+        bullets: [
+            "normal/shear stress, principal stress, von Mises stress의 용도를 구분합니다.",
+            "plane stress, plane strain, 3D stress state가 필요한 조건을 정리합니다."
+        ]
+    },
+    {
+        tag: "Week 1",
+        icon: "bx-grid",
+        title: "Day 5: element와 mesh 감각 잡기",
+        body: "beam, shell, solid element 선택 기준과 mesh refinement가 결과에 미치는 영향을 봅니다.",
+        bullets: [
+            "element type 선택 이유를 한 문장으로 말하는 연습을 합니다.",
+            "stress gradient가 큰 곳과 단순히 mesh가 나쁜 곳을 분리합니다."
+        ]
+    },
+    {
+        tag: "Week 2",
+        icon: "bx-ruler",
+        title: "Day 6-7: cantilever benchmark",
+        body: "손계산과 FEA 결과를 비교하며 FEA가 언제 믿을 만해지는지 감각을 만듭니다.",
+        bullets: [
+            "tip displacement를 beam theory와 비교합니다.",
+            "reaction force balance와 mesh refinement trend를 기록합니다."
+        ]
+    },
+    {
+        tag: "Week 2",
+        icon: "bx-donut-chart",
+        title: "Day 8-9: plate with hole benchmark",
+        body: "응력집중과 singularity, mesh sensitivity를 구분하는 훈련을 합니다.",
+        bullets: [
+            "hole 주변 stress concentration이 mesh에 따라 어떻게 바뀌는지 봅니다.",
+            "peak stress를 그대로 설계 판단에 쓰면 위험한 조건을 정리합니다."
+        ]
+    },
+    {
+        tag: "Week 2",
+        icon: "bx-conversation",
+        title: "Day 10: 팀 리뷰 리허설",
+        body: "팀원 한 명에게 같은 결과를 보여주고, 내가 던진 질문이 모델의 약한 고리를 드러내는지 확인합니다.",
+        bullets: [
+            "좋은 질문 10개와 부족했던 질문 5개를 기록합니다.",
+            "다음 3~4주차 Abaqus 실습에서 확인할 evidence 항목을 확정합니다."
+        ]
+    }
+];
+
+const week12Deliverables = [
+    {
+        tag: "Deliverable 1",
+        icon: "bx-file",
+        title: "FEA Mental Model Memo",
+        body: "A4 한 장으로 'FEA는 무엇을 풀고, 무엇을 가정하고, 무엇을 검증해야 하는가'를 정리합니다.",
+        bullets: [
+            "K u = f의 각 항을 구조역학 언어로 설명합니다.",
+            "해석 결과를 신뢰하기 위한 evidence 5개를 적습니다."
+        ]
+    },
+    {
+        tag: "Deliverable 2",
+        icon: "bx-table",
+        title: "Element Selection Matrix",
+        body: "beam/shell/solid/plane stress/plane strain을 언제 쓰고 언제 피할지 표로 만듭니다.",
+        bullets: [
+            "각 element idealization의 전제와 대표 리스크를 기록합니다.",
+            "팀의 실제 제품/부품 예시를 하나씩 연결합니다."
+        ]
+    },
+    {
+        tag: "Deliverable 3",
+        icon: "bx-line-chart",
+        title: "Benchmark Result Note",
+        body: "cantilever와 plate with hole 결과를 손계산, mesh sensitivity, 해석자의 판단 메모와 함께 누적합니다.",
+        bullets: [
+            "결과 그림보다 입력 가정과 반력/변위/응력 trend를 먼저 둡니다.",
+            "다음 해석에서 재사용할 검토 포인트를 체크리스트로 뽑습니다."
+        ]
+    },
+    {
+        tag: "Deliverable 4",
+        icon: "bx-message-square-detail",
+        title: "Team Discussion Questions",
+        body: "팀원과의 첫 구조해석 리뷰 미팅에서 사용할 질문 리스트입니다.",
+        bullets: [
+            "이 모델이 현실을 가장 크게 단순화한 지점은 어디인가?",
+            "이 stress peak는 failure risk인가, singularity인가?",
+            "현재 mesh로 의사결정 가능한 결과와 불가능한 결과는 무엇인가?"
         ]
     }
 ];
@@ -328,6 +548,64 @@ function renderLeaderCards() {
     `).join("");
 }
 
+function renderWeek12Foundation() {
+    const equationGrid = document.getElementById("foundation-equations");
+    equationGrid.innerHTML = foundationEquations.map(item => `
+        <div class="equation-box">
+            <code>${item.formula}</code>
+            <span>${item.note}</span>
+        </div>
+    `).join("");
+
+    const conceptGrid = document.getElementById("foundation-concepts");
+    conceptGrid.innerHTML = foundationConcepts.map(item => `
+        <article class="foundation-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+        </article>
+    `).join("");
+
+    const bridgeGrid = document.getElementById("background-bridges");
+    bridgeGrid.innerHTML = backgroundBridges.map(item => `
+        <article class="foundation-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+        </article>
+    `).join("");
+
+    const agendaGrid = document.getElementById("week12-agenda");
+    agendaGrid.innerHTML = week12Agenda.map(item => `
+        <article class="agenda-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+        </article>
+    `).join("");
+
+    const deliverableGrid = document.getElementById("week12-deliverables");
+    deliverableGrid.innerHTML = week12Deliverables.map(item => `
+        <article class="deliverable-card">
+            <small>${item.tag}</small>
+            <h3><i class='bx ${item.icon}'></i>${item.title}</h3>
+            <p>${item.body}</p>
+            <ul>
+                ${item.bullets.map(bullet => `<li>${bullet}</li>`).join("")}
+            </ul>
+        </article>
+    `).join("");
+}
+
 function renderRoadmap() {
     const grid = document.getElementById("roadmap-grid");
     grid.innerHTML = roadmap.map(item => `
@@ -460,6 +738,7 @@ function bindPromptCopy() {
 
 document.addEventListener("DOMContentLoaded", () => {
     renderLeaderCards();
+    renderWeek12Foundation();
     renderRoadmap();
     renderWorkflow();
     renderReview();
