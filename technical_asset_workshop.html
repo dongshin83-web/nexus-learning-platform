@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technical Asset Workshop Dashboard</title>
+    <title>Technical Assetization Workshop</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -33,32 +33,37 @@
             gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
-
         .workshop-hero h2 { font-size: 1.55rem; margin-bottom: 0.8rem; color: #fff; }
         .workshop-hero p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
-        .workshop-north-star {
+        .north-star {
             background: rgba(0, 0, 0, 0.24);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 8px;
             padding: 1.25rem;
         }
-        .workshop-north-star span { color: var(--primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
-        .workshop-north-star strong { display: block; color: #fff; line-height: 1.55; margin-top: 0.5rem; }
+        .north-star span { color: var(--primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+        .north-star strong { display: block; color: #fff; line-height: 1.55; margin-top: 0.5rem; }
 
-        .workshop-grid {
+        .section-copy {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 980px;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
+        .asset-grid, .compact-grid, .two-column-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
             gap: 1rem;
         }
-
-        .workshop-card, .stage-card, .output-card, .definition-card, .check-card {
+        .two-column-grid { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+        .asset-card, .note-card, .map-card, .metric-card, .question-card {
             background: rgba(255,255,255,0.035);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 8px;
-            padding: 1.4rem;
+            padding: 1.35rem;
         }
-
-        .workshop-card h3, .stage-card h3, .output-card h3, .definition-card h3, .check-card h3 {
+        .asset-card h3, .note-card h3, .map-card h3, .metric-card h3, .question-card h3 {
             display: flex;
             align-items: center;
             gap: 0.55rem;
@@ -66,14 +71,13 @@
             font-size: 1.06rem;
             margin-bottom: 0.75rem;
         }
-        .workshop-card h3 i, .stage-card h3 i, .output-card h3 i, .definition-card h3 i, .check-card h3 i { color: var(--primary); }
-        .workshop-card p, .stage-card p, .output-card p, .definition-card p, .check-card p {
+        .asset-card h3 i, .note-card h3 i, .map-card h3 i, .metric-card h3 i, .question-card h3 i { color: var(--primary); }
+        .asset-card p, .note-card p, .map-card p, .metric-card p, .question-card p {
             color: var(--text-secondary);
             line-height: 1.65;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
         }
-
-        .stage-card small, .output-card small, .definition-card small, .check-card small {
+        .asset-card small, .note-card small, .map-card small, .metric-card small, .question-card small {
             display: inline-flex;
             color: var(--primary);
             background: var(--primary-soft);
@@ -83,21 +87,20 @@
             font-weight: 800;
             margin-bottom: 0.75rem;
         }
-
-        .stage-card ul, .output-card ul, .definition-card ul, .check-card ul {
+        .asset-card ul, .note-card ul, .map-card ul, .metric-card ul, .question-card ul {
             list-style: none;
             display: grid;
             gap: 0.55rem;
             margin-top: 0.85rem;
         }
-        .stage-card li, .output-card li, .definition-card li, .check-card li {
+        .asset-card li, .note-card li, .map-card li, .metric-card li, .question-card li {
             color: rgba(255,255,255,0.84);
             line-height: 1.55;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             padding-left: 1.05rem;
             position: relative;
         }
-        .stage-card li::before, .output-card li::before, .definition-card li::before, .check-card li::before {
+        .asset-card li::before, .note-card li::before, .map-card li::before, .metric-card li::before, .question-card li::before {
             content: "";
             position: absolute;
             left: 0;
@@ -108,81 +111,116 @@
             background: var(--primary);
         }
 
-        .workbench-layout {
+        .flow-strip {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(300px, 0.72fr);
-            gap: 1rem;
-            align-items: start;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 0.7rem;
+            margin: 1rem 0 1.35rem;
         }
-        .field-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.85rem;
-        }
-        .field-card {
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        .field-card.full { grid-column: 1 / -1; }
-        .field-card label {
-            display: block;
-            color: #cffafe;
-            font-size: 0.82rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-        .field-card p {
-            color: var(--text-secondary);
-            font-size: 0.86rem;
-            line-height: 1.55;
-        }
-        .preview-card {
-            position: sticky;
-            top: 1rem;
+        .flow-step {
             border: 1px solid var(--primary-border);
-            background: linear-gradient(145deg, rgba(8, 47, 73, 0.54), rgba(15, 23, 42, 0.9));
+            background: rgba(34, 211, 238, 0.07);
             border-radius: 8px;
-            padding: 1.35rem;
-        }
-        .preview-card h3 { color: #fff; margin-bottom: 0.7rem; font-size: 1.08rem; }
-        .preview-card p { color: #bfdbfe; line-height: 1.65; font-size: 0.9rem; }
-        .preview-card .template-line {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            margin-top: 1rem;
-            padding-top: 1rem;
+            padding: 0.85rem;
             color: #ecfeff;
+            font-weight: 800;
+            text-align: center;
+            font-size: 0.86rem;
+        }
+        .decision-banner {
+            border-left: 3px solid var(--primary);
+            background: rgba(34, 211, 238, 0.08);
+            border-radius: 6px;
+            padding: 1rem 1.15rem;
+            color: #cffafe;
             line-height: 1.65;
-            font-weight: 600;
-        }
-        .quality-list {
-            display: grid;
-            gap: 0.6rem;
-            margin-top: 1rem;
-        }
-        .quality-list div {
-            display: flex;
-            gap: 0.55rem;
-            color: rgba(255,255,255,0.86);
-            line-height: 1.5;
-            font-size: 0.88rem;
-        }
-        .quality-list i { color: var(--green); font-size: 1rem; margin-top: 0.15rem; }
-        .section-copy {
-            color: var(--text-secondary);
-            line-height: 1.65;
-            max-width: 980px;
             margin-bottom: 1rem;
             font-size: 0.92rem;
         }
-        .prompt-panel {
+
+        .memo-panel {
+            border: 1px solid rgba(34, 211, 238, 0.22);
+            background: rgba(8, 47, 73, 0.26);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+        .memo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.85rem;
+        }
+        .memo-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .memo-header h3 i { color: var(--primary); }
+        .memo-status { color: var(--text-secondary); font-size: 0.78rem; }
+        .memo-input-row {
+            display: grid;
+            grid-template-columns: minmax(180px, 0.35fr) minmax(0, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .memo-panel input, .memo-panel textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.28);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 7px;
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: 0.88rem;
+            padding: 0.75rem;
+        }
+        .memo-panel textarea {
+            min-height: 132px;
+            resize: vertical;
+            line-height: 1.55;
+        }
+        .memo-panel input:focus, .memo-panel textarea:focus { outline: none; border-color: var(--primary); }
+        .memo-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .memo-actions button, .export-actions button {
+            border: none;
+            background: var(--primary);
+            color: #083344;
+            border-radius: 6px;
+            padding: 0.55rem 0.85rem;
+            cursor: pointer;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-family: var(--font-main);
+            font-size: 0.84rem;
+        }
+        .memo-actions button.secondary, .export-actions button.secondary {
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .memo-help {
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+        .export-panel {
             background: #1e1e1e;
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
             overflow: hidden;
         }
-        .prompt-toolbar {
+        .export-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -192,25 +230,13 @@
             color: var(--text-secondary);
             font-size: 0.85rem;
         }
-        .prompt-toolbar button {
-            border: none;
-            background: var(--primary);
-            color: #083344;
-            border-radius: 6px;
-            padding: 0.55rem 0.9rem;
-            cursor: pointer;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        #workshop-prompt {
+        #memo-export-preview, #workshop-prompt {
             white-space: pre-wrap;
             padding: 1.25rem;
             color: #e2e8f0;
             line-height: 1.65;
             font-size: 0.88rem;
-            max-height: 520px;
+            max-height: 560px;
             overflow-y: auto;
         }
 
@@ -220,8 +246,7 @@
             .sidebar { width: 100%; position: static; }
             .main-content { min-height: auto; }
             .content-wrapper, header { padding-left: 1.25rem; padding-right: 1.25rem; }
-            .workshop-hero, .workbench-layout, .field-grid { grid-template-columns: 1fr; }
-            .preview-card { position: static; }
+            .workshop-hero, .memo-input-row { grid-template-columns: 1fr; }
             .header-text h1 { font-size: 1.7rem; }
         }
     </style>
@@ -237,48 +262,25 @@
 
             <p class="sidebar-category">WORKSHOP</p>
             <ul class="nav-links">
-                <li class="active" data-target="guide-section">
-                    <i class='bx bx-map-pin'></i>
-                    <span>워크샵 안내</span>
-                </li>
-                <li data-target="definition-section">
-                    <i class='bx bx-edit-alt'></i>
-                    <span>1. 업무정의</span>
-                </li>
-                <li data-target="flow-section">
-                    <i class='bx bx-git-merge'></i>
-                    <span>2. 업무흐름</span>
-                </li>
-                <li data-target="knowledge-section">
-                    <i class='bx bx-brain'></i>
-                    <span>3. 기술요소</span>
-                </li>
-                <li data-target="asset-section">
-                    <i class='bx bx-layer-plus'></i>
-                    <span>4. 자산화 후보</span>
-                </li>
-                <li data-target="plan-section">
-                    <i class='bx bx-calendar-check'></i>
-                    <span>5. 실행계획</span>
-                </li>
+                <li class="active" data-target="guide-section"><i class='bx bx-map-pin'></i><span>워크샵 안내</span></li>
+                <li data-target="definition-section"><i class='bx bx-select-multiple'></i><span>1. 업무 정의</span></li>
+                <li data-target="asset-definition-section"><i class='bx bx-cube'></i><span>2. 자산 정의</span></li>
+                <li data-target="tech-map-section"><i class='bx bx-map-alt'></i><span>3. 기술 분류</span></li>
+                <li data-target="operation-section"><i class='bx bx-user-check'></i><span>4. 운영 책임</span></li>
+                <li data-target="webapp-section"><i class='bx bx-layout'></i><span>5. 웹앱 구조</span></li>
             </ul>
 
-            <p class="sidebar-category mt-2">FACILITATION</p>
+            <p class="sidebar-category mt-2">PRE-WORK</p>
             <ul class="nav-links">
-                <li data-target="checks-section">
-                    <i class='bx bx-check-shield'></i>
-                    <span>품질 체크</span>
-                </li>
-                <li data-target="prompt-section">
-                    <i class='bx bx-copy-alt'></i>
-                    <span>진행 프롬프트</span>
-                </li>
+                <li data-target="prep-section"><i class='bx bx-clipboard'></i><span>사전 준비</span></li>
+                <li data-target="memo-section"><i class='bx bx-message-square-detail'></i><span>메모 취합</span></li>
+                <li data-target="prompt-section"><i class='bx bx-copy-alt'></i><span>진행 프롬프트</span></li>
             </ul>
 
             <div class="sidebar-bottom">
                 <div class="user-info">
                     <p>Workshop Workbench</p>
-                    <small>Work to Technical Asset</small>
+                    <small>BP to Model Asset</small>
                 </div>
             </div>
         </nav>
@@ -287,72 +289,147 @@
             <header>
                 <div class="header-text">
                     <h1 id="page-title">워크샵 안내</h1>
-                    <p id="page-subtitle">반복 업무를 재사용 가능한 기술자산으로 전환하는 진행 구조</p>
+                    <p id="page-subtitle">대표 BP/VDR/COR을 재사용 가능한 모델, 조건, 판단 기준으로 전환하는 기준 정렬</p>
                 </div>
             </header>
 
             <div class="content-wrapper">
-                <section id="guide-section" class="content-section active">
+                <section id="guide-section" class="content-section active" data-memo-title="워크샵 안내">
                     <div class="workshop-hero">
                         <div>
-                            <h2>문서 설명회가 아니라 결과물이 쌓이는 워크샵입니다.</h2>
-                            <p>참가자는 자신이 반복해서 수행하는 업무를 하나 고르고, 그 업무가 어떤 목적과 산출물을 가지는지 정의합니다. 이후 업무흐름, 판단 기준, 암묵지, 재사용 가능한 산출물 후보를 차례로 정리합니다.</p>
-                            <p>최종 목표는 업무를 더 열심히 설명하는 것이 아니라, 다른 사람이 따라 할 수 있고 팀이 개선할 수 있는 기술자산의 형태로 바꾸는 것입니다.</p>
+                            <h2>BP를 더 모으는 자리가 아니라, 대표 모델 자산화 기준을 정하는 자리입니다.</h2>
+                            <p>이번 워크샵은 이미 수행해온 Simulation 업무를 다음 사람이 다시 활용할 수 있도록, 대표 BP/VDR/COR에서 모델, 물성, 조건, 판단 기준, 교육 포인트를 분해해 남기는 기준을 정렬합니다.</p>
+                            <p>VDR/COR/REP 역할 정의와 7개 기술 Map 분류는 재논의하지 않습니다. 합의된 전제 위에서 자산화 기준과 웹앱 MVP 구조를 구체화합니다.</p>
                         </div>
-                        <div class="workshop-north-star">
+                        <div class="north-star">
                             <span>North Star</span>
-                            <strong>숙련자 머릿속에 있는 반복 업무를 카드, 체크리스트, 템플릿, 프롬프트, 자동화 후보로 전환한다.</strong>
+                            <strong>대표 BP를 성과 사례에서 끝내지 않고, 대표 모델링, 판단 기준, 성장 Path로 재사용한다.</strong>
                         </div>
                     </div>
-                    <div class="workshop-grid" id="guide-grid"></div>
+                    <div class="flow-strip">
+                        <div class="flow-step">업무 정의</div>
+                        <div class="flow-step">자산 정의</div>
+                        <div class="flow-step">기술 분류</div>
+                        <div class="flow-step">운영 책임</div>
+                        <div class="flow-step">웹앱 구조</div>
+                    </div>
+                    <div class="asset-grid" id="guide-grid"></div>
                 </section>
 
-                <section id="definition-section" class="content-section">
-                    <p class="section-copy">1단계는 자산화할 업무 단위를 정하는 단계입니다. 아직 해결책이나 자동화로 뛰어가지 않고, 업무의 목적, 범위, 산출물, 성공 기준을 먼저 고정합니다.</p>
-                    <div class="workbench-layout">
-                        <div class="field-grid" id="definition-fields"></div>
-                        <aside class="preview-card">
-                            <h3>업무정의 카드 미리보기</h3>
-                            <p>입력 항목을 채우면 워크샵에서는 이 카드가 팀의 공통 기준점이 됩니다.</p>
-                            <div class="template-line">우리는 [상황/대상]에서 [목적]을 위해 [핵심 업무]를 수행하며, 그 결과로 [산출물]을 만든다. 이 업무의 성공 여부는 [성공 기준]으로 판단한다.</div>
-                            <div class="quality-list">
-                                <div><i class='bx bx-check-circle'></i><span>업무명이 실제 현장에서 쓰는 말인가?</span></div>
-                                <div><i class='bx bx-check-circle'></i><span>완료 기준과 산출물이 눈에 보이는가?</span></div>
-                                <div><i class='bx bx-check-circle'></i><span>숙련자 판단이 필요한 지점이 남아 있는가?</span></div>
-                            </div>
-                        </aside>
+                <section id="definition-section" class="content-section" data-memo-title="1. 업무 정의">
+                    <p class="section-copy">업무 정의의 핵심은 VDR/COR/REP를 다시 정의하는 것이 아니라, 어떤 업무 결과를 자산화 대상으로 볼 것인지 합의하는 것입니다.</p>
+                    <div class="decision-banner">합의 방향: 모든 VDR/COR을 자산화하지 않고, 대표성이 있는 VDR/COR 중 이미 BP로 정리된 사례 또는 BP 후보를 1차 대상으로 삼습니다.</div>
+                    <div class="asset-grid" id="definition-grid"></div>
+                    <div class="two-column-grid" style="margin-top:1rem;">
+                        <div class="note-card">
+                            <small>Selection Flow</small>
+                            <h3><i class='bx bx-git-branch'></i>자산화 대상 흐름</h3>
+                            <p>VDR/COR 전체에서 대표성을 가진 사례를 선별하고, BP 또는 BP 후보를 기술자산으로 분해합니다.</p>
+                            <ul>
+                                <li>VDR/COR 전체</li>
+                                <li>대표성 있는 VDR/COR 선별</li>
+                                <li>BP 또는 BP 후보 지정</li>
+                                <li>REP / 모델 / 물성 / 조건 / 판단 기준 / 교육 포인트 분해</li>
+                                <li>기술자산 / 성장 Path / VD Board 후보로 확산</li>
+                            </ul>
+                        </div>
+                        <div class="note-card">
+                            <small>Output</small>
+                            <h3><i class='bx bx-check-square'></i>업무 정의 결과물</h3>
+                            <p>이 단계의 결과물은 문장 정리가 아니라 자산화 대상 선별 기준입니다.</p>
+                            <ul>
+                                <li>대표 VDR/COR 선정 기준</li>
+                                <li>1차 자산화 대상 BP 목록</li>
+                                <li>단순 대응 VDR/COR 처리 원칙</li>
+                            </ul>
+                        </div>
                     </div>
                 </section>
 
-                <section id="flow-section" class="content-section">
-                    <p class="section-copy">업무흐름은 프로세스를 예쁘게 그리는 단계가 아닙니다. 시작 조건, 주요 단계, 판단 지점, 예외 상황을 분리해 후속 자산화 대상을 찾는 단계입니다.</p>
-                    <div class="workshop-grid" id="flow-grid"></div>
+                <section id="asset-definition-section" class="content-section" data-memo-title="2. 자산 정의">
+                    <p class="section-copy">기술자산은 BP나 보고서만 의미하지 않습니다. 모델 파일을 다시 쓸 수 있게 만드는 주변 정보까지 함께 남겨야 합니다.</p>
+                    <div class="asset-grid" id="asset-types-grid"></div>
+                    <p class="section-copy" style="margin-top:1.4rem;">해석 모델 자산화 필수 항목 후보입니다. 워크샵에서는 각 파트리더가 이 중 필수 정보 5개를 선정해옵니다.</p>
+                    <div class="compact-grid" id="model-fields-grid"></div>
+                    <div class="two-column-grid" style="margin-top:1rem;">
+                        <div>
+                            <p class="section-copy">모델 성숙도는 모델이 얼마나 재사용 가능한지 보여줍니다.</p>
+                            <div class="compact-grid" id="maturity-grid"></div>
+                        </div>
+                        <div>
+                            <p class="section-copy">신뢰 수준은 절대값 Matching뿐 아니라 경향성, 의사결정 반영까지 포함합니다.</p>
+                            <div class="compact-grid" id="confidence-grid"></div>
+                        </div>
+                    </div>
                 </section>
 
-                <section id="knowledge-section" class="content-section">
-                    <p class="section-copy">기술요소는 절차서에 잘 남지 않는 숙련자의 판단 기준입니다. 좋은 질문, 위험 신호, 사용 데이터, 반복 실수를 꺼내야 자산화 후보가 선명해집니다.</p>
-                    <div class="workshop-grid" id="knowledge-grid"></div>
+                <section id="tech-map-section" class="content-section" data-memo-title="3. 기술 분류">
+                    <p class="section-copy">기술 Map은 이미 파트리더들과 합의한 7개 축을 사용합니다. 파트별 차이는 기술 차이라기보다 적용 Context 차이로 다룹니다.</p>
+                    <div class="asset-grid" id="tech-map-grid"></div>
+                    <div class="two-column-grid" style="margin-top:1rem;">
+                        <div class="note-card">
+                            <small>Context</small>
+                            <h3><i class='bx bx-current-location'></i>Context로 연결할 항목</h3>
+                            <p>사업부/제품 차이는 별도 기술 분류가 아니라 자산의 적용 Context로 연결합니다.</p>
+                            <ul>
+                                <li>대응 사업부와 제품/플랫폼</li>
+                                <li>개발 단계 또는 양산 단계</li>
+                                <li>요청 유형과 의사결정 상황</li>
+                                <li>실험/평가 데이터 확보 수준</li>
+                                <li>물성/도면/공정 조건 확보 수준</li>
+                                <li>사업부 또는 고객 Consensus 필요 기준</li>
+                            </ul>
+                        </div>
+                        <div class="note-card">
+                            <small>Discussion</small>
+                            <h3><i class='bx bx-question-mark'></i>기술 분류 논의 질문</h3>
+                            <p>7개 Map 자체가 아니라 자산을 어떻게 배치하고 중복 연결할지 논의합니다.</p>
+                            <ul>
+                                <li>대표 모델은 하나의 기술 영역에만 속해야 하는가?</li>
+                                <li>복수 기술 Map 연결을 허용할 것인가?</li>
+                                <li>MVP에서 먼저 채울 기술 영역은 무엇인가?</li>
+                            </ul>
+                        </div>
+                    </div>
                 </section>
 
-                <section id="asset-section" class="content-section">
-                    <p class="section-copy">자산화 후보는 하나의 형태로 고정하지 않습니다. 체크리스트, 템플릿, 교육자료, 프롬프트, 자동화, 시스템화 후보를 업무 특성에 맞게 고릅니다.</p>
-                    <div class="workshop-grid" id="asset-grid"></div>
+                <section id="operation-section" class="content-section" data-memo-title="4. 운영 책임">
+                    <p class="section-copy">시니어 기술 Owner를 바로 임명하는 것이 아니라, Owner / Reviewer Pool / 기술 Chapter / 파트리더 1차 관리 중 어떤 구조가 현실적인지 논의합니다.</p>
+                    <div class="asset-grid" id="operation-grid"></div>
+                    <div class="two-column-grid" style="margin-top:1rem;" id="owner-boundary-grid"></div>
                 </section>
 
-                <section id="plan-section" class="content-section">
-                    <p class="section-copy">마지막 단계는 큰 로드맵이 아니라 바로 실험할 수 있는 실행계획입니다. 2주 안에 만들 수 있는 최소 산출물을 정하고, 실제 업무에서 검증합니다.</p>
-                    <div class="workshop-grid" id="plan-grid"></div>
+                <section id="webapp-section" class="content-section" data-memo-title="5. 웹앱 구조">
+                    <p class="section-copy">웹앱은 단순 자료실이 아니라 기술 Map에서 체계를 보고, 기술자산에서 BP와 모델을 찾고, 성장 Path에서 학습/재현/활용 순서를 보는 시스템입니다.</p>
+                    <div class="asset-grid" id="webapp-grid"></div>
+                    <div class="two-column-grid" style="margin-top:1rem;" id="mvp-grid"></div>
                 </section>
 
-                <section id="checks-section" class="content-section">
-                    <div class="workshop-grid" id="checks-grid"></div>
+                <section id="prep-section" class="content-section" data-memo-title="사전 준비">
+                    <p class="section-copy">파트리더가 워크샵 전에 준비할 항목은 4개로 단순화합니다. 완성된 문서를 요구하기보다 각 파트의 판단을 가져오는 것이 목적입니다.</p>
+                    <div class="asset-grid" id="prep-grid"></div>
+                </section>
+
+                <section id="memo-section" class="content-section">
+                    <p class="section-copy">각 섹션에서 작성한 메모는 현재 브라우저에 저장됩니다. 워크샵 전에 아래 Markdown을 복사하거나 파일로 내려받아 취합할 수 있습니다.</p>
+                    <div class="export-panel">
+                        <div class="export-actions">
+                            <span><i class='bx bx-message-square-detail'></i> 섹션별 사전 의견 취합본</span>
+                            <div style="display:flex; gap:0.55rem; flex-wrap:wrap;">
+                                <button id="refresh-memo-export"><i class='bx bx-refresh'></i> 새로고침</button>
+                                <button id="copy-memo-export" class="secondary"><i class='bx bx-copy'></i> 전체 복사</button>
+                                <button id="download-memo-export" class="secondary"><i class='bx bx-download'></i> Markdown 저장</button>
+                            </div>
+                        </div>
+                        <pre id="memo-export-preview"></pre>
+                    </div>
                 </section>
 
                 <section id="prompt-section" class="content-section">
-                    <div class="prompt-panel">
-                        <div class="prompt-toolbar">
+                    <div class="export-panel">
+                        <div class="export-actions">
                             <span><i class='bx bx-copy-alt'></i> 워크샵 진행자가 복사해서 사용할 안내 프롬프트</span>
-                            <button id="copy-workshop-prompt" aria-label="Copy workshop prompt"><i class='bx bx-copy'></i> Copy</button>
+                            <button id="copy-workshop-prompt"><i class='bx bx-copy'></i> Copy</button>
                         </div>
                         <pre id="workshop-prompt"></pre>
                     </div>
@@ -361,6 +438,6 @@
         </main>
     </div>
 
-    <script src="technical_asset_workshop.js?v=workshop-v1"></script>
+    <script src="technical_asset_workshop.js?v=workshop-v2"></script>
 </body>
 </html>
