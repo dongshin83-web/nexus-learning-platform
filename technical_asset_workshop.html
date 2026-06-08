@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Asset Workshop Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --primary-soft: rgba(34, 211, 238, 0.14);
+            --primary-border: rgba(34, 211, 238, 0.34);
+            --amber: #f59e0b;
+            --green: #34d399;
+            --rose: #fb7185;
+            --violet: #a78bfa;
+        }
+
+        .logo i { color: var(--primary); filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.35)); }
+        .nav-links li { border-radius: 8px; }
+        .nav-links li.active { background: linear-gradient(90deg, #0891b2, #22d3ee); box-shadow: 0 4px 15px rgba(34, 211, 238, 0.24); color: #082f49; }
+        .content-wrapper { padding-top: 1rem; }
+
+        .workshop-hero {
+            border: 1px solid var(--primary-border);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.13), rgba(167, 139, 250, 0.08));
+            border-radius: 8px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.85fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .workshop-hero h2 { font-size: 1.55rem; margin-bottom: 0.8rem; color: #fff; }
+        .workshop-hero p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
+        .workshop-north-star {
+            background: rgba(0, 0, 0, 0.24);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+        .workshop-north-star span { color: var(--primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+        .workshop-north-star strong { display: block; color: #fff; line-height: 1.55; margin-top: 0.5rem; }
+
+        .workshop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+            gap: 1rem;
+        }
+
+        .workshop-card, .stage-card, .output-card, .definition-card, .check-card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.4rem;
+        }
+
+        .workshop-card h3, .stage-card h3, .output-card h3, .definition-card h3, .check-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #fff;
+            font-size: 1.06rem;
+            margin-bottom: 0.75rem;
+        }
+        .workshop-card h3 i, .stage-card h3 i, .output-card h3 i, .definition-card h3 i, .check-card h3 i { color: var(--primary); }
+        .workshop-card p, .stage-card p, .output-card p, .definition-card p, .check-card p {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-size: 0.92rem;
+        }
+
+        .stage-card small, .output-card small, .definition-card small, .check-card small {
+            display: inline-flex;
+            color: var(--primary);
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-border);
+            border-radius: 999px;
+            padding: 0.2rem 0.65rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .stage-card ul, .output-card ul, .definition-card ul, .check-card ul {
+            list-style: none;
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.85rem;
+        }
+        .stage-card li, .output-card li, .definition-card li, .check-card li {
+            color: rgba(255,255,255,0.84);
+            line-height: 1.55;
+            font-size: 0.9rem;
+            padding-left: 1.05rem;
+            position: relative;
+        }
+        .stage-card li::before, .output-card li::before, .definition-card li::before, .check-card li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .workbench-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(300px, 0.72fr);
+            gap: 1rem;
+            align-items: start;
+        }
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+        .field-card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .field-card.full { grid-column: 1 / -1; }
+        .field-card label {
+            display: block;
+            color: #cffafe;
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .field-card p {
+            color: var(--text-secondary);
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
+        .preview-card {
+            position: sticky;
+            top: 1rem;
+            border: 1px solid var(--primary-border);
+            background: linear-gradient(145deg, rgba(8, 47, 73, 0.54), rgba(15, 23, 42, 0.9));
+            border-radius: 8px;
+            padding: 1.35rem;
+        }
+        .preview-card h3 { color: #fff; margin-bottom: 0.7rem; font-size: 1.08rem; }
+        .preview-card p { color: #bfdbfe; line-height: 1.65; font-size: 0.9rem; }
+        .preview-card .template-line {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            color: #ecfeff;
+            line-height: 1.65;
+            font-weight: 600;
+        }
+        .quality-list {
+            display: grid;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+        .quality-list div {
+            display: flex;
+            gap: 0.55rem;
+            color: rgba(255,255,255,0.86);
+            line-height: 1.5;
+            font-size: 0.88rem;
+        }
+        .quality-list i { color: var(--green); font-size: 1rem; margin-top: 0.15rem; }
+        .section-copy {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 980px;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
+        .prompt-panel {
+            background: #1e1e1e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prompt-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .prompt-toolbar button {
+            border: none;
+            background: var(--primary);
+            color: #083344;
+            border-radius: 6px;
+            padding: 0.55rem 0.9rem;
+            cursor: pointer;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        #workshop-prompt {
+            white-space: pre-wrap;
+            padding: 1.25rem;
+            color: #e2e8f0;
+            line-height: 1.65;
+            font-size: 0.88rem;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 920px) {
+            body { overflow: auto; }
+            .app-container { display: block; height: auto; }
+            .sidebar { width: 100%; position: static; }
+            .main-content { min-height: auto; }
+            .content-wrapper, header { padding-left: 1.25rem; padding-right: 1.25rem; }
+            .workshop-hero, .workbench-layout, .field-grid { grid-template-columns: 1fr; }
+            .preview-card { position: static; }
+            .header-text h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-sitemap'></i>
+                <span>AssetLab</span>
+            </div>
+
+            <p class="sidebar-category">WORKSHOP</p>
+            <ul class="nav-links">
+                <li class="active" data-target="guide-section">
+                    <i class='bx bx-map-pin'></i>
+                    <span>워크샵 안내</span>
+                </li>
+                <li data-target="definition-section">
+                    <i class='bx bx-edit-alt'></i>
+                    <span>1. 업무정의</span>
+                </li>
+                <li data-target="flow-section">
+                    <i class='bx bx-git-merge'></i>
+                    <span>2. 업무흐름</span>
+                </li>
+                <li data-target="knowledge-section">
+                    <i class='bx bx-brain'></i>
+                    <span>3. 기술요소</span>
+                </li>
+                <li data-target="asset-section">
+                    <i class='bx bx-layer-plus'></i>
+                    <span>4. 자산화 후보</span>
+                </li>
+                <li data-target="plan-section">
+                    <i class='bx bx-calendar-check'></i>
+                    <span>5. 실행계획</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">FACILITATION</p>
+            <ul class="nav-links">
+                <li data-target="checks-section">
+                    <i class='bx bx-check-shield'></i>
+                    <span>품질 체크</span>
+                </li>
+                <li data-target="prompt-section">
+                    <i class='bx bx-copy-alt'></i>
+                    <span>진행 프롬프트</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Workshop Workbench</p>
+                    <small>Work to Technical Asset</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1 id="page-title">워크샵 안내</h1>
+                    <p id="page-subtitle">반복 업무를 재사용 가능한 기술자산으로 전환하는 진행 구조</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section id="guide-section" class="content-section active">
+                    <div class="workshop-hero">
+                        <div>
+                            <h2>문서 설명회가 아니라 결과물이 쌓이는 워크샵입니다.</h2>
+                            <p>참가자는 자신이 반복해서 수행하는 업무를 하나 고르고, 그 업무가 어떤 목적과 산출물을 가지는지 정의합니다. 이후 업무흐름, 판단 기준, 암묵지, 재사용 가능한 산출물 후보를 차례로 정리합니다.</p>
+                            <p>최종 목표는 업무를 더 열심히 설명하는 것이 아니라, 다른 사람이 따라 할 수 있고 팀이 개선할 수 있는 기술자산의 형태로 바꾸는 것입니다.</p>
+                        </div>
+                        <div class="workshop-north-star">
+                            <span>North Star</span>
+                            <strong>숙련자 머릿속에 있는 반복 업무를 카드, 체크리스트, 템플릿, 프롬프트, 자동화 후보로 전환한다.</strong>
+                        </div>
+                    </div>
+                    <div class="workshop-grid" id="guide-grid"></div>
+                </section>
+
+                <section id="definition-section" class="content-section">
+                    <p class="section-copy">1단계는 자산화할 업무 단위를 정하는 단계입니다. 아직 해결책이나 자동화로 뛰어가지 않고, 업무의 목적, 범위, 산출물, 성공 기준을 먼저 고정합니다.</p>
+                    <div class="workbench-layout">
+                        <div class="field-grid" id="definition-fields"></div>
+                        <aside class="preview-card">
+                            <h3>업무정의 카드 미리보기</h3>
+                            <p>입력 항목을 채우면 워크샵에서는 이 카드가 팀의 공통 기준점이 됩니다.</p>
+                            <div class="template-line">우리는 [상황/대상]에서 [목적]을 위해 [핵심 업무]를 수행하며, 그 결과로 [산출물]을 만든다. 이 업무의 성공 여부는 [성공 기준]으로 판단한다.</div>
+                            <div class="quality-list">
+                                <div><i class='bx bx-check-circle'></i><span>업무명이 실제 현장에서 쓰는 말인가?</span></div>
+                                <div><i class='bx bx-check-circle'></i><span>완료 기준과 산출물이 눈에 보이는가?</span></div>
+                                <div><i class='bx bx-check-circle'></i><span>숙련자 판단이 필요한 지점이 남아 있는가?</span></div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <section id="flow-section" class="content-section">
+                    <p class="section-copy">업무흐름은 프로세스를 예쁘게 그리는 단계가 아닙니다. 시작 조건, 주요 단계, 판단 지점, 예외 상황을 분리해 후속 자산화 대상을 찾는 단계입니다.</p>
+                    <div class="workshop-grid" id="flow-grid"></div>
+                </section>
+
+                <section id="knowledge-section" class="content-section">
+                    <p class="section-copy">기술요소는 절차서에 잘 남지 않는 숙련자의 판단 기준입니다. 좋은 질문, 위험 신호, 사용 데이터, 반복 실수를 꺼내야 자산화 후보가 선명해집니다.</p>
+                    <div class="workshop-grid" id="knowledge-grid"></div>
+                </section>
+
+                <section id="asset-section" class="content-section">
+                    <p class="section-copy">자산화 후보는 하나의 형태로 고정하지 않습니다. 체크리스트, 템플릿, 교육자료, 프롬프트, 자동화, 시스템화 후보를 업무 특성에 맞게 고릅니다.</p>
+                    <div class="workshop-grid" id="asset-grid"></div>
+                </section>
+
+                <section id="plan-section" class="content-section">
+                    <p class="section-copy">마지막 단계는 큰 로드맵이 아니라 바로 실험할 수 있는 실행계획입니다. 2주 안에 만들 수 있는 최소 산출물을 정하고, 실제 업무에서 검증합니다.</p>
+                    <div class="workshop-grid" id="plan-grid"></div>
+                </section>
+
+                <section id="checks-section" class="content-section">
+                    <div class="workshop-grid" id="checks-grid"></div>
+                </section>
+
+                <section id="prompt-section" class="content-section">
+                    <div class="prompt-panel">
+                        <div class="prompt-toolbar">
+                            <span><i class='bx bx-copy-alt'></i> 워크샵 진행자가 복사해서 사용할 안내 프롬프트</span>
+                            <button id="copy-workshop-prompt" aria-label="Copy workshop prompt"><i class='bx bx-copy'></i> Copy</button>
+                        </div>
+                        <pre id="workshop-prompt"></pre>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="technical_asset_workshop.js?v=workshop-v1"></script>
+</body>
+</html>
