@@ -401,6 +401,10 @@ function memoKey(sectionId) {
     return `technicalAssetWorkshopMemo:${sectionId}`;
 }
 
+function draftKey(sectionId) {
+    return `technicalAssetWorkshopMemoDraft:${sectionId}`;
+}
+
 function getParticipant() {
     return localStorage.getItem("technicalAssetWorkshopParticipant") || "";
 }
@@ -412,12 +416,64 @@ function setParticipant(value) {
     });
 }
 
+function createMemoId() {
+    return `memo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function normalizeMemo(memo, index, sectionId) {
+    const now = new Date().toISOString();
+    const body = typeof memo?.body === "string" ? memo.body : "";
+    return {
+        id: memo?.id || `${sectionId}-${index}-${Date.now()}`,
+        author: typeof memo?.author === "string" ? memo.author : "",
+        body,
+        createdAt: memo?.createdAt || memo?.updatedAt || now,
+        updatedAt: memo?.updatedAt || memo?.createdAt || now
+    };
+}
+
+function getSectionMemos(sectionId) {
+    const raw = localStorage.getItem(memoKey(sectionId));
+    if (!raw) return [];
+
+    try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+            const memos = parsed
+                .map((memo, index) => normalizeMemo(memo, index, sectionId))
+                .filter(memo => memo.body.trim());
+            if (memos.length !== parsed.length) setSectionMemos(sectionId, memos);
+            return memos;
+        }
+    } catch (error) {
+        // Legacy single-text memo values are migrated below.
+    }
+
+    const legacyBody = raw.trim();
+    if (!legacyBody) return [];
+
+    const migrated = [{
+        id: `legacy-${sectionId}`,
+        author: getParticipant(),
+        body: legacyBody,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    }];
+    setSectionMemos(sectionId, migrated);
+    return migrated;
+}
+
+function setSectionMemos(sectionId, memos) {
+    localStorage.setItem(memoKey(sectionId), JSON.stringify(memos));
+}
+
 function renderMemoPanels() {
     memoSectionIds.forEach(sectionId => {
         const section = document.getElementById(sectionId);
         const title = section.dataset.memoTitle || pageMeta[sectionId].title;
         const panel = document.createElement("div");
         panel.className = "memo-panel";
+        panel.dataset.memoPanelFor = sectionId;
         panel.innerHTML = `
             <div class="memo-header">
                 <h3><i class='bx bx-message-square-edit'></i>${title} 의견 메모</h3>
@@ -425,19 +481,28 @@ function renderMemoPanels() {
             </div>
             <div class="memo-input-row">
                 <input class="memo-participant" type="text" placeholder="이름 / 파트" value="${escapeHtml(getParticipant())}">
-                <textarea data-memo-for="${sectionId}" placeholder="${title}에 대한 의견, 우려, 추가 질문을 적어주세요."></textarea>
+                <textarea data-memo-for="${sectionId}" rows="3" placeholder="${escapeHtml(title)}에 대한 의견, 우려, 추가 질문을 적어주세요."></textarea>
             </div>
             <div class="memo-actions">
                 <div style="display:flex; gap:0.55rem; flex-wrap:wrap;">
                     <button data-save-memo="${sectionId}"><i class='bx bx-save'></i> 저장</button>
+                    <button class="secondary is-hidden" data-cancel-edit="${sectionId}"><i class='bx bx-x'></i> 수정 취소</button>
                     <button class="secondary" data-copy-memo="${sectionId}"><i class='bx bx-copy'></i> 이 섹션 복사</button>
                 </div>
                 <span class="memo-help">현재 브라우저에 저장됩니다. 공동 취합은 메모 취합 페이지에서 Markdown으로 내보냅니다.</span>
             </div>
+            <div class="saved-memos">
+                <div class="saved-memos-title">
+                    <span>저장된 메모</span>
+                    <span class="saved-memos-count" data-memo-count-for="${sectionId}">0개</span>
+                </div>
+                <div class="saved-memo-list" data-memo-list-for="${sectionId}"></div>
+            </div>
         `;
         section.appendChild(panel);
         const textarea = panel.querySelector("textarea");
-        textarea.value = localStorage.getItem(memoKey(sectionId)) || "";
+        textarea.value = localStorage.getItem(draftKey(sectionId)) || "";
+        renderSavedMemoList(sectionId);
     });
 
     document.querySelectorAll(".memo-participant").forEach(input => {
@@ -452,20 +517,69 @@ function renderMemoPanels() {
         button.addEventListener("click", () => copySectionMemo(button.dataset.copyMemo));
     });
 
+    document.querySelectorAll("[data-cancel-edit]").forEach(button => {
+        button.addEventListener("click", () => cancelEditMemo(button.dataset.cancelEdit));
+    });
+
     document.querySelectorAll("[data-memo-for]").forEach(textarea => {
         textarea.addEventListener("input", () => {
             const sectionId = textarea.dataset.memoFor;
-            localStorage.setItem(memoKey(sectionId), textarea.value);
-            setMemoStatus(sectionId, "자동 저장됨");
-            updateMemoExportPreview();
+            localStorage.setItem(draftKey(sectionId), textarea.value);
+            setMemoStatus(sectionId, "초안 저장됨");
         });
+    });
+
+    document.addEventListener("click", event => {
+        const editButton = event.target.closest("[data-edit-memo]");
+        if (editButton) {
+            startEditMemo(editButton.dataset.sectionId, editButton.dataset.editMemo);
+            return;
+        }
+
+        const deleteButton = event.target.closest("[data-delete-memo]");
+        if (deleteButton) {
+            deleteMemo(deleteButton.dataset.sectionId, deleteButton.dataset.deleteMemo);
+        }
     });
 }
 
 function saveMemo(sectionId) {
     const textarea = document.querySelector(`[data-memo-for="${sectionId}"]`);
-    localStorage.setItem(memoKey(sectionId), textarea.value);
-    setMemoStatus(sectionId, "저장됨");
+    const body = textarea.value.trim();
+    if (!body) {
+        setMemoStatus(sectionId, "내용 없음");
+        return;
+    }
+
+    const panel = document.querySelector(`[data-memo-panel-for="${sectionId}"]`);
+    const editingMemoId = panel?.dataset.editingMemoId || "";
+    const memos = getSectionMemos(sectionId);
+    const now = new Date().toISOString();
+    const author = getParticipant().trim();
+
+    if (editingMemoId) {
+        const index = memos.findIndex(memo => memo.id === editingMemoId);
+        if (index >= 0) {
+            memos[index] = {
+                ...memos[index],
+                author,
+                body,
+                updatedAt: now
+            };
+        } else {
+            memos.unshift({ id: createMemoId(), author, body, createdAt: now, updatedAt: now });
+        }
+        clearEditState(sectionId);
+        setMemoStatus(sectionId, "수정됨");
+    } else {
+        memos.unshift({ id: createMemoId(), author, body, createdAt: now, updatedAt: now });
+        setMemoStatus(sectionId, "저장됨");
+    }
+
+    setSectionMemos(sectionId, memos);
+    localStorage.removeItem(draftKey(sectionId));
+    textarea.value = "";
+    renderSavedMemoList(sectionId);
     updateMemoExportPreview();
 }
 
@@ -476,10 +590,112 @@ function setMemoStatus(sectionId, text) {
     status.textContent = `${text} ${now.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}`;
 }
 
+function formatMemoDate(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleString("ko-KR", {
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function renderSavedMemoList(sectionId) {
+    const list = document.querySelector(`[data-memo-list-for="${sectionId}"]`);
+    const count = document.querySelector(`[data-memo-count-for="${sectionId}"]`);
+    if (!list) return;
+
+    const memos = getSectionMemos(sectionId);
+    if (count) count.textContent = `${memos.length}개`;
+
+    if (!memos.length) {
+        list.innerHTML = `<div class="saved-memo-empty">아직 저장된 메모가 없습니다. 의견을 입력한 뒤 저장을 눌러주세요.</div>`;
+        return;
+    }
+
+    list.innerHTML = memos.map(memo => `
+        <article class="saved-memo-item">
+            <div class="saved-memo-meta">
+                <span class="saved-memo-author">${escapeHtml(memo.author || "(이름 / 파트 미입력)")}</span>
+                <span>${escapeHtml(formatMemoDate(memo.updatedAt) || "저장 시각 없음")}</span>
+            </div>
+            <div class="saved-memo-body">${escapeHtml(memo.body)}</div>
+            <div class="saved-memo-actions">
+                <button data-section-id="${sectionId}" data-edit-memo="${memo.id}"><i class='bx bx-edit'></i> 수정</button>
+                <button class="danger" data-section-id="${sectionId}" data-delete-memo="${memo.id}"><i class='bx bx-trash'></i> 삭제</button>
+            </div>
+        </article>
+    `).join("");
+}
+
+function startEditMemo(sectionId, memoId) {
+    const memo = getSectionMemos(sectionId).find(item => item.id === memoId);
+    const panel = document.querySelector(`[data-memo-panel-for="${sectionId}"]`);
+    const textarea = document.querySelector(`[data-memo-for="${sectionId}"]`);
+    const saveButton = document.querySelector(`[data-save-memo="${sectionId}"]`);
+    const cancelButton = document.querySelector(`[data-cancel-edit="${sectionId}"]`);
+    if (!memo || !panel || !textarea || !saveButton || !cancelButton) return;
+
+    if (memo.author) setParticipant(memo.author);
+    panel.dataset.editingMemoId = memoId;
+    textarea.value = memo.body;
+    textarea.focus();
+    saveButton.innerHTML = "<i class='bx bx-save'></i> 수정 저장";
+    cancelButton.classList.remove("is-hidden");
+    setMemoStatus(sectionId, "수정 중");
+}
+
+function clearEditState(sectionId) {
+    const panel = document.querySelector(`[data-memo-panel-for="${sectionId}"]`);
+    const saveButton = document.querySelector(`[data-save-memo="${sectionId}"]`);
+    const cancelButton = document.querySelector(`[data-cancel-edit="${sectionId}"]`);
+    if (panel) delete panel.dataset.editingMemoId;
+    if (saveButton) saveButton.innerHTML = "<i class='bx bx-save'></i> 저장";
+    if (cancelButton) cancelButton.classList.add("is-hidden");
+}
+
+function cancelEditMemo(sectionId) {
+    const textarea = document.querySelector(`[data-memo-for="${sectionId}"]`);
+    clearEditState(sectionId);
+    if (textarea) textarea.value = localStorage.getItem(draftKey(sectionId)) || "";
+    setMemoStatus(sectionId, "수정 취소됨");
+}
+
+function deleteMemo(sectionId, memoId) {
+    if (!window.confirm("이 메모를 삭제할까요?")) return;
+    const panel = document.querySelector(`[data-memo-panel-for="${sectionId}"]`);
+    const memos = getSectionMemos(sectionId).filter(memo => memo.id !== memoId);
+    setSectionMemos(sectionId, memos);
+
+    if (panel?.dataset.editingMemoId === memoId) {
+        clearEditState(sectionId);
+        const textarea = document.querySelector(`[data-memo-for="${sectionId}"]`);
+        if (textarea) textarea.value = "";
+    }
+
+    renderSavedMemoList(sectionId);
+    setMemoStatus(sectionId, "삭제됨");
+    updateMemoExportPreview();
+}
+
 function buildSectionMemoMarkdown(sectionId) {
     const title = document.getElementById(sectionId)?.dataset.memoTitle || pageMeta[sectionId]?.title || sectionId;
-    const memo = localStorage.getItem(memoKey(sectionId)) || "";
-    return `## ${title}\n\n${memo.trim() || "(아직 작성된 의견 없음)"}`;
+    const memos = getSectionMemos(sectionId);
+    if (!memos.length) return `## ${title}\n\n(아직 저장된 의견 없음)`;
+
+    return [
+        `## ${title}`,
+        "",
+        ...memos.flatMap((memo, index) => [
+            `### ${index + 1}. ${memo.author || "(이름 / 파트 미입력)"}`,
+            `- 저장 시각: ${formatMemoDate(memo.updatedAt) || "-"}`,
+            "",
+            memo.body.trim(),
+            ""
+        ])
+    ].join("\n").trimEnd();
 }
 
 function buildAllMemoMarkdown() {
@@ -620,7 +836,7 @@ function bindHashRoute() {
 }
 
 function escapeHtml(value) {
-    return value
+    return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")

@@ -142,15 +142,15 @@
             border: 1px solid rgba(34, 211, 238, 0.22);
             background: rgba(8, 47, 73, 0.26);
             border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1.5rem;
+            padding: 0.9rem;
+            margin-top: 1.25rem;
         }
         .memo-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            margin-bottom: 0.85rem;
+            margin-bottom: 0.65rem;
         }
         .memo-header h3 {
             display: flex;
@@ -163,9 +163,10 @@
         .memo-status { color: var(--text-secondary); font-size: 0.78rem; }
         .memo-input-row {
             display: grid;
-            grid-template-columns: minmax(180px, 0.35fr) minmax(0, 1fr);
-            gap: 0.8rem;
-            margin-bottom: 0.8rem;
+            grid-template-columns: minmax(160px, 260px) minmax(0, 1fr);
+            gap: 0.65rem;
+            align-items: start;
+            margin-bottom: 0.65rem;
         }
         .memo-panel input, .memo-panel textarea {
             width: 100%;
@@ -175,12 +176,16 @@
             color: #fff;
             font-family: var(--font-main);
             font-size: 0.88rem;
-            padding: 0.75rem;
+            padding: 0.65rem 0.7rem;
+        }
+        .memo-panel input {
+            min-height: 42px;
         }
         .memo-panel textarea {
-            min-height: 132px;
+            min-height: 76px;
+            max-height: 160px;
             resize: vertical;
-            line-height: 1.55;
+            line-height: 1.45;
         }
         .memo-panel input:focus, .memo-panel textarea:focus { outline: none; border-color: var(--primary); }
         .memo-actions {
@@ -189,6 +194,7 @@
             gap: 0.55rem;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 0.8rem;
         }
         .memo-actions button, .export-actions button {
             border: none;
@@ -214,6 +220,83 @@
             font-size: 0.78rem;
             line-height: 1.45;
         }
+        .saved-memos {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 0.75rem;
+        }
+        .saved-memos-title {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            color: #dbeafe;
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 0.55rem;
+        }
+        .saved-memos-count {
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+        .saved-memo-list {
+            display: grid;
+            gap: 0.55rem;
+        }
+        .saved-memo-empty {
+            border: 1px dashed rgba(255,255,255,0.14);
+            border-radius: 7px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            padding: 0.65rem 0.75rem;
+        }
+        .saved-memo-item {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 7px;
+            padding: 0.7rem 0.75rem;
+        }
+        .saved-memo-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-bottom: 0.35rem;
+        }
+        .saved-memo-author {
+            color: #e0f2fe;
+            font-weight: 800;
+        }
+        .saved-memo-body {
+            color: #fff;
+            white-space: pre-wrap;
+            line-height: 1.45;
+            font-size: 0.86rem;
+        }
+        .saved-memo-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.45rem;
+            margin-top: 0.6rem;
+        }
+        .saved-memo-actions button {
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 0.35rem 0.55rem;
+            cursor: pointer;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.28rem;
+            font-family: var(--font-main);
+            font-size: 0.76rem;
+        }
+        .saved-memo-actions button.danger {
+            color: #fecaca;
+            border-color: rgba(248, 113, 113, 0.28);
+        }
+        .is-hidden { display: none !important; }
         .export-panel {
             background: #1e1e1e;
             border: 1px solid rgba(255,255,255,0.1);
