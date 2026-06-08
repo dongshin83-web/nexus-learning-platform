@@ -162,7 +162,7 @@ header { padding: 2.5rem 3rem 1rem 3rem; }
 .topic-tag { display: inline-block; padding: 0.2rem 0.8rem; background: rgba(59, 130, 246, 0.2); color: var(--blue); border-radius: 20px; font-size: 0.8rem; font-weight: 800; margin-bottom: 1rem; }
 .topic-card h3 { font-size: 1.4rem; margin-bottom: 1rem; }
 .topic-card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6; }
-.topic-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; font-size: 0.9rem; color: var(--text-secondary); }
+.topic-footer { display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; font-size: 0.9rem; color: var(--text-secondary); }
 .enter-btn { color: var(--accent); font-weight: 800; display: flex; align-items: center; gap: 0.2rem; }
 
 footer { text-align: center; padding: 3rem; color: var(--text-secondary); border-top: 1px solid var(--border-color); font-size: 0.9rem; }
