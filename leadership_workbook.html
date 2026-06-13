@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성장의 리더십 Workbook 정리</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --leadership-primary: #14b8a6;
+            --leadership-amber: #f59e0b;
+            --leadership-blue: #38bdf8;
+            --leadership-rose: #fb7185;
+            --leadership-panel: rgba(15, 23, 42, 0.72);
+            --leadership-muted: rgba(148, 163, 184, 0.18);
+            --leadership-border: rgba(148, 163, 184, 0.24);
+        }
+
+        .logo i { color: var(--leadership-primary); filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.35)); }
+        .nav-links li { border-radius: 8px; }
+        .nav-links li.active {
+            background: linear-gradient(90deg, #0f766e, #14b8a6);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.24);
+        }
+
+        .leadership-hero,
+        .leadership-panel,
+        .class-panel,
+        .lesson-card,
+        .term-card,
+        .question-card,
+        .source-card {
+            border: 1px solid var(--leadership-border);
+            border-radius: 8px;
+            background: var(--leadership-panel);
+        }
+
+        .leadership-hero {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(56, 189, 248, 0.08));
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.75fr);
+            gap: 1.25rem;
+            margin-bottom: 1rem;
+            padding: 1.75rem;
+        }
+
+        .leadership-hero h2,
+        .leadership-panel h2,
+        .class-panel h2,
+        .lesson-card h3,
+        .term-card h3,
+        .question-card h3 {
+            color: #fff;
+            line-height: 1.35;
+        }
+
+        .leadership-hero h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .leadership-hero p,
+        .leadership-panel p,
+        .class-panel p,
+        .lesson-card p,
+        .term-card p,
+        .term-card li,
+        .question-card p,
+        .leadership-list li,
+        .source-note {
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+            line-height: 1.72;
+        }
+
+        .north-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 1.1rem;
+        }
+
+        .north-card span,
+        .section-label {
+            color: #5eead4;
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .north-card strong {
+            color: #fff;
+            display: block;
+            line-height: 1.55;
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-box {
+            background: rgba(15, 23, 42, 0.66);
+            border: 1px solid var(--leadership-border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .metric-box small {
+            color: var(--text-secondary);
+            display: block;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+        }
+
+        .metric-box strong {
+            color: #fff;
+            font-size: 1.15rem;
+            line-height: 1.35;
+        }
+
+        .leadership-panel,
+        .class-panel {
+            margin-bottom: 1rem;
+            padding: 1.35rem;
+        }
+
+        .leadership-panel h2,
+        .class-panel h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .flow-grid,
+        .lesson-grid,
+        .term-grid,
+        .question-grid,
+        .source-grid {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .flow-grid {
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        }
+
+        .lesson-grid {
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .term-grid {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            margin-bottom: 1rem;
+        }
+
+        .question-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .source-grid {
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        }
+
+        .lesson-card,
+        .term-card,
+        .question-card,
+        .source-card {
+            background: rgba(15, 23, 42, 0.58);
+            padding: 1rem;
+        }
+
+        .lesson-card h3,
+        .term-card h3,
+        .question-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-card small,
+        .term-card small,
+        .question-card small,
+        .source-card small {
+            color: #5eead4;
+            display: block;
+            font-size: 0.76rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+
+        .flow-card {
+            background: rgba(15, 23, 42, 0.58);
+            border: 1px solid var(--leadership-border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .flow-card small {
+            color: #5eead4;
+            display: block;
+            font-weight: 900;
+            margin-bottom: 0.35rem;
+        }
+
+        .flow-card strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .class-kicker {
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .class-kicker h2 {
+            margin-bottom: 0.3rem;
+        }
+
+        .class-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.8rem;
+        }
+
+        .pill {
+            background: rgba(20, 184, 166, 0.13);
+            border: 1px solid rgba(20, 184, 166, 0.25);
+            border-radius: 999px;
+            color: #99f6e4;
+            display: inline-flex;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 0.32rem 0.62rem;
+        }
+
+        .outline-block {
+            border-left: 3px solid var(--leadership-primary);
+            margin: 1rem 0;
+            padding-left: 1rem;
+        }
+
+        .outline-block h3 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .leadership-list {
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+
+        .leadership-list li + li {
+            margin-top: 0.45rem;
+        }
+
+        .term-card ul {
+            margin: 0;
+            padding-left: 1rem;
+        }
+
+        .term-card li + li {
+            margin-top: 0.36rem;
+        }
+
+        .keyword-line {
+            color: #bae6fd;
+            display: block;
+            font-size: 0.86rem;
+            font-weight: 800;
+            line-height: 1.6;
+            margin-top: 0.55rem;
+        }
+
+        .leadership-table {
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .leadership-table th,
+        .leadership-table td {
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            padding: 0.8rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .leadership-table th {
+            background: rgba(20, 184, 166, 0.12);
+            color: #e2e8f0;
+            font-size: 0.82rem;
+            font-weight: 900;
+        }
+
+        .leadership-table td {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        .leadership-table strong {
+            color: #fff;
+        }
+
+        .source-card a {
+            color: #bae6fd;
+            font-weight: 800;
+            line-height: 1.5;
+            text-decoration: none;
+        }
+
+        .source-card a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 980px) {
+            .leadership-hero,
+            .class-kicker {
+                grid-template-columns: 1fr;
+            }
+
+            .leadership-hero,
+            .class-kicker {
+                display: block;
+            }
+
+            .leadership-table {
+                display: block;
+                overflow-x: auto;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo"><i class='bx bx-compass'></i><span>Growth</span></div>
+            <div class="sidebar-category">Workbook Map</div>
+            <ul class="nav-links">
+                <li class="active" data-target="overview-section"><i class='bx bx-map-alt'></i><span>Overview</span></li>
+                <li data-target="class1-section"><i class='bx bx-book-open'></i><span>Class 1</span></li>
+                <li data-target="class2-section"><i class='bx bx-book-open'></i><span>Class 2</span></li>
+                <li data-target="class3-section"><i class='bx bx-book-open'></i><span>Class 3</span></li>
+                <li data-target="class4-section"><i class='bx bx-book-open'></i><span>Class 4</span></li>
+                <li data-target="class5-section"><i class='bx bx-book-open'></i><span>Class 5</span></li>
+                <li data-target="class6-section"><i class='bx bx-book-open'></i><span>Class 6</span></li>
+                <li data-target="answer-questions-section"><i class='bx bx-message-square-detail'></i><span>Answer Qs</span></li>
+                <li data-target="sources-section"><i class='bx bx-link-alt'></i><span>Sources</span></li>
+            </ul>
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>ClassU Workbook</p>
+                    <small>Class별 상세 정리</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1 id="page-title">성장의 리더십 Workbook 정리</h1>
+                    <p id="page-subtitle">Class1부터 Class6까지 수업 내용을 각각의 메뉴로 나누어 상세 정리</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section id="overview-section" class="content-section active">
+                    <div class="leadership-hero">
+                        <div>
+                            <h2>성장의 리더십 과정은 조직 적응에서 출발해 자기, 타인, 미션 리딩으로 확장된다.</h2>
+                            <p>확인된 Workbook은 총 14개이며, 회차가 표시된 문서를 우선 기준으로 삼았다. 이 카드는 개인 답변 분석보다 Class별 수업 내용을 먼저 읽을 수 있도록 구성했다.</p>
+                            <p>답변은 별도 메뉴에서 "질문 - 회차 - 답변 요지" 형태로 분리했다. 수업 내용과 답변을 섞지 않기 위한 구조다.</p>
+                        </div>
+                        <div class="north-card">
+                            <span>Reading Order</span>
+                            <strong>Personal Success → Career → Foundation → Lead Yourself → Lead Others → Lead Missions</strong>
+                        </div>
+                    </div>
+
+                    <div class="metric-row">
+                        <div class="metric-box"><small>확인 문서</small><strong>14개 Workbook</strong></div>
+                        <div class="metric-box"><small>상세 메뉴</small><strong>Class 1-6 독립 구성</strong></div>
+                        <div class="metric-box"><small>답변 구성</small><strong>질문별 회차 비교</strong></div>
+                        <div class="metric-box"><small>공란 처리</small><strong>추정 없이 표시</strong></div>
+                    </div>
+
+                    <div class="leadership-panel">
+                        <h2><i class='bx bx-git-branch'></i> 전체 학습 흐름</h2>
+                        <div class="flow-grid">
+                            <div class="flow-card">
+                                <small>Class 1</small>
+                                <strong>Personal Success Navigator</strong>
+                                <p>회사, 조직, 업무, 관계, 자기관리의 기본 언어를 잡는다.</p>
+                            </div>
+                            <div class="flow-card">
+                                <small>Class 2</small>
+                                <strong>Career Essentials</strong>
+                                <p>커리어를 스스로 설계할 수 있는 비전, 목표, 경로, 실행의 틀을 만든다.</p>
+                            </div>
+                            <div class="flow-card">
+                                <small>Class 3</small>
+                                <strong>Leadership Foundation</strong>
+                                <p>리더십을 행동, 영향력, 균형, 게임플랜의 관점으로 이해한다.</p>
+                            </div>
+                            <div class="flow-card">
+                                <small>Class 4</small>
+                                <strong>Lead Yourself</strong>
+                                <p>자기인식, 성찰, 가치관, 비전, 피드백으로 리더 자신을 정렬한다.</p>
+                            </div>
+                            <div class="flow-card">
+                                <small>Class 5</small>
+                                <strong>Lead Others</strong>
+                                <p>관계, 신뢰, 피드백으로 구성원이 따르는 이유를 만든다.</p>
+                            </div>
+                            <div class="flow-card">
+                                <small>Class 6</small>
+                                <strong>Lead Missions</strong>
+                                <p>성과, 우선순위, 위임, 이해관계자, 협업을 통해 미션을 완수한다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="class1-section" class="content-section">
+                    <div class="class-panel">
+                        <div class="class-kicker">
+                            <div>
+                                <span class="section-label">Class 1</span>
+                                <h2><i class='bx bx-compass'></i> Personal Success Navigator</h2>
+                                <p>직장생활을 성공적으로 항해하기 위한 기본 지도다. 회사, 조직, 업무, 관계, 자기관리를 한 번에 정렬한다.</p>
+                            </div>
+                            <div class="class-chip-row">
+                                <span class="pill">조직 이해</span>
+                                <span class="pill">JD와 역할</span>
+                                <span class="pill">전략적 관계</span>
+                                <span class="pill">자기관리</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>학습 목표</h3>
+                            <ul class="leadership-list">
+                                <li>회사, 조직, 업무, 인재의 의미를 직장생활의 기본 문법으로 이해한다.</li>
+                                <li>관계를 단순 친밀감이 아니라 업무 성과와 신뢰를 만드는 전략적 기반으로 본다.</li>
+                                <li>나의 원칙, 에너지, 일관성을 점검해 조직 안에서 지속적으로 기여할 수 있는 방식을 찾는다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="lesson-grid">
+                            <div class="lesson-card">
+                                <small>PSN1</small>
+                                <h3>과정 소개와 학습 목표</h3>
+                                <p>Personal Success Navigator의 전체 구조를 확인한다. 직장생활을 개인의 노력만으로 보지 않고 회사, 조직, 업무, 관계, 자기관리의 조합으로 바라본다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>PSN2</small>
+                                <h3>Workplace Basics</h3>
+                                <p>직장생활의 4대 개념, 회사라는 조직의 성격, 회사와 개인의 관계, 업무가 조직 안에서 만들어지는 방식을 다룬다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>PSN3</small>
+                                <h3>JD, 조직 생태계, 인재</h3>
+                                <p>직무기술서는 역할의 전부가 아니라 최소 기준으로 이해한다. 조직은 개별 업무의 합이 아니라 서로 영향을 주고받는 생태계이며, 대체 불가 인재는 이 맥락 안에서 정의된다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>PSN4</small>
+                                <h3>Relationships</h3>
+                                <p>전략적 관계관리, 건설적 관계, 사내 정치의 이해, 관계 확장, 상급자/동료/팀 관계를 다룬다. 관계는 성과를 만드는 통로이자 리스크를 줄이는 기반이다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>PSN5</small>
+                                <h3>Yourself First</h3>
+                                <p>나부터 정렬하는 태도, 일관성, 목표와 성공의 선순환, 에너지 관리, 원칙과 신념을 점검한다. 자기관리는 성과의 지속성을 좌우한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>Closing</small>
+                                <h3>직장생활 기본기의 통합</h3>
+                                <p>회사와 개인의 관계, JD 이상의 기여, 관계관리, 자기관리까지 연결해 "조직 안에서 성과를 지속하는 사람"의 조건을 정리한다.</p>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>원문 용어와 표현</h3>
+                            <p>Class1은 직장생활을 설명하는 기본 단어를 촘촘히 잡는 수업이다. 아래 표현은 요약에서 사라지기 쉬운 수업 언어를 그대로 남긴 것이다.</p>
+                        </div>
+
+                        <div class="term-grid">
+                            <div class="term-card">
+                                <small>Workplace Basics</small>
+                                <h3>직장생활의 4대 개념</h3>
+                                <ul>
+                                    <li>회사, 직무, 조직, 인재를 직장생활의 기본 문법으로 본다.</li>
+                                    <li>회사, 직장, 직업의 차이를 구분하고 회사와 개인의 관계를 "파트너"로 이해한다.</li>
+                                    <li>회사와 직장생활은 목적, 요건, 기대치, 대가가 분명한 상호 협조적 관계로 설명된다.</li>
+                                </ul>
+                                <span class="keyword-line">회사 / 직장 / 직업 / 파트너 / 목적 / 요건 / 기대치 / 대가</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Job Description</small>
+                                <h3>JD는 최소 기준이자 발판</h3>
+                                <ul>
+                                    <li>JD(Job Description, 직무기술서)는 소속, 직책, 책임 업무, 자격요건, 잡그레이딩, 업무분장, 채용공고에 쓰이는 기본 문서다.</li>
+                                    <li>수업의 핵심은 JD 안에 갇히는 것이 아니라 JD를 최소 기준, 즉 bare minimum으로 보고 기대 이상의 기여로 확장하는 것이다.</li>
+                                    <li>업무를 "내 일"로만 닫지 않고 조직 생태계 속 역할과 연결해 읽는다.</li>
+                                </ul>
+                                <span class="keyword-line">JD / Job Description / 직무기술서 / bare minimum / 기대 이상의 능력</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Organization</small>
+                                <h3>조직 생태계와 변화 언어</h3>
+                                <ul>
+                                    <li>조직은 개인, 팀, 일이 유기적으로 연동되는 생태계이며 항상 움직이고 변화한다.</li>
+                                    <li>법칙, 절차, 체계가 있는 공간이므로 리더는 개인의 의지만이 아니라 맥락과 상호작용을 읽어야 한다.</li>
+                                    <li>변화 환경은 VUCA, RUPT, TUNA 같은 표현으로 설명된다.</li>
+                                </ul>
+                                <span class="keyword-line">VUCA / RUPT / TUNA / 조직 생태계 / 유기적 연동</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Relationships & Yourself</small>
+                                <h3>360도 관계와 자기관리</h3>
+                                <ul>
+                                    <li>상급자, 동료, 팀원을 포함한 360도 관계를 전략적으로 관리한다.</li>
+                                    <li>사내 정치, 관계 확장, 건설적 관계 형성을 피해야 할 주제가 아니라 관리해야 할 현실로 다룬다.</li>
+                                    <li>에너지는 80~120% 범위로 관리하고, 에너지 기버/킬러, 하이라이트 노트, 취미활동, 휴식으로 방전을 줄인다.</li>
+                                    <li>LOVE, LIKE, HATE, TOLERATE로 가치관을 탐색하고 양보할 수 없는 우선순위를 확인한다.</li>
+                                </ul>
+                                <span class="keyword-line">360도 관계 / 에너지 80~120% / Energy giver-killer / LOVE-LIKE-HATE-TOLERATE</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>리더십 적용</h3>
+                            <p>Class1은 리더십 이전의 기반이다. 리더가 팀원에게 기대하는 역할, 회사가 개인에게 기대하는 기여, 개인이 회사와 맺는 관계를 명확히 이해해야 이후 피플 리딩과 성과 리딩도 흔들리지 않는다.</p>
+                        </div>
+
+                        <div class="question-grid">
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>나는 어떤 리더가 되고 싶은가?</h3>
+                                <p>답변 요지: 팀원들을 바른 길로 이끌어 지속가능한 성과를 만들고, 팀원이 자신의 삶 안에서 회사와 건강한 관계를 맺도록 돕는 리더.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>회사에 기대하는 것은 무엇인가?</h3>
+                                <p>답변 요지: 열정과 능력을 가진 팀원, 소통이 되는 사람들과 함께 일하는 즐거움, 도전하고 싶게 만드는 환경.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>회사가 나에게 기대하는 것은 무엇인가?</h3>
+                                <p>답변 요지: 팀원들이 성과를 만들 수 있도록 독려하고 가이드하는 것. 아직은 서로 탐색 중인 단계로 인식.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="class2-section" class="content-section">
+                    <div class="class-panel">
+                        <div class="class-kicker">
+                            <div>
+                                <span class="section-label">Class 2</span>
+                                <h2><i class='bx bx-route'></i> Career Essentials</h2>
+                                <p>커리어를 우연히 흘러가는 이력이 아니라 설계하고 실행할 수 있는 성장 경로로 다룬다.</p>
+                            </div>
+                            <div class="class-chip-row">
+                                <span class="pill">커리어 주도성</span>
+                                <span class="pill">경로 탐색</span>
+                                <span class="pill">역량 설계</span>
+                                <span class="pill">로드맵</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>학습 목표</h3>
+                            <ul class="leadership-list">
+                                <li>직장, 직무, 커리어의 차이를 이해하고 커리어를 장기 여정으로 바라본다.</li>
+                                <li>개인 전문가, 매니저, 비즈니스 리더 등 다양한 경로와 요구 역량을 탐색한다.</li>
+                                <li>비전, 목표, 로드맵, 실행을 연결해 커리어 청사진을 만든다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="lesson-grid">
+                            <div class="lesson-card">
+                                <small>CE1</small>
+                                <h3>과정 소개</h3>
+                                <p>커리어를 현재 직무에 갇힌 개념이 아니라 긴 시간에 걸쳐 축적되는 성장 여정으로 정의한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>CE2</small>
+                                <h3>Career Basics</h3>
+                                <p>커리어의 핵심, 직장과 커리어의 차이, 성장 기회, 커리어 경로 탐색의 필요성을 정리한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>CE3</small>
+                                <h3>경로별 역량</h3>
+                                <p>개인 기여자, 매니저, 비즈니스 리더 등 경로에 따라 필요한 역량과 행동이 달라짐을 다룬다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>CE4</small>
+                                <h3>Career Planning</h3>
+                                <p>비전, 목표, 로드맵, 실행 전략을 연결한다. 커리어 목표는 선언이 아니라 실행 가능한 선택의 구조로 정리된다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>CE5</small>
+                                <h3>커리어 사례와 Q&A</h3>
+                                <p>커리어 코칭 사례와 질문을 통해 경로 전환, 성장 선택, 다음 역량 확보의 실제 고민을 다룬다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>Closing</small>
+                                <h3>청사진과 실행</h3>
+                                <p>커리어를 장기적으로 보고, 지금의 역할과 다음 성장을 연결하는 실행 계획으로 마무리한다.</p>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>원문 용어와 표현</h3>
+                            <p>Class2는 커리어를 "취업/승진 목표"보다 넓은 장기 여정으로 설명한다. 수업에서 반복되는 경로, 단계, 설계 언어를 보존했다.</p>
+                        </div>
+
+                        <div class="term-grid">
+                            <div class="term-card">
+                                <small>Career Basics</small>
+                                <h3>직업/직장과 커리어의 차이</h3>
+                                <ul>
+                                    <li>커리어는 특정 직장이나 직무를 얻는 사건이 아니라 장기간 노력하고 추구하는 여정이다.</li>
+                                    <li>직업과 직장이 역할을 수행하는 일자리라면, 커리어는 그 역할에 따르는 경험, 배움, 목표 달성 노력의 과정이다.</li>
+                                    <li>커리어의 주인은 나 자신이며, 개인, 피플 리더, 비즈니스 리더가 함께 선순환을 만들어야 한다.</li>
+                                </ul>
+                                <span class="keyword-line">커리어 여정 / 커리어의 주인 / 경험과 배움 / 선순환</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Career Path</small>
+                                <h3>Career Ladder vs. Lattices</h3>
+                                <ul>
+                                    <li>사다리형 경로는 수직 직급 상승과 정해진 직급 개수에 성패를 거는 방식이다.</li>
+                                    <li>격자무늬형 경로는 수직, 수평, 대각선 이동을 포함하며 경험과 스킬의 폭을 넓힌다.</li>
+                                    <li>현대의 다변수 환경에서는 한 방향 상승보다 이동성과 확장성을 가진 경로가 경쟁력을 만든다.</li>
+                                </ul>
+                                <span class="keyword-line">Career Ladder / Career Lattices / 수직 이동 / 수평 이동 / 대각선 이동</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Development Stages</small>
+                                <h3>전문성에서 리더십으로의 단계</h3>
+                                <ul>
+                                    <li>발전 단계는 Capable Individual, Contributing Team Member, Competent Manager로 확장된다.</li>
+                                    <li>이후 Leadership Level 1 & 2, Leadership Level 3로 이어지며 요구되는 영향력과 책임이 커진다.</li>
+                                    <li>경로는 Individual Contributor Path와 Managerial Path로 나뉘지만, 어느 쪽이든 스스로를 리드하는 능력은 필요하다.</li>
+                                </ul>
+                                <span class="keyword-line">Capable Individual / Contributing Team Member / Competent Manager / IC Path / Managerial Path</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Career Planning</small>
+                                <h3>커리어 플래닝 4요소</h3>
+                                <ul>
+                                    <li>커리어 플래닝은 비전, 목표, 로드맵, 실행화 전략의 네 요소로 정리된다.</li>
+                                    <li>커리어 선택은 적성, 열정, 의미, 가치관과 연결되어야 오래 지속된다.</li>
+                                    <li>업무성과와 개인 스펙, 워킹맘의 가정과 커리어 저글링처럼 현실적인 선택의 균형도 함께 다룬다.</li>
+                                </ul>
+                                <span class="keyword-line">비전 / 목표 / 로드맵 / 실행화 전략 / 적성 / 열정 / 의미 / 가치관</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>리더십 적용</h3>
+                            <p>Class2는 리더가 자신의 커리어만이 아니라 팀원의 성장 경로를 읽는 눈을 갖게 한다. 구성원을 업무 수행자로만 보지 않고 커리어를 가진 주체로 볼 때, 위임과 피드백의 품질이 달라진다.</p>
+                        </div>
+
+                        <div class="question-grid">
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>현재 커리어에서 보이는 기회는 무엇인가?</h3>
+                                <p>답변 요지: 나에게 주어진 다양한 성장의 기회. 많이 배우고 단단해져야 한다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Reflection Question</small>
+                                <h3>리더로서 팀원의 커리어를 어떻게 볼 것인가?</h3>
+                                <p>수업 연결: 커리어 경로와 역량 요구가 사람마다 다르기 때문에, 리더는 동일한 방식의 성장만 요구하지 않아야 한다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="class3-section" class="content-section">
+                    <div class="class-panel">
+                        <div class="class-kicker">
+                            <div>
+                                <span class="section-label">Class 3</span>
+                                <h2><i class='bx bx-layer'></i> Leadership Foundation</h2>
+                                <p>리더십을 개인 성향이나 직책이 아니라 반복 가능한 행동 체계와 균형의 문제로 이해한다.</p>
+                            </div>
+                            <div class="class-chip-row">
+                                <span class="pill">하이브리드 학습</span>
+                                <span class="pill">FAR</span>
+                                <span class="pill">3by3</span>
+                                <span class="pill">게임플랜</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>학습 목표</h3>
+                            <ul class="leadership-list">
+                                <li>현재 리더십 위치를 진단하고 나만의 리더십 여정 지도를 만든다.</li>
+                                <li>자기, 사람, 미션의 균형을 보는 3by3 프레임워크를 이해한다.</li>
+                                <li>리더십을 일상에서 실험하고 반복하는 게임플랜으로 전환한다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="lesson-grid">
+                            <div class="lesson-card">
+                                <small>LF1</small>
+                                <h3>과정 소개와 Self-Assessment</h3>
+                                <p>현재 리더십 위치, 피플리딩 경험, 리더 역할에서 느끼는 어려움을 점검한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LF2</small>
+                                <h3>하이브리드 시대의 리더십 트레이닝</h3>
+                                <p>짧은 학습, 현장 적용, 반복, 반응 기록을 강조한다. 리더십 학습은 업무와 분리된 이벤트가 아니라 일상 속 실험이다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LF3</small>
+                                <h3>리더십 프레임워크</h3>
+                                <p>리더십 여정에서 내가 어디까지 왔고 어디로 가야 하는지 볼 수 있는 기준을 세운다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LF4</small>
+                                <h3>3by3</h3>
+                                <p>자기, 사람, 미션의 균형을 잡는 틀이다. 리더는 자신을 정렬하고, 사람을 움직이며, 미션을 완수해야 한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LF5-LF8</small>
+                                <h3>리더의 정의, 오해, 롤모델</h3>
+                                <p>리더를 직책이나 권한으로만 보지 않고 영향력, 행동, 책임으로 재정의한다. 좋은 리더의 모습을 관찰하고 언어화한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LF9-LF11</small>
+                                <h3>리더십 견해와 게임플랜</h3>
+                                <p>나의 리더십 관점을 정리하고 실제 업무에서 실행할 게임플랜으로 바꾼다.</p>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>원문 용어와 표현</h3>
+                            <p>Class3은 전체 과정의 공통 프레임을 세우는 수업이다. 리더십을 명사가 아닌 행동으로 읽게 하는 표현들을 따로 남겼다.</p>
+                        </div>
+
+                        <div class="term-grid">
+                            <div class="term-card">
+                                <small>Self-Assessment</small>
+                                <h3>리더십 여정의 현재 위치</h3>
+                                <ul>
+                                    <li>Leadership training methodologies, Leadership framework, Definitions of leadership, Role model, Prepared as a leader를 진단한다.</li>
+                                    <li>수업은 리더십 여정의 이정표이자 나만의 리더십 플레이북의 목차 페이지로 기능한다.</li>
+                                    <li>롤모델을 통해 좋은 리더십을 추상적 이미지가 아니라 관찰 가능한 행동으로 바꾼다.</li>
+                                </ul>
+                                <span class="keyword-line">Self-Assessment / Role model / Leadership framework / 플레이북</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Hybrid Training</small>
+                                <h3>70/20/10과 반복 학습</h3>
+                                <ul>
+                                    <li>리더십 성장은 실제 업무 현장경험 70%, 타인과의 상호작용 20%, 체계화된 교육 10%의 조합으로 설명된다.</li>
+                                    <li>하이브리드 리더십 트레이닝은 통찰력, 실험 정신, 자기 발견을 강조한다.</li>
+                                    <li>Focus, Apply, Repeat의 리듬으로 학습하고 현장에서 "아하 모멘트"를 만든다.</li>
+                                </ul>
+                                <span class="keyword-line">70% Experience / 20% Interaction / 10% Education / Focus! Apply! Repeat! / 아하 모멘트</span>
+                            </div>
+                            <div class="term-card">
+                                <small>3by3 Framework</small>
+                                <h3>무엇을 리드하고 어떻게 리드할 것인가</h3>
+                                <ul>
+                                    <li>리더십은 명사가 아니라 동사이며, 직책보다 행동과 영향력으로 이해한다.</li>
+                                    <li>3by3은 무엇을 리드할까와 어떻게 리드할까를 함께 묻는다.</li>
+                                    <li>무엇을 리드할까의 축은 스스로, 타인, 미션으로 연결된다.</li>
+                                    <li>리더의 정의는 자발적으로 따르는 팔로워, 책임과 역할 관점의 리더, 스스로의 리더라는 세 관점으로 확장된다.</li>
+                                </ul>
+                                <span class="keyword-line">3by3 / Self-People-Mission / 리더십은 행동 / 영향력</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Game Plan</small>
+                                <h3>오해를 걷어내고 행동방침 세우기</h3>
+                                <ul>
+                                    <li>직급, 연차, 팀원 보유, 타고난 카리스마, 모든 해답 보유가 리더십을 자동으로 만들어준다는 오해를 점검한다.</li>
+                                    <li>리더의 게임플랜은 역할과 책임, 사람과 일, 리딩과 매니징, 현재와 미래의 균형을 다룬다.</li>
+                                    <li>성과는 가능성이 아니라 해 놓은 성과이며, 기대치 조율과 potential risk 관리가 필요하다.</li>
+                                    <li>셀프 리더십이 모든 리더십의 시작점이다.</li>
+                                </ul>
+                                <span class="keyword-line">오해 5가지 / 기대치 조율 / potential risk / 해 놓은 성과 / 셀프 리더십</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>리더십 적용</h3>
+                            <p>Class3은 전체 과정의 중심축이다. 이후 Class4의 자기 리더십, Class5의 타인 리딩, Class6의 미션 리딩을 이해하기 위한 공통 프레임을 제공한다.</p>
+                        </div>
+
+                        <div class="question-grid">
+                            <div class="question-card">
+                                <small>2회차 / 3회차 공통 질문</small>
+                                <h3>현재 업무, 경력, 리더십 포지션은 무엇인가?</h3>
+                                <p>2회차 답변 요지: Simulation 조직에서 빠르게 리더 역할을 맡았고, 정규 팀장 전환 후 새 분야와 더 큰 팀을 맡는 부담을 인식했다. 3회차 답변 요지: 디스플레이 제조업 Simulation 업무, 약 7년 경력과 6년 피플리딩으로 압축했다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>2회차 / 3회차 공통 질문</small>
+                                <h3>더 개발해야 할 리더십 영역은 무엇인가?</h3>
+                                <p>2회차 답변 요지: 팀원에게 더 다가가고 심리적 안전감과 상호 이해를 만드는 것. 3회차 답변 요지: 다른 분야 이해도와 예측 밖 질문에 대응하는 유연성.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>3by3 Reflection</small>
+                                <h3>자기, 사람, 미션 중 어디에서 균형이 필요한가?</h3>
+                                <p>답변 요지: 리딩과 매니징 사이의 균형, 일을 성과와 연결하는 방식, PL에게 무엇을 위임할지의 질문이 남았다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="class4-section" class="content-section">
+                    <div class="class-panel">
+                        <div class="class-kicker">
+                            <div>
+                                <span class="section-label">Class 4</span>
+                                <h2><i class='bx bx-user-check'></i> Lead Yourself</h2>
+                                <p>타인을 이끌기 전에 리더 자신을 먼저 정렬한다. 자기인식, 성찰, 가치관, 비전, 피드백이 중심이다.</p>
+                            </div>
+                            <div class="class-chip-row">
+                                <span class="pill">자기인식</span>
+                                <span class="pill">셀프 리플렉션</span>
+                                <span class="pill">가치관</span>
+                                <span class="pill">피드백</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>학습 목표</h3>
+                            <ul class="leadership-list">
+                                <li>내적 자기인식과 외적 자기인식을 구분하고 균형 있게 점검한다.</li>
+                                <li>성찰을 자기비난이 아니라 다음 행동을 찾는 도구로 사용한다.</li>
+                                <li>가치관, 비전, 리더십 스타일, 피드백을 통해 리더 자신의 기준을 정렬한다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="lesson-grid">
+                            <div class="lesson-card">
+                                <small>LY1</small>
+                                <h3>과정 소개와 Self-Assessment</h3>
+                                <p>자기 리더십의 현재 상태를 진단하고, 나를 먼저 이해하는 것이 왜 필요한지 확인한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LY2</small>
+                                <h3>자기인식</h3>
+                                <p>내가 보는 나와 타인이 경험하는 나를 구분한다. 커리어와 리더십 모두 자기인식의 품질에 영향을 받는다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LY3</small>
+                                <h3>셀프 리플렉션</h3>
+                                <p>있는 그대로 관찰하고, "왜 그랬을까"보다 "무엇을 다르게 할 수 있을까"를 묻는다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LY4-LY6</small>
+                                <h3>자신감, 가치관, 비전</h3>
+                                <p>리더가 불확실한 상황에서도 자신을 믿고 행동하기 위해 필요한 기준을 세운다. 내가 만들고 싶은 상태와 전달해야 할 "왜"를 정리한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LY7-LY8</small>
+                                <h3>리더십 스타일과 프로파일</h3>
+                                <p>나의 자연스러운 리더십 방식과 주변이 경험하는 리더십 방식을 비교한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LY9-LY10</small>
+                                <h3>피드백 잘 묻고 받는 법</h3>
+                                <p>피드백을 평가가 아니라 외적 자기인식을 얻는 데이터로 다룬다. Closing에서는 자기 리더십의 실천 과제를 정리한다.</p>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>원문 용어와 표현</h3>
+                            <p>Class4는 리더가 자기 자신을 정확히 이해하고 조정하는 수업이다. 자기인식, 성찰, 자신감, 피드백의 세부 표현을 보존했다.</p>
+                        </div>
+
+                        <div class="term-grid">
+                            <div class="term-card">
+                                <small>Self-Awareness</small>
+                                <h3>자기인식은 리더십의 반석</h3>
+                                <ul>
+                                    <li>진정한 자기인식은 성격, 행동, 가치, 신념, 감정, 생각을 포함한 지금의 "나"를 이해하는 능력이다.</li>
+                                    <li>내적 자기인식과 외적 자기인식의 균형이 필요하며, 나에 대해 생각하는 것과 나에 대해 아는 것은 다르다.</li>
+                                    <li>자기인식이 뛰어난 사람은 공정함, 일관성과 무게감, 객관적 자기평가, 결단력과 자신감을 보인다.</li>
+                                </ul>
+                                <span class="keyword-line">내적 자기인식 / 외적 자기인식 / 공정함 / 일관성 / 객관적 자기평가</span>
+                            </div>
+                            <div class="term-card">
+                                <small>EQ & Social Skills</small>
+                                <h3>시니어 리더십 JD의 변화</h3>
+                                <ul>
+                                    <li>리더십에서 자기인식은 나를 이해하고 내가 타인에게 어떻게 전달되는지 이해하는 것이다.</li>
+                                    <li>시니어 리더십 JD에는 자기인식, 커뮤니케이션, 다른 성향과 일하기, 타인의 생각과 느낌을 추론하는 능력이 중요해진다.</li>
+                                    <li>직장생활의 5대 EQ는 Self-Awareness, Self-Regulation, Motivation, Empathy, Social Skills로 정리된다.</li>
+                                </ul>
+                                <span class="keyword-line">EQ / Social Skills / Self-Regulation / Motivation / Empathy</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Reflection & Confidence</small>
+                                <h3>반성보다 반향, Why보다 What</h3>
+                                <ul>
+                                    <li>셀프 리플렉션은 반성, 비판, 각성, 비난이 아니라 있는 그대로를 되돌려보는 "반향"에 가깝다.</li>
+                                    <li>"왜 그랬지?"보다 "무엇을 바꿔야 할까?"를 묻는 방향으로 질문을 전환한다.</li>
+                                    <li>자신감은 내가 옳다고 믿는 대로 말하고 행동하며 결과를 감내할 용기다.</li>
+                                    <li>자신감은 리더십 트레이닝, 자기인식, 피드백과 코칭, 네트워크 구축, 도움 요청하기와 vulnerability를 통해 만들어진다.</li>
+                                </ul>
+                                <span class="keyword-line">Self-Reflection / Why to What / 자신감 / vulnerability</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Receiving Feedback</small>
+                                <h3>피드백을 잘 묻고 받는 법</h3>
+                                <ul>
+                                    <li>외부 자기인식은 Feedback, 내부 자기인식은 Self-Reflection을 통해 보완한다.</li>
+                                    <li>피드백은 먼저 묻기, 구체적으로 묻기, 정기적으로 미리 고지하기, 구체적 예시 묻기, What else?, 감사와 Next step 공유로 다룬다.</li>
+                                    <li>동의하기 어려운 피드백을 반복해서 받는다면, 실제 의도와 별개로 그렇게 인식되고 있다는 데이터로 받아들인다.</li>
+                                    <li>피드백 취사선택 기준은 리더 자리의 역할, 커리어 비전, 롤모델 리더상, 가치관이다.</li>
+                                </ul>
+                                <span class="keyword-line">Feedback / What else? / Next step / 역할 / 커리어 비전 / 롤모델 / 가치관</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>리더십 적용</h3>
+                            <p>Class4는 리더십의 출발점을 "팀원을 어떻게 바꿀 것인가"에서 "나는 어떤 기준과 습관으로 행동하는가"로 옮긴다. 리더의 자기인식이 낮으면 관계, 피드백, 성과관리도 흔들린다.</p>
+                        </div>
+
+                        <div class="question-grid">
+                            <div class="question-card">
+                                <small>Reflection Question</small>
+                                <h3>외적 자기인식을 알기 위해 무엇을 해야 하는가?</h3>
+                                <p>답변 요지: 내적 자기인식과 외적 자기인식의 균형을 고민했고, 외적 자기인식을 얻는 방법을 질문으로 남겼다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>내가 무엇을 다르게 해야 할까?</h3>
+                                <p>답변 요지: 1:다수 미팅은 말하는 사람만 말하게 되고 피드백이 한 번 걸러질 수 있으므로, 1:1 미팅 전환을 고민했다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Feedback Question</small>
+                                <h3>무슨 피드백을 요청할 것인가?</h3>
+                                <p>답변 요지: 신임 팀장으로서 역할을 잘하고 있는지, 부족한 부분과 잘하고 있는 부분이 무엇인지 묻고자 했다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="class5-section" class="content-section">
+                    <div class="class-panel">
+                        <div class="class-kicker">
+                            <div>
+                                <span class="section-label">Class 5</span>
+                                <h2><i class='bx bx-group'></i> Lead Others</h2>
+                                <p>직급이 아니라 관계, 신뢰, 피드백을 통해 사람들이 자발적으로 따르는 이유를 만든다.</p>
+                            </div>
+                            <div class="class-chip-row">
+                                <span class="pill">People Leadership</span>
+                                <span class="pill">관계</span>
+                                <span class="pill">신뢰</span>
+                                <span class="pill">피드백</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>학습 목표</h3>
+                            <ul class="leadership-list">
+                                <li>타인을 리딩하는 원칙과 구성원이 자발적으로 따르는 이유를 이해한다.</li>
+                                <li>직책 기반 리더십의 한계와 관계 기반, 성과 기반 리더십으로의 성장을 이해한다.</li>
+                                <li>신뢰와 건설적 피드백을 통해 구성원의 성장과 성과를 돕는 방법을 익힌다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="lesson-grid">
+                            <div class="lesson-card">
+                                <small>LO1</small>
+                                <h3>과정 소개와 Self-Assessment</h3>
+                                <p>현재 사람을 이끄는 방식과 피플 리더십의 출발점을 점검한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LO2</small>
+                                <h3>리더십 성장 단계</h3>
+                                <p>직책에 기대는 리더에서 관계를 만드는 리더, 성과로 신뢰받는 리더로 성장하는 단계를 이해한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LO3</small>
+                                <h3>Position과 Title의 양면성</h3>
+                                <p>직급과 권한은 시작점일 수 있지만, 그것만으로 신뢰와 자발성을 만들 수 없다. 직책은 도구이지 리더십의 본질은 아니다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LO4-LO6</small>
+                                <h3>Relationship</h3>
+                                <p>구성원을 이해하고 연결되는 관계 기반을 만든다. 관계는 친밀감만이 아니라 업무 맥락에서 신뢰가 흐르는 통로다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LO7-LO9</small>
+                                <h3>Credibility</h3>
+                                <p>감정적 신뢰와 합리적 신뢰, 팀 신뢰를 구분하고 진단한다. 신뢰는 리더의 의도, 역량, 일관성에서 만들어진다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LO10</small>
+                                <h3>Giving Feedback</h3>
+                                <p>구성원의 성장과 성과를 돕는 건설적 피드백 제공 방식을 학습한다.</p>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>원문 용어와 표현</h3>
+                            <p>Class5는 타인이 리더를 따르는 이유를 직급에서 관계, 신뢰, 성과로 확장한다. 피플 리더십의 세부 언어를 보존했다.</p>
+                        </div>
+
+                        <div class="term-grid">
+                            <div class="term-card">
+                                <small>People Leadership</small>
+                                <h3>구성원이 리더를 따르는 원리</h3>
+                                <ul>
+                                    <li>리더 혼자 이룰 수 있는 성과는 거의 없으며, 리더십은 타인과의 상호작용 속에서 영향력으로 나타난다.</li>
+                                    <li>직급의 리더는 직급 때문에 의무감으로 따르게 만들지만, 리더를 따르는 것과 지시를 따르는 것은 다르다.</li>
+                                    <li>관계의 리더는 믿음과 신뢰를 바탕으로 영향력을 만들지만 좋은 관계만으로는 한계가 있다.</li>
+                                    <li>성과의 리더는 결과를 통해 사람들이 성공하는 팀의 일부가 되고 싶게 만든다.</li>
+                                </ul>
+                                <span class="keyword-line">직급의 리더 / 관계의 리더 / 성과의 리더 / 자발적 팔로워십</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Position & Relationship</small>
+                                <h3>직급은 도구, 의존은 리스크</h3>
+                                <ul>
+                                    <li>타이틀과 직급 자체가 나쁜 것이 아니라 그것에만 의존하는 것이 문제다.</li>
+                                    <li>성숙도 단계는 졸업하고 잊는 것이 아니라 전 단계 위에 다음 단계를 쌓는 방식이다.</li>
+                                    <li>새 팀, 새 멤버, 이해관계자, 고객이 바뀌면 첫 단계부터 관계를 다시 시작해야 한다.</li>
+                                    <li>권한 위임과 동기부여는 관계와 신뢰 위에서 작동한다.</li>
+                                </ul>
+                                <span class="keyword-line">Position / Title / 관계 형성 / 권한 위임 / 동기부여 / 단계 쌓기</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Credibility</small>
+                                <h3>신뢰는 생기는 게 아니라 만드는 것</h3>
+                                <ul>
+                                    <li>신뢰는 우연히 생기는 것이 아니라 리더가 의도적으로 만들어야 하는 조건이다.</li>
+                                    <li>감성적 신뢰요소와 이성적 신뢰요소를 구분하고, 팀 전체가 서로를 신뢰하는지도 진단한다.</li>
+                                    <li>관계 형성의 5가지 핵심요소는 친밀함을 넘어 업무 맥락에서 신뢰가 흐르게 하는 장치다.</li>
+                                </ul>
+                                <span class="keyword-line">Credibility / 감성적 신뢰 / 이성적 신뢰 / 팀 신뢰 / 관계 형성 5요소</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Giving Feedback</small>
+                                <h3>피드백의 What과 How</h3>
+                                <ul>
+                                    <li>피드백은 받을 때 자신의 부족함을 직면해야 하고, 줄 때 상처와 갈등을 걱정하게 되어 어렵다.</li>
+                                    <li>그럼에도 피드백은 리더의 책임이자 의무이며, 사람 자체가 아니라 문제점에 초점을 맞춘다.</li>
+                                    <li>피드백은 내용인 what과 전달 방법인 how, 즉 톤앤매너를 구분해 설계한다.</li>
+                                    <li>Name, Role, Contribution of the role to company/team goal의 프레임으로 역할과 기대를 분명히 한다.</li>
+                                </ul>
+                                <span class="keyword-line">What / How / 톤앤매너 / Name-Role-Contribution / 저성과 전달</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>리더십 적용</h3>
+                            <p>Class5는 Class4에서 정렬한 리더 자신을 바탕으로 사람에게 확장되는 단계다. 리더십의 중심이 직책에서 관계, 관계에서 신뢰, 신뢰에서 피드백과 성장으로 이동한다.</p>
+                        </div>
+
+                        <div class="question-grid">
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>구성원이 자발적으로 따르는 리더는 어떤 리더인가?</h3>
+                                <p>수업 연결: 구성원은 직책만 보고 따르지 않는다. 관계, 신뢰, 일관성, 피드백 경험이 쌓일 때 자발성이 만들어진다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Answer Status</small>
+                                <h3>2회차와 3회차 답변 상태</h3>
+                                <p>2회차와 3회차 Class5 문서는 수업 내용은 확인되지만 답변 칸은 대부분 공란이다. 따라서 답변을 추정하지 않고 수업 내용 중심으로 정리했다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="class6-section" class="content-section">
+                    <div class="class-panel">
+                        <div class="class-kicker">
+                            <div>
+                                <span class="section-label">Class 6</span>
+                                <h2><i class='bx bx-target-lock'></i> Lead Missions</h2>
+                                <p>리더십을 최종적으로 성과와 미션 완수에 연결한다. 우선순위, 위임, 이해관계자, 협업이 중심이다.</p>
+                            </div>
+                            <div class="class-chip-row">
+                                <span class="pill">성과 리더십</span>
+                                <span class="pill">우선순위</span>
+                                <span class="pill">위임</span>
+                                <span class="pill">협업</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>학습 목표</h3>
+                            <ul class="leadership-list">
+                                <li>성과를 액션 리스트나 업무량이 아니라 팀이 만들어낸 결과로 이해한다.</li>
+                                <li>문제 해결자에서 비전, 로드맵, 실행 전략을 세우는 리더로 전환한다.</li>
+                                <li>이해관계자 관리와 협업 프레임워크를 통해 미션 완수 가능성을 높인다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="lesson-grid">
+                            <div class="lesson-card">
+                                <small>LM1</small>
+                                <h3>과정 소개와 Self-Assessment</h3>
+                                <p>미션을 리드하는 현재 방식을 진단하고, 성과 리더십의 필요성을 확인한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LM2-LM4</small>
+                                <h3>Performance Leadership</h3>
+                                <p>성과는 가능성, 노력, 업무량, 프로젝트 수가 아니라 실제 결과다. 리더는 문제 해결을 넘어 결과를 만드는 구조를 설계해야 한다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>Priority</small>
+                                <h3>우선순위와 위임</h3>
+                                <p>상위 20% 핵심 업무를 선별하고, 나머지는 구성원과 PL에게 위임해 팀 전체의 실행력을 높인다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LM5-LM7</small>
+                                <h3>Stakeholder Management</h3>
+                                <p>이해관계자를 식별하고 기대를 조율하며, 의사결정과 협업을 위한 정렬을 만든다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>LM8-LM10</small>
+                                <h3>Collaboration</h3>
+                                <p>자율성, 명확한 역할, 장애물 제거, 갈등 관리, 큰 그림 공유, 협업 프레임워크를 통해 팀 간 시너지를 만든다.</p>
+                            </div>
+                            <div class="lesson-card">
+                                <small>Closing</small>
+                                <h3>Action Plan</h3>
+                                <p>성과 리더십, 이해관계자 관리, 협업을 실제 실행 계획으로 정리한다.</p>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>원문 용어와 표현</h3>
+                            <p>Class6은 리더십을 최종적으로 성과와 미션 완수에 연결한다. 성과, 우선순위, 위임, 이해관계자, 협업의 원문 표현을 살렸다.</p>
+                        </div>
+
+                        <div class="term-grid">
+                            <div class="term-card">
+                                <small>Performance Leadership</small>
+                                <h3>성과는 리더의 존재 이유</h3>
+                                <ul>
+                                    <li>성과는 가능성이 아니라 실제 산출한 결과이며, 리더 개인 성과가 아니라 팀 성과로 읽어야 한다.</li>
+                                    <li>액션플랜, 업무량, 프로젝트 숫자는 그 자체로 성과가 아니다.</li>
+                                    <li>모든 성공 리더는 생산적이지만, 생산적이라고 해서 자동으로 리더십이 있는 것은 아니다.</li>
+                                    <li>best-fit 수준을 넘어 두각을 나타내는 탁월한 리더는 문제 해결을 넘어 비전, 로드맵, 실행화 전략을 지휘한다.</li>
+                                </ul>
+                                <span class="keyword-line">성과 / best-fit / 탁월한 성과 딜리버리 / 팀 성과 / 실제 산출</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Leadership Capabilities</small>
+                                <h3>성과 리더의 역량 전환</h3>
+                                <ul>
+                                    <li>성과 리더의 핵심 역량은 직접 일하는 능력보다 팀이 성과를 내도록 환경을 만들고 지휘하는 능력이다.</li>
+                                    <li>Conflict management, Stakeholder management, Decision making, Change management, Risk taking, Influencing skill이 핵심 언어로 제시된다.</li>
+                                    <li>해결사 역할에 머무르지 않고 미래의 방향, 의사결정, 리스크 감수, 영향력 행사로 이동한다.</li>
+                                </ul>
+                                <span class="keyword-line">Conflict / Stakeholder / Decision / Change / Risk taking / Influencing</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Priority & Delegation</small>
+                                <h3>20:80 우선순위와 위임</h3>
+                                <ul>
+                                    <li>상위 20% 요소와 업무에 노력과 포커스의 80%를 둔다.</li>
+                                    <li>회사 목표, 팀 역할, 목표와의 연관성, 리더의 기준과 논리로 우선순위를 세운다.</li>
+                                    <li>성과 달성과 연결성이 낮은 일은 휴지통에 넣거나 위임 대상으로 검토한다.</li>
+                                    <li>"내가 아니면 누구도 대신할 수 없거나 할 수 없는 일은 무엇인가?"라는 질문으로 리더의 고유 역할을 좁힌다.</li>
+                                </ul>
+                                <span class="keyword-line">20:80 / top 20% / 휴지통 / 위임 / 리더의 고유 역할</span>
+                            </div>
+                            <div class="term-card">
+                                <small>Stakeholders & Collaboration</small>
+                                <h3>360도 이해관계자와 협업 기본사양</h3>
+                                <ul>
+                                    <li>핵심 이해관계자는 매일 상호작용하거나 동의가 필요하고, 미션 성패에 영향을 주는 협조부서의 핵심 인물까지 포함한다.</li>
+                                    <li>얼라인먼트, 위험과 기회 요인, 의사결정, 원활한 소통, 기대치 조율, 갈등관리가 이해관계자 관리의 핵심이다.</li>
+                                    <li>협업은 선택이 아니라 기본사양이며, 공동 목표를 위해 함께 일해 더 큰 아웃컴을 내는 방식이다.</li>
+                                    <li>협업 리더는 자율권, 업무분장, 장애요소 관리, 큰그림 업데이트, 명확한 협업 틀을 설계한다. 리더 의견은 가장 나중에 제시한다.</li>
+                                </ul>
+                                <span class="keyword-line">360도 이해관계자 / 얼라인먼트 / 협업 기본사양 / 갈등은 패키지 / 리더 의견은 나중에</span>
+                            </div>
+                        </div>
+
+                        <div class="outline-block">
+                            <h3>리더십 적용</h3>
+                            <p>Class6은 앞선 다섯 Class를 성과로 묶는다. 조직 이해, 커리어, 리더십 기본기, 자기인식, 관계와 신뢰가 결국 미션 완수와 연결되어야 함을 확인하는 마지막 단계다.</p>
+                        </div>
+
+                        <div class="question-grid">
+                            <div class="question-card">
+                                <small>Workbook Question</small>
+                                <h3>성과를 만들기 위해 리더가 직접 잡아야 할 것은 무엇인가?</h3>
+                                <p>수업 연결: 리더는 모든 문제를 직접 해결하는 사람이 아니라, 우선순위와 위임 구조를 설계해 팀이 결과를 만들게 하는 사람이다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Class3 Answer Link</small>
+                                <h3>리딩과 매니징 사이의 균형을 어떻게 잡을 것인가?</h3>
+                                <p>답변 연결: "일을 성과와 연결하기보다 쳐내기만 했다"는 깨달음은 Class6의 성과 리더십, 우선순위, 위임 주제와 직접 연결된다.</p>
+                            </div>
+                            <div class="question-card">
+                                <small>Answer Status</small>
+                                <h3>Class6 답변 상태</h3>
+                                <p>2회차 문서는 수업 내용은 확인되지만 본인 답변 칸은 대부분 공란이다. 따라서 답변은 확정하지 않고 수업 내용 중심으로 정리했다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="answer-questions-section" class="content-section">
+                    <div class="leadership-panel">
+                        <h2><i class='bx bx-message-square-detail'></i> 답변 질문 모음</h2>
+                        <p>여기서는 답변 자체보다 "어떤 질문에 대한 답변이었는지"를 먼저 보이도록 정리했다. 같은 질문이 2회차와 3회차에 반복된 경우에는 한 줄에 묶었다.</p>
+                    </div>
+
+                    <div class="leadership-panel">
+                        <table class="leadership-table">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>질문</th>
+                                    <th>회차</th>
+                                    <th>답변 요지</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Class1</strong></td>
+                                    <td>나는 어떤 리더가 되고 싶은가?</td>
+                                    <td>1회차</td>
+                                    <td>팀원을 바른 길로 이끌어 지속가능한 성과를 만들고, 팀원이 회사와 건강한 관계를 맺도록 돕는 리더.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class1</strong></td>
+                                    <td>회사에 기대하는 것은 무엇인가?</td>
+                                    <td>1회차</td>
+                                    <td>열정과 능력을 가진 팀원, 소통이 되는 사람들과 함께 일하는 즐거움, 도전하고 싶게 만드는 환경.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class1</strong></td>
+                                    <td>회사는 나에게 무엇을 기대하는가?</td>
+                                    <td>1회차</td>
+                                    <td>팀원들이 성과를 만들 수 있도록 독려하고 가이드하는 것. 아직은 서로 탐색 중인 단계.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class2</strong></td>
+                                    <td>현재 커리어에서 보이는 기회는 무엇인가?</td>
+                                    <td>1회차</td>
+                                    <td>다양한 성장의 기회가 주어져 있으며 많이 배우고 단단해져야 한다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class3</strong></td>
+                                    <td>하이브리드 시대의 리더십 트레이닝을 어떻게 적용할 것인가?</td>
+                                    <td>2회차 / 3회차</td>
+                                    <td>2회차는 짧은 학습과 실생활 적용, 3회차는 통찰력과 간결한 표현, 시도와 체감에 초점을 두었다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class3</strong></td>
+                                    <td>현재 업무, 경력, 리더십 포지션은 무엇인가?</td>
+                                    <td>2회차 / 3회차</td>
+                                    <td>2회차는 새 팀장 전환기의 맥락과 부담을 길게 정리했고, 3회차는 Simulation 업무와 피플리딩 경력으로 압축했다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class3</strong></td>
+                                    <td>더 개발해야 할 리더십 영역은 무엇인가?</td>
+                                    <td>2회차 / 3회차</td>
+                                    <td>2회차는 팀원에게 다가가는 방식과 심리적 안전감, 3회차는 다른 분야 이해도와 유연한 대응을 적었다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class3</strong></td>
+                                    <td>3by3에서 인상 깊은 점 또는 남은 질문은 무엇인가?</td>
+                                    <td>2회차 / 3회차</td>
+                                    <td>2회차는 리딩과 매니징, 성과 연결, PL 위임의 균형을 질문으로 남겼고, 3회차는 나를 먼저 세우는 필요성을 적었다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class4</strong></td>
+                                    <td>외적 자기인식을 알기 위해 무엇을 해야 하는가?</td>
+                                    <td>2회차</td>
+                                    <td>내적 자기인식과 외적 자기인식의 균형을 고민했고, 외부 인식을 확인할 방법을 질문으로 남겼다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class4</strong></td>
+                                    <td>내가 무엇을 다르게 해야 할까?</td>
+                                    <td>2회차</td>
+                                    <td>1:다수 미팅의 한계를 보고 1:1 미팅 전환을 고민했다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class4</strong></td>
+                                    <td>무슨 피드백을 요청할 것인가?</td>
+                                    <td>2회차</td>
+                                    <td>신임 팀장으로서 역할을 잘하고 있는지, 부족한 부분과 잘하고 있는 부분을 묻고자 했다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class5</strong></td>
+                                    <td>Lead Others 관련 답변이 있는가?</td>
+                                    <td>2회차 / 3회차</td>
+                                    <td>수업 내용은 확인되지만 답변 칸은 대부분 공란이다.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class6</strong></td>
+                                    <td>Lead Missions 관련 답변이 있는가?</td>
+                                    <td>2회차</td>
+                                    <td>수업 내용은 확인되지만 답변 칸은 대부분 공란이다. Class3의 성과 연결 질문과 개념적으로 이어진다.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="sources-section" class="content-section">
+                    <div class="leadership-panel">
+                        <h2><i class='bx bx-link-alt'></i> 확인한 주요 문서</h2>
+                        <p class="source-note">회차 표기가 있는 문서를 우선 소스로 삼았다. 회차가 없는 Class1~6 원본 후보는 회차 확정에는 쓰지 않고 보조 대조용으로만 보았다.</p>
+                        <div class="source-grid">
+                            <div class="source-card"><small>1회차</small><a href="https://docs.google.com/document/d/1k65SW3ocxr1DHYzzWiGCf6kaRdA98lN_Wnc6JXeeKw8" target="_blank">Class1 - Personal Success Navigator</a></div>
+                            <div class="source-card"><small>1회차</small><a href="https://docs.google.com/document/d/1_TOtbNgiIOGjU9MOl0H_z4AC_G3q6WZTQqEWWIApkh8" target="_blank">Class2 - Career Essentials</a></div>
+                            <div class="source-card"><small>2회차</small><a href="https://docs.google.com/document/d/1RpuX3AJ4dTjMnUQTgD3PhKIc34aIsbhXJ2jJJ8RjA3A" target="_blank">Class3 - Leadership Foundation</a></div>
+                            <div class="source-card"><small>2회차</small><a href="https://docs.google.com/document/d/1PWNxp1D_Og_I5u0mHUDtpcHHW0ixYIjihx_ewzg2r1c" target="_blank">Class4 - Lead Yourself</a></div>
+                            <div class="source-card"><small>2회차</small><a href="https://docs.google.com/document/d/1tGKaBpmgUw8VwMUIVHBK9hZ0hsaj8rcBcnZ5YavmpnQ" target="_blank">Class5 - Lead Others</a></div>
+                            <div class="source-card"><small>2회차</small><a href="https://docs.google.com/document/d/16XJSMcIDcEKaygZke84lRPKTubRoBLEQX_sJCwPokTU" target="_blank">Class6 - Lead Missions</a></div>
+                            <div class="source-card"><small>3회차</small><a href="https://docs.google.com/document/d/1w0jTvXzZvIb4I456JkpLOThuAkWMIoCR4RGrU-vdCSc" target="_blank">Class3 - Leadership Foundation</a></div>
+                            <div class="source-card"><small>3회차</small><a href="https://docs.google.com/document/d/11nz0bHB9i7Zfb38qdqQBk42U5u7E2SbVviN19FgQTB0" target="_blank">Class5 - Lead Others</a></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const titles = {
+            'overview-section': ['성장의 리더십 Workbook 정리', 'Class1부터 Class6까지 수업 내용을 각각의 메뉴로 나누어 상세 정리'],
+            'class1-section': ['Class 1. Personal Success Navigator', '회사, 조직, 업무, 관계, 자기관리의 기본 지도'],
+            'class2-section': ['Class 2. Career Essentials', '커리어를 설계 가능한 성장 경로로 이해'],
+            'class3-section': ['Class 3. Leadership Foundation', '리더십 기본기와 3by3 프레임워크'],
+            'class4-section': ['Class 4. Lead Yourself', '자기인식, 성찰, 가치관, 피드백'],
+            'class5-section': ['Class 5. Lead Others', '관계, 신뢰, 피드백으로 타인을 리드'],
+            'class6-section': ['Class 6. Lead Missions', '성과, 우선순위, 위임, 이해관계자, 협업'],
+            'answer-questions-section': ['답변 질문 모음', '질문과 회차를 먼저 보이도록 답변 요지를 재정리'],
+            'sources-section': ['Sources', '확인한 Google Docs Workbook 링크']
+        };
+
+        document.querySelectorAll('.nav-links li').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-links li').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                item.classList.add('active');
+                const target = item.dataset.target;
+                document.getElementById(target).classList.add('active');
+                document.getElementById('page-title').textContent = titles[target][0];
+                document.getElementById('page-subtitle').textContent = titles[target][1];
+            });
+        });
+    </script>
+</body>
+</html>
