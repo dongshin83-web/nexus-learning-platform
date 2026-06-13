@@ -262,7 +262,7 @@
                     <div class="production-hero">
                         <div>
                             <h2>완성 영상에서 역산한 제작 흐름</h2>
-                            <p>이 사례는 키프레임 기반 AI 영상 제작입니다. 처음부터 영상을 뽑은 것이 아니라, 스토리와 장면 목적을 먼저 정하고 Midjourney로 기준 이미지를 만든 뒤 Flow에서 움직임을 붙였습니다.</p>
+                            <p>이 사례는 키프레임 기반 AI 영상 제작입니다. 처음부터 영상을 뽑은 것이 아니라, Story Plan 단계에서 먼저 전체 Storyboard를 짜고 장면 목적을 정리한 뒤 Midjourney로 기준 이미지를 만들었습니다.</p>
                             <p>이후 DaVinci Resolve에서 컷 편집과 자막 기준을 잡고, ElevenLabs로 음악과 나레이션을 만든 다음 다시 Resolve에서 최종 오디오 믹싱과 렌더링을 마무리했습니다.</p>
                             <div class="tool-links">
                                 <a href="https://youtu.be/0jDM0cLeQgU?si=2yvQWIgfVr4U7vfV" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> Final Video</a>
@@ -274,7 +274,7 @@
                     </div>
 
                     <div class="flow-strip">
-                        <div class="flow-step">Story Plan</div>
+                        <div class="flow-step">Story Plan / Storyboard</div>
                         <div class="flow-step">ChatGPT → Midjourney Prompting</div>
                         <div class="flow-step">Midjourney Keyframes</div>
                         <div class="flow-step">Flow Video Generation</div>
@@ -306,6 +306,17 @@
                                 <li>자막 문장과 나레이션 문장</li>
                             </ul>
                         </article>
+                        <article class="asset-card accent-violet">
+                            <small>Storyboard</small>
+                            <h3><i class='bx bx-layout'></i>스토리보드 작성</h3>
+                            <p>Midjourney 프롬프트를 만들기 전에 영상의 컷 순서와 화면 전환을 스토리보드로 먼저 정리했습니다.</p>
+                            <ul>
+                                <li>각 컷의 첫 이미지와 핵심 메시지</li>
+                                <li>화면에서 보여줄 오브젝트와 카메라 감각</li>
+                                <li>자막/나레이션이 들어갈 타이밍</li>
+                                <li>Flow에서 줄 움직임의 방향</li>
+                            </ul>
+                        </article>
                         <article class="asset-card accent-green">
                             <small>Decision</small>
                             <h3><i class='bx bx-check-shield'></i>사람이 판단한 것</h3>
@@ -331,27 +342,54 @@
                             <tr>
                                 <td>01 Opening</td>
                                 <td>주제와 분위기 제시</td>
-                                <td>시네마틱한 Virtual Twin 첫 장면</td>
+                                <td>시네마틱한 Virtual Twin 첫 장면. 영상의 톤을 결정하는 establishing shot으로 설계</td>
                                 <td>짧은 도입 자막, 음악은 낮게 시작</td>
                             </tr>
                             <tr>
                                 <td>02 Process</td>
                                 <td>AI 제작 흐름 설명</td>
-                                <td>데이터 레이어, 시뮬레이션, 디지털 인터페이스</td>
+                                <td>데이터 레이어, 시뮬레이션, 디지털 인터페이스. 컷별로 시각 정보를 단계적으로 쌓음</td>
                                 <td>나레이션을 기준으로 컷 길이 조정</td>
                             </tr>
                             <tr>
                                 <td>03 Closing</td>
                                 <td>핵심 메시지 정리</td>
-                                <td>깨끗한 엔딩 프레임과 여운</td>
+                                <td>깨끗한 엔딩 프레임과 여운. 앞 장면의 기술적 이미지를 정리하는 closing shot</td>
                                 <td>음악 페이드아웃, 최종 문장 강조</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="production-table">
+                        <thead>
+                            <tr>
+                                <th>Storyboard Field</th>
+                                <th>정리한 내용</th>
+                                <th>다음 단계로 넘어간 방식</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Visual Beat</td>
+                                <td>각 컷에서 시청자가 먼저 봐야 할 이미지와 시각적 리듬</td>
+                                <td>ChatGPT에 Midjourney 프롬프트 생성을 요청할 때 장면별 visual concept으로 전달</td>
+                            </tr>
+                            <tr>
+                                <td>Scene Transition</td>
+                                <td>Opening, process, closing으로 이어지는 장면 흐름과 전환 감각</td>
+                                <td>Flow motion prompt에서 push-in, orbit, fade 같은 움직임 방향으로 변환</td>
+                            </tr>
+                            <tr>
+                                <td>Text Timing</td>
+                                <td>자막이 필요한 위치와 나레이션이 설명해야 할 구간</td>
+                                <td>DaVinci Resolve 초벌 편집과 ElevenLabs TTS 스크립트의 기준으로 사용</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
                 <section id="chatgpt-prompt-section" class="content-section">
-                    <p class="section-copy">Story Plan에서 정한 장면 목적을 바로 Midjourney에 넣지 않고, ChatGPT에서 장면별 이미지 생성 프롬프트로 변환했습니다. 이 단계는 스토리 언어를 시각 언어로 바꾸는 프롬프트 설계 공정입니다.</p>
+                    <p class="section-copy">Story Plan과 Storyboard에서 정한 장면 목적을 바로 Midjourney에 넣지 않고, ChatGPT에서 장면별 이미지 생성 프롬프트로 변환했습니다. 이 단계는 스토리 언어를 시각 언어로 바꾸는 프롬프트 설계 공정입니다.</p>
                     <div class="tool-links">
                         <a href="https://chatgpt.com/" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> ChatGPT</a>
                         <a href="https://www.midjourney.com/" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> Midjourney</a>
@@ -417,7 +455,7 @@ Story plan:
                         <tbody>
                             <tr>
                                 <td>Scene Breakdown</td>
-                                <td>Story Plan의 장면 목적과 메시지</td>
+                                <td>Story Plan과 Storyboard의 장면 목적, 메시지, 컷 순서</td>
                                 <td>장면별 시각 콘셉트</td>
                                 <td>영상 전체 톤과 맞는가?</td>
                             </tr>
