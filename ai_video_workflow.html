@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cinematic Video Production</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --video-primary: #fb7185;
+            --video-primary-soft: rgba(251, 113, 133, 0.13);
+            --video-primary-border: rgba(251, 113, 133, 0.34);
+            --video-amber: #f59e0b;
+            --video-green: #34d399;
+            --video-cyan: #22d3ee;
+            --video-violet: #a78bfa;
+        }
+
+        .logo i { color: var(--video-primary); filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.35)); }
+        .nav-links li { border-radius: 8px; }
+        .nav-links li.active {
+            background: linear-gradient(90deg, #be123c, #fb7185);
+            box-shadow: 0 4px 15px rgba(251, 113, 133, 0.24);
+            color: #fff1f2;
+        }
+        .content-wrapper { padding-top: 1rem; }
+
+        .production-hero {
+            border: 1px solid var(--video-primary-border);
+            background: linear-gradient(135deg, rgba(251, 113, 133, 0.13), rgba(34, 211, 238, 0.08));
+            border-radius: 8px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.85fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .production-hero h2 { font-size: 1.55rem; margin-bottom: 0.8rem; color: #fff; }
+        .production-hero p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
+        .video-embed {
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: #020617;
+        }
+        .video-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+        .section-copy {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 980px;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
+        .flow-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 0.7rem;
+            margin: 1rem 0 1.35rem;
+        }
+        .flow-step {
+            border: 1px solid var(--video-primary-border);
+            background: rgba(251, 113, 133, 0.07);
+            border-radius: 8px;
+            padding: 0.85rem;
+            color: #ffe4e6;
+            font-weight: 800;
+            text-align: center;
+            font-size: 0.86rem;
+            line-height: 1.35;
+        }
+        .asset-grid, .compact-grid, .two-column-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+            gap: 1rem;
+        }
+        .two-column-grid { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+        .asset-card, .note-card, .template-card, .check-card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.35rem;
+        }
+        .asset-card h3, .note-card h3, .template-card h3, .check-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #fff;
+            font-size: 1.06rem;
+            margin-bottom: 0.75rem;
+        }
+        .asset-card h3 i, .note-card h3 i, .template-card h3 i, .check-card h3 i { color: var(--video-primary); }
+        .asset-card p, .note-card p, .template-card p, .check-card p {
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-size: 0.9rem;
+        }
+        .asset-card small, .note-card small, .template-card small, .check-card small {
+            display: inline-flex;
+            color: #fecdd3;
+            background: var(--video-primary-soft);
+            border: 1px solid var(--video-primary-border);
+            border-radius: 999px;
+            padding: 0.2rem 0.65rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+        .asset-card ul, .note-card ul, .template-card ul, .check-card ul {
+            list-style: none;
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.85rem;
+        }
+        .asset-card li, .note-card li, .template-card li, .check-card li {
+            color: rgba(255,255,255,0.84);
+            line-height: 1.55;
+            font-size: 0.88rem;
+            padding-left: 1.05rem;
+            position: relative;
+        }
+        .asset-card li::before, .note-card li::before, .template-card li::before, .check-card li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--video-primary);
+        }
+        .tool-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            margin: 0.35rem 0 1.1rem;
+        }
+        .tool-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 0.6rem 0.8rem;
+            font-weight: 800;
+            font-size: 0.86rem;
+        }
+        .tool-links a:hover { border-color: var(--video-primary); color: #fecdd3; }
+        .prompt-block {
+            position: relative;
+            background: #111827;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.9rem;
+        }
+        .prompt-block pre {
+            color: #e5e7eb;
+            white-space: pre-wrap;
+            font-family: Consolas, monospace;
+            font-size: 0.84rem;
+            line-height: 1.55;
+            padding-right: 5.4rem;
+        }
+        .copy-mini {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border-radius: 7px;
+            padding: 0.45rem 0.65rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+        .production-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 1rem;
+        }
+        .production-table th, .production-table td {
+            padding: 0.85rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            text-align: left;
+            vertical-align: top;
+            color: rgba(255,255,255,0.84);
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+        .production-table th {
+            color: #fff;
+            background: rgba(251, 113, 133, 0.12);
+            font-weight: 800;
+        }
+        .production-table tr:last-child td { border-bottom: 0; }
+        .accent-amber h3 i { color: var(--video-amber); }
+        .accent-green h3 i { color: var(--video-green); }
+        .accent-cyan h3 i { color: var(--video-cyan); }
+        .accent-violet h3 i { color: var(--video-violet); }
+
+        @media (max-width: 860px) {
+            .production-hero {
+                grid-template-columns: 1fr;
+                padding: 1.25rem;
+            }
+            .production-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-video-recording'></i>
+                <span>AI Video</span>
+            </div>
+
+            <p class="sidebar-category">PRODUCTION FLOW</p>
+            <ul class="nav-links">
+                <li class="active" data-target="story-section"><i class='bx bx-edit-alt'></i><span>Story Plan</span></li>
+                <li data-target="chatgpt-prompt-section"><i class='bx bx-message-square-dots'></i><span>ChatGPT → Midjourney Prompting</span></li>
+                <li data-target="midjourney-section"><i class='bx bx-image-add'></i><span>Midjourney Keyframes</span></li>
+                <li data-target="flow-section"><i class='bx bx-movie-play'></i><span>Flow Video Generation</span></li>
+                <li data-target="davinci-subtitle-section"><i class='bx bx-caption'></i><span>DaVinci Resolve Editing/자막</span></li>
+                <li data-target="music-section"><i class='bx bx-music'></i><span>ElevenLabs Music</span></li>
+                <li data-target="tts-section"><i class='bx bx-microphone'></i><span>ElevenLabs "Text to Speech"</span></li>
+                <li data-target="final-edit-section"><i class='bx bx-film'></i><span>DaVinci Resolve Editing</span></li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Production Case</p>
+                    <small>Midjourney · Flow · ElevenLabs · Resolve</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1 id="page-title">Story Plan</h1>
+                    <p id="page-subtitle">AI 영상의 메시지, 장면 구조, 제작 산출물을 먼저 정의하는 단계</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section id="story-section" class="content-section active">
+                    <div class="production-hero">
+                        <div>
+                            <h2>완성 영상에서 역산한 제작 흐름</h2>
+                            <p>이 사례는 키프레임 기반 AI 영상 제작입니다. 처음부터 영상을 뽑은 것이 아니라, 스토리와 장면 목적을 먼저 정하고 Midjourney로 기준 이미지를 만든 뒤 Flow에서 움직임을 붙였습니다.</p>
+                            <p>이후 DaVinci Resolve에서 컷 편집과 자막 기준을 잡고, ElevenLabs로 음악과 나레이션을 만든 다음 다시 Resolve에서 최종 오디오 믹싱과 렌더링을 마무리했습니다.</p>
+                            <div class="tool-links">
+                                <a href="https://youtu.be/0jDM0cLeQgU?si=2yvQWIgfVr4U7vfV" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> Final Video</a>
+                            </div>
+                        </div>
+                        <div class="video-embed">
+                            <iframe src="https://www.youtube.com/embed/0jDM0cLeQgU?rel=0" title="AI Cinematic Video Production video" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <div class="flow-strip">
+                        <div class="flow-step">Story Plan</div>
+                        <div class="flow-step">ChatGPT → Midjourney Prompting</div>
+                        <div class="flow-step">Midjourney Keyframes</div>
+                        <div class="flow-step">Flow Video Generation</div>
+                        <div class="flow-step">DaVinci Editing/자막</div>
+                        <div class="flow-step">ElevenLabs Music</div>
+                        <div class="flow-step">ElevenLabs TTS</div>
+                        <div class="flow-step">DaVinci Final Editing</div>
+                    </div>
+
+                    <div class="asset-grid">
+                        <article class="asset-card">
+                            <small>Goal</small>
+                            <h3><i class='bx bx-target-lock'></i>학습 목적</h3>
+                            <p>한 편의 AI 영상이 어떤 의사결정과 도구 조합으로 만들어졌는지 재현 가능한 형태로 남깁니다.</p>
+                            <ul>
+                                <li>장면별 제작 의도와 선택 이유 기록</li>
+                                <li>도구별 프롬프트와 산출물 연결</li>
+                                <li>다음 영상 제작에 재사용할 템플릿 확보</li>
+                            </ul>
+                        </article>
+                        <article class="asset-card accent-cyan">
+                            <small>Scene Sheet</small>
+                            <h3><i class='bx bx-table'></i>장면 설계표</h3>
+                            <p>각 장면은 메시지, 키프레임, 영상 프롬프트, 자막, 오디오 판단이 한 줄로 연결되어야 합니다.</p>
+                            <ul>
+                                <li>Scene ID와 장면 목적</li>
+                                <li>Midjourney 이미지 파일명</li>
+                                <li>Flow 클립 파일명</li>
+                                <li>자막 문장과 나레이션 문장</li>
+                            </ul>
+                        </article>
+                        <article class="asset-card accent-green">
+                            <small>Decision</small>
+                            <h3><i class='bx bx-check-shield'></i>사람이 판단한 것</h3>
+                            <p>AI가 생성한 결과보다 중요한 것은 컷을 고르고 연결하는 기준입니다.</p>
+                            <ul>
+                                <li>화면이 메시지를 바로 전달하는가</li>
+                                <li>장면 전환이 자연스러운가</li>
+                                <li>나레이션과 자막의 밀도가 적절한가</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <table class="production-table">
+                        <thead>
+                            <tr>
+                                <th>Scene</th>
+                                <th>Purpose</th>
+                                <th>Visual Direction</th>
+                                <th>Audio / Subtitle Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01 Opening</td>
+                                <td>주제와 분위기 제시</td>
+                                <td>시네마틱한 Virtual Twin 첫 장면</td>
+                                <td>짧은 도입 자막, 음악은 낮게 시작</td>
+                            </tr>
+                            <tr>
+                                <td>02 Process</td>
+                                <td>AI 제작 흐름 설명</td>
+                                <td>데이터 레이어, 시뮬레이션, 디지털 인터페이스</td>
+                                <td>나레이션을 기준으로 컷 길이 조정</td>
+                            </tr>
+                            <tr>
+                                <td>03 Closing</td>
+                                <td>핵심 메시지 정리</td>
+                                <td>깨끗한 엔딩 프레임과 여운</td>
+                                <td>음악 페이드아웃, 최종 문장 강조</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="chatgpt-prompt-section" class="content-section">
+                    <p class="section-copy">Story Plan에서 정한 장면 목적을 바로 Midjourney에 넣지 않고, ChatGPT에서 장면별 이미지 생성 프롬프트로 변환했습니다. 이 단계는 스토리 언어를 시각 언어로 바꾸는 프롬프트 설계 공정입니다.</p>
+                    <div class="tool-links">
+                        <a href="https://chatgpt.com/" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> ChatGPT</a>
+                        <a href="https://www.midjourney.com/" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> Midjourney</a>
+                    </div>
+
+                    <div class="asset-grid">
+                        <article class="asset-card">
+                            <small>Input</small>
+                            <h3><i class='bx bx-notepad'></i>스토리 입력</h3>
+                            <p>장면별 메시지, 분위기, 핵심 오브젝트, 자막 여백 요구사항을 ChatGPT에 전달합니다.</p>
+                            <ul>
+                                <li>Scene ID와 장면 목적</li>
+                                <li>화면에 반드시 보여야 할 요소</li>
+                                <li>피해야 할 요소: 텍스트, 로고 왜곡, 과한 장식</li>
+                            </ul>
+                        </article>
+                        <article class="asset-card accent-violet">
+                            <small>Translation</small>
+                            <h3><i class='bx bx-transfer-alt'></i>시각 언어 변환</h3>
+                            <p>ChatGPT는 추상적인 스토리 문장을 카메라, 조명, 배경, 재질, 구도, 스타일 토큰으로 풀어줍니다.</p>
+                            <ul>
+                                <li>cinematic product visualization</li>
+                                <li>clean technical interface</li>
+                                <li>translucent simulation data layers</li>
+                            </ul>
+                        </article>
+                        <article class="asset-card accent-green">
+                            <small>Output</small>
+                            <h3><i class='bx bx-copy-alt'></i>Midjourney용 프롬프트</h3>
+                            <p>최종 산출물은 Midjourney에 그대로 붙여 넣을 수 있는 장면별 프롬프트와 공통 스타일 파라미터입니다.</p>
+                            <ul>
+                                <li>장면별 프롬프트 원문</li>
+                                <li>공통 스타일 문장</li>
+                                <li>16:9 비율과 스타일 파라미터</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <div class="prompt-block">
+                        <button class="copy-mini" data-copy-target="chatgpt-prompt">Copy</button>
+                        <pre id="chatgpt-prompt">You are a cinematic AI art director. Convert the following story plan into Midjourney prompts.
+
+For each scene, create:
+1. A concise visual concept
+2. A detailed Midjourney prompt in English
+3. Common style tokens for consistency
+4. Negative constraints such as no text, no watermark, no distorted logo
+5. Recommended parameters for a 16:9 video keyframe
+
+Story plan:
+[Paste scene purpose, message, object, mood, and subtitle-safe area notes here]</pre>
+                    </div>
+
+                    <table class="production-table">
+                        <thead>
+                            <tr>
+                                <th>Workflow Step</th>
+                                <th>What ChatGPT Receives</th>
+                                <th>What ChatGPT Produces</th>
+                                <th>Review Point</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Scene Breakdown</td>
+                                <td>Story Plan의 장면 목적과 메시지</td>
+                                <td>장면별 시각 콘셉트</td>
+                                <td>영상 전체 톤과 맞는가?</td>
+                            </tr>
+                            <tr>
+                                <td>Prompt Draft</td>
+                                <td>오브젝트, 배경, 감정, 구도 조건</td>
+                                <td>Midjourney용 영어 프롬프트</td>
+                                <td>너무 많은 요소를 한 장면에 넣지 않았는가?</td>
+                            </tr>
+                            <tr>
+                                <td>Prompt Cleanup</td>
+                                <td>선택한 스타일 기준과 제외 조건</td>
+                                <td>공통 스타일 토큰과 negative constraints</td>
+                                <td>장면 간 이미지 일관성이 유지되는가?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="midjourney-section" class="content-section">
+                    <p class="section-copy">Midjourney는 영상의 시각적 기준점을 만드는 단계입니다. 여기서 만든 이미지는 Flow에서 움직임을 붙일 기준 프레임이 되므로, 장면 간 스타일 일관성이 가장 중요합니다.</p>
+                    <div class="tool-links">
+                        <a href="https://www.midjourney.com/" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> Midjourney</a>
+                    </div>
+
+                    <div class="two-column-grid">
+                        <article class="template-card">
+                            <small>Input</small>
+                            <h3><i class='bx bx-list-check'></i>정리할 항목</h3>
+                            <ul>
+                                <li>장면 번호와 장면 목적</li>
+                                <li>프롬프트 원문과 수정 버전</li>
+                                <li>사용 파라미터: aspect ratio, style, seed, stylize</li>
+                                <li>선택 이미지와 버린 이미지의 차이</li>
+                            </ul>
+                        </article>
+                        <article class="template-card accent-cyan">
+                            <small>Output</small>
+                            <h3><i class='bx bx-image'></i>산출물 기준</h3>
+                            <ul>
+                                <li>Flow에서 움직여도 형태가 안정적인 프레임</li>
+                                <li>배경, 조명, 색감이 장면 간 충돌하지 않는 이미지</li>
+                                <li>자막이 올라갈 여백이 확보된 16:9 구도</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <div class="prompt-block">
+                        <button class="copy-mini" data-copy-target="midjourney-prompt">Copy</button>
+                        <pre id="midjourney-prompt">[Scene subject], cinematic virtual twin explainer, clean technical product visualization, realistic lighting, premium industrial design, translucent simulation data layers, white and graphite studio background, elegant composition, no text, no watermark --ar 16:9 --style raw</pre>
+                    </div>
+
+                    <table class="production-table">
+                        <thead>
+                            <tr>
+                                <th>Scene</th>
+                                <th>Prompt</th>
+                                <th>Parameters</th>
+                                <th>Why Selected</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Scene 01</td>
+                                <td>최종 사용 프롬프트를 붙여 넣기</td>
+                                <td>--ar 16:9 / style / seed</td>
+                                <td>영상의 첫인상과 메시지가 가장 선명함</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="flow-section" class="content-section">
+                    <p class="section-copy">Flow에서는 Midjourney 키프레임을 영상 클립으로 확장했습니다. 이 단계의 기록은 이미지 파일, motion prompt, camera motion, 최종 클립 파일명이 함께 남아야 나중에 재현할 수 있습니다.</p>
+                    <div class="tool-links">
+                        <a href="https://labs.google/fx/tools/flow" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> Google Flow</a>
+                    </div>
+
+                    <div class="asset-grid">
+                        <article class="asset-card">
+                            <small>Input</small>
+                            <h3><i class='bx bx-image-add'></i>키프레임 입력</h3>
+                            <p>Midjourney에서 선택한 이미지를 장면별로 업로드하고, 장면의 첫 프레임 또는 기준 프레임으로 사용합니다.</p>
+                        </article>
+                        <article class="asset-card accent-amber">
+                            <small>Motion</small>
+                            <h3><i class='bx bx-camera-movie'></i>움직임 지시</h3>
+                            <p>카메라 움직임은 과하게 주지 않고 slow push-in, gentle orbit, subtle parallax처럼 장면 목적을 보조하는 정도로 제한합니다.</p>
+                        </article>
+                        <article class="asset-card accent-green">
+                            <small>Review</small>
+                            <h3><i class='bx bx-search-alt'></i>평가 기준</h3>
+                            <p>형태 왜곡, 불필요한 텍스트 생성, 갑작스러운 물체 변화, 다음 컷과의 연결성을 기준으로 채택 여부를 결정합니다.</p>
+                        </article>
+                    </div>
+
+                    <div class="prompt-block">
+                        <button class="copy-mini" data-copy-target="flow-prompt">Copy</button>
+                        <pre id="flow-prompt">Use the uploaded keyframe as the visual reference. Create a cinematic slow push-in with subtle parallax. Keep the product geometry stable. Animate translucent simulation data layers softly around the subject. No extra text, no logo distortion, no sudden object changes. Clean premium technology film look.</pre>
+                    </div>
+
+                    <table class="production-table">
+                        <thead>
+                            <tr>
+                                <th>Scene</th>
+                                <th>Input Keyframe</th>
+                                <th>Flow Prompt</th>
+                                <th>Camera Motion</th>
+                                <th>Output Clip</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01</td>
+                                <td>MJ_scene_01.png</td>
+                                <td>실제 사용한 motion prompt</td>
+                                <td>Slow push-in</td>
+                                <td>flow_scene_01.mp4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="davinci-subtitle-section" class="content-section">
+                    <p class="section-copy">첫 번째 DaVinci Resolve 단계는 영상 클립을 한 편의 흐름으로 조립하고, 자막 위치와 문장 길이를 먼저 잡는 단계입니다. 이때 음악과 나레이션은 최종본이 아니어도 됩니다.</p>
+                    <div class="tool-links">
+                        <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> DaVinci Resolve</a>
+                    </div>
+
+                    <div class="asset-grid">
+                        <article class="asset-card accent-violet">
+                            <small>Editing</small>
+                            <h3><i class='bx bx-cut'></i>초벌 컷 편집</h3>
+                            <ul>
+                                <li>Flow 클립을 장면 순서대로 배치</li>
+                                <li>각 컷의 앞뒤 불안정한 프레임 제거</li>
+                                <li>장면 간 속도와 전환 리듬 조정</li>
+                            </ul>
+                        </article>
+                        <article class="asset-card">
+                            <small>Subtitle</small>
+                            <h3><i class='bx bx-caption'></i>자막 기준</h3>
+                            <ul>
+                                <li>한 줄 자막은 짧게 유지</li>
+                                <li>키 비주얼을 가리지 않는 하단 안전 영역 사용</li>
+                                <li>나레이션 문장과 자막 문장을 완전히 같게 둘 필요는 없음</li>
+                            </ul>
+                        </article>
+                        <article class="asset-card accent-cyan">
+                            <small>Handoff</small>
+                            <h3><i class='bx bx-export'></i>오디오 작업용 기준본</h3>
+                            <p>초벌 편집본을 기준으로 음악 길이, 분위기, 나레이션 타이밍을 ElevenLabs에서 맞춥니다.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="music-section" class="content-section">
+                    <p class="section-copy">음악은 영상의 감정선을 먼저 결정합니다. 이 사례에서는 초벌 편집본의 길이와 장면 전환을 기준으로 ElevenLabs에서 배경음악을 만들고, 나레이션을 방해하지 않도록 밀도를 조절합니다.</p>
+                    <div class="tool-links">
+                        <a href="https://elevenlabs.io/music" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> ElevenLabs Music</a>
+                    </div>
+
+                    <div class="two-column-grid">
+                        <article class="template-card accent-green">
+                            <small>Music Direction</small>
+                            <h3><i class='bx bx-slider-alt'></i>음악 설계</h3>
+                            <ul>
+                                <li>초반은 낮은 에너지로 시작</li>
+                                <li>중반은 기술적 몰입감과 리듬 확보</li>
+                                <li>후반은 메시지를 방해하지 않게 부드럽게 정리</li>
+                            </ul>
+                        </article>
+                        <article class="template-card">
+                            <small>Mix Note</small>
+                            <h3><i class='bx bx-volume-full'></i>믹싱 기준</h3>
+                            <ul>
+                                <li>나레이션이 들어오는 구간은 음악 볼륨을 낮춤</li>
+                                <li>저역이 과하면 목소리 명료도가 떨어짐</li>
+                                <li>전환점마다 음악의 강세가 컷과 맞는지 확인</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <div class="prompt-block">
+                        <button class="copy-mini" data-copy-target="music-prompt">Copy</button>
+                        <pre id="music-prompt">Minimal cinematic technology score, calm futuristic atmosphere, warm synth pads, subtle pulse, premium documentary feel, no vocals, no aggressive drums, gradually builds then resolves softly for a clean AI innovation video.</pre>
+                    </div>
+                </section>
+
+                <section id="tts-section" class="content-section">
+                    <p class="section-copy">Text to Speech는 영상의 이해 속도를 결정합니다. 스크립트는 자막보다 조금 더 자연스러운 말투로 만들고, 톤은 차분하지만 기술 설명의 신뢰감이 느껴지도록 잡습니다.</p>
+                    <div class="tool-links">
+                        <a href="https://elevenlabs.io/app/speech-synthesis/text-to-speech" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> ElevenLabs Text to Speech</a>
+                    </div>
+
+                    <div class="asset-grid">
+                        <article class="asset-card">
+                            <small>Script</small>
+                            <h3><i class='bx bx-file'></i>나레이션 스크립트</h3>
+                            <p>장면별 자막 문장을 그대로 읽기보다, 화면을 해석해주는 문장으로 다듬습니다.</p>
+                        </article>
+                        <article class="asset-card accent-amber">
+                            <small>Voice</small>
+                            <h3><i class='bx bx-user-voice'></i>보이스 선택</h3>
+                            <p>톤, 속도, 발음 명료도, 기술 콘텐츠와의 어울림을 기준으로 선택합니다.</p>
+                        </article>
+                        <article class="asset-card accent-cyan">
+                            <small>Timing</small>
+                            <h3><i class='bx bx-time-five'></i>타이밍 조정</h3>
+                            <p>최종 편집에서 컷 길이를 과하게 바꾸지 않도록 초벌 편집본에 맞춘 길이로 음성을 생성합니다.</p>
+                        </article>
+                    </div>
+
+                    <div class="prompt-block">
+                        <button class="copy-mini" data-copy-target="tts-prompt">Copy</button>
+                        <pre id="tts-prompt">Tone: calm, confident Korean documentary narration.
+Pace: medium-slow, clear pronunciation.
+Emotion: thoughtful, technical, optimistic.
+Direction: explain the AI production process as a polished learning case, not as an advertisement.</pre>
+                    </div>
+                </section>
+
+                <section id="final-edit-section" class="content-section">
+                    <p class="section-copy">마지막 DaVinci Resolve 단계에서는 영상, 자막, 음악, 나레이션을 한 타임라인에서 통합합니다. 여기서는 새로 만드는 것보다 균형을 맞추고 불필요한 것을 덜어내는 판단이 중요합니다.</p>
+                    <div class="tool-links">
+                        <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener"><i class='bx bx-link-external'></i> DaVinci Resolve</a>
+                    </div>
+
+                    <div class="asset-grid">
+                        <article class="check-card">
+                            <small>Audio</small>
+                            <h3><i class='bx bx-equalizer'></i>오디오 밸런스</h3>
+                            <ul>
+                                <li>나레이션이 항상 음악보다 앞에 오도록 조정</li>
+                                <li>장면 전환부는 음악 페이드로 부드럽게 연결</li>
+                                <li>마지막 문장 이후 여운을 남기고 종료</li>
+                            </ul>
+                        </article>
+                        <article class="check-card accent-violet">
+                            <small>Visual</small>
+                            <h3><i class='bx bx-palette'></i>최종 화면 정리</h3>
+                            <ul>
+                                <li>클립별 색감과 대비가 튀지 않는지 확인</li>
+                                <li>자막이 주요 피사체를 가리지 않는지 확인</li>
+                                <li>영상 생성 흔적이 큰 컷은 짧게 쓰거나 제외</li>
+                            </ul>
+                        </article>
+                        <article class="check-card accent-green">
+                            <small>Deliver</small>
+                            <h3><i class='bx bx-upload'></i>렌더링과 업로드</h3>
+                            <ul>
+                                <li>16:9 기준 최종 렌더링</li>
+                                <li>YouTube 업로드 후 링크 기록</li>
+                                <li>Nexus Learning 페이지에 제작 과정과 함께 연결</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <table class="production-table">
+                        <thead>
+                            <tr>
+                                <th>Final Check</th>
+                                <th>Question</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Message</td>
+                                <td>영상만 봐도 제작 흐름이 이해되는가?</td>
+                                <td>Review</td>
+                            </tr>
+                            <tr>
+                                <td>Subtitle</td>
+                                <td>자막이 짧고 읽을 시간이 충분한가?</td>
+                                <td>Review</td>
+                            </tr>
+                            <tr>
+                                <td>Audio</td>
+                                <td>음악이 나레이션을 가리지 않는가?</td>
+                                <td>Review</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const pageMeta = {
+            "story-section": {
+                title: "Story Plan",
+                subtitle: "AI 영상의 메시지, 장면 구조, 제작 산출물을 먼저 정의하는 단계"
+            },
+            "chatgpt-prompt-section": {
+                title: "ChatGPT → Midjourney Prompting",
+                subtitle: "스토리 문장을 Midjourney 키프레임용 이미지 프롬프트로 변환"
+            },
+            "midjourney-section": {
+                title: "Midjourney Keyframes",
+                subtitle: "Flow에서 움직일 기준 프레임을 장면별로 생성하고 선택"
+            },
+            "flow-section": {
+                title: "Flow Video Generation",
+                subtitle: "키프레임에 카메라 움직임과 시네마틱 모션을 부여"
+            },
+            "davinci-subtitle-section": {
+                title: "DaVinci Resolve Editing/자막",
+                subtitle: "초벌 컷 편집과 자막 위치, 길이, 문장 기준 정리"
+            },
+            "music-section": {
+                title: "ElevenLabs Music",
+                subtitle: "초벌 편집본에 맞춘 배경음악 생성과 분위기 설계"
+            },
+            "tts-section": {
+                title: "ElevenLabs \"Text to Speech\"",
+                subtitle: "장면 흐름에 맞는 나레이션 보이스와 스크립트 생성"
+            },
+            "final-edit-section": {
+                title: "DaVinci Resolve Editing",
+                subtitle: "영상, 자막, 음악, 나레이션을 통합해 최종본으로 렌더링"
+            }
+        };
+
+        function activateSection(targetId, updateHash = true) {
+            if (!pageMeta[targetId]) return;
+            document.querySelectorAll(".content-section").forEach(section => {
+                section.classList.toggle("active", section.id === targetId);
+            });
+            document.querySelectorAll(".nav-links li").forEach(item => {
+                item.classList.toggle("active", item.dataset.target === targetId);
+            });
+            document.getElementById("page-title").textContent = pageMeta[targetId].title;
+            document.getElementById("page-subtitle").textContent = pageMeta[targetId].subtitle;
+            if (updateHash) history.replaceState(null, "", `#${targetId}`);
+        }
+
+        document.querySelectorAll(".nav-links li").forEach(item => {
+            item.addEventListener("click", () => activateSection(item.dataset.target));
+        });
+
+        document.querySelectorAll("[data-copy-target]").forEach(button => {
+            button.addEventListener("click", async () => {
+                const target = document.getElementById(button.dataset.copyTarget);
+                if (!target) return;
+                try {
+                    await navigator.clipboard.writeText(target.textContent.trim());
+                    button.textContent = "Copied";
+                    setTimeout(() => button.textContent = "Copy", 1400);
+                } catch {
+                    button.textContent = "Failed";
+                    setTimeout(() => button.textContent = "Copy", 1400);
+                }
+            });
+        });
+
+        const initialSection = window.location.hash.replace("#", "");
+        if (pageMeta[initialSection]) activateSection(initialSection, false);
+    </script>
+</body>
+</html>
