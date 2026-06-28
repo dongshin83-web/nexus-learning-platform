@@ -1,27 +1,27 @@
 const pageMeta = {
     "objective-section": {
-        title: "Leader Objective",
-        subtitle: "구조역학 Simulation 팀장이 가져야 할 판단 능력의 목표선"
+        title: "Learning Objective",
+        subtitle: "구조역학 Simulation 학습 목표와 검토 기준"
     },
     "roadmap-section": {
         title: "12-Week Learning Plan",
-        subtitle: "Abaqus와 HyperMesh를 리더십 리뷰 능력 중심으로 학습하는 12주 계획"
+        subtitle: "Abaqus와 HyperMesh를 해석 검토 능력 중심으로 학습하는 12주 계획"
     },
     "workflow-section": {
         title: "Abaqus + HyperMesh Workflow",
         subtitle: "외부 요구를 계산 전략으로 번역하고 결과를 의사결정 자료로 만드는 흐름"
     },
     "review-section": {
-        title: "Review Checklist",
-        subtitle: "실무자가 가져온 모델을 검토할 때 반드시 확인할 질문 세트"
+        title: "Evidence Checklist",
+        subtitle: "해석 모델을 검토할 때 확인할 기준"
     },
     "cases-section": {
         title: "Capstone Cases",
-        subtitle: "팀장 관점의 판단 능력을 검증하기 위한 실습 케이스"
+        subtitle: "해석 판단 능력을 검증하기 위한 실습 케이스"
     },
     "terms-section": {
         title: "Key Terms",
-        subtitle: "팀원과 정확히 같은 언어로 토론하기 위해 먼저 잡아야 할 개념"
+        subtitle: "해석 검토에서 같은 언어로 토론하기 위해 먼저 잡아야 할 개념"
     },
     "prompt-section": {
         title: "NotebookLM Prompt",
@@ -29,41 +29,41 @@ const pageMeta = {
     }
 };
 
-const leaderCards = [
+const objectiveCards = [
     {
         icon: "bx-radar",
-        title: "팀장 역할의 중심",
-        body: "직접 모델을 가장 빨리 만드는 것이 아니라, 해석 목적과 모델 가정, 수치 리스크, 의사결정 가능 범위를 정리하는 사람입니다.",
+        title: "학습 목표의 중심",
+        body: "직접 모델링 속도보다 해석 목적, 모델 가정, 수치 리스크, 판단 가능 범위를 정리하는 능력을 우선합니다.",
         signals: [
-            "외부 요구를 failure mode와 simulation question으로 바꾼다.",
-            "Abaqus/HyperMesh 선택과 해석 workflow가 문제에 맞는지 묻는다.",
-            "결과 그림보다 reaction, energy, convergence, correlation evidence를 먼저 본다."
+            "외부 요구를 failure mode와 simulation question으로 바꿉니다.",
+            "Abaqus/HyperMesh 선택과 해석 workflow가 문제에 맞는지 확인합니다.",
+            "결과 그림보다 reaction, energy, convergence, correlation evidence를 먼저 봅니다."
         ]
     },
     {
         icon: "bx-target-lock",
-        title: "알아야 할 최소 깊이",
-        body: "element, material, contact, boundary condition, nonlinear step, solver log를 읽고 모델의 약한 연결고리를 토론할 수 있어야 합니다.",
+        title: "필요한 최소 이해 범위",
+        body: "element, material, contact, boundary condition, nonlinear step, solver log를 읽고 모델의 약한 연결고리를 토론할 수 있는 수준을 목표로 합니다.",
         signals: [
-            "Standard와 Explicit의 선택 이유를 설명할 수 있다.",
-            "mesh convergence와 singularity를 구분할 수 있다.",
-            "경계조건이 실제 load path를 왜곡하는지 질문할 수 있다."
+            "Standard와 Explicit의 선택 이유를 설명할 수 있습니다.",
+            "mesh convergence와 singularity를 구분할 수 있습니다.",
+            "경계조건이 실제 load path를 왜곡하는지 확인할 수 있습니다."
         ]
     },
     {
         icon: "bx-low-vision",
-        title: "깊게 안 해도 되는 영역",
-        body: "모든 GUI 조작, 모든 deck option, 모든 contact parameter를 암기할 필요는 없습니다. 다만 그 옵션이 필요한 상황과 검증 질문은 알아야 합니다.",
+        title: "우선순위를 낮춰도 되는 영역",
+        body: "모든 GUI 조작, 모든 deck option, 모든 contact parameter 암기는 우선순위를 낮춥니다. 대신 옵션이 쓰이는 상황과 검증 기준을 정리합니다.",
         signals: [
-            "버튼 위치보다 input deck의 구조를 읽는 능력을 우선한다.",
-            "UMAT/VUMAT을 직접 구현하기보다 언제 필요한지 판단한다.",
-            "HyperMesh 작업 속도보다 mesh quality 기준을 리뷰한다."
+            "버튼 위치보다 input deck의 구조를 읽는 능력을 우선합니다.",
+            "UMAT/VUMAT을 직접 구현하기보다 언제 필요한지 판단합니다.",
+            "HyperMesh 작업 속도보다 mesh quality 기준을 검토합니다."
         ]
     },
     {
         icon: "bx-conversation",
-        title: "팀원과의 좋은 토론 기준",
-        body: "정답을 바로 주는 것이 아니라, 실무자가 가진 현장 지식을 더 날카롭게 꺼내는 질문을 던지는 것이 목표입니다.",
+        title: "해석 검토 대화 기준",
+        body: "정답을 바로 찾기보다, 모델에 숨어 있는 가정과 evidence의 빈틈을 선명하게 드러내는 대화를 목표로 합니다.",
         signals: [
             "이 결과를 믿어도 되는 가장 강한 근거는 무엇인가?",
             "이 모델이 현실을 가장 크게 단순화한 지점은 어디인가?",
@@ -81,7 +81,7 @@ const foundationEquations = [
             <span class="math-frac"><span>F</span><span>A</span></span>
         `,
         readAs: "stress = force / area",
-        note: "응력은 단순한 색깔값이 아니라 하중이 단면을 통해 전달되는 방식입니다. 팀장 질문은 '이 힘은 실제로 어디로 흘러가는가?'입니다."
+        note: "응력은 단순한 색깔값이 아니라 하중이 단면을 통해 전달되는 방식입니다. 확인 기준은 '이 힘은 실제로 어디로 흘러가는가?'입니다."
     },
     {
         title: "변형률: 늘어난 양을 원래 길이로 나눈 값",
@@ -284,7 +284,7 @@ const foundationConcepts = [
         tag: "Discretization",
         icon: "bx-grid-alt",
         title: "Weak Form, Element, DOF",
-        body: "FEA는 연속체를 element와 node의 자유도 문제로 바꿔 풉니다. 팀장은 상세 유도보다 '무엇을 이산화했는가'를 잡으면 됩니다.",
+        body: "FEA는 연속체를 element와 node의 자유도 문제로 바꿔 풉니다. 상세 유도보다 '무엇을 이산화했는가'를 잡는 것이 먼저입니다.",
         bullets: [
             "node 값만 계산하고 element 내부는 shape function으로 보간합니다.",
             "DOF는 모델이 움직일 수 있는 수치적 자유도입니다.",
@@ -323,7 +323,7 @@ const backgroundBridges = [
         body: "DFT가 원자/전자 수준에서 재료의 에너지와 물성을 이해하는 창이라면, FEA는 그 물성을 연속체 constitutive law로 받아 구조 스케일의 거동을 계산합니다.",
         bullets: [
             "DFT/MD 물성은 FEA의 E, nu, CTE, plastic law로 들어옵니다.",
-            "팀장 질문: 이 재료 물성은 해석 온도와 변형률 범위에서 유효한가?"
+            "확인 기준: 이 재료 물성은 해석 온도와 변형률 범위에서 유효한가?"
         ]
     },
     {
@@ -333,7 +333,7 @@ const backgroundBridges = [
         body: "MD가 원자 위치와 속도의 시간 진화를 본다면, FEA는 displacement, strain, stress field를 요소 단위로 봅니다.",
         bullets: [
             "둘 다 경계조건과 시간/길이 스케일 선택이 결과를 지배합니다.",
-            "팀장 질문: 이 continuum 가정은 미세구조 효과를 무시해도 되는 스케일인가?"
+            "확인 기준: 이 continuum 가정은 미세구조 효과를 무시해도 되는 스케일인가?"
         ]
     },
     {
@@ -343,7 +343,7 @@ const backgroundBridges = [
         body: "CFD에서 residual, mesh independence, boundary layer를 보듯이 FEA에서도 residual, mesh sensitivity, stress gradient를 봅니다.",
         bullets: [
             "CFD의 유량/압력 경계조건 감각은 FEA의 force/displacement/constraint 감각과 닮아 있습니다.",
-            "팀장 질문: 수렴한 숫자인가, 물리적으로 균형 잡힌 해인가?"
+            "확인 기준: 수렴한 숫자인가, 물리적으로 균형 잡힌 해인가?"
         ]
     },
     {
@@ -353,7 +353,7 @@ const backgroundBridges = [
         body: "DSMC가 분자/입자 샘플링으로 거시 유동량을 얻는다면, FEA는 element integration으로 연속체 장을 얻습니다.",
         bullets: [
             "둘 다 sampling 또는 integration 선택이 noise와 정확도를 바꿉니다.",
-            "팀장 질문: 해석 자유도와 계산 비용이 의사결정에 필요한 해상도를 만족하는가?"
+            "확인 기준: 해석 자유도와 계산 비용이 판단에 필요한 해상도를 만족하는가?"
         ]
     }
 ];
@@ -412,10 +412,10 @@ const week12Agenda = [
     {
         tag: "Week 2",
         icon: "bx-conversation",
-        title: "Day 10: 팀 리뷰 리허설",
-        body: "팀원 한 명에게 같은 결과를 보여주고, 내가 던진 질문이 모델의 약한 고리를 드러내는지 확인합니다.",
+        title: "Day 10: 해석 검토 리허설",
+        body: "같은 결과를 기준으로, 검토 질문이 모델의 약한 고리를 드러내는지 확인합니다.",
         bullets: [
-            "좋은 질문 10개와 부족했던 질문 5개를 기록합니다.",
+            "유효한 검토 질문 10개와 보완할 질문 5개를 기록합니다.",
             "다음 3~4주차 Abaqus 실습에서 확인할 evidence 항목을 확정합니다."
         ]
     }
@@ -439,7 +439,7 @@ const week12Deliverables = [
         body: "beam/shell/solid/plane stress/plane strain을 언제 쓰고 언제 피할지 표로 만듭니다.",
         bullets: [
             "각 element idealization의 전제와 대표 리스크를 기록합니다.",
-            "팀의 실제 제품/부품 예시를 하나씩 연결합니다."
+            "실제 제품/부품 예시를 하나씩 연결합니다."
         ]
     },
     {
@@ -455,8 +455,8 @@ const week12Deliverables = [
     {
         tag: "Deliverable 4",
         icon: "bx-message-square-detail",
-        title: "Team Discussion Questions",
-        body: "팀원과의 첫 구조해석 리뷰 미팅에서 사용할 질문 리스트입니다.",
+        title: "검토 질문",
+        body: "구조해석 검토에 사용할 질문 리스트입니다.",
         bullets: [
             "이 모델이 현실을 가장 크게 단순화한 지점은 어디인가?",
             "이 stress peak는 failure risk인가, singularity인가?",
@@ -469,7 +469,7 @@ const roadmap = [
     {
         phase: "Weeks 1-2",
         title: "구조역학과 FEA 판단 언어 정렬",
-        goal: "stress, strain, stiffness, load path, weak form, element, DOF를 팀원과 같은 언어로 말한다.",
+        goal: "stress, strain, stiffness, load path, weak form, element, DOF를 같은 언어로 말한다.",
         learn: "continuum mechanics 복습, 선형 탄성, plane stress/strain, beam/shell/solid element의 역할.",
         output: "간단한 benchmark 3개에 대해 해석 목적, 지배 가정, 예상 결과를 한 페이지로 정리.",
         detailHref: "structural_mechanics_weeks_1_2.html"
@@ -484,8 +484,8 @@ const roadmap = [
     },
     {
         phase: "Weeks 5-6",
-        title: "HyperMesh 모델 빌드와 mesh quality 리뷰",
-        goal: "실무자의 HyperMesh 모델을 보고 geometry cleanup, element type, mesh quality issue를 토론한다.",
+        title: "HyperMesh 모델 빌드와 mesh quality 검토",
+        goal: "HyperMesh 모델을 보고 geometry cleanup, element type, mesh quality issue를 토론한다.",
         learn: "CAD import, topology cleanup, midsurface, shell/solid mesh, connector, Abaqus solver profile, deck export.",
         output: "HyperMesh에서 Abaqus input deck로 넘기는 체크리스트 초안 작성."
     },
@@ -501,14 +501,14 @@ const roadmap = [
         title: "동역학, Explicit, thermal stress 판단",
         goal: "quasi-static, transient, impact, thermal-structural 문제를 solver 전략으로 분기한다.",
         learn: "Abaqus/Explicit, stable time increment, mass scaling, kinetic/internal energy ratio, thermal expansion, residual stress.",
-        output: "Standard와 Explicit 선택 기준표 및 thermal stress 해석 리뷰 질문 작성."
+        output: "Standard와 Explicit 선택 기준표 및 thermal stress 해석 검토 기준 작성."
     },
     {
         phase: "Weeks 11-12",
-        title: "리뷰 시스템과 팀 capstone",
-        goal: "실제 팀 문제 하나를 simulation campaign으로 설계하고, 결과 리뷰 회의를 운영한다.",
+        title: "검토 시스템과 capstone synthesis",
+        goal: "실제 문제 하나를 simulation campaign으로 설계하고, 결과 검토 흐름을 정리한다.",
         learn: "Abaqus Python scripting, 반복 실행 자동화, 결과 extraction, V&V, decision memo 작성.",
-        output: "팀 표준 Simulation Review Memo v1과 capstone 발표 자료."
+        output: "Simulation Evidence Memo v1과 capstone 발표 자료."
     }
 ];
 
@@ -516,7 +516,7 @@ const workflow = [
     {
         icon: "bx-world",
         title: "External Need",
-        body: "시장, 고객, 제품 리스크를 구조역학 질문으로 번역합니다. 무엇이 깨질 수 있고, 어떤 의사결정을 내려야 하는지 먼저 고정합니다.",
+        body: "시장, 고객, 제품 리스크를 구조역학 계산 문제로 정리합니다. 무엇이 깨질 수 있고, 어떤 판단이 필요한지 먼저 고정합니다.",
         question: "우리가 알고 싶은 것은 최대 응력인가, 변형량인가, 수명인가, 접촉 안정성인가?"
     },
     {
@@ -609,8 +609,8 @@ const capstoneCases = [
     {
         icon: "bx-link",
         title: "Bolted or Contact Assembly",
-        purpose: "contact와 load path 리뷰 능력 확보",
-        tasks: ["friction, preload, contact pressure sensitivity 확인", "수렴 실패 원인을 접촉, 강체 운동, BC 문제로 분류", "Standard 해석 로그 리뷰"]
+        purpose: "contact와 load path 검토 능력 확보",
+        tasks: ["friction, preload, contact pressure sensitivity 확인", "수렴 실패 원인을 접촉, 강체 운동, BC 문제로 분류", "Standard 해석 로그 검토"]
     },
     {
         icon: "bx-thermometer",
@@ -630,7 +630,7 @@ const terms = [
     {
         icon: "bx-grid-alt",
         title: "Element",
-        body: "구조물을 나누는 계산 단위입니다. 팀장 관점에서는 element formulation, integration, aspect ratio가 결과 신뢰도에 어떤 영향을 주는지 묻는 것이 중요합니다."
+        body: "구조물을 나누는 계산 단위입니다. element formulation, integration, aspect ratio가 결과 신뢰도에 어떤 영향을 주는지 확인합니다."
     },
     {
         icon: "bx-lock-alt",
@@ -655,16 +655,16 @@ const terms = [
     {
         icon: "bx-certification",
         title: "V&V",
-        body: "Verification은 방정식을 제대로 풀었는가, Validation은 현실을 제대로 대표하는가의 질문입니다. 팀장 리뷰는 늘 이 둘을 분리해서 다뤄야 합니다."
+        body: "Verification은 방정식을 제대로 풀었는가, Validation은 현실을 제대로 대표하는가의 질문입니다. 이 둘은 분리해서 다루는 것이 좋습니다."
     }
 ];
 
-const notebookPrompt = `NotebookLM의 Deep Research 기능을 켜고, 아래 목적에 맞춰 구조역학 Simulation 팀장용 학습 자료를 만들어줘.
+const notebookPrompt = `NotebookLM의 Deep Research 기능을 켜고, 아래 목적에 맞춰 구조역학 Simulation 학습 자료를 만들어줘.
 
 목적:
-나는 DFT와 MD 기반 지식이 있고, 회사에서는 CFD 팀장으로 DSMC Tool과 Boltzmann 방정식 기반 입자 유동 계산을 직접 다뤄본 경험이 있다. 이제 Abaqus와 HyperMesh를 사용하는 구조역학 Simulation 팀의 방향성을 정하고, 실무자와 깊이 있게 토론할 수 있는 수준의 전문성을 얻고 싶다.
+나는 DFT와 MD 기반 지식이 있고, CFD와 DSMC Tool, Boltzmann 방정식 기반 입자 유동 계산을 직접 다뤄본 경험이 있다. 이제 Abaqus와 HyperMesh를 사용하는 구조역학 Simulation의 모델 구성과 결과 검토를 깊이 있게 이해하고 싶다.
 
-내 목표는 Abaqus/HyperMesh의 최고 숙련자가 되는 것이 아니라, review-capable technical leader가 되는 것이다. 즉, 팀원이 만든 모델과 결과를 보고 물리 가정, 수치 리스크, 모델 신뢰도, 다음 해석 방향을 판단할 수 있어야 한다.
+내 목표는 Abaqus/HyperMesh의 최고 숙련자가 되는 것이 아니라, 모델과 결과를 보고 물리 가정, 수치 리스크, 모델 신뢰도, 다음 해석 방향을 판단할 수 있는 실무적 이해를 갖추는 것이다.
 
 다음 목차로 조사하고 정리해줘.
 
@@ -683,7 +683,7 @@ const notebookPrompt = `NotebookLM의 Deep Research 기능을 켜고, 아래 목
 - mesh quality 기준과 나쁜 mesh가 만드는 결과 왜곡
 - Abaqus solver profile, deck export, connector, model organization
 
-4. 팀장용 Simulation Review Checklist
+4. Simulation Evidence Checklist
 - problem framing
 - model fidelity
 - boundary condition and load path
@@ -694,7 +694,7 @@ const notebookPrompt = `NotebookLM의 Deep Research 기능을 켜고, 아래 목
 5. 12주 학습 로드맵
 - 주차별 학습 목표
 - 직접 해볼 benchmark case
-- 팀원과 토론해야 할 질문
+- 해석 검토 질문
 - 산출물 형식
 
 6. 반드시 피해야 할 오해
@@ -704,15 +704,15 @@ const notebookPrompt = `NotebookLM의 Deep Research 기능을 켜고, 아래 목
 - contact stabilization, mass scaling, artificial energy를 과소평가하는 경우
 
 7. 최종 산출물
-- 팀장이 매주 누적할 learning memo template
-- 해석 리뷰 회의 agenda template
+- 매주 누적할 learning memo template
+- 해석 검토 agenda template
 - capstone simulation campaign 예시
 
-가능하면 공식 문서와 산업 실무 관점의 키워드를 함께 제시하고, 각 항목마다 "팀장이 던질 좋은 질문"을 별도로 정리해줘.`;
+가능하면 공식 문서와 산업 실무 관점의 키워드를 함께 제시하고, 각 항목마다 "검토 질문"을 별도로 정리해줘.`;
 
-function renderLeaderCards() {
-    const grid = document.getElementById("leader-grid");
-    grid.innerHTML = leaderCards.map(card => `
+function renderObjectiveCards() {
+    const grid = document.getElementById("objective-grid");
+    grid.innerHTML = objectiveCards.map(card => `
         <article class="sim-card">
             <h3><i class='bx ${card.icon}'></i>${card.title}</h3>
             <p>${card.body}</p>
@@ -855,7 +855,7 @@ function renderWorkflow() {
             <div class="step-icon"><i class='bx ${item.icon}'></i></div>
             <h3>${item.title}</h3>
             <p>${item.body}</p>
-            <div class="leader-question"><strong>Leader question</strong><br>${item.question}</div>
+            <div class="check-note"><strong>Check</strong><br>${item.question}</div>
         </article>
     `).join("");
 }
@@ -1007,7 +1007,7 @@ function bindPromptCopy() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    renderLeaderCards();
+    renderObjectiveCards();
     renderWeek12Foundation();
     renderRoadmap();
     renderWorkflow();

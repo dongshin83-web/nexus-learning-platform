@@ -203,11 +203,11 @@
                 <span>StructSim</span>
             </div>
 
-            <p class="sidebar-category">LEADERSHIP</p>
+            <p class="sidebar-category">LEARNING</p>
             <ul class="nav-links">
                 <li onclick="location.href='structural_mechanics.html#objective-section'">
                     <i class='bx bx-compass'></i>
-                    <span>Leader Objective</span>
+                    <span>Learning Objective</span>
                 </li>
                 <li class="active" onclick="location.href='structural_mechanics.html#roadmap-section'">
                     <i class='bx bx-map-alt'></i>
@@ -219,11 +219,11 @@
                 </li>
             </ul>
 
-            <p class="sidebar-category mt-2">REVIEW SYSTEM</p>
+            <p class="sidebar-category mt-2">EVIDENCE</p>
             <ul class="nav-links">
                 <li onclick="location.href='structural_mechanics.html#review-section'">
                     <i class='bx bx-check-shield'></i>
-                    <span>Review Checklist</span>
+                    <span>Evidence Checklist</span>
                 </li>
                 <li onclick="location.href='structural_mechanics.html#cases-section'">
                     <i class='bx bx-test-tube'></i>
@@ -261,19 +261,19 @@
                         <h2>Abaqus 모델을 만들고, 결과보다 먼저 evidence를 읽기</h2>
                         <a href="structural_mechanics.html#roadmap-section" class="detail-back-btn"><i class='bx bx-arrow-back'></i> 12-Week Plan</a>
                     </div>
-                    <p>3~4주차의 목표는 Abaqus/CAE를 능숙하게 조작하는 것이 아니라, 팀원이 만든 선형 정적 모델의 구조를 읽고 결과가 의사결정에 쓸 수 있는지 판단하는 것입니다. 화면의 contour plot보다 먼저 `.inp`, `.odb`, `.msg`, `.sta`, reaction balance, field/history output을 읽는 습관을 만듭니다.</p>
+                    <p>3~4주차의 목표는 Abaqus/CAE를 능숙하게 조작하는 것이 아니라, 선형 정적 모델의 구조를 읽고 결과가 판단에 쓸 수 있는지 확인하는 것입니다. 화면의 contour plot보다 먼저 `.inp`, `.odb`, `.msg`, `.sta`, reaction balance, field/history output을 읽는 습관을 만듭니다.</p>
                 </section>
 
                 <div class="section-kicker">Abaqus Workflow Map</div>
-                <p class="section-copy">Abaqus/CAE의 각 module은 단순 메뉴가 아니라 해석 가정이 쌓이는 순서입니다. 팀장은 버튼을 외우기보다 각 단계에서 어떤 물리적 가정이 고정되는지 봐야 합니다.</p>
+                <p class="section-copy">Abaqus/CAE의 각 module은 단순 메뉴가 아니라 해석 가정이 쌓이는 순서입니다. 버튼 위치보다 각 단계에서 어떤 물리적 가정이 고정되는지 확인합니다.</p>
                 <div class="workflow-grid">
                     <article class="workflow-card">
                         <span class="tag">1. Part</span>
                         <h3><i class='bx bx-cube-alt'></i>형상과 이상화 수준</h3>
                         <p>해석 대상의 geometry를 정의합니다. 이 단계에서 이미 3D solid, shell midsurface, beam idealization 중 무엇을 볼지 결정됩니다.</p>
                         <ul class="clean-list">
-                            <li>팀장 질문: 제거한 fillet, hole, fastener detail이 stress path를 바꾸는가?</li>
-                            <li>팀장 질문: 관심 결과가 global stiffness인가, local stress인가?</li>
+                            <li>확인 기준: 제거한 fillet, hole, fastener detail이 stress path를 바꾸는가?</li>
+                            <li>확인 기준: 관심 결과가 global stiffness인가, local stress인가?</li>
                         </ul>
                     </article>
                     <article class="workflow-card">
@@ -324,7 +324,7 @@
                 </div>
 
                 <div class="section-kicker">Input Deck Literacy</div>
-                <p class="section-copy">`.inp` 파일은 Abaqus가 실제로 읽은 해석 모델입니다. CAE 화면에서 무엇을 했든, 최종 진실은 input deck에 남습니다. 팀장은 아래 키워드가 어떤 모델 가정을 뜻하는지 읽을 수 있으면 됩니다.</p>
+                <p class="section-copy">`.inp` 파일은 Abaqus가 실제로 읽은 해석 모델입니다. CAE 화면에서 무엇을 했든, 최종 진실은 input deck에 남습니다. 아래 키워드가 어떤 모델 가정을 뜻하는지 읽는 것이 목표입니다.</p>
                 <pre class="deck-block">*Heading
 *Part, name=BRACKET
 *Node
@@ -400,7 +400,7 @@ S, E
                             <li>적용한 force, pressure resultant와 크기/방향이 맞는지 봅니다.</li>
                             <li>맞지 않으면 하중 누락, 단위 오류, BC 오류, contact 누락 가능성을 의심합니다.</li>
                         </ul>
-                        <div class="evidence-rule">팀장 기준: contour plot을 보기 전에 RF balance가 설명되어야 합니다.</div>
+                        <div class="evidence-rule">기준: contour plot을 보기 전에 RF balance가 설명되어야 합니다.</div>
                     </article>
                     <article class="evidence-card">
                         <span class="tag">Deformed Shape</span>
@@ -431,7 +431,7 @@ S, E
                             <li>.msg: warning, convergence, contact diagnostics.</li>
                             <li>.dat/.log: 출력 요청, 실행 정보, 에러/경고 흔적.</li>
                         </ul>
-                        <div class="warning-rule">팀장 기준: warning을 "있었지만 무시"가 아니라 "결과에 영향 없음"으로 설명해야 합니다.</div>
+                        <div class="warning-rule">기준: warning을 "있었지만 무시"가 아니라 "결과에 영향 없음"으로 설명해야 합니다.</div>
                     </article>
                 </div>
 
@@ -496,15 +496,15 @@ S, E
                     <div class="agenda-row">
                         <div class="agenda-day">Day 9</div>
                         <div>
-                            <h3>팀원 모델 하나를 evidence 관점으로 읽기</h3>
-                            <p>실무자가 만든 기존 모델에서 `.inp` 구조, output request, RF balance, mesh sensitivity 여부를 확인합니다.</p>
+                            <h3>기존 해석 모델 하나를 evidence 관점으로 읽기</h3>
+                            <p>기존 모델에서 `.inp` 구조, output request, RF balance, mesh sensitivity 여부를 확인합니다.</p>
                         </div>
                     </div>
                     <div class="agenda-row">
                         <div class="agenda-day">Day 10</div>
                         <div>
                             <h3>Abaqus Evidence Memo 작성</h3>
-                            <p>결과 이미지 1장, RF balance 1개, input deck map 1개, warning 해석 1개를 포함한 팀장용 memo를 작성합니다.</p>
+                            <p>결과 이미지 1장, RF balance 1개, input deck map 1개, warning 해석 1개를 포함한 검토 memo를 작성합니다.</p>
                         </div>
                     </div>
                 </div>
@@ -529,7 +529,7 @@ S, E
                         <ul class="clean-list">
                             <li>*Material과 단위계 확인.</li>
                             <li>*Boundary와 *Cload의 실제 의미 확인.</li>
-                            <li>*Output 요청이 리뷰에 충분한지 확인.</li>
+                            <li>*Output 요청이 검토에 충분한지 확인.</li>
                         </ul>
                     </article>
                     <article class="review-card">
@@ -545,7 +545,7 @@ S, E
                     <article class="review-card">
                         <span class="tag">Deliverable 4</span>
                         <h3><i class='bx bx-check-shield'></i>Abaqus Evidence Memo</h3>
-                        <p>팀원이 결과를 가져왔을 때 확인할 최소 evidence 형식을 만듭니다.</p>
+                        <p>해석 결과를 검토할 때 확인할 최소 evidence 형식을 만듭니다.</p>
                         <ul class="clean-list">
                             <li>해석 목적과 failure mode.</li>
                             <li>모델 가정: element, material, BC, load.</li>
@@ -555,11 +555,11 @@ S, E
                     </article>
                 </div>
 
-                <div class="section-kicker">Team Review Questions</div>
+                <div class="section-kicker">Evidence Checklist</div>
                 <div class="detail-grid">
                     <article class="detail-card">
                         <span class="tag">Model Setup</span>
-                        <h3><i class='bx bx-conversation'></i>모델 구성 질문</h3>
+                        <h3><i class='bx bx-conversation'></i>모델 구성 확인</h3>
                         <ul class="clean-list">
                             <li>이 geometry simplification은 관심 stress path를 바꾸지 않는가?</li>
                             <li>이 material property는 실제 온도와 공정 조건에서 유효한가?</li>
@@ -568,7 +568,7 @@ S, E
                     </article>
                     <article class="detail-card">
                         <span class="tag">Solve Evidence</span>
-                        <h3><i class='bx bx-search-alt'></i>해석 증거 질문</h3>
+                        <h3><i class='bx bx-search-alt'></i>해석 증거 확인</h3>
                         <ul class="clean-list">
                             <li>RF 합계와 외력 합계가 맞는가?</li>
                             <li>warning이 결과 해석에 영향 없다고 말할 근거가 있는가?</li>
@@ -577,7 +577,7 @@ S, E
                     </article>
                     <article class="detail-card">
                         <span class="tag">Decision</span>
-                        <h3><i class='bx bx-bulb'></i>의사결정 질문</h3>
+                        <h3><i class='bx bx-bulb'></i>판단 기준 확인</h3>
                         <ul class="clean-list">
                             <li>현재 mesh로 말할 수 있는 결론과 말하면 안 되는 결론은 무엇인가?</li>
                             <li>peak stress가 아니라 trend로 판단해야 하는 항목은 무엇인가?</li>
