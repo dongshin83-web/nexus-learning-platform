@@ -479,7 +479,8 @@ const roadmap = [
         title: "Abaqus 기본 workflow와 evidence 읽기",
         goal: "Abaqus/CAE에서 선형 정적 모델을 만들고, .inp와 .odb가 어떤 정보를 담는지 읽는다.",
         learn: "part, property, assembly, step, interaction, load, BC, job, visualization, reaction force balance.",
-        output: "cantilever, plate with hole, simple bracket 결과를 mesh refinement별로 비교."
+        output: "cantilever, plate with hole, simple bracket 결과를 mesh refinement별로 비교.",
+        detailHref: "structural_mechanics_weeks_3_4.html"
     },
     {
         phase: "Weeks 5-6",
