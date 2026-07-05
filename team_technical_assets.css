@@ -1,25 +1,25 @@
 :root {
-    --page: #f7f8fa;
+    --page: #f3f3f5;
     --paper: #ffffff;
-    --paper-soft: #fbfaf8;
-    --ink: #2f2723;
-    --muted: #7a6e68;
-    --line: #e4e0dc;
-    --line-strong: #d7d0c9;
-    --primary: #795548;
-    --primary-deep: #4e342e;
-    --primary-soft: #f0e8e3;
-    --teal: #0f766e;
-    --teal-soft: #e6f4f1;
-    --blue: #2563eb;
-    --blue-soft: #e8efff;
-    --green: #2e7d32;
-    --green-soft: #e8f5e9;
-    --amber: #b7791f;
-    --amber-soft: #fff7df;
-    --rose: #b42318;
-    --rose-soft: #fff0ee;
-    --shadow: 0 18px 40px rgba(62, 39, 35, 0.08);
+    --paper-soft: #f0f0f6;
+    --ink: #25252a;
+    --muted: #83838a;
+    --line: #e2e2e8;
+    --line-strong: #c6c6cc;
+    --primary: #25252a;
+    --primary-deep: #25252a;
+    --primary-soft: #e2e2e8;
+    --teal: #3b4a41;
+    --teal-soft: #d4e7dc;
+    --blue: #3c4856;
+    --blue-soft: #d7e4f5;
+    --green: #374c36;
+    --green-soft: #d0e9ce;
+    --amber: #524622;
+    --amber-soft: #f4e1b7;
+    --rose: #58413e;
+    --rose-soft: #f9dcd7;
+    --shadow: 0 4px 6px rgba(40, 40, 42, 0.08), 0 12px 24px rgba(40, 40, 42, 0.12);
     --radius: 8px;
     --font: "Inter", "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -35,7 +35,7 @@ html {
 body {
     margin: 0;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(247, 248, 250, 1) 34rem),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(243, 243, 245, 1) 34rem),
         var(--page);
     color: var(--ink);
     font-family: var(--font);
@@ -47,31 +47,31 @@ body {
 body[data-page="landing"] {
     --accent: var(--primary);
     --accent-soft: var(--primary-soft);
-    --accent-rgb: 121, 85, 72;
+    --accent-rgb: 37, 37, 42;
 }
 
 body[data-page="library"] {
     --accent: var(--teal);
     --accent-soft: var(--teal-soft);
-    --accent-rgb: 15, 118, 110;
+    --accent-rgb: 59, 74, 65;
 }
 
 body[data-page="map"] {
     --accent: var(--green);
     --accent-soft: var(--green-soft);
-    --accent-rgb: 46, 125, 50;
+    --accent-rgb: 55, 76, 54;
 }
 
 body[data-page="techtree"] {
     --accent: var(--blue);
     --accent-soft: var(--blue-soft);
-    --accent-rgb: 37, 99, 235;
+    --accent-rgb: 60, 72, 86;
 }
 
 body[data-page="culture"] {
     --accent: var(--amber);
     --accent-soft: var(--amber-soft);
-    --accent-rgb: 183, 121, 31;
+    --accent-rgb: 82, 70, 34;
 }
 
 a {
@@ -101,7 +101,7 @@ code {
     gap: 1rem;
     padding: 0.9rem clamp(1rem, 3vw, 2rem);
     border-bottom: 1px solid rgba(var(--accent-rgb, 121, 85, 72), 0.18);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(14px);
 }
 
@@ -600,31 +600,31 @@ select:focus {
 }
 
 .badge.domain {
-    border-color: #dfd1c8;
+    border-color: #d4d4da;
     background: var(--primary-soft);
     color: var(--primary-deep);
 }
 
 .badge.ready {
-    border-color: #b9dfbd;
+    border-color: #c2dbc0;
     background: var(--green-soft);
     color: var(--green);
 }
 
 .badge.review {
-    border-color: #b6c9fb;
+    border-color: #c9d6e7;
     background: var(--blue-soft);
     color: var(--blue);
 }
 
 .badge.draft {
-    border-color: #ead49f;
+    border-color: #e5d3a9;
     background: var(--amber-soft);
     color: var(--amber);
 }
 
 .badge.need {
-    border-color: #f2b8b0;
+    border-color: #ebcec9;
     background: var(--rose-soft);
     color: var(--rose);
 }
@@ -743,23 +743,23 @@ select:focus {
 }
 
 .level-1 {
-    background: #8a6a53;
+    background: #5e5e63;
 }
 
 .level-2 {
-    background: #b7791f;
+    background: #857650;
 }
 
 .level-3 {
-    background: #2563eb;
+    background: #3c4856;
 }
 
 .level-4 {
-    background: #0f766e;
+    background: #3b4a41;
 }
 
 .level-5 {
-    background: #2e7d32;
+    background: #374c36;
 }
 
 .graph-title {
@@ -858,12 +858,12 @@ select:focus {
 }
 
 .heat-cell.current {
-    outline: 3px solid rgba(37, 99, 235, 0.18);
-    border-color: #2563eb;
+    outline: 3px solid rgba(60, 72, 86, 0.18);
+    border-color: #3c4856;
 }
 
 .heat-cell.target {
-    box-shadow: inset 0 0 0 2px rgba(46, 125, 50, 0.4);
+    box-shadow: inset 0 0 0 2px rgba(55, 76, 54, 0.42);
 }
 
 .map-card,
