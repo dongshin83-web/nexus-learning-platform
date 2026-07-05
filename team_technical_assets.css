@@ -44,24 +44,34 @@ body {
     overflow-wrap: break-word;
 }
 
+body[data-page="landing"] {
+    --accent: var(--primary);
+    --accent-soft: var(--primary-soft);
+    --accent-rgb: 121, 85, 72;
+}
+
 body[data-page="library"] {
     --accent: var(--teal);
     --accent-soft: var(--teal-soft);
+    --accent-rgb: 15, 118, 110;
 }
 
 body[data-page="map"] {
     --accent: var(--green);
     --accent-soft: var(--green-soft);
+    --accent-rgb: 46, 125, 50;
 }
 
 body[data-page="techtree"] {
     --accent: var(--blue);
     --accent-soft: var(--blue-soft);
+    --accent-rgb: 37, 99, 235;
 }
 
 body[data-page="culture"] {
     --accent: var(--amber);
     --accent-soft: var(--amber-soft);
+    --accent-rgb: 183, 121, 31;
 }
 
 a {
@@ -90,7 +100,7 @@ code {
     justify-content: space-between;
     gap: 1rem;
     padding: 0.9rem clamp(1rem, 3vw, 2rem);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid rgba(var(--accent-rgb, 121, 85, 72), 0.18);
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(14px);
 }
@@ -187,9 +197,53 @@ code {
     box-shadow: var(--shadow);
 }
 
+.hero-side,
+.panel,
+.metric,
+.asset-card,
+.detail-panel,
+.map-card,
+.guide-card,
+.route-card,
+.tree-stage {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-side::before,
+.panel::before,
+.metric::before,
+.asset-card::before,
+.detail-panel::before,
+.map-card::before,
+.guide-card::before,
+.route-card::before,
+.tree-stage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent, var(--primary));
+}
+
+.hero-side > *,
+.panel > *,
+.metric > *,
+.asset-card > *,
+.detail-panel > *,
+.map-card > *,
+.guide-card > *,
+.route-card > *,
+.tree-stage > * {
+    position: relative;
+}
+
 .hero-main {
     position: relative;
     overflow: hidden;
+    border-top: 5px solid var(--accent, var(--primary));
     padding: clamp(1rem, 2.3vw, 1.55rem);
 }
 
@@ -199,44 +253,8 @@ code {
     inset: 0;
     pointer-events: none;
     background:
-        linear-gradient(90deg, rgba(121, 85, 72, 0.06), transparent 42%),
-        radial-gradient(circle at 92% 0%, rgba(15, 118, 110, 0.12), transparent 34%);
-}
-
-body[data-page="library"] .hero-main {
-    border-left: 6px solid var(--accent);
-}
-
-body[data-page="map"] .hero-main {
-    border-bottom: 6px solid var(--accent);
-}
-
-body[data-page="techtree"] .hero-main {
-    border-left: 6px solid var(--accent);
-    background: linear-gradient(180deg, #fff, var(--blue-soft));
-}
-
-body[data-page="culture"] .hero-main {
-    border-top: 6px solid var(--accent);
-    background: linear-gradient(180deg, #fff, var(--amber-soft));
-}
-
-body[data-page="library"] .panel,
-body[data-page="library"] .detail-panel {
-    border-top: 5px solid var(--accent);
-}
-
-body[data-page="map"] .map-card {
-    border-top: 5px solid var(--accent);
-}
-
-body[data-page="culture"] #culture-records {
-    grid-template-columns: 1fr;
-}
-
-body[data-page="culture"] #culture-records .asset-card {
-    border-left: 5px solid var(--accent);
-    background: linear-gradient(90deg, var(--amber-soft), #fff 24%);
+        linear-gradient(90deg, rgba(var(--accent-rgb, 121, 85, 72), 0.07), transparent 44%),
+        radial-gradient(circle at 92% 0%, rgba(var(--accent-rgb, 121, 85, 72), 0.12), transparent 34%);
 }
 
 .hero-main > * {
@@ -249,10 +267,10 @@ body[data-page="culture"] #culture-records .asset-card {
     gap: 0.45rem;
     min-height: 1.9rem;
     padding: 0.28rem 0.72rem;
-    border: 1px solid var(--line-strong);
+    border: 1px solid rgba(var(--accent-rgb, 121, 85, 72), 0.28);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.72);
-    color: var(--primary-deep);
+    background: var(--accent-soft, rgba(255, 255, 255, 0.72));
+    color: var(--accent, var(--primary-deep));
     font-size: 0.78rem;
     font-weight: 800;
 }
@@ -296,8 +314,8 @@ h1 {
 }
 
 .btn-primary {
-    border-color: var(--primary);
-    background: var(--primary);
+    border-color: var(--accent, var(--primary));
+    background: var(--accent, var(--primary));
     color: #fff;
 }
 
@@ -426,8 +444,8 @@ h1 {
     width: 2rem;
     height: 2rem;
     border-radius: var(--radius);
-    background: var(--teal-soft);
-    color: var(--teal);
+    background: var(--accent-soft, var(--teal-soft));
+    color: var(--accent, var(--teal));
     font-weight: 800;
 }
 
@@ -443,7 +461,7 @@ h1 {
 .route-card strong {
     display: inline-flex;
     margin-top: 0.8rem;
-    color: var(--primary-deep);
+    color: var(--accent, var(--primary-deep));
 }
 
 .filters {
@@ -493,8 +511,8 @@ select {
 
 input:focus,
 select:focus {
-    outline: 3px solid rgba(121, 85, 72, 0.12);
-    border-color: var(--primary);
+    outline: 3px solid rgba(var(--accent-rgb, 121, 85, 72), 0.14);
+    border-color: var(--accent, var(--primary));
 }
 
 .chips,
@@ -523,9 +541,9 @@ select:focus {
 }
 
 .chip[aria-pressed="true"] {
-    border-color: rgba(121, 85, 72, 0.55);
-    background: var(--primary-soft);
-    color: var(--primary-deep);
+    border-color: rgba(var(--accent-rgb, 121, 85, 72), 0.55);
+    background: var(--accent-soft, var(--primary-soft));
+    color: var(--accent, var(--primary-deep));
 }
 
 .asset-list {
@@ -542,8 +560,8 @@ select:focus {
 
 .asset-card:hover,
 .asset-card.active {
-    border-color: rgba(121, 85, 72, 0.55);
-    box-shadow: 0 12px 24px rgba(62, 39, 35, 0.08);
+    border-color: rgba(var(--accent-rgb, 121, 85, 72), 0.55);
+    box-shadow: 0 12px 24px rgba(var(--accent-rgb, 121, 85, 72), 0.1);
 }
 
 .asset-top,
@@ -888,11 +906,14 @@ select:focus {
 
 .tree-stage {
     border: 1px solid var(--line);
-    border-left: 6px solid var(--accent, var(--primary));
     border-radius: var(--radius);
     background: var(--paper);
     box-shadow: var(--shadow);
     padding: 1rem;
+}
+
+body[data-page="culture"] #culture-records {
+    grid-template-columns: 1fr;
 }
 
 .tree-stage span {
