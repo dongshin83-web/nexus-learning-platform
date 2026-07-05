@@ -700,17 +700,17 @@ function renderLevelGraph() {
     if (!wrap) return;
     wrap.innerHTML = `
         <div class="graph-title">
-            <strong>신뢰와 의사결정 영향의 상승</strong>
-            <span>Input → Cross Validation → Feedback Loop</span>
+            <strong>L1에서 L5로 갈 때 달라지는 것</strong>
+            <span>데이터와 검증이 보강될수록 활용 가능한 의사결정 범위가 넓어집니다.</span>
         </div>
-        <div class="level-bars">
+        <div class="level-ladder">
             ${simulationLevels.map((level) => `
-                <article class="level-bar-card">
-                    <div class="level-bar level-${level.score}" style="--bar-height: ${level.score * 18 + 28}px;">
-                        <span>${level.id}</span>
+                <article class="level-step-card">
+                    <span class="level-chip level-${level.score}">${level.id}</span>
+                    <div>
+                        <strong>${level.title}</strong>
+                        <small>${level.data} / ${level.decision}</small>
                     </div>
-                    <strong>${level.short}</strong>
-                    <small>${level.decision}</small>
                 </article>
             `).join("")}
         </div>

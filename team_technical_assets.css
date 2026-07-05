@@ -155,7 +155,7 @@ code {
 }
 
 .hero {
-    padding: clamp(1.5rem, 4vw, 3rem) 0 1.2rem;
+    padding: clamp(1rem, 2.4vw, 2rem) 0 0.9rem;
 }
 
 .hero-grid,
@@ -190,7 +190,7 @@ code {
 .hero-main {
     position: relative;
     overflow: hidden;
-    padding: clamp(1.2rem, 3vw, 2rem);
+    padding: clamp(1rem, 2.3vw, 1.55rem);
 }
 
 .hero-main::before {
@@ -258,10 +258,10 @@ body[data-page="culture"] #culture-records .asset-card {
 }
 
 h1 {
-    margin: 1rem 0 0.85rem;
+    margin: 0.75rem 0 0.55rem;
     max-width: 860px;
-    font-size: clamp(2rem, 4.2vw, 4.4rem);
-    line-height: 1.08;
+    font-size: clamp(1.45rem, 1.9vw, 2.2rem);
+    line-height: 1.18;
     letter-spacing: 0;
 }
 
@@ -269,7 +269,7 @@ h1 {
     max-width: 880px;
     margin: 0;
     color: var(--muted);
-    font-size: clamp(0.98rem, 1.6vw, 1.12rem);
+    font-size: clamp(0.92rem, 1.2vw, 1.02rem);
 }
 
 .hero-actions {
@@ -756,45 +756,35 @@ select:focus {
     font-weight: 700;
 }
 
-.level-bars {
+.level-ladder {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0.5rem;
-    align-items: end;
-    min-height: 190px;
+    gap: 0.55rem;
     margin-top: 1rem;
 }
 
-.level-bar-card {
+.level-step-card {
     display: grid;
-    gap: 0.4rem;
-    align-items: end;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.6rem;
+    align-items: center;
     min-width: 0;
-    text-align: center;
-    overflow-wrap: anywhere;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-soft);
+    padding: 0.65rem;
 }
 
-.level-bar {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: var(--bar-height);
-    min-height: 48px;
-    border-radius: var(--radius) var(--radius) 4px 4px;
-    color: #fff;
-    font-size: 0.74rem;
-    font-weight: 800;
-    padding: 0.35rem 0.2rem;
-}
-
-.level-bar-card strong {
-    font-size: 0.78rem;
+.level-step-card strong {
+    display: block;
+    font-size: 0.88rem;
     line-height: 1.2;
 }
 
-.level-bar-card small {
+.level-step-card small {
+    display: block;
+    margin-top: 0.15rem;
     color: var(--muted);
-    font-size: 0.7rem;
+    font-size: 0.74rem;
 }
 
 .graph-note {
