@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Tree | 우리팀 기술자산화 Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="team_technical_assets.css">
+</head>
+<body data-page="techtree">
+    <header class="topbar">
+        <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
+            <span class="brand-mark"><i class="bx bx-git-branch"></i></span>
+            <span>
+                <strong>Tech Tree</strong>
+                <span>기술적으로 배우고 익히는 순서</span>
+            </span>
+        </a>
+        <nav class="topnav" aria-label="기술자산화 페이지">
+            <a href="team_technical_assets.html">Overview</a>
+            <a href="team_technical_assets_library.html">Library</a>
+            <a href="team_technical_assets_map.html">Technology Map</a>
+            <a class="active" href="team_technical_assets_techtree.html">Tech Tree</a>
+            <a href="team_technical_assets_culture.html">Culture & History</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-grid">
+                <div class="hero-main">
+                    <span class="eyebrow"><i class="bx bx-git-branch"></i> Technical Growth Path</span>
+                    <h1>내가 무엇을 어떤 순서로 배워야 하는지 보이게 한다</h1>
+                    <p class="hero-copy">
+                        팀 교육 과정이 따로 있더라도, Tech Tree는 개인이 기술적으로 무엇을 먼저 이해하고
+                        어떤 실습과 산출물을 남겨야 하는지 확인하는 자기 점검용 경로입니다.
+                    </p>
+                </div>
+                <aside class="hero-side">
+                    <article class="side-note">
+                        <span>Role</span>
+                        <strong>공식 교육 과정의 대체가 아니다</strong>
+                        <p>교육 과정과 Library 사이를 이어주는 학습 순서 지도입니다.</p>
+                    </article>
+                    <article class="side-note">
+                        <span>Output</span>
+                        <strong>배움의 결과를 남긴다</strong>
+                        <p>각 단계는 읽어야 할 내용보다 남겨야 할 산출물을 함께 제시합니다.</p>
+                    </article>
+                </aside>
+            </div>
+        </section>
+
+        <section class="section container">
+            <div class="section-head">
+                <div>
+                    <h2>기술 성장 단계</h2>
+                    <p>결과를 읽는 법에서 시작해 모델링, 기술영역별 메커니즘, CoR/VD Request, BP/Manual, AI/타 Domain 연계로 확장합니다.</p>
+                </div>
+            </div>
+            <div class="tree-stack" id="tech-tree"></div>
+        </section>
+
+        <section class="section container">
+            <div class="section-head">
+                <div>
+                    <h2>Tech Tree와 Library의 연결</h2>
+                    <p>학습 단계마다 Library에서 찾아야 할 자료 유형이 다릅니다.</p>
+                </div>
+            </div>
+            <div class="guide-grid">
+                <article class="guide-card">
+                    <h3>초기 학습</h3>
+                    <p>교육자료와 Tool Manual을 먼저 보고, 기존 모델을 재현합니다.</p>
+                </article>
+                <article class="guide-card">
+                    <h3>기술영역 이해</h3>
+                    <p>BP와 CoR 보고서를 통해 문제 메커니즘과 판단 기준을 읽습니다.</p>
+                </article>
+                <article class="guide-card">
+                    <h3>과제화</h3>
+                    <p>CoR 제안서와 VD Request 결과를 참고해 요청을 과제로 전환합니다.</p>
+                </article>
+                <article class="guide-card">
+                    <h3>자산화</h3>
+                    <p>새로운 경험을 BP, Tool Manual, 교육 활용 메모로 다시 Library에 남깁니다.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer container">
+        <span>Tech Tree is a learning path, not a formal curriculum replacement.</span>
+    </footer>
+
+    <script src="team_technical_assets.js"></script>
+</body>
+</html>

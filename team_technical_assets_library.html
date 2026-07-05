@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자산 Library | 우리팀 기술자산화 Hub</title>
+    <title>Library | 우리팀 기술자산화 Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -15,26 +15,27 @@
         <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
             <span class="brand-mark"><i class="bx bx-search"></i></span>
             <span>
-                <strong>자산 Library</strong>
-                <span>대표 사례와 재사용 가능한 자산 검색</span>
+                <strong>Library</strong>
+                <span>BP, CoR, 보고서, 매뉴얼, 교육자료</span>
             </span>
         </a>
         <nav class="topnav" aria-label="기술자산화 페이지">
             <a href="team_technical_assets.html">Overview</a>
             <a class="active" href="team_technical_assets_library.html">Library</a>
             <a href="team_technical_assets_map.html">Technology Map</a>
-            <a href="team_technical_assets_growth.html">Growth Loop</a>
+            <a href="team_technical_assets_techtree.html">Tech Tree</a>
+            <a href="team_technical_assets_culture.html">Culture & History</a>
         </nav>
     </header>
 
     <main>
         <section class="hero container">
             <div class="hero-main">
-                <span class="eyebrow"><i class="bx bx-filter-alt"></i> Search and Filter</span>
-                <h1>필요한 기술자산을 빠르게 찾는다</h1>
+                <span class="eyebrow"><i class="bx bx-folder-open"></i> Document and Asset Library</span>
+                <h1>기술 자료를 유형별로 찾는다</h1>
                 <p class="hero-copy">
-                    키워드, 기술영역, 자산 유형, 상태, AI/타 Domain 연계 여부로 샘플 자산을 탐색합니다.
-                    실제 내부 운영에서는 각 카드의 링크를 회사 내부 문서, 모델 폴더, 검토표 주소로 교체하면 됩니다.
+                    Library는 BP만 모으는 곳이 아닙니다. CoR 과제 제안서와 보고서, VD Request 결과,
+                    Tool Manual, 교육 자료까지 내부 링크로 연결하는 자료 검색 페이지입니다.
                 </p>
             </div>
         </section>
@@ -42,8 +43,18 @@
         <section class="section container">
             <div class="section-head">
                 <div>
-                    <h2>검색/필터</h2>
-                    <p>처음에는 샘플 데이터로 구조를 검토하고, 내부 운영 시 실제 BP와 링크로 바꿉니다.</p>
+                    <h2>자료 유형</h2>
+                    <p>자료 유형별로 목적이 다르기 때문에 먼저 분류를 보여주고, 그다음 검색합니다.</p>
+                </div>
+            </div>
+            <div class="guide-grid" id="type-summary"></div>
+        </section>
+
+        <section class="section container">
+            <div class="section-head">
+                <div>
+                    <h2>자료 검색</h2>
+                    <p>자료 유형, 기술영역, 상태, 연계 태그로 내부 링크를 찾습니다.</p>
                 </div>
                 <button class="btn btn-secondary" type="button" id="reset-filters"><i class="bx bx-refresh"></i> 필터 초기화</button>
             </div>
@@ -54,11 +65,11 @@
                         <label for="search-input">키워드 검색</label>
                         <div class="input-wrap">
                             <i class="bx bx-search"></i>
-                            <input id="search-input" type="search" placeholder="예: 박리, 경계조건, 신규 인원 교육, AI 연계">
+                            <input id="search-input" type="search" placeholder="예: CoR 제안서, VD Request, Tool Manual, 박리, 교육">
                         </div>
                     </div>
                     <div class="field">
-                        <label for="type-filter">자산 유형</label>
+                        <label for="type-filter">자료 유형</label>
                         <select id="type-filter"></select>
                     </div>
                     <div class="field">
@@ -78,8 +89,8 @@
                 <div class="asset-list" id="asset-list"></div>
                 <aside class="detail-panel" id="detail-panel" aria-live="polite">
                     <div class="detail-empty">
-                        <strong>자산을 선택하세요.</strong>
-                        <p>왼쪽 카드에서 대표 사례를 누르면 의사결정 영향, 재사용 요소, 내부 링크 placeholder를 확인할 수 있습니다.</p>
+                        <strong>자료를 선택하세요.</strong>
+                        <p>왼쪽 카드에서 자료를 누르면 활용 목적, 포함 내용, 내부 링크 placeholder를 확인할 수 있습니다.</p>
                     </div>
                 </aside>
             </div>
