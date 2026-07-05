@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자산 Library | 우리팀 기술자산화 Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="team_technical_assets.css">
+</head>
+<body data-page="library">
+    <header class="topbar">
+        <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
+            <span class="brand-mark"><i class="bx bx-search"></i></span>
+            <span>
+                <strong>자산 Library</strong>
+                <span>대표 사례와 재사용 가능한 자산 검색</span>
+            </span>
+        </a>
+        <nav class="topnav" aria-label="기술자산화 페이지">
+            <a href="team_technical_assets.html">Overview</a>
+            <a class="active" href="team_technical_assets_library.html">Library</a>
+            <a href="team_technical_assets_map.html">Technology Map</a>
+            <a href="team_technical_assets_growth.html">Growth Loop</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-main">
+                <span class="eyebrow"><i class="bx bx-filter-alt"></i> Search and Filter</span>
+                <h1>필요한 기술자산을 빠르게 찾는다</h1>
+                <p class="hero-copy">
+                    키워드, 기술영역, 자산 유형, 상태, AI/타 Domain 연계 여부로 샘플 자산을 탐색합니다.
+                    실제 내부 운영에서는 각 카드의 링크를 회사 내부 문서, 모델 폴더, 검토표 주소로 교체하면 됩니다.
+                </p>
+            </div>
+        </section>
+
+        <section class="section container">
+            <div class="section-head">
+                <div>
+                    <h2>검색/필터</h2>
+                    <p>처음에는 샘플 데이터로 구조를 검토하고, 내부 운영 시 실제 BP와 링크로 바꿉니다.</p>
+                </div>
+                <button class="btn btn-secondary" type="button" id="reset-filters"><i class="bx bx-refresh"></i> 필터 초기화</button>
+            </div>
+
+            <div class="panel">
+                <div class="filters">
+                    <div class="field">
+                        <label for="search-input">키워드 검색</label>
+                        <div class="input-wrap">
+                            <i class="bx bx-search"></i>
+                            <input id="search-input" type="search" placeholder="예: 박리, 경계조건, 신규 인원 교육, AI 연계">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="type-filter">자산 유형</label>
+                        <select id="type-filter"></select>
+                    </div>
+                    <div class="field">
+                        <label for="status-filter">상태</label>
+                        <select id="status-filter"></select>
+                    </div>
+                    <div class="field">
+                        <label for="link-filter">연계</label>
+                        <select id="link-filter"></select>
+                    </div>
+                </div>
+                <div class="chips" id="domain-chips" aria-label="기술영역 필터"></div>
+                <div class="subchips" id="tag-chips" aria-label="보조 태그 필터"></div>
+            </div>
+
+            <div class="main-grid" style="margin-top: 1rem;">
+                <div class="asset-list" id="asset-list"></div>
+                <aside class="detail-panel" id="detail-panel" aria-live="polite">
+                    <div class="detail-empty">
+                        <strong>자산을 선택하세요.</strong>
+                        <p>왼쪽 카드에서 대표 사례를 누르면 의사결정 영향, 재사용 요소, 내부 링크 placeholder를 확인할 수 있습니다.</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer container">
+        <span>Library data lives in team_technical_assets.js. Replace sample links in the internal environment.</span>
+    </footer>
+
+    <script src="team_technical_assets.js"></script>
+</body>
+</html>
