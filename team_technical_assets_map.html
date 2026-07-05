@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technology Map | Team Technical Asset Hub</title>
+    <title>Methodology Map | 우리팀 기술자산화 Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -15,8 +15,8 @@
         <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
             <span class="brand-mark"><i class="bx bx-grid-alt"></i></span>
             <span>
-                <strong>기술영역 Map</strong>
-                <span>7개 영역과 연계 태그 현황</span>
+                <strong>Methodology Map</strong>
+                <span>Simulation 방법론 레벨과 Gap</span>
             </span>
         </a>
         <nav class="topnav" aria-label="기술자산화 페이지">
@@ -30,39 +30,92 @@
 
     <main>
         <section class="hero container">
-            <div class="hero-main">
-                <span class="eyebrow"><i class="bx bx-sitemap"></i> Technology Classification</span>
-                <h1>기술영역은 기본 분류, 연계 태그는 확장 관점으로 본다</h1>
-                <p class="hero-copy">
-                    01.변형부터 07.기타까지는 Library 자료를 찾기 위한 기본 위치입니다.
-                    AI, 타 Domain, 공정, 신뢰성, 소재/물성, 실험/평가 연계는 한 자료가 여러 방향으로 확장되는 방식을 보여줍니다.
-                </p>
+            <div class="hero-grid">
+                <div class="hero-main">
+                    <span class="eyebrow"><i class="bx bx-sitemap"></i> Simulation Methodology Map</span>
+                    <h1>방법론의 현재 레벨과 다음 Gap을 한 화면에서 본다</h1>
+                    <p class="hero-copy">
+                        Map은 Library의 자료 목록이 아닙니다. 우리가 보유한 Simulation 방법론을 대분류에서 세부 방법론으로 내려가며
+                        L1~L5 성숙도, 현재 수준, 목표 수준, 보완해야 할 데이터를 확인하는 기술 현황판입니다.
+                    </p>
+                </div>
+                <aside class="hero-side">
+                    <article class="side-note">
+                        <span>Map Role</span>
+                        <strong>기술 현황과 Gap</strong>
+                        <p>어떤 방법론이 의사결정에 쓰일 수 있고, 어디는 아직 데이터 Gap이 있는지 보여줍니다.</p>
+                    </article>
+                    <article class="side-note">
+                        <span>Library Role</span>
+                        <strong>증거 자료와 링크</strong>
+                        <p>BP, 보고서, 모델, 교육자료는 Library에서 찾고, Map은 그 자료가 만든 신뢰 수준을 봅니다.</p>
+                    </article>
+                </aside>
             </div>
         </section>
 
         <section class="section container">
             <div class="section-head">
                 <div>
-                    <h2>7개 기술영역</h2>
-                    <p>각 카드를 누르면 해당 기술영역으로 필터링된 Library로 이동합니다.</p>
+                    <h2>L1~L5 성숙도 정의</h2>
+                    <p>레벨은 서열이 아니라 소통 언어입니다. 현재 수준과 다음 레벨로 가기 위해 필요한 데이터/검증 조건을 함께 봅니다.</p>
                 </div>
             </div>
-            <div class="map-grid" id="map-grid"></div>
+            <div class="level-layout">
+                <div class="panel">
+                    <div class="table-scroll" id="level-summary"></div>
+                </div>
+                <aside class="panel">
+                    <div class="level-graph" id="level-graph"></div>
+                </aside>
+            </div>
         </section>
 
         <section class="section container">
             <div class="section-head">
                 <div>
-                    <h2>연계 태그</h2>
-                    <p>AI와 타 Domain 연계는 별도 기술영역이 아니라, 모든 기술영역 위에 겹쳐지는 활용 관점입니다.</p>
+                    <h2>방법론 레벨 히트맵</h2>
+                    <p>대분류를 펼쳐 세부 방법론별 현재 레벨과 목표 레벨을 봅니다. 셀을 선택하면 Gap과 다음 액션을 확인합니다.</p>
                 </div>
             </div>
-            <div class="guide-grid" id="tag-matrix"></div>
+            <div class="main-grid">
+                <div class="panel">
+                    <div class="table-scroll" id="method-heatmap"></div>
+                </div>
+                <aside class="detail-panel" id="method-detail" aria-live="polite"></aside>
+            </div>
+        </section>
+
+        <section class="section container">
+            <div class="section-head">
+                <div>
+                    <h2>Map에서 읽을 것</h2>
+                    <p>Map은 평가표가 아니라 기술 보강과 자산화 우선순위를 정하는 기준입니다.</p>
+                </div>
+            </div>
+            <div class="guide-grid">
+                <article class="guide-card">
+                    <h3>현재 레벨</h3>
+                    <p>지금 이 방법론을 어떤 의사결정 수준까지 사용할 수 있는지 확인합니다.</p>
+                </article>
+                <article class="guide-card">
+                    <h3>목표 레벨</h3>
+                    <p>모든 방법론이 L5일 필요는 없습니다. 필요한 영역에서 L3 표준화, L4 확장, 선별적 L5 확보를 봅니다.</p>
+                </article>
+                <article class="guide-card">
+                    <h3>Data Gap</h3>
+                    <p>간접 실험, 직접 데이터, Cross Validation처럼 다음 레벨에 필요한 입력을 확인합니다.</p>
+                </article>
+                <article class="guide-card">
+                    <h3>Library 연결</h3>
+                    <p>레벨 판단의 근거가 되는 BP, 모델, Tool Manual, 교육자료는 Library 링크로 연결합니다.</p>
+                </article>
+            </div>
         </section>
     </main>
 
     <footer class="footer container">
-        <span>Technology domains and tags are sample values. Edit team_technical_assets.js to adjust them.</span>
+        <span>Methodology levels and heatmap data are editable samples. Replace them with the team source of truth in the internal environment.</span>
     </footer>
 
     <script src="team_technical_assets.js"></script>
