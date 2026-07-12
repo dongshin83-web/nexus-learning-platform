@@ -1,0 +1,1239 @@
+window.TECHNICAL_ASSET_LIBRARY = {
+  "schemaVersion": "0.1",
+  "cardCount": 14,
+  "cards": [
+    {
+      "schemaVersion": "0.1",
+      "id": "external-report-simulation-overview",
+      "type": "외부 보고 자료",
+      "title": "[샘플] Simulation 적용 현황 외부 보고 자료",
+      "domain": "other",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "작성 중",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "contributors": [],
+      "createdAt": "2026-07-13",
+      "updatedAt": "2026-07-13",
+      "tags": [
+        "외부 보고",
+        "의사결정 반영",
+        "고객/사업부 대응",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "사업부",
+        "CTO"
+      ],
+      "aliases": [
+        "외부 보고",
+        "임원 보고",
+        "사업부 보고",
+        "Simulation 적용 현황"
+      ],
+      "summary": "기술자산의 근거와 적용 이력을 팀 외부 이해관계자가 확인할 수 있는 메시지로 재구성한 보고 자료 샘플입니다.",
+      "useCase": "사업부 또는 리더 협의에서 Simulation의 적용 범위, 의사결정 반영 내용과 남은 한계를 설명할 때 사용합니다.",
+      "contents": "보고 목적, 대상과 의사결정, 전달 메시지, 근거 자산, 공유 범위, 버전과 유효기간, 한계와 주의사항",
+      "sourceIds": [
+        "EXT-REPORT-DEMO-001"
+      ],
+      "links": [
+        {
+          "label": "외부 보고 자료 원문",
+          "href": "#",
+          "type": "외부 보고",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "DERIVED_FROM",
+          "targetId": "technical-report-interface-sensitivity",
+          "note": "기술 결론과 판단 한계의 근거를 참조"
+        },
+        {
+          "type": "REFERENCES",
+          "targetId": "bp-deformation-warpage",
+          "note": "의사결정 반영 사례를 메시지 근거로 참조"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [
+          "technical-report-interface-sensitivity",
+          "bp-deformation-warpage"
+        ],
+        "usageType": "보고 근거 재사용",
+        "outcome": "팀 외부 보고 메시지 구성"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "reportPurpose": "Simulation 적용 현황과 의사결정 반영 사례를 팀 외부 이해관계자에게 설명",
+        "audienceAndDecision": "CTO 및 사업부 리더 / 후속 검증과 적용 범위 협의",
+        "approvedMessages": [
+          "Simulation 결과는 적용 범위와 판단 한계를 함께 설명한다",
+          "기존 기술자산이 실제 의사결정에 다시 사용된 이력을 근거로 제시한다"
+        ],
+        "sourceAssetsAndEvidence": [
+          "계면 물성 민감도 기술보고서",
+          "박막 적층 구조 변형 예측 BP"
+        ],
+        "disclosureScope": "팀 외부 공유 전 고객·제품·수치·사내 링크의 공개 범위를 확인",
+        "versionAndValidity": "2026-07-13 초안 / 근거 자산 개정 시 재검토",
+        "limitationsAndNotes": [
+          "실제 수치와 식별정보를 포함하지 않은 기능시험용 샘플",
+          "외부 전달 전 Reviewer 확인 필요"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-13",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "외부 보고 자료 유형 기능시험"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "vdr-demo-drop-design-selection",
+      "type": "VD Request",
+      "title": "[샘플] Drop 설계안 취약부 상대 비교 VD Request",
+      "domain": "impact",
+      "secondaryDomains": [],
+      "contexts": [
+        "설계",
+        "개발",
+        "품질",
+        "사업부"
+      ],
+      "publicationStatus": "게시",
+      "status": "완료",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "샘플 Reviewer",
+      "contributors": [
+        "샘플 협업자"
+      ],
+      "createdAt": "2026-07-11",
+      "updatedAt": "2026-07-11",
+      "tags": [
+        "샘플 데이터",
+        "신뢰성 연계",
+        "실험/평가 연계",
+        "기존 자산 재사용"
+      ],
+      "aliases": [
+        "충격",
+        "Drop",
+        "취약부",
+        "설계안 비교",
+        "Risk Ranking",
+        "Drop 설계안 비교",
+        "충격 Risk Ranking"
+      ],
+      "summary": "[제품군]의 설계동결 전에 [설계안 A·B] 중 충격 취약 가능성이 낮은 안을 선택해야 했으나 실물 평가 데이터가 없었다.",
+      "useCase": "[설계동결 시점] 전에 두 설계안 중 충격 취약 가능성이 낮은 구조를 선택할 수 있는가?",
+      "contents": "동일 충격조건에서 두 구조안의 결과 패턴과 민감도를 비교하고 취약부 Risk Ranking을 검토했다. / 한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다. / 절대 파손수명 판단 불가 / 동적 물성 미확보 / 실험 상관 필요",
+      "sourceIds": [
+        "VDR-DEMO-001"
+      ],
+      "links": [
+        {
+          "label": "샘플 VD Request 원문",
+          "href": "https://internal.example/vdr/VDR-DEMO-001",
+          "type": "요청",
+          "status": "정상"
+        },
+        {
+          "label": "샘플 결과 요약",
+          "href": "https://internal.example/report/VDR-DEMO-001",
+          "type": "결과",
+          "status": "정상"
+        }
+      ],
+      "relations": [
+        {
+          "type": "USES",
+          "targetId": "methodology-impact-risk-ranking",
+          "note": "충격 취약부 Risk Ranking 절차를 조건 변경 적용"
+        },
+        {
+          "type": "REFERENCES",
+          "targetId": "cor-impact",
+          "note": "기존 검증범위와 평가 피드백 참고"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [
+          "methodology-impact-risk-ranking",
+          "cor-impact"
+        ],
+        "usageType": "조건 변경 적용",
+        "outcome": "설계안 선택 근거"
+      },
+      "aiAssistance": {
+        "externalStructured": true,
+        "externalStructuredAt": "2026-07-11",
+        "internalClineStructured": true,
+        "internalClineStructuredAt": "2026-07-11",
+        "humanConfirmed": true,
+        "confirmedBy": "샘플 등록자"
+      },
+      "content": {
+        "context": "[제품군]의 설계동결 전에 [설계안 A·B] 중 충격 취약 가능성이 낮은 안을 선택해야 했으나 실물 평가 데이터가 없었다.",
+        "primaryQuestion": "[설계동결 시점] 전에 두 설계안 중 충격 취약 가능성이 낮은 구조를 선택할 수 있는가?",
+        "inputsAndConstraints": [
+          "후보 형상 2안",
+          "기존 충격 평가조건",
+          "변형률 속도 의존 물성 미확보",
+          "제한된 일정 안에 답변 필요"
+        ],
+        "approach": "동일 충격조건에서 두 구조안의 결과 패턴과 민감도를 비교하고 취약부 Risk Ranking을 검토했다.",
+        "result": "한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다.",
+        "judgmentScope": "동일 충격조건에서 후보안 간 상대 비교와 Risk Ranking",
+        "limitations": [
+          "절대 파손수명 판단 불가",
+          "동적 물성 미확보",
+          "실험 상관 필요"
+        ],
+        "followUp": [
+          "기존 충격 방법론 활용",
+          "후속 실물 평가 비교",
+          "사업부 피드백 후 BP 후보 여부 판단"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-11",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "외부 AI Handoff Packet과 내부 보완정보로 샌드박스 카드 생성"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "knowhow-contact-convergence",
+      "type": "노하우",
+      "title": "접촉 초기구간 수렴 안정화 노하우",
+      "domain": "other",
+      "secondaryDomains": [
+        "impact"
+      ],
+      "publicationStatus": "초안",
+      "status": "검토 완료",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "샘플 Reviewer",
+      "createdAt": "2026-06-26",
+      "updatedAt": "2026-07-09",
+      "tags": [
+        "계산시간",
+        "수렴성",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "연구",
+        "개발",
+        "CTO"
+      ],
+      "aliases": [
+        "Contact convergence",
+        "time step 감소",
+        "접촉 수렴"
+      ],
+      "summary": "접촉 시작구간에서 time step이 반복 감소하며 해석이 중단되는 문제의 진단과 안정화 절차를 정리한 샘플입니다.",
+      "useCase": "접촉 비선형 해석의 초기 수렴 실패 원인을 좁히고 안전한 조치 순서를 확인할 때 사용합니다.",
+      "contents": "문제 증상, 원인 가설, 진단순서, 해결절차, 효과, 부작용과 복구방법",
+      "sourceIds": [],
+      "links": [
+        {
+          "label": "노하우 예제",
+          "href": "#",
+          "type": "예제",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "DERIVED_FROM",
+          "targetId": "cor-impact",
+          "note": "충격 과제 수행 중 확인한 샘플"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "직접 재사용",
+        "outcome": "수렴 실패 반복 방지"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "symptomAndConditions": "접촉 시작구간에서 time step이 급격히 감소하고 중단",
+        "causeAndDiagnosis": "접촉 초기 침투, 강성 변화와 에너지 로그 확인",
+        "resolution": "입력 정합성 확인 후 접촉·증분 설정을 단계적으로 조정",
+        "effectAndEvidence": "샘플 과제에서 초기구간 통과",
+        "risksAndRecovery": [
+          "과도한 안정화 금지",
+          "원래 설정으로 단계 복구"
+        ],
+        "versionsAndSources": [
+          "샘플 Tool 버전"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-09",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "technical-report-interface-sensitivity",
+      "type": "기술보고서",
+      "title": "계면 물성 민감도 기술보고서",
+      "domain": "delamination",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "검토 중",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-22",
+      "updatedAt": "2026-07-08",
+      "tags": [
+        "소재/물성 연계",
+        "실험/평가 연계",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "연구",
+        "개발",
+        "품질",
+        "CTO",
+        "품질경영"
+      ],
+      "aliases": [
+        "Interface sensitivity",
+        "계면 물성 보고서"
+      ],
+      "summary": "계면 물성 변화가 취약부 Ranking에 미치는 영향을 검토한 기술보고서 샘플입니다.",
+      "useCase": "계면 물성이 부족한 상태에서 상대 비교 결과의 유효조건과 한계를 확인할 때 사용합니다.",
+      "contents": "기술 질문, 검토조건, 민감도 분석, 주요 발견, 유효조건, 지원 가능한 판단과 한계",
+      "sourceIds": [
+        "TR-DEMO-001"
+      ],
+      "links": [
+        {
+          "label": "공식 보고서",
+          "href": "#",
+          "type": "보고서",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "DOCUMENTS",
+          "targetId": "cor-delamination",
+          "note": "CoR 제안의 선행 근거 샘플"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [
+          "cor-delamination"
+        ],
+        "usageType": "검증 근거",
+        "outcome": "성공기준 보완"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "questionAndPurpose": "계면 물성 범위가 상대 취약순위에 미치는 영향",
+        "scopeAndConditions": [
+          "샘플 구조",
+          "물성 범위"
+        ],
+        "methodAndEvidence": "민감도 비교",
+        "findingsAndConclusion": "일부 조건에서 Ranking 유지",
+        "validConditionsAndDecisions": "상대 비교만 지원",
+        "limitations": [
+          "실험 상관 전"
+        ],
+        "officialSource": "샘플 링크"
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-08",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "vd-request-cross-domain",
+      "type": "VD Request",
+      "title": "복합 Domain VD Request",
+      "domain": "other",
+      "secondaryDomains": [
+        "thermal-flow",
+        "deformation"
+      ],
+      "publicationStatus": "초안",
+      "status": "수행 중",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-07-01",
+      "updatedAt": "2026-07-07",
+      "tags": [
+        "타 Domain 연계",
+        "고객/사업부 대응",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "개발",
+        "사업부"
+      ],
+      "aliases": [
+        "복합 도메인",
+        "Multi-domain VDR"
+      ],
+      "summary": "여러 기술영역이 걸친 요청의 판단 질문과 협업·데이터 전달조건을 기록하는 샘플입니다.",
+      "useCase": "주 기술영역이 하나로 정해지지 않는 요청의 협업 이력과 후속 연결을 찾을 때 사용합니다.",
+      "contents": "요청 맥락, 관련 Domain, 사용 데이터, 의사결정 질문, 협업 제약, 후속 연결",
+      "sourceIds": [
+        "VDR-DEMO-CROSS"
+      ],
+      "links": [
+        {
+          "label": "VD Request 원문",
+          "href": "#",
+          "type": "요청",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "REFERENCES",
+          "targetId": "vd-request-thermal",
+          "note": "타 Domain 전달조건 참고"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [
+          "vd-request-thermal"
+        ],
+        "usageType": "참고",
+        "outcome": "협업조건 확인"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "context": "복합 Domain 협업 요청",
+        "primaryQuestion": "여러 결과를 어떤 기준으로 연결해 판단할 것인가",
+        "inputsAndConstraints": [
+          "타 Domain 데이터",
+          "전달 시점"
+        ],
+        "approach": "Domain별 입력·출력과 책임 구분",
+        "result": "진행 중",
+        "judgmentScope": "협업 범위",
+        "limitations": [
+          "결과 미확정"
+        ],
+        "followUp": [
+          "추가 VD Request"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-07",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "cor-impact",
+      "type": "CoR",
+      "title": "Drop 충격 취약부 검증 CoR",
+      "domain": "impact",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "수행 중",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-05-15",
+      "updatedAt": "2026-07-06",
+      "tags": [
+        "신뢰성 연계",
+        "실험/평가 연계",
+        "고객/사업부 대응",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "설계",
+        "개발",
+        "품질",
+        "사업부",
+        "품질경영"
+      ],
+      "aliases": [
+        "Drop CoR",
+        "충격 취약부 과제"
+      ],
+      "summary": "충격조건별 취약부와 설계안 차이를 비교하고 평가 전 검토 우선순위를 정립하는 CoR 샘플입니다.",
+      "useCase": "충격 관련 요청에서 기존 검증범위, 비교항목과 남은 기술 Gap을 확인할 때 사용합니다.",
+      "contents": "과제 목표, 해석조건, 취약부 비교, 실험·평가 연결, 중간 판단, 후속검증",
+      "sourceIds": [
+        "COR-DEMO-002"
+      ],
+      "links": [
+        {
+          "label": "CoR 중간보고",
+          "href": "#",
+          "type": "CoR",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "VALIDATES",
+          "targetId": "methodology-impact-risk-ranking",
+          "note": "Risk Ranking 반복성 검토"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [
+          "methodology-impact-risk-ranking"
+        ],
+        "usageType": "검증 근거",
+        "outcome": "방법론 후보 검증"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "backgroundAndGap": "여러 충격 요청에서 취약부 Ranking의 반복성 검증 필요",
+        "objectiveAndSuccessCriteria": "평가 피드백과 취약부 Ranking의 상관 확인",
+        "scopeAndPlan": "조건별 해석과 평가 결과 비교",
+        "validationDesign": "동일 조건의 Simulation·평가 취약위치 비교",
+        "progressDecisions": "중간 검증 수행 중",
+        "resultAndJudgment": "부분 조건에서 경향 일치",
+        "outputsAndFollowUp": [
+          "중간보고",
+          "방법론 후보 보완"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-06",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "bp-deformation-warpage",
+      "type": "BP",
+      "title": "박막 적층 구조 변형 예측 BP",
+      "domain": "deformation",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "BP 후보",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-21",
+      "updatedAt": "2026-07-05",
+      "tags": [
+        "공정 연계",
+        "소재/물성 연계",
+        "교육/온보딩",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "설계",
+        "공정",
+        "사업부",
+        "생산기술"
+      ],
+      "aliases": [
+        "박막 Warpage BP",
+        "변형 예측 성공사례"
+      ],
+      "summary": "공정조건 변경 전에 변형 리스크를 비교하고 허용 가능한 설계·공정 선택지를 좁힌 BP 후보입니다.",
+      "useCase": "유사 적층 구조에서 변형 위험과 공정안 선택의 사업 맥락을 참고할 때 사용합니다.",
+      "contents": "사업 맥락, Simulation 대응, 사업부 피드백, 경영성과, 재현조건",
+      "sourceIds": [
+        "BP-DEMO-001"
+      ],
+      "links": [
+        {
+          "label": "BP 문서",
+          "href": "#",
+          "type": "BP",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "USES",
+          "targetId": "methodology-warpage-relative-comparison",
+          "note": "변형 상대 비교 절차 활용"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [
+          "methodology-warpage-relative-comparison"
+        ],
+        "usageType": "조건 변경 적용",
+        "outcome": "공정안 비교"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "businessContext": "설계·공정 선택 전에 변형 위험 비교가 필요했던 샘플 상황",
+        "simulationResponse": "후보안과 물성 민감도를 비교",
+        "businessFeedback": "샘플 피드백 확인 필요",
+        "businessImpact": "샘플 효과 확인 필요",
+        "reproductionConditions": [
+          "유사 적층 구조",
+          "동일 비교기준"
+        ],
+        "evidence": [
+          "방법론 후보"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-05",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "methodology-impact-risk-ranking",
+      "type": "방법론",
+      "title": "충격 취약부 Risk Ranking 방법론",
+      "domain": "impact",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "방법론 후보",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-25",
+      "updatedAt": "2026-07-04",
+      "tags": [
+        "신뢰성 연계",
+        "실험/평가 연계",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "연구",
+        "설계",
+        "개발",
+        "품질",
+        "CTO"
+      ],
+      "aliases": [
+        "Drop",
+        "충격 취약부",
+        "Risk Ranking",
+        "상대 위험 순위"
+      ],
+      "summary": "동일 충격조건에서 후보 구조의 취약 위치와 상대 위험 순위를 비교하는 방법론 후보입니다.",
+      "useCase": "실물 평가 전에 설계안의 상대적 충격 취약 가능성과 평가 우선순위를 검토할 때 사용합니다.",
+      "contents": "입력조건 확인, 동일조건 비교, 민감도 점검, 취약부 Ranking, 판단 한계",
+      "sourceIds": [],
+      "links": [
+        {
+          "label": "방법론 초안",
+          "href": "#",
+          "type": "방법론",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "VALIDATED_BY",
+          "targetId": "cor-impact",
+          "note": "CoR 샘플에서 비교 기준을 검토"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "",
+        "outcome": ""
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "problemAndPurpose": "충격 조건에서 설계안별 취약부와 상대 위험 순위 비교",
+        "technicalPrinciples": "동일 조건의 결과 패턴과 민감도를 이용한 상대 비교",
+        "inputsAndPrerequisites": [
+          "후보 형상",
+          "충격 평가조건",
+          "비교 가능한 재료모델"
+        ],
+        "standardProcedure": "입력 정합성 확인 후 동일조건 해석과 민감도 비교",
+        "resultsAndCriteria": "취약 위치의 반복성과 상대 위험 순위",
+        "scopeAndLimits": [
+          "Risk Ranking",
+          "절대 파손수명 판단 불가"
+        ],
+        "validationAndReuse": [
+          "CoR 결과와 평가 피드백 연결 필요"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-04",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "methodology-warpage-relative-comparison",
+      "type": "방법론",
+      "title": "적층 구조 Warpage 상대 비교 방법론",
+      "domain": "deformation",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "방법론 후보",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-20",
+      "updatedAt": "2026-07-03",
+      "tags": [
+        "공정 연계",
+        "소재/물성 연계",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "연구",
+        "설계",
+        "공정",
+        "CTO"
+      ],
+      "aliases": [
+        "Warpage",
+        "휨 변형",
+        "상대 비교"
+      ],
+      "summary": "적층 구조의 물성·공정조건 변화가 변형 경향에 미치는 영향을 상대 비교하는 방법론 후보입니다.",
+      "useCase": "절대 변형량 예측보다 설계안·공정안의 상대 우선순위를 검토할 때 사용합니다.",
+      "contents": "기술 원리, 입력조건, 비교 절차, 결과 판단기준, 적용범위와 한계",
+      "sourceIds": [],
+      "links": [
+        {
+          "label": "방법론 초안",
+          "href": "#",
+          "type": "방법론",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "",
+        "outcome": ""
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "problemAndPurpose": "적층 구조의 설계·공정안별 변형 경향 비교",
+        "technicalPrinciples": "물성·두께·공정조건 변화에 따른 상대 변형 민감도 비교",
+        "inputsAndPrerequisites": [
+          "후보 구조",
+          "주요 물성 범위",
+          "공정·경계조건"
+        ],
+        "standardProcedure": "기준안 설정 후 동일 조건에서 후보안과 민감도를 비교",
+        "resultsAndCriteria": "변형량과 취약 위치의 상대 순위를 판단",
+        "scopeAndLimits": [
+          "상대 비교 중심",
+          "절대값은 별도 검증 필요"
+        ],
+        "validationAndReuse": [
+          "샘플 BP와 연결"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-03",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "cor-delamination",
+      "type": "CoR",
+      "title": "계면 박리 기술 Gap CoR",
+      "domain": "delamination",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "제안",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-24",
+      "updatedAt": "2026-07-02",
+      "tags": [
+        "소재/물성 연계",
+        "고객/사업부 대응",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "연구",
+        "개발",
+        "품질",
+        "사업부",
+        "품질경영"
+      ],
+      "aliases": [
+        "계면 박리 CoR",
+        "Delamination 과제"
+      ],
+      "summary": "계면 취약조건을 구조적으로 설명하기 위해 물성·실험·모델 검증 Gap을 과제화한 CoR 제안입니다.",
+      "useCase": "반복되는 박리 문제를 개별 요청이 아닌 선행 검증과제로 정의할 때 참고합니다.",
+      "contents": "발굴 배경, 기술 Gap, 성공기준, 수행계획, 검증설계, 예상 산출물",
+      "sourceIds": [
+        "COR-DEMO-001"
+      ],
+      "links": [
+        {
+          "label": "CoR 제안서",
+          "href": "#",
+          "type": "CoR",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "적합 자산 없음",
+        "outcome": "기술 Gap 기록"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "backgroundAndGap": "계면 취약조건 설명을 위한 물성·검증체계 부족",
+        "objectiveAndSuccessCriteria": "박리 Risk Ranking과 검증조건 정립",
+        "scopeAndPlan": "물성 확보, 모델 개발, 실험 상관",
+        "validationDesign": "기준시편과 조건별 비교",
+        "progressDecisions": "제안 단계",
+        "resultAndJudgment": "결과 없음",
+        "outputsAndFollowUp": [
+          "기술보고서",
+          "방법론 후보"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-02",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "tool-manual-ai-search",
+      "type": "Tool Manual",
+      "title": "AI 기반 기술자산 검색·요약 가이드",
+      "domain": "other",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "작성 중",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-29",
+      "updatedAt": "2026-07-02",
+      "tags": [
+        "AI 연계",
+        "타 Domain 연계",
+        "교육/온보딩",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "AX"
+      ],
+      "aliases": [
+        "AI 검색",
+        "자산 요약",
+        "검색 Prompt"
+      ],
+      "summary": "기존 자산을 찾고 요약할 때 사용할 검색어와 결과 검증 순서를 정리한 가이드 샘플입니다.",
+      "useCase": "카드가 많아진 뒤 필요한 자산을 찾고 AI 요약을 원문과 대조할 때 사용합니다.",
+      "contents": "검색어 구성, 필터, 요약 입력, 보안 주의, 원문 검증",
+      "sourceIds": [],
+      "links": [
+        {
+          "label": "검색 가이드",
+          "href": "#",
+          "type": "Manual",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "교육·실습 활용",
+        "outcome": "Library 검색 교육"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "purposeAndOutput": "기술자산 검색과 근거 확인",
+        "prerequisites": [
+          "Library 접근",
+          "AI 사용 보안원칙"
+        ],
+        "procedure": "문제·판단 질문 검색 후 원문 대조",
+        "completionCheck": "관련 카드와 원문 근거 확인",
+        "errorsAndWarnings": [
+          "요약을 사실로 단정하지 않음"
+        ],
+        "versionsAndSources": [
+          "샘플 가이드"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-02",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "vd-request-thermal",
+      "type": "VD Request",
+      "title": "열유동-구조 연계 VD Request",
+      "domain": "thermal-flow",
+      "secondaryDomains": [
+        "deformation"
+      ],
+      "publicationStatus": "초안",
+      "status": "완료",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-28",
+      "updatedAt": "2026-07-01",
+      "tags": [
+        "AI 연계",
+        "타 Domain 연계",
+        "공정 연계",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "개발",
+        "공정",
+        "생산기술"
+      ],
+      "aliases": [
+        "온도장 전달",
+        "열구조 연계",
+        "Thermal mapping"
+      ],
+      "summary": "열유동 결과를 구조해석 입력으로 전환할 때 필요한 온도장, 시간축과 보수성 기준을 정리한 요청 샘플입니다.",
+      "useCase": "타 Domain 결과를 구조 판단으로 전환할 때 누락하기 쉬운 입력과 한계를 확인합니다.",
+      "contents": "요청 맥락, 입력 데이터, 전달 규칙, Mesh·시간축 변환, 결과와 한계",
+      "sourceIds": [
+        "VDR-DEMO-THERMAL"
+      ],
+      "links": [
+        {
+          "label": "VD Request 결과",
+          "href": "#",
+          "type": "요청",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "PRODUCES",
+          "targetId": "tool-manual-ai-search",
+          "note": "데이터 변환 확인절차 예시"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "적합 자산 없음",
+        "outcome": "후속 Manual 후보"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "context": "타 Domain 결과를 구조해석 입력으로 전환",
+        "primaryQuestion": "온도장과 시간축을 어떤 기준으로 전달할 것인가",
+        "inputsAndConstraints": [
+          "열유동 결과",
+          "서로 다른 Mesh와 시간축"
+        ],
+        "approach": "공간·시간 보간과 보수성 기준 비교",
+        "result": "전달 시 확인할 핵심 항목 정리",
+        "judgmentScope": "입력 변환 정합성",
+        "limitations": [
+          "절대 온도 예측의 검증은 별도"
+        ],
+        "followUp": [
+          "연계 Manual 후보"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-07-01",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "tool-manual-vibration",
+      "type": "Tool Manual",
+      "title": "진동 모드 검토 Tool Manual",
+      "domain": "vibration",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "검토 중",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-18",
+      "updatedAt": "2026-06-30",
+      "tags": [
+        "실험/평가 연계",
+        "교육/온보딩",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "개발",
+        "품질",
+        "CTO"
+      ],
+      "aliases": [
+        "Modal Manual",
+        "모드 해석 절차",
+        "시험 Matching"
+      ],
+      "summary": "모드 해석 세팅, 실험 모드 비교와 경계조건 민감도 확인 순서를 정리한 Tool Manual 샘플입니다.",
+      "useCase": "신규 인원이 진동 모델을 세팅하거나 기존 결과를 재현할 때 사용합니다.",
+      "contents": "입력 준비, 해석 실행, 정상 완료 확인, 실험 비교, 관련 오류 노하우",
+      "sourceIds": [],
+      "links": [
+        {
+          "label": "Tool Manual",
+          "href": "#",
+          "type": "Manual",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [
+        {
+          "type": "PRACTICED_BY",
+          "targetId": "education-fatigue",
+          "note": "샘플 관계"
+        }
+      ],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "교육·실습 활용",
+        "outcome": "온보딩"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "purposeAndOutput": "모드 해석과 시험 모드 비교",
+        "prerequisites": [
+          "모델",
+          "시험 결과",
+          "Tool 접근"
+        ],
+        "procedure": "입력 확인, 실행, 모드 비교",
+        "completionCheck": "정상 종료와 모드 형상 확인",
+        "errorsAndWarnings": [
+          "경계조건 민감도 확인"
+        ],
+        "versionsAndSources": [
+          "샘플 버전"
+        ]
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-06-30",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    },
+    {
+      "schemaVersion": "0.1",
+      "id": "education-fatigue",
+      "type": "교육자료",
+      "title": "열사이클 피로 기본 교육자료",
+      "domain": "fatigue",
+      "secondaryDomains": [],
+      "publicationStatus": "초안",
+      "status": "보완 필요",
+      "owner": "샘플 담당자",
+      "registrant": "샘플 등록자",
+      "reviewer": "",
+      "createdAt": "2026-06-10",
+      "updatedAt": "2026-06-27",
+      "tags": [
+        "신뢰성 연계",
+        "소재/물성 연계",
+        "교육/온보딩",
+        "샘플 데이터"
+      ],
+      "contexts": [
+        "개발",
+        "품질",
+        "CTO"
+      ],
+      "aliases": [
+        "Fatigue 교육",
+        "열사이클 입문",
+        "피로 실습"
+      ],
+      "summary": "피로수명 결과를 절대값이 아니라 조건별 상대 비교와 한계 표시 관점에서 학습하는 자료입니다.",
+      "useCase": "기초 교육과 방법론 학습 전에 피로 입력과 결과 해석의 주의점을 확인합니다.",
+      "contents": "학습목표, 피로 기본개념, 열사이클 조건, 물성입력, 결과해석, 확인문제",
+      "sourceIds": [],
+      "links": [
+        {
+          "label": "교육자료",
+          "href": "#",
+          "type": "교육자료",
+          "status": "확인 필요"
+        }
+      ],
+      "relations": [],
+      "searchReuse": {
+        "performed": true,
+        "foundAssetIds": [],
+        "usageType": "교육·실습 활용",
+        "outcome": "기초 교육"
+      },
+      "aiAssistance": {
+        "externalStructured": false,
+        "internalClineStructured": false,
+        "humanConfirmed": true
+      },
+      "content": {
+        "learningObjectives": [
+          "상대 비교와 절대 수명 판단을 구분한다"
+        ],
+        "audienceAndPrerequisites": "Simulation 기초 이해",
+        "outline": "피로 개념, 입력, 결과 해석",
+        "activities": "읽기와 사례 토론",
+        "completionCriteria": "결과 해석의 한계를 설명",
+        "sourcesAndVersion": "샘플 교육자료"
+      },
+      "changeLog": [
+        {
+          "changedAt": "2026-06-27",
+          "changedBy": "샘플 등록자",
+          "changeType": "생성",
+          "reason": "화면 샘플"
+        }
+      ],
+      "demo": true
+    }
+  ]
+};

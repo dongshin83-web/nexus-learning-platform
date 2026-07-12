@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library | 우리팀 기술자산화 Hub</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="team_technical_assets_boxicons.css">
     <link rel="stylesheet" href="team_technical_assets.css">
 </head>
 <body data-page="library">
@@ -16,7 +13,7 @@
             <span class="brand-mark"><i class="bx bx-search"></i></span>
             <span>
                 <strong>Library</strong>
-                <span>BP, CoR, 보고서, 매뉴얼, 교육자료</span>
+                <span>방법론, 성과, 업무, 실행·학습자료</span>
             </span>
         </a>
         <nav class="topnav" aria-label="기술자산화 페이지">
@@ -28,78 +25,102 @@
         </nav>
     </header>
 
-    <main>
-        <section class="hero container">
-            <div class="hero-main">
-                <span class="eyebrow"><i class="bx bx-folder-open"></i> Document and Asset Library</span>
-                <h1>기술 자료 검색</h1>
-                <p class="hero-copy">
-                    BP, CoR 제안서/보고서, VD Request 결과, Tool Manual, 교육 자료를 내부 링크로 연결합니다.
-                </p>
+    <main class="library-page">
+        <section class="library-heading container" aria-labelledby="library-title">
+            <div>
+                <span class="page-kicker">Technical Asset Library</span>
+                <h1 id="library-title">기술자산 Library</h1>
+                <p>문제와 판단 질문에서 시작해 검증 근거, 적용 이력과 실행자료를 찾습니다.</p>
             </div>
+            <dl class="library-stats" aria-label="Library 현황">
+                <div>
+                    <dt>전체</dt>
+                    <dd id="library-total-count">0</dd>
+                </div>
+                <div>
+                    <dt>게시</dt>
+                    <dd id="library-published-count">0</dd>
+                </div>
+                <div>
+                    <dt>재사용 자산</dt>
+                    <dd id="library-reused-count">0</dd>
+                </div>
+            </dl>
         </section>
 
-        <section class="section container">
-            <div class="section-head">
-                <div>
-                    <h2>자료 유형</h2>
-                    <p>자료 유형별로 목적이 다르기 때문에 먼저 분류를 보여주고, 그다음 검색합니다.</p>
-                </div>
-            </div>
-            <div class="guide-grid" id="type-summary"></div>
-        </section>
-
-        <section class="section container">
-            <div class="section-head">
-                <div>
-                    <h2>자료 검색</h2>
-                    <p>자료 유형, 기술영역, 상태, 연계 태그로 내부 링크를 찾습니다.</p>
-                </div>
-                <button class="btn btn-secondary" type="button" id="reset-filters"><i class="bx bx-refresh"></i> 필터 초기화</button>
-            </div>
-
-            <div class="panel">
-                <div class="filters">
-                    <div class="field">
-                        <label for="search-input">키워드 검색</label>
+        <section class="library-workspace container" aria-label="기술자산 검색과 결과">
+            <div class="library-toolbar" id="library-toolbar">
+                <div class="toolbar-primary">
+                    <div class="field search-field">
+                        <label for="search-input">문제·판단 질문 검색</label>
                         <div class="input-wrap">
                             <i class="bx bx-search"></i>
-                            <input id="search-input" type="search" placeholder="예: CoR 제안서, VD Request, Tool Manual, 박리, 교육">
+                            <input id="search-input" type="search" autocomplete="off" placeholder="예: 충격 설계안 비교, 접촉 수렴, 계면 물성">
                         </div>
                     </div>
-                    <div class="field">
+                    <div class="field compact-field type-filter-field">
                         <label for="type-filter">자료 유형</label>
                         <select id="type-filter"></select>
                     </div>
-                    <div class="field">
-                        <label for="status-filter">상태</label>
-                        <select id="status-filter"></select>
+                    <div class="field compact-field scope-filter-field">
+                        <label for="publication-scope-filter">게시 범위</label>
+                        <select id="publication-scope-filter"></select>
                     </div>
-                    <div class="field">
-                        <label for="link-filter">연계</label>
-                        <select id="link-filter"></select>
+                    <div class="field compact-field sort-filter-field">
+                        <label for="sort-filter">정렬</label>
+                        <select id="sort-filter">
+                            <option value="relevance">관련도순</option>
+                            <option value="updated">최근 수정순</option>
+                            <option value="owner">담당자순</option>
+                        </select>
                     </div>
+                    <button class="mobile-filter-toggle" type="button" id="toggle-mobile-filters" aria-controls="library-toolbar" aria-expanded="false"><i class="bx bx-filter-alt"></i><span>필터 열기</span></button>
+                    <button class="icon-button reset-button" type="button" id="reset-filters" aria-label="필터 초기화" title="필터 초기화"><i class="bx bx-refresh"></i></button>
                 </div>
-                <div class="chips" id="domain-chips" aria-label="기술영역 필터"></div>
-                <div class="subchips" id="tag-chips" aria-label="보조 태그 필터"></div>
+
+                <div class="filter-row">
+                    <span class="filter-label">기술영역</span>
+                    <div class="library-filter-strip" id="domain-chips" aria-label="기술영역 필터"></div>
+                </div>
+                <div class="filter-row">
+                    <span class="filter-label">업무 단계</span>
+                    <div class="library-filter-strip" id="stage-chips" aria-label="업무 단계 필터"></div>
+                </div>
+                <div class="filter-row">
+                    <span class="filter-label">대응 대상</span>
+                    <div class="library-filter-strip" id="target-chips" aria-label="대응 대상 필터"></div>
+                </div>
             </div>
 
-            <div class="main-grid" style="margin-top: 1rem;">
-                <div class="asset-list" id="asset-list"></div>
-                <aside class="detail-panel" id="detail-panel" aria-live="polite">
+            <div class="result-bar" aria-live="polite">
+                <div><strong id="result-count">0</strong><span>개 결과</span></div>
+                <span id="result-context">최근 수정순</span>
+            </div>
+
+            <div class="library-main-grid">
+                <section class="result-pane" aria-label="검색 결과 목록">
+                    <div class="asset-list" id="asset-list"></div>
+                </section>
+                <aside class="detail-panel" id="detail-panel" aria-live="polite" aria-label="선택한 기술자산 미리보기">
+                    <button class="icon-button detail-close" type="button" id="close-detail" aria-label="상세 닫기" title="상세 닫기"><i class="bx bx-x"></i></button>
                     <div class="detail-empty">
-                        <strong>자료를 선택하세요.</strong>
-                        <p>왼쪽 카드에서 자료를 누르면 활용 목적, 포함 내용, 내부 링크 placeholder를 확인할 수 있습니다.</p>
+                        <strong>자산을 선택하세요.</strong>
+                        <p>검색 결과를 선택하면 활용 상황과 핵심 판단 정보를 미리 볼 수 있습니다.</p>
                     </div>
                 </aside>
             </div>
+            <div class="detail-backdrop" id="detail-backdrop" aria-hidden="true"></div>
+            <dialog class="full-detail-dialog" id="full-detail-dialog" aria-labelledby="full-detail-title">
+                <div id="full-detail-content"></div>
+            </dialog>
         </section>
     </main>
 
     <footer class="footer container">
-        <span>Library data lives in team_technical_assets.js. Replace sample links in the internal environment.</span>
+        <span>현재 화면은 기능 검증용 샘플 데이터를 포함합니다.</span>
     </footer>
 
+    <script src="team_technical_assets_data.js"></script>
     <script src="team_technical_assets.js"></script>
 </body>
 </html>

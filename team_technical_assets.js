@@ -8,15 +8,26 @@ const technologyDomains = [
     { id: "other", label: "07. 기타", description: "복합 Domain, AI/자동화, 공통 기준, 교육/운영 자산" }
 ];
 
-const auxiliaryTags = [
-    "AI 연계",
-    "타 Domain 연계",
-    "공정 연계",
-    "신뢰성 연계",
-    "소재/물성 연계",
-    "실험/평가 연계",
-    "고객/사업부 대응",
-    "교육/온보딩"
+const contextOptions = [
+    { value: "연구", group: "업무 단계", description: "원리 규명, 가능성 검토, 방법론·물성 개발" },
+    { value: "설계", group: "업무 단계", description: "구조·치수·설계안 비교와 최적화 판단" },
+    { value: "개발", group: "업무 단계", description: "제품 개발 과제, 검증과 개발 일정 의사결정" },
+    { value: "공정", group: "업무 단계", description: "공정 조건, Recipe와 Process Window 판단" },
+    { value: "제조", group: "업무 단계", description: "양산 라인, 설비, 생산성·수율 판단" },
+    { value: "품질", group: "업무 단계", description: "불량, 신뢰성, 품질 기준과 판정" },
+    { value: "고객", group: "대응 대상", description: "외부 고객 설명, 협의와 대응" },
+    { value: "사업부", group: "대응 대상", description: "사내 사업부 요청과 의사결정 대응" },
+    { value: "CTO", group: "대응 대상", description: "CTO 조직의 기술 판단과 연구개발 의사결정 대응" },
+    { value: "AX", group: "대응 대상", description: "AX 과제와 데이터·AI 활용 의사결정 대응" },
+    { value: "품질경영", group: "대응 대상", description: "품질 기준, 불량과 신뢰성 판단 대응" },
+    { value: "생산기술", group: "대응 대상", description: "공정, 설비와 양산 기술 판단 대응" }
+];
+
+const publicationScopeOptions = [
+    { value: "published", label: "게시 자료만", statuses: ["게시"] },
+    { value: "review", label: "검토 중 포함", statuses: ["게시", "검토 중"] },
+    { value: "draft", label: "초안까지 포함", statuses: ["게시", "검토 중", "초안"] },
+    { value: "working", label: "전체 작업 자료", statuses: ["게시", "검토 중", "초안", "개정 필요"] }
 ];
 
 const simulationLevels = [
@@ -270,118 +281,58 @@ const methodologyGroups = [
 
 const statusMeta = {
     "초안": { className: "draft", icon: "bx bx-edit-alt" },
+    "방법론 후보": { className: "draft", icon: "bx bx-git-branch" },
+    "BP 후보": { className: "draft", icon: "bx bx-star" },
+    "제안": { className: "draft", icon: "bx bx-bulb" },
+    "작성 중": { className: "draft", icon: "bx bx-pencil" },
     "작성중": { className: "draft", icon: "bx bx-pencil" },
+    "수행 중": { className: "review", icon: "bx bx-run" },
+    "선정·계획": { className: "review", icon: "bx bx-list-check" },
+    "검토 중": { className: "review", icon: "bx bx-search-alt" },
     "검토중": { className: "review", icon: "bx bx-search-alt" },
+    "게시": { className: "ready", icon: "bx bx-check-circle" },
+    "등록 완료": { className: "ready", icon: "bx bx-check-circle" },
     "등록완료": { className: "ready", icon: "bx bx-check-circle" },
-    "보완필요": { className: "need", icon: "bx bx-error-circle" }
+    "정식 방법론": { className: "ready", icon: "bx bx-badge-check" },
+    "BP": { className: "ready", icon: "bx bx-star" },
+    "완료": { className: "ready", icon: "bx bx-check-circle" },
+    "검토 완료": { className: "ready", icon: "bx bx-check-circle" },
+    "보완 필요": { className: "need", icon: "bx bx-error-circle" },
+    "보완필요": { className: "need", icon: "bx bx-error-circle" },
+    "개정 필요": { className: "need", icon: "bx bx-revision" },
+    "보류": { className: "need", icon: "bx bx-pause-circle" },
+    "취소": { className: "need", icon: "bx bx-x-circle" },
+    "중단": { className: "need", icon: "bx bx-stop-circle" },
+    "미선정": { className: "need", icon: "bx bx-minus-circle" },
+    "폐기": { className: "need", icon: "bx bx-archive" }
 };
 
-const libraryItems = [
-    {
-        id: "bp-deformation-warpage",
-        title: "박막 적층 구조 변형 예측 BP",
-        type: "BP",
-        domain: "deformation",
-        status: "등록완료",
-        owner: "1파트",
-        tags: ["공정 연계", "소재/물성 연계", "교육/온보딩"],
-        summary: "공정 조건 변경 전 변형 리스크를 비교하고 허용 가능한 설계/공정 선택지를 좁힌 대표 사례입니다.",
-        useCase: "유사 적층 구조 검토, 변형량 상대 비교, 물성 민감도 검토를 시작할 때 참고합니다.",
-        contents: "문제 정의, 모델링 기준, 물성/경계조건, 결과 해석, 의사결정 반영, 재사용 조건",
-        links: [{ label: "BP 문서", href: "#" }, { label: "모델 폴더", href: "#" }, { label: "검토 코멘트", href: "#" }]
-    },
-    {
-        id: "cor-proposal-delamination",
-        title: "계면 박리 CoR 과제 제안서",
-        type: "CoR 제안서",
-        domain: "delamination",
-        status: "검토중",
-        owner: "2파트",
-        tags: ["소재/물성 연계", "고객/사업부 대응"],
-        summary: "계면 취약 조건을 구조적으로 설명하기 위해 CoR 과제로 제안한 배경, 범위, 기대 산출물을 담습니다.",
-        useCase: "문제 정의가 아직 불명확한 박리 이슈를 과제화할 때 제안서 구조와 질문을 참고합니다.",
-        contents: "Pain Point, 과제 범위, 필요한 물성/실험 데이터, 예상 모델링 접근, 판단 기준 후보",
-        links: [{ label: "제안서", href: "#" }, { label: "관련 회의록", href: "#" }]
-    },
-    {
-        id: "cor-report-impact",
-        title: "Drop 충격 취약부 CoR 결과 보고서",
-        type: "CoR 보고서",
-        domain: "impact",
-        status: "작성중",
-        owner: "3파트",
-        tags: ["신뢰성 연계", "실험/평가 연계", "고객/사업부 대응"],
-        summary: "충격 조건별 취약부와 설계안 차이를 비교하고 평가 전 검토 우선순위를 정리한 보고서입니다.",
-        useCase: "충격 관련 요청이 들어왔을 때 기존 조건, 비교 항목, 결과 해석 프레임을 빠르게 확인합니다.",
-        contents: "CoR 범위, 해석 조건, 취약부 비교, 실험/평가 연결, 권고안, 후속 과제",
-        links: [{ label: "결과 보고서", href: "#" }, { label: "결과 비교표", href: "#" }]
-    },
-    {
-        id: "vd-request-thermal",
-        title: "열유동-구조 연계 VD Request 결과",
-        type: "VD Request 결과",
-        domain: "thermal-flow",
-        status: "초안",
-        owner: "공통",
-        tags: ["AI 연계", "타 Domain 연계", "공정 연계"],
-        summary: "열유동 결과를 구조 해석 입력으로 전환할 때 필요한 온도장, 시간축, 보수성 기준을 정리합니다.",
-        useCase: "다른 Domain 결과를 받아 구조 판단으로 전환할 때 누락하기 쉬운 확인 항목을 점검합니다.",
-        contents: "요청 배경, 입력 데이터, 전달 규칙, mesh/시간축 변환, 한계와 주의점",
-        links: [{ label: "VD Request 결과", href: "#" }, { label: "데이터 변환 예시", href: "#" }]
-    },
-    {
-        id: "tool-manual-vibration",
-        title: "진동 모드 검토 Tool Manual",
-        type: "Tool Manual",
-        domain: "vibration",
-        status: "검토중",
-        owner: "1파트",
-        tags: ["실험/평가 연계", "교육/온보딩"],
-        summary: "모드 해석 세팅, 실험 모드 비교, 경계조건 민감도 검토 순서를 정리한 도구 매뉴얼입니다.",
-        useCase: "신규 인원이 진동 모델을 처음 세팅하거나 기존 결과를 재현할 때 사용합니다.",
-        contents: "입력 파일 준비, 해석 실행, 결과 확인, 실험 비교, 자주 틀리는 설정",
-        links: [{ label: "Tool Manual", href: "#" }, { label: "예제 모델", href: "#" }]
-    },
-    {
-        id: "training-fatigue",
-        title: "열사이클 피로 기본 교육 자료",
-        type: "교육자료",
-        domain: "fatigue",
-        status: "보완필요",
-        owner: "2파트",
-        tags: ["신뢰성 연계", "소재/물성 연계", "교육/온보딩"],
-        summary: "피로 수명 검토를 절대값 예측이 아니라 조건별 상대 비교와 한계 표시 관점에서 학습하는 자료입니다.",
-        useCase: "팀 교육 과정 전후로 기본 개념, 입력값, 결과 해석의 주의점을 확인합니다.",
-        contents: "피로 기본 개념, 열사이클 조건, 물성 입력, 손상 가정, 결과 해석 예제",
-        links: [{ label: "교육 자료", href: "#" }, { label: "연습 문제", href: "#" }]
-    },
-    {
-        id: "manual-ai-search",
-        title: "AI 기반 기술자산 검색/요약 가이드",
-        type: "Tool Manual",
-        domain: "other",
-        status: "초안",
-        owner: "공통",
-        tags: ["AI 연계", "타 Domain 연계", "교육/온보딩"],
-        summary: "기존 BP, CoR 보고서, Tool Manual을 빠르게 찾고 요약할 때 사용할 검색 키워드와 검증 기준입니다.",
-        useCase: "내부 링크가 많아진 뒤에도 필요한 자산을 찾고, 요약 결과를 그대로 믿지 않도록 검증합니다.",
-        contents: "검색 키워드 규칙, 요약 프롬프트, 보안 주의, 결과 검증 체크리스트",
-        links: [{ label: "검색 가이드", href: "#" }, { label: "요약 예시", href: "#" }]
-    },
-    {
-        id: "vd-request-other",
-        title: "복합 Domain VD Request 결과 정리",
-        type: "VD Request 결과",
-        domain: "other",
-        status: "초안",
-        owner: "공통",
-        tags: ["타 Domain 연계", "고객/사업부 대응"],
-        summary: "여러 기술영역이 걸친 요청 결과를 한 기술 Map에 억지로 넣지 않고 복합 과제로 기록합니다.",
-        useCase: "기술영역이 애매한 요청을 분류하거나, 타 Domain과의 협업 흔적을 남길 때 사용합니다.",
-        contents: "요청 배경, 관련 Domain, 사용 데이터, 의사결정 질문, 후속 연결",
-        links: [{ label: "결과 정리", href: "#" }, { label: "관련 자료", href: "#" }]
-    }
-];
+const publicationStatusMeta = {
+    "초안": { className: "draft", icon: "bx bx-edit-alt" },
+    "검토 중": { className: "review", icon: "bx bx-search-alt" },
+    "게시": { className: "ready", icon: "bx bx-check-circle" },
+    "개정 필요": { className: "need", icon: "bx bx-revision" },
+    "폐기": { className: "need", icon: "bx bx-archive" }
+};
+
+const libraryItems = Array.isArray(window.TECHNICAL_ASSET_LIBRARY?.cards)
+    ? window.TECHNICAL_ASSET_LIBRARY.cards
+    : [];
+const reuseRelationTypes = new Set(["USES", "REFERENCES", "VALIDATES", "VALIDATED_BY", "DERIVED_FROM", "DOCUMENTS", "BASED_ON"]);
+const incomingReuseCountById = new Map(libraryItems.map((item) => [item.id, 0]));
+libraryItems.forEach((candidate) => {
+    const reusedIds = new Set([
+        ...(candidate.searchReuse?.foundAssetIds ?? []),
+        ...(candidate.relations ?? [])
+            .filter((relation) => reuseRelationTypes.has(relation.type))
+            .map((relation) => relation.targetId)
+    ]);
+    reusedIds.forEach((targetId) => {
+        if (targetId !== candidate.id && incomingReuseCountById.has(targetId)) {
+            incomingReuseCountById.set(targetId, incomingReuseCountById.get(targetId) + 1);
+        }
+    });
+});
 
 const techTreeStages = [
     {
@@ -464,11 +415,182 @@ const cultureRecords = [
 ];
 
 const domainById = Object.fromEntries(technologyDomains.map((domain) => [domain.id, domain]));
-const filters = { search: "", domain: "all", tag: "all", type: "all", status: "all", link: "all" };
+const libraryTypeOrder = ["방법론", "BP", "VD Request", "CoR", "기술보고서", "노하우", "Tool Manual", "교육자료"];
+const workflowStageOptions = contextOptions.filter((context) => context.group === "업무 단계");
+const responseTargetOptions = contextOptions.filter((context) => context.group === "대응 대상");
+const publicationScopeByValue = Object.fromEntries(publicationScopeOptions.map((scope) => [scope.value, scope]));
+const filters = {
+    search: "",
+    domains: new Set(),
+    stages: new Set(),
+    targets: new Set(),
+    type: "all",
+    publicationScope: "working",
+    sort: "relevance"
+};
+const libraryBatchSize = 60;
+const libraryContentLabels = {
+    context: "요청 맥락",
+    primaryQuestion: "판단 질문",
+    inputsAndConstraints: "입력·제약",
+    approach: "대응 접근",
+    result: "결과",
+    judgmentScope: "판단 가능 범위",
+    limitations: "한계",
+    followUp: "후속조치",
+    problemAndPurpose: "문제·목적",
+    technicalPrinciples: "기술 원리",
+    inputsAndPrerequisites: "입력·사전조건",
+    standardProcedure: "표준 절차",
+    resultsAndCriteria: "결과·판단기준",
+    scopeAndLimits: "적용범위·한계",
+    validationAndReuse: "검증·재사용",
+    businessContext: "사업 맥락",
+    simulationResponse: "Simulation 대응",
+    businessFeedback: "사업부 피드백",
+    businessImpact: "경영성과",
+    reproductionConditions: "재현 조건",
+    evidence: "근거",
+    backgroundAndGap: "기술 Gap",
+    objectiveAndSuccessCriteria: "목표·성공기준",
+    scopeAndPlan: "범위·계획",
+    validationDesign: "검증 설계",
+    progressDecisions: "수행 중 판단",
+    resultAndJudgment: "결과·판단",
+    outputsAndFollowUp: "산출물·후속조치",
+    questionAndPurpose: "기술 질문·목적",
+    scopeAndConditions: "검토 범위·조건",
+    methodAndEvidence: "분석 방법·근거",
+    findingsAndConclusion: "발견·결론",
+    validConditionsAndDecisions: "유효조건·판단",
+    officialSource: "공식 원본",
+    symptomAndConditions: "증상·조건",
+    causeAndDiagnosis: "원인·진단",
+    resolution: "해결 절차",
+    effectAndEvidence: "효과·근거",
+    risksAndRecovery: "위험·복구",
+    versionsAndSources: "버전·출처",
+    purposeAndOutput: "작업 목적·결과물",
+    prerequisites: "사전 준비",
+    procedure: "실행 절차",
+    completionCheck: "완료 확인",
+    errorsAndWarnings: "오류·주의사항",
+    learningObjectives: "학습목표",
+    audienceAndPrerequisites: "대상·사전지식",
+    outline: "학습 구성",
+    activities: "학습활동",
+    completionCriteria: "이해 확인",
+    sourcesAndVersion: "출처·버전"
+};
+const previewFieldKeysByType = {
+    "VD Request": ["primaryQuestion", "result", "judgmentScope", "limitations"],
+    "CoR": ["objectiveAndSuccessCriteria", "progressDecisions", "resultAndJudgment", "outputsAndFollowUp"],
+    "BP": ["businessContext", "businessFeedback", "businessImpact", "reproductionConditions"],
+    "방법론": ["problemAndPurpose", "resultsAndCriteria", "scopeAndLimits", "validationAndReuse"],
+    "기술보고서": ["questionAndPurpose", "findingsAndConclusion", "validConditionsAndDecisions", "limitations"],
+    "노하우": ["symptomAndConditions", "resolution", "effectAndEvidence", "risksAndRecovery"],
+    "Tool Manual": ["purposeAndOutput", "procedure", "completionCheck", "errorsAndWarnings"],
+    "교육자료": ["learningObjectives", "audienceAndPrerequisites", "outline", "completionCriteria"]
+};
 let selectedItemId = null;
+let detailFocusTimer = null;
+let visibleLibraryLimit = libraryBatchSize;
+let librarySearchTimer = null;
+let fullDetailReturnFocus = null;
 
+const landingMethodGrowth = [
+    {
+        method: "박막 적층 Warpage 예측",
+        domain: "01. 변형",
+        from: "L2",
+        to: "L3",
+        contributor: "김OO",
+        evidence: "BP 기반으로 물성 민감도와 공정 조건 비교 기준을 정리",
+        basis: "박막 적층 구조 변형 예측 BP",
+        next: "제품군 교차 검증 데이터가 보강되면 L4 진입 후보"
+    },
+    {
+        method: "Set Drop/Tumble Drop Platform",
+        domain: "03. 충격",
+        from: "L3",
+        to: "L4",
+        contributor: "이OO",
+        evidence: "VD Request 결과와 평가 피드백을 연결해 취약부 ranking 재현성을 확보",
+        basis: "Drop 충격 취약부 CoR 결과 보고서",
+        next: "여러 제품군의 feedback loop를 축적하면 L5 후보"
+    },
+    {
+        method: "Modal/실험 Matching",
+        domain: "06. 진동",
+        from: "L2",
+        to: "L3",
+        contributor: "박OO",
+        evidence: "시험 모드 비교 기준과 경계조건 체크리스트를 Tool Manual로 정리",
+        basis: "진동 모드 검토 Tool Manual",
+        next: "반복 케이스 확보 후 L4 검증 기준으로 확장"
+    }
+];
+
+const landingContributions = [
+    {
+        kind: "신규 등록",
+        title: "계면 박리 CoR 과제 제안서",
+        contributor: "최OO",
+        meta: "CoR 제안서 · 02. 박리",
+        relation: "기반 자산: Interface 박리 Risk Ranking",
+        date: "2026.07"
+    },
+    {
+        kind: "재사용",
+        title: "변형 예측 BP를 신규 CoR 착수 자료로 활용",
+        contributor: "정OO",
+        meta: "BP → CoR · 01. 변형",
+        relation: "관계 유형: 참고 / 확장",
+        date: "2026.07"
+    },
+    {
+        kind: "리뷰 완료",
+        title: "진동 모드 검토 Tool Manual",
+        contributor: "한OO",
+        meta: "Tool Manual · 06. 진동",
+        relation: "후속 활용: 온보딩 교육자료 후보",
+        date: "2026.06"
+    },
+    {
+        kind: "교육자료화",
+        title: "열유동-구조 연계 체크리스트 초안",
+        contributor: "윤OO",
+        meta: "VD Request 결과 · 04. 열유동",
+        relation: "관계 유형: 교육자료화",
+        date: "2026.06"
+    }
+];
+
+const landingReusedAssets = [
+    {
+        title: "박막 적층 구조 변형 예측 BP",
+        count: 5,
+        owner: "1파트",
+        relation: "후속 활용: Warpage L3 판단 기준, 신규 CoR 착수 자료",
+        note: "유사 구조 검토와 교육자료에서 반복 참고"
+    },
+    {
+        title: "Drop 충격 취약부 CoR 결과 보고서",
+        count: 4,
+        owner: "3파트",
+        relation: "후속 활용: 충격 방법론 L4 근거, 평가 조건 체크리스트",
+        note: "취약부 ranking과 평가 feedback loop 정리에 사용"
+    },
+    {
+        title: "진동 모드 검토 Tool Manual",
+        count: 3,
+        owner: "1파트",
+        relation: "후속 활용: 신규 담당자 온보딩, 리뷰 기준 정리",
+        note: "시험 matching 기준과 반복 설정 확인에 사용"
+    }
+];
 function getUniqueValues(key) {
-    return [...new Set(libraryItems.map((item) => item[key]))].sort((a, b) => a.localeCompare(b, "ko"));
+    return [...new Set(libraryItems.map((item) => item[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b, "ko"));
 }
 
 function makeOption(label, value) {
@@ -483,19 +605,206 @@ function setText(id, value) {
     if (node) node.textContent = value;
 }
 
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function flattenLibraryText(value) {
+    if (value === null || value === undefined) return "";
+    if (Array.isArray(value)) return value.map(flattenLibraryText).join(" ");
+    if (typeof value === "object") return Object.values(value).map(flattenLibraryText).join(" ");
+    return String(value);
+}
+
+function normalizeLibraryText(value) {
+    return String(value ?? "")
+        .normalize("NFKC")
+        .toLocaleLowerCase("ko")
+        .replace(/[^\p{L}\p{N}]+/gu, " ")
+        .trim();
+}
+
+function getDomainLabel(domainId) {
+    return domainById[domainId]?.label ?? domainId ?? "공통";
+}
+
+function getContextLabel(value) {
+    return contextOptions.find((context) => context.value === value)?.value ?? value;
+}
+
+function getResponsiblePerson(item) {
+    const owner = String(item.owner ?? "").trim();
+    if (owner && !(/파트$|팀$/.test(owner) || owner === "공통")) return owner;
+    return item.registrant || "담당자 미정";
+}
+
+function getTypeStatusLabel(type) {
+    if (type === "VD Request" || type === "CoR") return "업무 상태";
+    if (type === "방법론" || type === "BP") return "자산 자격";
+    return "검토 상태";
+}
+
+function getIncomingReuseCount(itemId) {
+    return incomingReuseCountById.get(itemId) ?? 0;
+}
+
+function getLibrarySearchScore(item, query) {
+    const normalizedQuery = normalizeLibraryText(query);
+    if (!normalizedQuery) return 0;
+
+    const terms = normalizedQuery.split(/\s+/).filter(Boolean);
+    const fields = {
+        id: normalizeLibraryText(item.id),
+        title: normalizeLibraryText(item.title),
+        summary: normalizeLibraryText(item.summary),
+        useCase: normalizeLibraryText(item.useCase),
+        contexts: normalizeLibraryText(flattenLibraryText(item.contexts)),
+        aliases: normalizeLibraryText(flattenLibraryText(item.aliases)),
+        tags: normalizeLibraryText(flattenLibraryText(item.tags)),
+        content: normalizeLibraryText(flattenLibraryText(item.content)),
+        relations: normalizeLibraryText(flattenLibraryText(item.relations))
+    };
+
+    if (fields.id === normalizedQuery) return 1000;
+    if (fields.title === normalizedQuery) return 900;
+
+    let score = 0;
+    let matchedTerms = 0;
+    terms.forEach((term) => {
+        let matched = false;
+        if (fields.title.includes(term)) { score += 40; matched = true; }
+        if (fields.aliases.includes(term)) { score += 26; matched = true; }
+        if (fields.contexts.includes(term)) { score += 22; matched = true; }
+        if (fields.tags.includes(term)) { score += 20; matched = true; }
+        if (fields.summary.includes(term)) { score += 16; matched = true; }
+        if (fields.useCase.includes(term)) { score += 12; matched = true; }
+        if (fields.content.includes(term)) { score += 8; matched = true; }
+        if (fields.relations.includes(term)) { score += 5; matched = true; }
+        if (matched) matchedTerms += 1;
+    });
+    if (terms.length > 1 && matchedTerms < Math.min(2, terms.length)) return 0;
+    if (matchedTerms === terms.length) score += 30;
+    return score;
+}
+
+function safeHref(value) {
+    const href = String(value ?? "").trim();
+    if (href === "#" || href.startsWith("/") || href.startsWith("./") || href.startsWith("../")) return href || "#";
+    try {
+        const url = new URL(href);
+        return ["http:", "https:"].includes(url.protocol) ? href : "#";
+    } catch {
+        return "#";
+    }
+}
+
+
+function renderLandingMetrics() {
+    setText("metric-new-assets", landingContributions.filter((item) => item.kind === "신규 등록" || item.kind === "교육자료화").length);
+    setText("metric-level-up", landingMethodGrowth.length);
+    setText("metric-reused", landingReusedAssets.reduce((sum, item) => sum + item.count, 0));
+    setText("metric-reviewed", landingContributions.filter((item) => item.kind === "리뷰 완료").length);
+}
+
+function renderLandingMethodGrowth() {
+    const wrap = document.getElementById("landing-method-growth");
+    if (!wrap) return;
+    wrap.innerHTML = landingMethodGrowth.map((item) => `
+        <article class="growth-card">
+            <header>
+                <span class="badge domain">${item.domain}</span>
+                <span class="badge ready"><i class="bx bx-user-check"></i>${item.contributor}</span>
+            </header>
+            <h3>${item.method}</h3>
+            <div class="level-transition">
+                <span class="level-chip level-${item.from.replace("L", "")}">${item.from}</span>
+                <i class="bx bx-right-arrow-alt"></i>
+                <span class="level-chip level-${item.to.replace("L", "")}">${item.to}</span>
+            </div>
+            <p>${item.evidence}</p>
+            <div class="relation-line"><span>기반 자산</span><strong>${item.basis}</strong></div>
+            <div class="relation-line"><span>다음 성장 포인트</span><strong>${item.next}</strong></div>
+        </article>
+    `).join("");
+}
+
+function renderLandingContributionFeed() {
+    const wrap = document.getElementById("landing-contribution-feed");
+    if (!wrap) return;
+    wrap.innerHTML = landingContributions.map((item) => `
+        <article class="feed-item">
+            <div>
+                <span class="badge review">${item.kind}</span>
+                <h3>${item.title}</h3>
+                <p>${item.meta}</p>
+                <strong>${item.relation}</strong>
+            </div>
+            <div class="feed-side">
+                <span>${item.date}</span>
+                <strong>${item.contributor}</strong>
+            </div>
+        </article>
+    `).join("");
+}
+
+function renderLandingReusedAssets() {
+    const wrap = document.getElementById("landing-reused-assets");
+    if (!wrap) return;
+    wrap.innerHTML = landingReusedAssets.map((item) => `
+        <article class="reuse-card">
+            <div class="reuse-count"><strong>${item.count}</strong><span>회 재사용</span></div>
+            <div>
+                <h3>${item.title}</h3>
+                <p>${item.note}</p>
+                <div class="relation-line"><span>Owner</span><strong>${item.owner}</strong></div>
+                <div class="relation-line"><span>관계</span><strong>${item.relation}</strong></div>
+            </div>
+        </article>
+    `).join("");
+}
+
+function renderLanding() {
+    renderLandingMetrics();
+    renderLandingMethodGrowth();
+    renderLandingContributionFeed();
+    renderLandingReusedAssets();
+}
 function renderMetrics() {
     setText("metric-total", libraryItems.length);
     setText("metric-domain", technologyDomains.length);
-    setText("metric-linked", libraryItems.filter((item) => item.tags.includes("AI 연계") || item.tags.includes("타 Domain 연계")).length);
+    setText("metric-linked", libraryItems.filter((item) => item.tags?.includes("AI 연계") || item.tags?.includes("타 Domain 연계")).length);
     setText("metric-stage", techTreeStages.length);
     setText("metric-culture", cultureRecords.length);
 }
 
-function createChip(label, isActive, onClick) {
+function alignActiveNavigation() {
+    if (!window.matchMedia("(max-width: 720px)").matches) return;
+    const nav = document.querySelector(".topnav");
+    const active = nav?.querySelector("a.active");
+    if (!nav || !active) return;
+    window.requestAnimationFrame(() => {
+        nav.scrollLeft = active.offsetLeft - ((nav.clientWidth - active.offsetWidth) / 2);
+    });
+}
+
+function createChip(label, isActive, onClick, count = null) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "chip";
-    button.textContent = label;
+    const labelNode = document.createElement("span");
+    labelNode.textContent = label;
+    button.appendChild(labelNode);
+    if (count !== null) {
+        const countNode = document.createElement("span");
+        countNode.className = "filter-count";
+        countNode.textContent = count;
+        button.appendChild(countNode);
+    }
     button.setAttribute("aria-pressed", String(isActive));
     button.addEventListener("click", onClick);
     return button;
@@ -509,58 +818,141 @@ function initSelect(id, values, allLabel) {
     values.forEach((value) => select.appendChild(makeOption(value, value)));
 }
 
-function getFilteredLibraryItems() {
-    const keyword = filters.search.trim().toLowerCase();
-    return libraryItems.filter((item) => {
-        const haystack = [
-            item.title,
-            item.type,
-            item.status,
-            item.owner,
-            domainById[item.domain]?.label,
-            item.summary,
-            item.useCase,
-            item.contents,
-            ...item.tags
-        ].join(" ").toLowerCase();
+function initPublicationScopeSelect() {
+    const select = document.getElementById("publication-scope-filter");
+    if (!select) return;
+    select.innerHTML = "";
+    publicationScopeOptions.forEach((scope) => select.appendChild(makeOption(scope.label, scope.value)));
+    select.value = filters.publicationScope;
+}
 
-        return (!keyword || haystack.includes(keyword))
-            && (filters.domain === "all" || item.domain === filters.domain)
-            && (filters.tag === "all" || item.tags.includes(filters.tag))
+function toggleSetValue(values, value) {
+    if (values.has(value)) values.delete(value);
+    else values.add(value);
+}
+
+function matchesSelectedContext(item, selectedValues) {
+    return selectedValues.size === 0 || item.contexts?.some((context) => selectedValues.has(context));
+}
+
+function getFacetBaseItems(excludedAxis) {
+    const keyword = filters.search.trim();
+    const publicationStatuses = publicationScopeByValue[filters.publicationScope]?.statuses ?? publicationScopeByValue.working.statuses;
+    return libraryItems.filter((item) => {
+        const score = getLibrarySearchScore(item, keyword);
+        return (!keyword || score > 0)
             && (filters.type === "all" || item.type === filters.type)
-            && (filters.status === "all" || item.status === filters.status)
-            && (filters.link === "all" || item.tags.includes(filters.link));
+            && publicationStatuses.includes(item.publicationStatus)
+            && (excludedAxis === "domains" || filters.domains.size === 0 || filters.domains.has(item.domain))
+            && (excludedAxis === "stages" || matchesSelectedContext(item, filters.stages))
+            && (excludedAxis === "targets" || matchesSelectedContext(item, filters.targets));
     });
+}
+
+function getFilteredLibraryItems() {
+    const keyword = filters.search.trim();
+    const publicationStatuses = publicationScopeByValue[filters.publicationScope]?.statuses ?? publicationScopeByValue.working.statuses;
+    return libraryItems
+        .map((item) => ({ item, score: getLibrarySearchScore(item, keyword) }))
+        .filter(({ item, score }) => {
+            return (!keyword || score > 0)
+                && (filters.domains.size === 0 || filters.domains.has(item.domain))
+                && matchesSelectedContext(item, filters.stages)
+                && matchesSelectedContext(item, filters.targets)
+                && (filters.type === "all" || item.type === filters.type)
+                && publicationStatuses.includes(item.publicationStatus);
+        })
+        .sort((a, b) => {
+            if (filters.sort === "owner") {
+                return getResponsiblePerson(a.item).localeCompare(getResponsiblePerson(b.item), "ko")
+                    || String(b.item.updatedAt).localeCompare(String(a.item.updatedAt));
+            }
+            if (filters.sort === "updated") return String(b.item.updatedAt).localeCompare(String(a.item.updatedAt));
+            if (keyword) return b.score - a.score || String(b.item.updatedAt).localeCompare(String(a.item.updatedAt));
+            return String(b.item.updatedAt).localeCompare(String(a.item.updatedAt));
+        })
+        .map(({ item }) => item);
 }
 
 function renderFilterChips() {
     const domainWrap = document.getElementById("domain-chips");
-    const tagWrap = document.getElementById("tag-chips");
-    if (!domainWrap || !tagWrap) return;
+    const stageWrap = document.getElementById("stage-chips");
+    const targetWrap = document.getElementById("target-chips");
+    if (!domainWrap || !stageWrap || !targetWrap) return;
+
+    const domainBaseItems = getFacetBaseItems("domains");
+    const stageBaseItems = getFacetBaseItems("stages");
+    const targetBaseItems = getFacetBaseItems("targets");
 
     domainWrap.innerHTML = "";
-    domainWrap.appendChild(createChip("전체", filters.domain === "all", () => {
-        filters.domain = "all";
+    domainWrap.appendChild(createChip("전체", filters.domains.size === 0, () => {
+        filters.domains.clear();
+        resetLibraryBatch();
         renderLibrary();
-    }));
+    }, domainBaseItems.length));
     technologyDomains.forEach((domain) => {
-        domainWrap.appendChild(createChip(domain.label, filters.domain === domain.id, () => {
-            filters.domain = domain.id;
+        const count = domainBaseItems.filter((item) => item.domain === domain.id).length;
+        const chip = createChip(domain.label, filters.domains.has(domain.id), () => {
+            toggleSetValue(filters.domains, domain.id);
+            resetLibraryBatch();
             renderLibrary();
-        }));
+        }, count);
+        chip.disabled = count === 0 && !filters.domains.has(domain.id);
+        domainWrap.appendChild(chip);
     });
 
-    tagWrap.innerHTML = "";
-    tagWrap.appendChild(createChip("태그 전체", filters.tag === "all", () => {
-        filters.tag = "all";
-        renderLibrary();
-    }));
-    auxiliaryTags.forEach((tag) => {
-        tagWrap.appendChild(createChip(tag, filters.tag === tag, () => {
-            filters.tag = tag;
+    [
+        { wrap: stageWrap, values: filters.stages, options: workflowStageOptions, baseItems: stageBaseItems },
+        { wrap: targetWrap, values: filters.targets, options: responseTargetOptions, baseItems: targetBaseItems }
+    ].forEach(({ wrap, values, options, baseItems }) => {
+        wrap.innerHTML = "";
+        wrap.appendChild(createChip("전체", values.size === 0, () => {
+            values.clear();
+            resetLibraryBatch();
             renderLibrary();
-        }));
+        }, baseItems.length));
+        options.forEach((context) => {
+            const count = baseItems.filter((item) => item.contexts?.includes(context.value)).length;
+            const chip = createChip(context.value, values.has(context.value), () => {
+                toggleSetValue(values, context.value);
+                resetLibraryBatch();
+                renderLibrary();
+            }, count);
+            chip.title = `${context.group}: ${context.description}${count ? "" : " (현재 조건의 카드 없음)"}`;
+            chip.disabled = count === 0 && !values.has(context.value);
+            wrap.appendChild(chip);
+        });
     });
+}
+
+function renderLibraryMetrics() {
+    setText("library-total-count", libraryItems.length);
+    setText("library-published-count", libraryItems.filter((item) => item.publicationStatus === "게시").length);
+    setText("library-reused-count", libraryItems.filter((item) => getIncomingReuseCount(item.id) > 0).length);
+}
+
+function getLibraryResultContext() {
+    const sortLabels = {
+        relevance: filters.search.trim() ? `“${filters.search.trim()}” 관련도순` : "최근 수정순",
+        updated: "최근 수정순",
+        owner: "담당자순"
+    };
+    const activeFilters = [];
+    if (filters.type !== "all") activeFilters.push(filters.type);
+    activeFilters.push(publicationScopeByValue[filters.publicationScope]?.label ?? "전체 작업 자료");
+    if (filters.domains.size) activeFilters.push([...filters.domains].map(getDomainLabel).join(", "));
+    if (filters.stages.size) activeFilters.push([...filters.stages].join(", "));
+    if (filters.targets.size) activeFilters.push([...filters.targets].join(", "));
+    return [sortLabels[filters.sort] ?? "최근 수정순", ...activeFilters].join(" · ");
+}
+
+function formatDisplayDate(value) {
+    return String(value || "-").replaceAll("-", ".");
+}
+
+function resetLibraryBatch() {
+    visibleLibraryLimit = libraryBatchSize;
+    selectedItemId = null;
 }
 
 function renderLibrary() {
@@ -569,12 +961,15 @@ function renderLibrary() {
     if (!list) return;
 
     const items = getFilteredLibraryItems();
+    setText("result-count", items.length);
+    setText("result-context", getLibraryResultContext());
     list.innerHTML = "";
 
     if (!items.length) {
         selectedItemId = null;
-        list.innerHTML = `<div class="detail-empty"><strong>조건에 맞는 자료가 없습니다.</strong><p>검색어 또는 필터를 줄여 다시 확인하세요.</p></div>`;
+        list.innerHTML = `<div class="empty-state"><i class="bx bx-search-alt"></i><strong>조건에 맞는 자료가 없습니다.</strong><p>검색어를 바꾸거나 선택한 필터를 줄여보세요.</p></div>`;
         renderDetail(null);
+        closeDetailDrawer(false);
         return;
     }
 
@@ -582,84 +977,357 @@ function renderLibrary() {
         selectedItemId = items[0].id;
     }
 
-    items.forEach((item) => {
-        const status = statusMeta[item.status] ?? statusMeta["초안"];
-        const card = document.createElement("article");
-        card.className = `asset-card${item.id === selectedItemId ? " active" : ""}`;
-        card.tabIndex = 0;
+    const selectedIndex = items.findIndex((item) => item.id === selectedItemId);
+    const firstBatch = items.slice(0, visibleLibraryLimit);
+    const visibleItems = selectedIndex >= visibleLibraryLimit
+        ? [items[selectedIndex], ...firstBatch]
+        : firstBatch;
+
+    visibleItems.forEach((item) => {
+        const publicationStatus = publicationStatusMeta[item.publicationStatus] ?? publicationStatusMeta["초안"];
+        const domainLabel = getDomainLabel(item.domain);
+        const reuseCount = getIncomingReuseCount(item.id);
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = `asset-row${item.id === selectedItemId ? " active" : ""}`;
+        card.dataset.itemId = item.id;
+        card.setAttribute("aria-pressed", String(item.id === selectedItemId));
+        card.setAttribute("aria-controls", "detail-panel");
         card.innerHTML = `
-            <div class="asset-top">
+            <div class="asset-row-top">
                 <div class="badge-row">
-                    <span class="badge domain">${domainById[item.domain].label}</span>
-                    <span class="badge">${item.type}</span>
+                    <span class="badge domain">${escapeHtml(domainLabel)}</span>
+                    <span class="badge">${escapeHtml(item.type)}</span>
+                    ${item.demo ? '<span class="badge draft">샘플</span>' : ""}
                 </div>
-                <span class="badge ${status.className}"><i class="${status.icon}"></i>${item.status}</span>
+                <span class="badge ${publicationStatus.className}"><i class="${publicationStatus.icon}"></i>${escapeHtml(item.publicationStatus)}</span>
             </div>
-            <h3>${item.title}</h3>
-            <p>${item.summary}</p>
-            <div class="badge-row" style="margin-top: 0.8rem;">${item.tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}</div>
-            <div class="asset-footer">
-                <span><i class="bx bx-user"></i> ${item.owner}</span>
-                <span>${item.links.length} links <i class="bx bx-link-external"></i></span>
+            <div class="asset-row-copy">
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.summary)}</p>
+            </div>
+            <div class="asset-row-footer">
+                <div class="asset-row-meta">
+                    <span><i class="bx bx-user"></i>${escapeHtml(getResponsiblePerson(item))}</span>
+                    <span><i class="bx bx-calendar"></i>${escapeHtml(formatDisplayDate(item.updatedAt))}</span>
+                </div>
+                <span class="reuse-indicator${reuseCount ? " reused" : ""}"><i class="bx bx-revision"></i>재사용 ${reuseCount}회</span>
             </div>
         `;
-        card.addEventListener("click", () => selectItem(item.id));
-        card.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                selectItem(item.id);
-            }
-        });
+        card.addEventListener("click", () => selectItem(item.id, true));
         list.appendChild(card);
     });
+
+    const renderedBatchCount = Math.min(visibleLibraryLimit, items.length);
+    if (renderedBatchCount < items.length) {
+        const remaining = items.length - renderedBatchCount;
+        const loadMore = document.createElement("button");
+        loadMore.type = "button";
+        loadMore.className = "load-more";
+        loadMore.innerHTML = `<i class="bx bx-chevron-down"></i><span>${escapeHtml(Math.min(libraryBatchSize, remaining))}개 더 보기</span><small>남은 ${escapeHtml(remaining)}개</small>`;
+        loadMore.addEventListener("click", () => {
+            visibleLibraryLimit += libraryBatchSize;
+            renderLibrary();
+        });
+        list.appendChild(loadMore);
+    }
 
     renderDetail(libraryItems.find((item) => item.id === selectedItemId));
 }
 
-function selectItem(itemId) {
+function isCompactLibraryView() {
+    return window.matchMedia("(max-width: 900px)").matches;
+}
+
+function openDetailDrawer() {
+    if (!isCompactLibraryView()) return;
+    const panel = document.getElementById("detail-panel");
+    panel?.setAttribute("role", "dialog");
+    panel?.setAttribute("aria-modal", "true");
+    document.body.classList.add("detail-open");
+    window.clearTimeout(detailFocusTimer);
+    detailFocusTimer = window.setTimeout(() => document.getElementById("close-detail")?.focus({ preventScroll: true }), 220);
+}
+
+function closeDetailDrawer(restoreFocus = true) {
+    window.clearTimeout(detailFocusTimer);
+    detailFocusTimer = null;
+    const panel = document.getElementById("detail-panel");
+    panel?.removeAttribute("role");
+    panel?.removeAttribute("aria-modal");
+    document.body.classList.remove("detail-open");
+    if (restoreFocus) {
+        document.querySelector('.asset-row[aria-pressed="true"]')?.focus({ preventScroll: true });
+    }
+}
+
+function setMobileFiltersOpen(isOpen) {
+    document.body.classList.toggle("mobile-filters-open", isOpen);
+    const toggle = document.getElementById("toggle-mobile-filters");
+    if (!toggle) return;
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    const label = toggle.querySelector("span");
+    if (label) label.textContent = isOpen ? "필터 닫기" : "필터 열기";
+}
+
+function resetLibraryFilters() {
+    window.clearTimeout(librarySearchTimer);
+    librarySearchTimer = null;
+    filters.search = "";
+    filters.domains.clear();
+    filters.stages.clear();
+    filters.targets.clear();
+    filters.type = "all";
+    filters.publicationScope = "working";
+    filters.sort = "relevance";
+    resetLibraryBatch();
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) searchInput.value = "";
+    const typeSelect = document.getElementById("type-filter");
+    if (typeSelect) typeSelect.value = "all";
+    const scopeSelect = document.getElementById("publication-scope-filter");
+    if (scopeSelect) scopeSelect.value = "working";
+    const sortSelect = document.getElementById("sort-filter");
+    if (sortSelect) sortSelect.value = "relevance";
+    setMobileFiltersOpen(false);
+}
+
+function selectRelatedItem(itemId, shouldOpenPreview = true) {
+    resetLibraryFilters();
     selectedItemId = itemId;
     renderLibrary();
+    if (shouldOpenPreview) openDetailDrawer();
+}
+
+function selectItem(itemId, shouldOpenDetail = false) {
+    selectedItemId = itemId;
+    renderLibrary();
+    if (shouldOpenDetail) openDetailDrawer();
+}
+
+function getLibraryContentEntries(item) {
+    return Object.entries(item.content ?? {})
+        .map(([key, value]) => {
+            const text = Array.isArray(value) ? value.join(" · ") : flattenLibraryText(value);
+            return { key, label: libraryContentLabels[key] ?? key, text: text.trim() };
+        })
+        .filter((entry) => entry.text);
+}
+
+function getPreviewContentEntries(item) {
+    const entries = getLibraryContentEntries(item);
+    const byKey = new Map(entries.map((entry) => [entry.key, entry]));
+    const preferred = (previewFieldKeysByType[item.type] ?? [])
+        .map((key) => byKey.get(key))
+        .filter(Boolean);
+    const remaining = entries.filter((entry) => !preferred.some((candidate) => candidate.key === entry.key));
+    return [...preferred, ...remaining].slice(0, 4);
+}
+
+function renderDetailFields(entries) {
+    return entries.map((entry) => `
+        <div class="detail-field">
+            <dt>${escapeHtml(entry.label)}</dt>
+            <dd>${escapeHtml(entry.text)}</dd>
+        </div>
+    `).join("");
 }
 
 function renderDetail(item) {
     const panel = document.getElementById("detail-panel");
     if (!panel) return;
     if (!item) {
-        panel.innerHTML = `<div class="detail-empty"><strong>자료를 선택하세요.</strong><p>왼쪽 카드에서 자료를 누르면 활용 목적, 포함 내용, 내부 링크 placeholder를 확인할 수 있습니다.</p></div>`;
+        panel.dataset.previewItemId = "";
+        panel.innerHTML = `
+            <button class="icon-button detail-close" type="button" id="close-detail" aria-label="미리보기 닫기" title="미리보기 닫기"><i class="bx bx-x"></i></button>
+            <div class="detail-empty"><strong>자료를 선택하세요.</strong><p>검색 결과를 선택하면 활용 상황과 핵심 판단 정보를 미리 볼 수 있습니다.</p></div>
+        `;
         return;
     }
 
-    const status = statusMeta[item.status] ?? statusMeta["초안"];
+    const publicationStatus = publicationStatusMeta[item.publicationStatus] ?? publicationStatusMeta["초안"];
+    const domainLabel = getDomainLabel(item.domain);
+    const sourceIds = item.sourceIds ?? [];
+    const previewEntries = getPreviewContentEntries(item);
+    const contexts = item.contexts ?? [];
+    const reuseCount = getIncomingReuseCount(item.id);
+    const relatedIds = [...new Set([
+        ...(item.relations ?? []).map((relation) => relation.targetId),
+        ...(item.searchReuse?.foundAssetIds ?? [])
+    ])];
+    const relatedTitles = relatedIds
+        .map((id) => libraryItems.find((candidate) => candidate.id === id)?.title ?? id)
+        .slice(0, 3);
+    const remainingRelations = Math.max(0, relatedIds.length - relatedTitles.length);
+    panel.dataset.previewItemId = item.id;
     panel.innerHTML = `
-        <div class="badge-row">
-            <span class="badge domain">${domainById[item.domain].label}</span>
-            <span class="badge">${item.type}</span>
-            <span class="badge ${status.className}"><i class="${status.icon}"></i>${item.status}</span>
-        </div>
-        <h2 style="font-size: 1.25rem; line-height: 1.28; margin: 0.85rem 0 0.6rem;">${item.title}</h2>
-        <div class="detail-list">
-            <div class="detail-item"><span>요약</span><strong>${item.summary}</strong></div>
-            <div class="detail-item"><span>활용 상황</span><strong>${item.useCase}</strong></div>
-            <div class="detail-item"><span>포함 내용</span><strong>${item.contents}</strong></div>
-        </div>
-        <div class="badge-row">${item.tags.map((tag) => `<span class="badge">${tag}</span>`).join("")}</div>
-        <div style="display: grid; gap: 0.5rem; margin-top: 1rem;">
-            ${item.links.map((link) => `<a class="btn btn-secondary" href="${link.href}" onclick="return false;" title="내부 환경에서 실제 링크로 교체"><i class="bx bx-link-alt"></i>${link.label}</a>`).join("")}
+        <button class="icon-button detail-close" type="button" id="close-detail" aria-label="미리보기 닫기" title="미리보기 닫기"><i class="bx bx-x"></i></button>
+        <div class="preview-card-content">
+            <header class="preview-header">
+                <div class="badge-row">
+                    <span class="badge domain">${escapeHtml(domainLabel)}</span>
+                    <span class="badge">${escapeHtml(item.type)}</span>
+                    <span class="badge ${publicationStatus.className}"><i class="${publicationStatus.icon}"></i>${escapeHtml(item.publicationStatus)}</span>
+                    ${item.demo ? '<span class="badge draft">샘플</span>' : ""}
+                </div>
+                <h2>${escapeHtml(item.title)}</h2>
+                <p>${escapeHtml(item.summary)}</p>
+                <div class="detail-meta">
+                    <span><i class="bx bx-user"></i>${escapeHtml(getResponsiblePerson(item))}</span>
+                    <span><i class="bx bx-calendar"></i>${escapeHtml(formatDisplayDate(item.updatedAt))}</span>
+                    <span><i class="bx bx-info-circle"></i>${escapeHtml(getTypeStatusLabel(item.type))}: ${escapeHtml(item.status)}</span>
+                    <span><i class="bx bx-file"></i>${escapeHtml(sourceIds.join(", ") || "원천 ID 없음")}</span>
+                    <span class="reuse-indicator${reuseCount ? " reused" : ""}"><i class="bx bx-revision"></i>재사용 ${reuseCount}회</span>
+                </div>
+            </header>
+
+            <section class="preview-section">
+                <h3>활용 상황</h3>
+                <p class="preview-callout">${escapeHtml(item.useCase || item.contents || "활용 상황이 아직 정리되지 않았습니다.")}</p>
+            </section>
+
+            <section class="preview-section">
+                <h3>핵심 판단 정보</h3>
+                <dl class="preview-definition-list">
+                    ${renderDetailFields(previewEntries) || `<div class="detail-field"><dt>포함 내용</dt><dd>${escapeHtml(item.contents || "내용 보완 필요")}</dd></div>`}
+                </dl>
+            </section>
+
+            ${(contexts.length || relatedTitles.length) ? `
+                <section class="preview-section preview-signals">
+                    ${contexts.length ? `<div><span>활용 맥락</span><div class="badge-row">${contexts.slice(0, 5).map((context) => `<span class="badge">${escapeHtml(getContextLabel(context))}</span>`).join("")}</div></div>` : ""}
+                    ${relatedTitles.length ? `<div><span>연결 자산</span><p>${escapeHtml(relatedTitles.join(" · "))}${remainingRelations ? ` 외 ${remainingRelations}개` : ""}</p></div>` : ""}
+                </section>
+            ` : ""}
+
+            <button class="preview-open-button" type="button" data-open-full="${escapeHtml(item.id)}">
+                <span><i class="bx bx-expand-alt"></i>전체 내용 보기</span>
+                <i class="bx bx-chevron-right"></i>
+            </button>
         </div>
     `;
 }
 
-function renderTypeSummary() {
-    const wrap = document.getElementById("type-summary");
-    if (!wrap) return;
-    wrap.innerHTML = "";
-    getUniqueValues("type").forEach((type) => {
-        const count = libraryItems.filter((item) => item.type === type).length;
-        const card = document.createElement("article");
-        card.className = "guide-card";
-        card.innerHTML = `<h3>${type}</h3><p>${count}개 샘플. 실제 운영에서는 각 유형별 내부 링크와 작성 기준을 붙입니다.</p>`;
-        wrap.appendChild(card);
-    });
+function renderFullDetail(item) {
+    const content = document.getElementById("full-detail-content");
+    if (!content || !item) return;
+
+    const publicationStatus = publicationStatusMeta[item.publicationStatus] ?? publicationStatusMeta["초안"];
+    const domainLabel = getDomainLabel(item.domain);
+    const contexts = item.contexts ?? [];
+    const links = item.links ?? [];
+    const sourceIds = item.sourceIds ?? [];
+    const relations = item.relations ?? [];
+    const changeLog = item.changeLog ?? [];
+    const contentRows = renderDetailFields(getLibraryContentEntries(item));
+    const reuseCount = getIncomingReuseCount(item.id);
+    const reuseText = item.searchReuse?.performed
+        ? `${item.searchReuse.usageType || "검색 완료"}${item.searchReuse.outcome ? ` · ${item.searchReuse.outcome}` : ""}`
+        : "검색 기록 없음";
+    const relationRows = relations.map((relation) => {
+        const target = libraryItems.find((candidate) => candidate.id === relation.targetId);
+        const rowContent = `<span>${escapeHtml(relation.type)}</span><strong>${escapeHtml(target?.title ?? relation.targetId)}</strong>${relation.note ? `<small>${escapeHtml(relation.note)}</small>` : ""}`;
+        return target
+            ? `<button class="relation-item" type="button" data-related-id="${escapeHtml(target.id)}">${rowContent}<i class="bx bx-chevron-right"></i></button>`
+            : `<div class="relation-item">${rowContent}</div>`;
+    }).join("");
+    const reuseAssetRows = (item.searchReuse?.foundAssetIds ?? []).map((assetId) => {
+        const target = libraryItems.find((candidate) => candidate.id === assetId);
+        if (!target) return `<span class="reuse-reference">${escapeHtml(assetId)}</span>`;
+        return `<button class="reuse-reference" type="button" data-related-id="${escapeHtml(target.id)}"><i class="bx bx-link"></i>${escapeHtml(target.title)}</button>`;
+    }).join("");
+    const changeLogRows = changeLog.slice().reverse().map((entry) => `
+        <li>
+            <span>${escapeHtml(formatDisplayDate(entry.changedAt))} · ${escapeHtml(entry.changedBy || "수정자 미상")}</span>
+            <strong>${escapeHtml(entry.changeType || "수정")}</strong>
+            ${entry.reason ? `<p>${escapeHtml(entry.reason)}</p>` : ""}
+        </li>
+    `).join("");
+    const linkRows = links.map((link) => {
+        const href = safeHref(link.href);
+        const disabled = href === "#";
+        return `<a class="btn btn-secondary${disabled ? " is-disabled" : ""}" href="${escapeHtml(href)}"${disabled ? ' aria-disabled="true" onclick="return false;"' : ' target="_blank" rel="noopener"'}><i class="bx bx-link-external"></i>${escapeHtml(link.label)}</a>`;
+    }).join("");
+
+    content.innerHTML = `
+        <div class="full-detail-shell">
+            <button class="icon-button full-detail-close" type="button" id="close-full-detail" aria-label="전체 내용 닫기" title="전체 내용 닫기"><i class="bx bx-x"></i></button>
+            <header class="detail-header full-detail-header">
+                <div class="badge-row">
+                    <span class="badge domain">${escapeHtml(domainLabel)}</span>
+                    <span class="badge">${escapeHtml(item.type)}</span>
+                    <span class="badge ${publicationStatus.className}"><i class="${publicationStatus.icon}"></i>${escapeHtml(item.publicationStatus)}</span>
+                    ${item.demo ? '<span class="badge draft">샘플</span>' : ""}
+                </div>
+                <h2 id="full-detail-title">${escapeHtml(item.title)}</h2>
+                <p class="detail-summary">${escapeHtml(item.summary)}</p>
+                <div class="detail-meta">
+                    <span><i class="bx bx-user"></i>${escapeHtml(getResponsiblePerson(item))}</span>
+                    <span><i class="bx bx-calendar"></i>${escapeHtml(formatDisplayDate(item.updatedAt))}</span>
+                    <span><i class="bx bx-info-circle"></i>${escapeHtml(getTypeStatusLabel(item.type))}: ${escapeHtml(item.status)}</span>
+                    <span><i class="bx bx-file"></i>${escapeHtml(sourceIds.join(", ") || "원천 ID 없음")}</span>
+                </div>
+            </header>
+
+            <div class="full-detail-columns">
+                <div class="full-detail-primary">
+                    <section class="detail-section">
+                        <h3>언제 활용하는가</h3>
+                        <p class="detail-callout">${escapeHtml(item.useCase || item.contents || "활용 상황이 아직 정리되지 않았습니다.")}</p>
+                    </section>
+                    <section class="detail-section">
+                        <h3>전체 카드 내용</h3>
+                        <dl class="detail-definition-list">
+                            ${contentRows || `<div class="detail-field"><dt>포함 내용</dt><dd>${escapeHtml(item.contents || "내용 보완 필요")}</dd></div>`}
+                        </dl>
+                    </section>
+                </div>
+
+                <div class="full-detail-secondary">
+                    <section class="detail-section">
+                        <h3>검색·재사용 기록</h3>
+                        <p class="reuse-summary"><strong>이 카드 재사용 ${reuseCount}회</strong><span>등록 시 기존 자산 활용: ${escapeHtml(reuseText)}</span></p>
+                        ${reuseAssetRows ? `<div class="reuse-reference-list">${reuseAssetRows}</div>` : '<p class="section-empty">연결된 선행 자산이 없습니다.</p>'}
+                    </section>
+                    ${relationRows ? `<section class="detail-section"><h3>연결된 기술자산</h3><div class="relation-list">${relationRows}</div></section>` : ""}
+                    <section class="detail-section">
+                        <h3>관리 정보</h3>
+                        <dl class="detail-metadata-grid">
+                            <div><dt>담당자</dt><dd>${escapeHtml(getResponsiblePerson(item))}</dd></div>
+                            <div><dt>등록자</dt><dd>${escapeHtml(item.registrant || "-")}</dd></div>
+                            <div><dt>등록일</dt><dd>${escapeHtml(formatDisplayDate(item.createdAt))}</dd></div>
+                            <div><dt>검토자</dt><dd>${escapeHtml(item.reviewer || "미지정")}</dd></div>
+                            <div><dt>게시 상태</dt><dd>${escapeHtml(item.publicationStatus || "-")}</dd></div>
+                            <div><dt>${escapeHtml(getTypeStatusLabel(item.type))}</dt><dd>${escapeHtml(item.status || "-")}</dd></div>
+                        </dl>
+                        ${changeLogRows ? `<ol class="change-log">${changeLogRows}</ol>` : ""}
+                    </section>
+                    ${contexts.length ? `<section class="detail-section"><h3>활용 맥락</h3><div class="badge-row">${contexts.map((context) => `<span class="badge">${escapeHtml(getContextLabel(context))}</span>`).join("")}</div></section>` : ""}
+                    <section class="detail-section detail-source-section">
+                        <h3>사내 원본</h3>
+                        <div class="detail-actions">${linkRows || '<span class="section-empty">연결된 원본 링크가 없습니다.</span>'}</div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function openFullDetail(itemId, returnFocusTarget = null) {
+    const item = libraryItems.find((candidate) => candidate.id === itemId);
+    const dialog = document.getElementById("full-detail-dialog");
+    if (!item || !dialog) return;
+    fullDetailReturnFocus = returnFocusTarget
+        || (isCompactLibraryView() ? document.getElementById("close-detail") : document.querySelector(".preview-open-button"));
+    renderFullDetail(item);
+    document.body.classList.add("full-detail-open");
+    if (!dialog.open) dialog.showModal();
+    window.setTimeout(() => document.getElementById("close-full-detail")?.focus({ preventScroll: true }), 0);
+}
+
+function closeFullDetail() {
+    const dialog = document.getElementById("full-detail-dialog");
+    if (dialog?.open) dialog.close();
 }
 
 function getSimulationLevel(level) {
@@ -864,50 +1532,130 @@ function renderCulture() {
 }
 
 function bindLibraryEvents() {
-    initSelect("type-filter", getUniqueValues("type"), "자료 유형 전체");
-    initSelect("status-filter", getUniqueValues("status"), "상태 전체");
-    initSelect("link-filter", ["AI 연계", "타 Domain 연계"], "연계 전체");
+    const existingTypes = getUniqueValues("type");
+    const orderedTypes = [
+        ...libraryTypeOrder.filter((type) => existingTypes.includes(type)),
+        ...existingTypes.filter((type) => !libraryTypeOrder.includes(type))
+    ];
+    initSelect("type-filter", orderedTypes, "자료 유형 전체");
+    initPublicationScopeSelect();
 
     const params = new URLSearchParams(window.location.search);
     const domainParam = params.get("domain");
-    if (domainParam && domainById[domainParam]) filters.domain = domainParam;
+    if (domainParam && domainById[domainParam]) filters.domains.add(domainParam);
 
     document.getElementById("search-input")?.addEventListener("input", (event) => {
         filters.search = event.target.value;
-        renderLibrary();
+        window.clearTimeout(librarySearchTimer);
+        librarySearchTimer = window.setTimeout(() => {
+            resetLibraryBatch();
+            renderLibrary();
+        }, 120);
     });
     document.getElementById("type-filter")?.addEventListener("change", (event) => {
         filters.type = event.target.value;
+        resetLibraryBatch();
         renderLibrary();
     });
-    document.getElementById("status-filter")?.addEventListener("change", (event) => {
-        filters.status = event.target.value;
+    document.getElementById("publication-scope-filter")?.addEventListener("change", (event) => {
+        filters.publicationScope = event.target.value;
+        resetLibraryBatch();
         renderLibrary();
     });
-    document.getElementById("link-filter")?.addEventListener("change", (event) => {
-        filters.link = event.target.value;
+    document.getElementById("sort-filter")?.addEventListener("change", (event) => {
+        filters.sort = event.target.value;
+        resetLibraryBatch();
         renderLibrary();
     });
     document.getElementById("reset-filters")?.addEventListener("click", () => {
-        filters.search = "";
-        filters.domain = "all";
-        filters.tag = "all";
-        filters.type = "all";
-        filters.status = "all";
-        filters.link = "all";
-        document.getElementById("search-input").value = "";
-        ["type-filter", "status-filter", "link-filter"].forEach((id) => { document.getElementById(id).value = "all"; });
+        resetLibraryFilters();
         renderLibrary();
+    });
+    document.getElementById("toggle-mobile-filters")?.addEventListener("click", () => {
+        setMobileFiltersOpen(!document.body.classList.contains("mobile-filters-open"));
+    });
+
+    document.getElementById("detail-panel")?.addEventListener("click", (event) => {
+        if (event.target.closest("#close-detail")) {
+            closeDetailDrawer();
+            return;
+        }
+        const itemId = event.currentTarget.dataset.previewItemId;
+        const explicitTrigger = event.target.closest(".preview-open-button");
+        const returnTarget = explicitTrigger
+            || (isCompactLibraryView() ? event.currentTarget.querySelector("#close-detail") : event.currentTarget.querySelector(".preview-open-button"));
+        if (itemId) openFullDetail(itemId, returnTarget);
+    });
+    document.getElementById("detail-backdrop")?.addEventListener("click", () => closeDetailDrawer());
+    const fullDetailDialog = document.getElementById("full-detail-dialog");
+    fullDetailDialog?.addEventListener("click", (event) => {
+        if (event.target === fullDetailDialog || event.target.closest("#close-full-detail")) {
+            closeFullDetail();
+            return;
+        }
+        const relatedItem = event.target.closest("[data-related-id]");
+        if (!relatedItem?.dataset.relatedId) return;
+        selectRelatedItem(relatedItem.dataset.relatedId, false);
+        const relatedAsset = libraryItems.find((item) => item.id === relatedItem.dataset.relatedId);
+        renderFullDetail(relatedAsset);
+        fullDetailReturnFocus = isCompactLibraryView()
+            ? document.getElementById("close-detail")
+            : document.querySelector(".preview-open-button");
+        document.getElementById("close-full-detail")?.focus({ preventScroll: true });
+    });
+    fullDetailDialog?.addEventListener("close", () => {
+        document.body.classList.remove("full-detail-open");
+        const returnTarget = fullDetailReturnFocus;
+        fullDetailReturnFocus = null;
+        window.setTimeout(() => returnTarget?.isConnected && returnTarget.focus({ preventScroll: true }), 0);
+    });
+    document.addEventListener("keydown", (event) => {
+        if (fullDetailDialog?.open) {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                closeFullDetail();
+            }
+            return;
+        }
+        if (!document.body.classList.contains("detail-open")) return;
+        if (event.key === "Escape") {
+            closeDetailDrawer();
+            return;
+        }
+        if (event.key !== "Tab") return;
+        const panel = document.getElementById("detail-panel");
+        if (!panel) return;
+        const focusable = [...panel.querySelectorAll('button:not([disabled]), a[href]:not([aria-disabled="true"]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+            .filter((node) => node.offsetParent !== null);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+    const compactView = window.matchMedia("(max-width: 900px)");
+    compactView.addEventListener?.("change", (event) => {
+        if (!event.matches) closeDetailDrawer(false);
     });
 }
 
 function initPage() {
     const page = document.body.dataset.page;
     renderMetrics();
+    alignActiveNavigation();
+
+    if (page === "landing") {
+        renderLanding();
+    }
 
     if (page === "library") {
+        renderLibraryMetrics();
         bindLibraryEvents();
-        renderTypeSummary();
         renderLibrary();
     }
     if (page === "map") {
