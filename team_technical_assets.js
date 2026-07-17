@@ -83,7 +83,7 @@ const simulationLevels = [
     }
 ];
 
-const methodologyGroups = [
+const legacyMethodologySamples = [
     {
         id: "deformation",
         label: "01. 변형",
@@ -279,6 +279,16 @@ const methodologyGroups = [
     }
 ];
 
+const methodologyLevelData = window.SIMULATION_METHODOLOGY_LEVELS ?? null;
+const methodologyDisplayNameOverrides = {
+    "structural-002": "Push Probe on Bend",
+    "structural-028": "Package 파괴 Simulation"
+};
+const methodologyMapState = {
+    businessUnitId: "sc",
+    selectedMethodId: null
+};
+
 const statusMeta = {
     "초안": { className: "draft", icon: "bx bx-edit-alt" },
     "방법론 후보": { className: "draft", icon: "bx bx-git-branch" },
@@ -334,50 +344,897 @@ libraryItems.forEach((candidate) => {
     });
 });
 
+const learningCareerStages = [
+    { id: "years-1-2", label: "1~2년" },
+    { id: "years-3-5", label: "3~5년" },
+    { id: "years-5-plus", label: "5년 이상" }
+];
+
+// Landing의 기존 단계 수 지표와의 호환을 유지합니다.
 const techTreeStages = [
+    { id: "team-common", label: "팀 공통 기반" },
+    ...learningCareerStages
+];
+
+const learningChannelMeta = {
+    self: { label: "자체학습", icon: "bx bx-book-open", className: "is-self" },
+    external: { label: "사외교육", icon: "bx bx-world", className: "is-external" },
+    hrd: { label: "HRD/e-learning", icon: "bx bx-laptop", className: "is-hrd" },
+    internal: { label: "사내교육", icon: "bx bx-building", className: "is-unknown" },
+    ojt: { label: "OJT", icon: "bx bx-user-voice", className: "is-unknown" },
+    unknown: { label: "교육 방식 미분류", icon: "bx bx-help-circle", className: "is-unknown" }
+};
+
+const learningCommonFoundation = {
+    id: "team-common-foundation",
+    title: "팀 공통 기반",
+    source: "사진 1 · 팀 전체 필요역량",
+    items: [
+        "재료역학·열역학",
+        "구조·열 해석(FEM)",
+        "Material Plastic/Hyperelastic",
+        "인장·압축 물성 측정",
+        "박리 물성 측정 프로세스",
+        "Application별 제품 구조 이해",
+        "Panel 기술 이해(OLED/LCD)",
+        "TFT/CELL 기술 일반",
+        "Module Process 이해",
+        "Panel Process 이해",
+        "Creo/ProE 기본",
+        "HyperMesh 기본",
+        "Abaqus 기본",
+        "FloEFD 기본"
+    ]
+};
+
+const learningPartTracks = [
     {
-        level: "Level 0",
-        title: "Simulation 결과를 판단 근거로 읽기",
-        focus: "해석 이미지나 수치보다 의사결정 질문, 비교 기준, 한계를 먼저 읽습니다.",
-        practices: ["결과 해석 메모 작성", "특이점/실제 리스크 구분", "상대 비교와 절대값 판단 구분"],
-        outputs: ["결과 검토 체크리스트", "판단 질문 3개"]
+        id: "part-1-years-1-2",
+        stageId: "years-1-2",
+        title: "현 1파트",
+        parts: [1],
+        source: "사진 3 · 기존 2파트 → 현 1파트",
+        items: [
+            "HyperMesh 기본", "Defeature", "2D Shell", "3D Tetra", "3D Hexa",
+            "Creo/ProE 기본", "Abaqus 기본", "Direct Bonding", "Bending",
+            "FloEFD 기본", "ANSYS 열유동", "Abaqus Thermal Stress"
+        ]
     },
     {
-        level: "Level 1",
-        title: "모델링 기본기",
-        focus: "Geometry, mesh, contact, material, boundary condition이 결과에 미치는 영향을 익힙니다.",
-        practices: ["기존 모델 재현", "입력값 민감도 비교", "경계조건 변경 실험"],
-        outputs: ["재현 모델", "조건 변경 비교표"]
+        id: "parts-2-3-years-1-2",
+        stageId: "years-1-2",
+        title: "현 2·3파트 공유",
+        parts: [2, 3],
+        source: "사진 2 · 기존 1파트 → 현 2·3파트",
+        items: [
+            "Bending", "Thermal Cycle 고온·고습", "Slow Puncture(제품 구조)",
+            "Bending + Thermal Cycle", "Sub-modeling", "Ball Impact", "PPOB/POHE",
+            "ACF(COP) Bonding", "HyperMesh 2D/3D", "Creo 기본/Origin"
+        ]
     },
     {
-        level: "Level 2",
-        title: "7개 기술영역별 핵심 메커니즘",
-        focus: "변형, 박리, 충격, 열유동, 피로, 진동, 기타 영역에서 문제를 설명하는 물리 메커니즘을 익힙니다.",
-        practices: ["영역별 대표 BP 읽기", "CoR 보고서 한 건 분해", "관련 실험/평가 조건 확인"],
-        outputs: ["기술영역별 요약 노트", "대표 사례 설명"]
+        id: "parts-4-5-years-1-2",
+        stageId: "years-1-2",
+        title: "현 4·5파트 공유",
+        parts: [4, 5],
+        source: "사진 4 · 기존 3파트 → 현 4·5파트",
+        items: [
+            "ANSYS/Abaqus 자동처짐", "ANSYS/Abaqus Bonding 공정", "Curved/Bendable",
+            "FloEFD 기본", "ANSYS 열유동(고온 구동 열변형)",
+            "ANSYS/Abaqus 고온·저온 보존 열변형"
+        ]
     },
     {
-        level: "Level 3",
-        title: "CoR/VD Request 과제화",
-        focus: "요청을 그대로 처리하지 않고 문제 정의, 필요한 데이터, 판단 기준, 산출물로 전환합니다.",
-        practices: ["CoR 제안서 작성", "VD Request 결과 정리", "의사결정 시점 확인"],
-        outputs: ["과제 제안서", "결과 보고서 초안"]
+        id: "part-1-years-3-5",
+        stageId: "years-3-5",
+        title: "현 1파트",
+        parts: [1],
+        source: "사진 3 · 기존 2파트 → 현 1파트",
+        items: [
+            "Abaqus Implicit", "Thermal Cycle (Visco)", "Static Analysis", "박리", "진동",
+            "Abaqus Explicit", "Ball Impact", "Set Drop", "Abaqus Coupled Thermal Stress",
+            "Heat Transfer", "Coupled Thermal Stress", "유동해석"
+        ]
     },
     {
-        level: "Level 4",
-        title: "BP와 Tool Manual로 자산화",
-        focus: "한 번의 대응이 다음 사람이 학습, 재현, 변형, 활용할 수 있는 구조로 남게 합니다.",
-        practices: ["BP 템플릿 작성", "Tool Manual 작성", "Reviewer Comment 반영"],
-        outputs: ["등록 가능한 BP", "Tool Manual", "교육 활용 메모"]
+        id: "parts-2-3-years-3-5",
+        stageId: "years-3-5",
+        title: "현 2·3파트 공유",
+        parts: [2, 3],
+        source: "사진 2 · 기존 1파트 → 현 2·3파트",
+        items: [
+            "박리/Crack Propagation", "Protect Film 박리 공정", "Fatigue", "고온·고습",
+            "온도 분포", "Slow Puncture(GDS)", "Front Face Ball Impact", "Set Drop",
+            "Direct Bonding", "Wrinkle", "ACF Flow"
+        ]
     },
     {
-        level: "Level 5",
-        title: "AI/타 Domain 연계와 확산",
-        focus: "기술자산을 검색, 요약, 자동화, 타 Domain 연결, 신규 교육과 연결합니다.",
-        practices: ["검색/요약 가이드 적용", "타 Domain 입력값 검증", "교육 과정과 연결"],
-        outputs: ["연계 태그 정리", "교육/확산 패키지"]
+        id: "parts-4-5-years-3-5",
+        stageId: "years-3-5",
+        title: "현 4·5파트 공유",
+        parts: [4, 5],
+        source: "사진 4 · 기존 3파트 → 현 4·5파트",
+        items: [
+            "LS-Dyna HIT", "RecurDyn 포장 진동", "ANSYS/Abaqus 박리", "통합 열해석",
+            "ANSYS 투습 Simulation", "ANSYS 고온·고습 보존 열변형"
+        ]
+    },
+    {
+        id: "part-1-years-5-plus",
+        stageId: "years-5-plus",
+        title: "현 1파트",
+        parts: [1],
+        source: "사진 3 · 기존 2파트 → 현 1파트",
+        items: [
+            "Abaqus Advanced", "Fracture", "Fatigue", "Script", "Submodel",
+            "Optimization (iSight)", "FloEFD 심화", "Circuit", "Joule Heating"
+        ]
+    },
+    {
+        id: "parts-2-3-years-5-plus",
+        stageId: "years-5-plus",
+        title: "현 2·3파트 공유",
+        parts: [2, 3],
+        source: "사진 2 · 기존 1파트 → 현 2·3파트",
+        items: ["Optimization(iSight)", "Creep", "Script(공통)"]
+    },
+    {
+        id: "parts-4-5-years-5-plus",
+        stageId: "years-5-plus",
+        title: "현 4·5파트 공유",
+        parts: [4, 5],
+        source: "사진 4 · 기존 3파트 → 현 4·5파트",
+        items: [],
+        emptyMessage: "사진 4의 5년 이상 영역은 실제로 비어 있습니다."
     }
 ];
+
+const learningSharedCapabilities = [
+    { title: "Bending", parts: [1, 2, 3] },
+    { title: "Direct Bonding", parts: [1, 2, 3] },
+    { title: "Ball Impact 계열", parts: [1, 2, 3] },
+    { title: "Set Drop", parts: [1, 2, 3] },
+    { title: "Thermal Cycle", parts: [1, 2, 3] },
+    { title: "박리 계열", parts: [1, 2, 3, 4, 5] },
+    { title: "Bonding 계열", parts: [1, 2, 3, 4, 5] },
+    { title: "FloEFD 기본·열유동", parts: [1, 4, 5] },
+    { title: "Fatigue", parts: [1, 2, 3] },
+    { title: "Script", parts: [1, 2, 3] },
+    { title: "Optimization(iSight)", parts: [1, 2, 3] },
+    { title: "Submodel", parts: [1, 2, 3] }
+];
+
+const learningEducationGroups = [
+    {
+        id: "self",
+        status: "확정",
+        source: "사진 2 · 자체학습 구획",
+        items: ["인장·압축", "비선형 재료", "재료역학·열역학", "구조·열 해석(FEM)"],
+        note: "사진 2에서 자체학습 구획으로 확인했습니다."
+    },
+    {
+        id: "external",
+        status: "확정",
+        source: "사진 2 · 사외교육 구획",
+        items: [
+            "HyperMesh 기본", "Contact/Convergence", "Intro to Abaqus", "Rubber and Viscoelastic",
+            "Heat and Thermal Stress", "Explicit Advanced", "Intro to FE-Safe", "iSight 기본",
+            "박리 물성 측정 프로세스"
+        ],
+        note: "사진 2에서 사외교육 구획으로 확인했습니다."
+    },
+    {
+        id: "hrd",
+        status: "구획 확정 · 표기 확인 필요",
+        source: "사진 2 · HRD교육(e-learning) 구획",
+        items: [
+            "OLED A-cube Panel / IT Panel_차이나는 클래스2",
+            "OLED A-CUBE 기구",
+            "OLED A-cube 소자공정",
+            "계열사 DX 우수사례"
+        ],
+        note: "과정명은 사진에서 판독한 값이며 대소문자와 구두점은 원본 확인이 필요합니다."
+    },
+    {
+        id: "internal",
+        status: "확인 필요",
+        source: "사진 1~4",
+        items: [],
+        note: "원자료에 사내교육이라는 별도 구획이 확인되지 않았습니다. 과정 매핑이 필요합니다."
+    },
+    {
+        id: "ojt",
+        status: "확인 필요",
+        source: "사진 1~4",
+        items: [],
+        note: "원자료에 OJT 과정 또는 완료 기준이 표시되지 않았습니다."
+    },
+    {
+        id: "unknown",
+        status: "미분류",
+        source: "사진 3·4",
+        items: ["사진 3 · 현 1파트 역량", "사진 4 · 현 4·5파트 역량"],
+        note: "사진 3과 사진 4에는 교육 채널 구분이 없습니다."
+    }
+];
+
+const learningUncertaintyGroups = [
+    {
+        title: "사진 1 · 팀 전체",
+        items: [
+            "사외교육 괄호 안 플랫폼명",
+            "HyperMesh/Abaqus 앞뒤의 작은 녹색 부기",
+            "작은 분류명과 빨강·파랑 약어",
+            "Crack Propagation 인접 짧은 항목",
+            "ACF Flow 옆 ELB 약어의 정확한 의미",
+            "Curved/Bendable 뒤 패널돔으로 보이는 정확한 명칭",
+            "열 영역의 열경화로 보이는 항목 정확 표기",
+            "최하단 제품·공정 범위의 전체 문구",
+            "DTube/DType로 보이는 문구",
+            "일부 교육 구획의 정확한 경계",
+            "화면상 경력 구간 표기와 사용자 확인값이 충돌해, 구현은 사용자 Ground Truth인 1~2년/3~5년/5년 이상을 우선 적용"
+        ]
+    },
+    {
+        title: "사진 2 · 기존 1파트 → 현 2·3파트",
+        items: [
+            "PseudoHyperelastic로 보이는 정확한 표기",
+            "A-cube 과정명의 대소문자와 구두점",
+            "원형 담당자 배지의 인명·역할",
+            "유동 전공자만 해당 주석의 정확한 적용 범위",
+            "5년 이상 열 영역의 열경화로 보이는 항목 정확 표기",
+            "HRD/e-learning을 사내교육으로 볼 근거는 원자료에서 확인되지 않음"
+        ]
+    },
+    {
+        title: "사진 3 · 기존 2파트 → 현 1파트",
+        items: [
+            "열 영역 Level 2의 짧은 한글 항목 1개",
+            "우측 메모에 항목별 Item 추가와 전파 아이템 선정이 필요하다고 표시되어 원자료 자체가 미완성",
+            "교육 방식이 별도로 표시되지 않음"
+        ]
+    },
+    {
+        title: "사진 4 · 기존 3파트 → 현 4·5파트",
+        items: [
+            "상단 주석과 Curved/Bendable 뒤 패널돔으로 보이는 정확한 표기",
+            "교육 방식이 별도로 표시되지 않음",
+            "5년 이상과 공통 영역은 판독 실패가 아니라 실제 공란"
+        ]
+    },
+    {
+        title: "공통 확인사항",
+        items: [
+            "박스 사이 선이 단순 정렬선인지 선수관계인지 불명확해 세부 항목 간 화살표는 연결하지 않음",
+            "현 2·3파트와 현 4·5파트 내부의 개별 담당 구분은 확인되지 않아 현재는 공유 트랙으로 표시"
+        ]
+    }
+];
+
+const learningPathState = {
+    selectedPart: "all",
+    selectedRequirement: "all",
+    selectedChannel: "all"
+};
+
+const learningEducationChannelLabels = {
+    team: "팀 자체",
+    internal: "사내",
+    external: "사외"
+};
+
+const learningRequirementLabels = {
+    required: "필수",
+    optional: "선택"
+};
+
+const learningRequiredFamilyIds = new Set([
+    "core-theory-properties",
+    "product-process-understanding"
+]);
+
+const learningAllParts = [1, 2, 3, 4, 5];
+
+const learningCapabilityFamilies = [
+    {
+        id: "core-theory-properties",
+        label: "핵심 이론과 물성 이해",
+        description: "재료·열역학, FEM, 재료 모델과 물성 측정의 공통 토대",
+        nodes: [
+            {
+                id: "mechanics-thermodynamics",
+                label: "재료역학·열역학",
+                masterCapabilityId: "core-theory-properties",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "fem-foundation",
+                label: "구조·열 해석(FEM)",
+                masterCapabilityId: "core-theory-properties",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "nonlinear-material-foundation",
+                label: "비선형 재료 모델 (Plastic·Hyperelastic·Rubber·Viscoelastic)",
+                masterCapabilityId: "core-theory-properties",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "tension-compression-properties",
+                label: "인장·압축 물성 이해·측정",
+                masterCapabilityId: "core-theory-properties",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            }
+        ]
+    },
+    {
+        id: "product-process-understanding",
+        label: "자사 제품 및 공정 이해",
+        description: "Panel·TFT/CELL·Module과 자사 제품·공정 구조 이해",
+        nodes: [
+            {
+                id: "application-product-structure",
+                label: "Application별 제품 구조 이해",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "panel-technology-foundation",
+                label: "Panel 기술 이해(OLED/LCD)",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "tft-cell-foundation",
+                label: "TFT/CELL 기술 일반",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "module-process-foundation",
+                label: "Module Process 이해",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "panel-process-foundation",
+                label: "Panel Process 이해",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "oled-panel-it-class",
+                label: "OLED A-cube Panel / IT Panel 차이나는 클래스 2",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["internal"] }]
+            },
+            {
+                id: "oled-acube-mechanism",
+                label: "OLED A-CUBE 기구",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["internal"] }]
+            },
+            {
+                id: "oled-acube-device-process",
+                label: "OLED A-cube 소자공정",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-3-5", parts: learningAllParts, channels: ["internal"] }]
+            },
+            {
+                id: "affiliate-dx-case",
+                label: "계열사 DX 우수사례",
+                masterCapabilityId: "product-process-understanding",
+                placements: [{ stageId: "years-5-plus", parts: learningAllParts, channels: ["internal"] }]
+            }
+        ]
+    },
+    {
+        id: "analysis-modeling",
+        label: "해석 기반·모델링",
+        description: "Geometry·Mesh·Solver 기반과 해석 모델 고도화",
+        nodes: [
+            {
+                id: "hypermesh-basic-p1",
+                label: "HyperMesh 기본",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "mesh-elements-p1",
+                label: "Defeature · 2D Shell · 3D Tetra · 3D Hexa",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "creo-proe-p1",
+                label: "Creo/ProE 기본",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "abaqus-basic-p1",
+                label: "Abaqus 기본",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "ansys-basic",
+                label: "ANSYS 기본",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "ls-dyna-basic",
+                label: "LS-Dyna 기본",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "contact-convergence",
+                label: "Contact/Convergence",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["external"] }]
+            },
+            {
+                id: "hypermesh-2d-3d-p23",
+                label: "HyperMesh 2D/3D",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "creo-origin-p23",
+                label: "Creo 기본/Origin",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "submodel",
+                label: "Sub-modeling / Submodel",
+                masterCapabilityId: "analysis-modeling",
+                placements: [
+                    { stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" },
+                    { stageId: "years-5-plus", parts: [1], source: "사진 3 · 현 1파트" }
+                ]
+            },
+            {
+                id: "abaqus-implicit-static-p1",
+                label: "Abaqus Implicit · Static Analysis",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "abaqus-explicit-p1",
+                label: "Abaqus Explicit",
+                masterCapabilityId: "analysis-modeling",
+                placements: [
+                    { stageId: "years-1-2", parts: learningAllParts, channels: ["external"], label: "Explicit Advanced" },
+                    { stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }
+                ]
+            },
+            {
+                id: "abaqus-advanced-p1",
+                label: "Abaqus Advanced",
+                masterCapabilityId: "analysis-modeling",
+                placements: [{ stageId: "years-5-plus", parts: [1], source: "사진 3 · 현 1파트" }]
+            }
+        ]
+    },
+    {
+        id: "deformation-bonding",
+        label: "변형·Bonding",
+        description: "변형 거동, 접합 공정과 형상·계면 문제",
+        nodes: [
+            {
+                id: "bending",
+                label: "Bending",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{ stageId: "years-1-2", parts: [1, 2, 3], source: "사진 2·3" }]
+            },
+            {
+                id: "bending-thermal-cycle",
+                label: "Bending + Thermal Cycle",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "direct-bonding",
+                label: "Direct Bonding",
+                masterCapabilityId: "deformation-bonding",
+                placements: [
+                    { stageId: "years-1-2", parts: [1], source: "사진 3 · 현 1파트" },
+                    {
+                        stageId: "years-3-5",
+                        parts: [2, 3],
+                        source: "사진 2 · 현 2·3파트",
+                        parentIds: ["ppob-pohe"],
+                        relationType: "source-link",
+                        relationParts: [2, 3]
+                    }
+                ]
+            },
+            {
+                id: "acf-bonding",
+                label: "ACF(COP) Bonding",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "acf-flow",
+                label: "ACF Flow",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["acf-bonding"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "automatic-deflection-p45",
+                label: "ANSYS/Abaqus 자동처짐",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{ stageId: "years-1-2", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "bonding-process-p45",
+                label: "ANSYS/Abaqus Bonding 공정",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{ stageId: "years-1-2", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "curved-bendable-p45",
+                label: "Curved/Bendable",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{ stageId: "years-1-2", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "wrinkle",
+                label: "Wrinkle",
+                masterCapabilityId: "deformation-bonding",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["direct-bonding"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            }
+        ]
+    },
+    {
+        id: "impact-reliability",
+        label: "충격·신뢰성",
+        description: "충격·낙하·진동 응답에서 피로·파괴·Creep 신뢰성으로 확장",
+        mapCategories: ["충격", "진동", "피로"],
+        nodes: [
+            {
+                id: "slow-puncture-product",
+                label: "Slow Puncture(제품 구조)",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "slow-puncture-gds",
+                label: "Slow Puncture(GDS)",
+                masterCapabilityId: "impact-reliability",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["submodel"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "ball-impact",
+                label: "Ball Impact",
+                masterCapabilityId: "impact-reliability",
+                placements: [
+                    { stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" },
+                    { stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }
+                ]
+            },
+            {
+                id: "front-face-ball-impact",
+                label: "Front Face Ball Impact",
+                masterCapabilityId: "impact-reliability",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["submodel", "ball-impact"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "set-drop",
+                label: "Set Drop",
+                masterCapabilityId: "impact-reliability",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [1, 2, 3],
+                    source: "사진 2·3",
+                    parentIds: ["front-face-ball-impact"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "ppob-pohe",
+                label: "PPOB/POHE",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "vibration-p1",
+                label: "진동",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "ls-dyna-hit-p45",
+                label: "LS-Dyna HIT",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-3-5", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "recurdyn-vibration-p45",
+                label: "RecurDyn 포장 진동",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-3-5", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "fatigue",
+                label: "Fatigue",
+                masterCapabilityId: "impact-reliability",
+                placements: [
+                    {
+                        stageId: "years-3-5",
+                        parts: [2, 3],
+                        source: "사진 2 · 현 2·3파트",
+                        parentIds: ["bending-thermal-cycle"],
+                        relationType: "source-link",
+                        relationParts: [2, 3]
+                    },
+                    { stageId: "years-5-plus", parts: [1], source: "사진 3 · 현 1파트" }
+                ]
+            },
+            {
+                id: "fe-safe-basic",
+                label: "FE-Safe 기본",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-3-5", parts: learningAllParts, channels: ["external"] }]
+            },
+            {
+                id: "fracture-p1",
+                label: "Fracture",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-5-plus", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "creep-p23",
+                label: "Creep",
+                masterCapabilityId: "impact-reliability",
+                placements: [{ stageId: "years-5-plus", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            }
+        ]
+    },
+    {
+        id: "delamination",
+        label: "박리",
+        description: "박리·Crack Propagation과 박리 공정의 단계별 확장",
+        mapCategories: ["박리"],
+        nodes: [
+            {
+                id: "delamination-properties",
+                label: "박리 물성 이해·측정",
+                masterCapabilityId: "delamination",
+                placements: [{ stageId: "years-3-5", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "delamination-p1",
+                label: "박리",
+                masterCapabilityId: "delamination",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "delamination-crack-p23",
+                label: "박리/Crack Propagation",
+                masterCapabilityId: "delamination",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["bending-thermal-cycle"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "protect-film-delamination-p23",
+                label: "Protect Film 박리 공정",
+                masterCapabilityId: "delamination",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["delamination-crack-p23"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "delamination-p45",
+                label: "ANSYS/Abaqus 박리",
+                masterCapabilityId: "delamination",
+                placements: [{ stageId: "years-3-5", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            }
+        ]
+    },
+    {
+        id: "thermal-flow",
+        label: "열·유동",
+        description: "열변형·열응력·유동·투습의 연성 해석",
+        nodes: [
+            {
+                id: "floefd-basic",
+                label: "FloEFD 기본",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["team", "external"] }]
+            },
+            {
+                id: "ansys-thermal-flow-p1",
+                label: "ANSYS 열유동",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-1-2", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "abaqus-thermal-stress-p1",
+                label: "Abaqus · Heat and Thermal Stress",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-1-2", parts: learningAllParts, channels: ["external"] }]
+            },
+            {
+                id: "thermal-cycle-hh-p23",
+                label: "Thermal Cycle 고온·고습",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-1-2", parts: [2, 3], source: "사진 2 · 현 2·3파트" }]
+            },
+            {
+                id: "ansys-thermal-flow-p45",
+                label: "ANSYS 열유동(고온 구동 열변형)",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-1-2", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "storage-thermal-deformation-p45",
+                label: "ANSYS/Abaqus 고온·저온 보존 열변형",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-1-2", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "thermal-cycle-visco-p1",
+                label: "Thermal Cycle(Visco)",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "high-temp-humidity-p23",
+                label: "고온·고습",
+                masterCapabilityId: "thermal-flow",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["submodel"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "thermal-moisture-properties",
+                label: "열·투습 물성 이해·측정",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: learningAllParts, channels: ["team"] }]
+            },
+            {
+                id: "temperature-distribution-p23",
+                label: "온도 분포",
+                masterCapabilityId: "thermal-flow",
+                placements: [{
+                    stageId: "years-3-5",
+                    parts: [2, 3],
+                    source: "사진 2 · 현 2·3파트",
+                    parentIds: ["high-temp-humidity-p23"],
+                    relationType: "source-link",
+                    relationParts: [2, 3]
+                }]
+            },
+            {
+                id: "coupled-thermal-p1",
+                label: "Abaqus Coupled / Coupled Thermal Stress",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "heat-transfer-p1",
+                label: "Heat Transfer",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "flow-analysis-p1",
+                label: "유동해석",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: [1], source: "사진 3 · 현 1파트" }]
+            },
+            {
+                id: "integrated-thermal-p45",
+                label: "통합 열해석",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: learningAllParts, channels: ["external"] }]
+            },
+            {
+                id: "moisture-simulation-p45",
+                label: "ANSYS 투습 Simulation",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "hh-storage-deformation-p45",
+                label: "ANSYS 고온·고습 보존 열변형",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-3-5", parts: [4, 5], source: "사진 4 · 현 4·5파트" }]
+            },
+            {
+                id: "floefd-advanced-p1",
+                label: "FloEFD 심화",
+                masterCapabilityId: "thermal-flow",
+                placements: [
+                    { stageId: "years-3-5", parts: learningAllParts, channels: ["external"], label: "FloEFD 심화 교육" },
+                    { stageId: "years-5-plus", parts: [1], source: "사진 3 · 현 1파트" }
+                ]
+            },
+            {
+                id: "circuit-joule-p1",
+                label: "Circuit · Joule Heating",
+                masterCapabilityId: "thermal-flow",
+                placements: [{ stageId: "years-5-plus", parts: [1], source: "사진 3 · 현 1파트" }]
+            }
+        ]
+    },
+    {
+        id: "automation-optimization",
+        label: "자동화·최적화",
+        description: "반복 해석 자동화와 설계 최적화",
+        nodes: [
+            {
+                id: "script",
+                label: "Script",
+                masterCapabilityId: "automation-optimization",
+                placements: [{ stageId: "years-5-plus", parts: [1, 2, 3], source: "사진 2·3" }]
+            },
+            {
+                id: "optimization-isight",
+                label: "Optimization(iSight)",
+                masterCapabilityId: "automation-optimization",
+                placements: [
+                    { stageId: "years-3-5", parts: learningAllParts, channels: ["external"], label: "iSight 기본" },
+                    { stageId: "years-5-plus", parts: [1, 2, 3], source: "사진 2·3" }
+                ]
+            }
+        ]
+    }
+];
+
+const learningCapabilityById = Object.fromEntries(
+    learningCapabilityFamilies.flatMap((family) => family.nodes.map((node) => [node.id, node]))
+);
 
 const cultureRecords = [
     {
@@ -497,39 +1354,6 @@ let detailFocusTimer = null;
 let visibleLibraryLimit = libraryBatchSize;
 let librarySearchTimer = null;
 let fullDetailReturnFocus = null;
-
-const landingMethodGrowth = [
-    {
-        method: "박막 적층 Warpage 예측",
-        domain: "01. 변형",
-        from: "L2",
-        to: "L3",
-        contributor: "김OO",
-        evidence: "BP 기반으로 물성 민감도와 공정 조건 비교 기준을 정리",
-        basis: "박막 적층 구조 변형 예측 BP",
-        next: "제품군 교차 검증 데이터가 보강되면 L4 진입 후보"
-    },
-    {
-        method: "Set Drop/Tumble Drop Platform",
-        domain: "03. 충격",
-        from: "L3",
-        to: "L4",
-        contributor: "이OO",
-        evidence: "VD Request 결과와 평가 피드백을 연결해 취약부 ranking 재현성을 확보",
-        basis: "Drop 충격 취약부 CoR 결과 보고서",
-        next: "여러 제품군의 feedback loop를 축적하면 L5 후보"
-    },
-    {
-        method: "Modal/실험 Matching",
-        domain: "06. 진동",
-        from: "L2",
-        to: "L3",
-        contributor: "박OO",
-        evidence: "시험 모드 비교 기준과 경계조건 체크리스트를 Tool Manual로 정리",
-        basis: "진동 모드 검토 Tool Manual",
-        next: "반복 케이스 확보 후 L4 검증 기준으로 확장"
-    }
-];
 
 const landingContributions = [
     {
@@ -703,10 +1527,94 @@ function safeHref(value) {
     }
 }
 
+function getMaturityMethodologies() {
+    return Array.isArray(methodologyLevelData?.methodologies) ? methodologyLevelData.methodologies : [];
+}
+
+function getMethodologyDisplayName(method) {
+    return methodologyDisplayNameOverrides[method?.id] ?? String(method?.name ?? "");
+}
+
+function getMaturityBusinessUnits() {
+    return Array.isArray(methodologyLevelData?.businessUnits) ? methodologyLevelData.businessUnits : [];
+}
+
+function getMaturityScore(method, periodId, businessUnitId) {
+    const value = method?.scores?.[periodId]?.[businessUnitId];
+    return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function formatMaturityScore(value) {
+    if (value === null || value === undefined) return "미적용";
+    const score = Number(value);
+    if (!Number.isFinite(score)) return "미적용";
+    return `L${Number.isInteger(score) ? score : score.toFixed(1).replace(/\.0$/, "")}`;
+}
+
+function getMaturityBand(value) {
+    if (value === null || value === undefined || !Number.isFinite(Number(value))) return null;
+    return Math.min(5, Math.max(1, Math.floor(Number(value))));
+}
+
+function describeMaturityScore(value) {
+    if (value === null || value === undefined) return "미적용";
+    const score = Number(value);
+    const exact = simulationLevels.find((item) => item.score === score);
+    if (exact) return `${exact.id} ${exact.title}`;
+    const lower = Math.max(1, Math.floor(score));
+    const upper = Math.min(5, Math.ceil(score));
+    return `L${lower}과 L${upper} 사이의 중간 성숙도`;
+}
+
+function renderMaturityScore(value, extraClass = "") {
+    const className = extraClass ? ` ${extraClass}` : "";
+    if (value === null || value === undefined) {
+        return `<span class="score-token is-na" title="미적용: 점수와 평균 계산에서 제외">미적용</span>`;
+    }
+    const band = getMaturityBand(value);
+    const changeTitle = extraClass.split(/\s+/).includes("has-change") ? " · 현황 대비 목표 변동" : "";
+    return `<span class="score-token score-band-${band}${className}" title="${escapeHtml(describeMaturityScore(value))}${changeTitle}">${escapeHtml(formatMaturityScore(value))}</span>`;
+}
+
+function getMaturityChange(current, target) {
+    if (current === null && target === null) return { kind: "not-applicable", label: "미적용 유지", delta: null };
+    if (current === null && target !== null) return { kind: "new", label: "신규 적용", delta: null };
+    if (current !== null && target === null) return { kind: "removed", label: "적용 해제", delta: null };
+    const delta = Number((target - current).toFixed(1));
+    if (delta > 0) return { kind: "level-up", label: `+${delta}`, delta };
+    if (delta < 0) return { kind: "lowered", label: `${delta}`, delta };
+    return { kind: "stable", label: "유지", delta: 0 };
+}
+
+function getMaturityTargetClass(current, target) {
+    const change = getMaturityChange(current, target);
+    return ["stable", "not-applicable"].includes(change.kind) ? "is-target" : "is-target has-change";
+}
+
+function getLandingMethodGrowth() {
+    const businessUnits = getMaturityBusinessUnits();
+    return getMaturityMethodologies()
+        .map((method) => {
+            const changes = businessUnits.map((businessUnit) => {
+                const current = getMaturityScore(method, "current", businessUnit.id);
+                const target = getMaturityScore(method, "target", businessUnit.id);
+                return { businessUnit, current, target, change: getMaturityChange(current, target) };
+            }).filter((item) => ["new", "level-up"].includes(item.change.kind));
+            return { method, changes };
+        })
+        .filter((item) => item.changes.length > 0)
+        .sort((a, b) => {
+            const aNew = a.changes.some((item) => item.change.kind === "new") ? 1 : 0;
+            const bNew = b.changes.some((item) => item.change.kind === "new") ? 1 : 0;
+            return bNew - aNew || a.method.no - b.method.no;
+        });
+}
+
 
 function renderLandingMetrics() {
+    const methodologyGrowth = getLandingMethodGrowth();
     setText("metric-new-assets", landingContributions.filter((item) => item.kind === "신규 등록" || item.kind === "교육자료화").length);
-    setText("metric-level-up", landingMethodGrowth.length);
+    setText("metric-level-up", methodologyLevelData ? methodologyGrowth.length : "-");
     setText("metric-reused", landingReusedAssets.reduce((sum, item) => sum + item.count, 0));
     setText("metric-reviewed", landingContributions.filter((item) => item.kind === "리뷰 완료").length);
 }
@@ -714,23 +1622,33 @@ function renderLandingMetrics() {
 function renderLandingMethodGrowth() {
     const wrap = document.getElementById("landing-method-growth");
     if (!wrap) return;
-    wrap.innerHTML = landingMethodGrowth.map((item) => `
+    const methodologyGrowth = getLandingMethodGrowth();
+    if (!methodologyLevelData || methodologyGrowth.length === 0) {
+        wrap.innerHTML = `<p class="section-empty">방법론 성숙도 데이터를 확인할 수 없습니다.</p>`;
+        return;
+    }
+    wrap.innerHTML = methodologyGrowth.slice(0, 6).map(({ method, changes }) => `
         <article class="growth-card">
             <header>
-                <span class="badge domain">${item.domain}</span>
-                <span class="badge ready"><i class="bx bx-user-check"></i>${item.contributor}</span>
+                <span class="badge domain">${escapeHtml(method.categoryLabel)}</span>
+                <span class="growth-change-count">${changes.length}개 사업부 변화</span>
             </header>
-            <h3>${item.method}</h3>
-            <div class="level-transition">
-                <span class="level-chip level-${item.from.replace("L", "")}">${item.from}</span>
-                <i class="bx bx-right-arrow-alt"></i>
-                <span class="level-chip level-${item.to.replace("L", "")}">${item.to}</span>
+            <h3>${escapeHtml(getMethodologyDisplayName(method))}</h3>
+            <div class="growth-business-list">
+                ${changes.map(({ businessUnit, current, target, change }) => `
+                    <div class="growth-business-row">
+                        <strong>${escapeHtml(businessUnit.label)}</strong>
+                        <span>${renderMaturityScore(current, "is-current")}</span>
+                        <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+                        <span>${renderMaturityScore(target, getMaturityTargetClass(current, target))}</span>
+                        <small class="change-label change-${change.kind}">${change.kind === "new" ? "신규 적용" : "성숙도 향상"}</small>
+                    </div>
+                `).join("")}
             </div>
-            <p>${item.evidence}</p>
-            <div class="relation-line"><span>기반 자산</span><strong>${item.basis}</strong></div>
-            <div class="relation-line"><span>다음 성장 포인트</span><strong>${item.next}</strong></div>
         </article>
-    `).join("");
+    `).join("") + (methodologyGrowth.length > 6
+        ? `<a class="text-link growth-more-link" href="team_technical_assets_map.html">변화 방법론 ${methodologyGrowth.length}개 전체 보기 <i class="bx bx-right-arrow-alt"></i></a>`
+        : "");
 }
 
 function renderLandingContributionFeed() {
@@ -1331,7 +2249,11 @@ function closeFullDetail() {
 }
 
 function getSimulationLevel(level) {
-    return simulationLevels.find((item) => item.score === Number(level)) ?? simulationLevels[0];
+    const score = Number(level);
+    if (!Number.isFinite(score)) return null;
+    return simulationLevels.find((item) => item.score === score)
+        ?? [...simulationLevels].reverse().find((item) => item.score <= score)
+        ?? null;
 }
 
 function renderLevelSummary() {
@@ -1339,13 +2261,14 @@ function renderLevelSummary() {
     if (!wrap) return;
     wrap.innerHTML = `
         <table class="level-table">
+            <caption class="visually-hidden">Simulation 방법론 L1부터 L5까지의 정의와 판단 기준</caption>
             <thead>
                 <tr>
-                    <th>Level</th>
-                    <th>정의</th>
-                    <th>판단 가능 수준</th>
-                    <th>필요 데이터</th>
-                    <th>다음 조건</th>
+                    <th scope="col">레벨</th>
+                    <th scope="col">정의</th>
+                    <th scope="col">판단 가능 수준</th>
+                    <th scope="col">필요 데이터</th>
+                    <th scope="col">다음 조건</th>
                 </tr>
             </thead>
             <tbody>
@@ -1383,128 +2306,828 @@ function renderLevelGraph() {
             `).join("")}
         </div>
         <div class="graph-note">
-            <span>L1~L2 Data Gap</span>
-            <span>L3 Pivot Point</span>
-            <span>L4~L5 Golden Standard</span>
+            <span>L1~L2 · 기초 데이터와 초기 예측</span>
+            <span>L3 · 경향성 기반 의사결정의 Pivot Point</span>
+            <span>L4~L5 · 최적화와 선별적 실험 대체</span>
+            <span>소수 · 인접한 두 정수 레벨 사이의 중간 성숙도</span>
         </div>
     `;
+}
+
+const methodologyCategoryLibraryDomains = {
+    "static-deformation": "deformation",
+    delamination: "delamination",
+    vibration: "vibration",
+    fatigue: "fatigue",
+    impact: "impact",
+    "thermal-flow": "thermal-flow"
+};
+
+function getMaturityCategories() {
+    if (Array.isArray(methodologyLevelData?.categories)) return methodologyLevelData.categories;
+    const categories = new Map();
+    getMaturityMethodologies().forEach((method) => {
+        if (!categories.has(method.categoryId)) {
+            categories.set(method.categoryId, { id: method.categoryId, label: method.categoryLabel, methodologyCount: 0 });
+        }
+        categories.get(method.categoryId).methodologyCount += 1;
+    });
+    return [...categories.values()];
+}
+
+function averageMaturityScore(values) {
+    const applied = values.filter((value) => typeof value === "number" && Number.isFinite(value));
+    if (applied.length === 0) return null;
+    return applied.reduce((sum, value) => sum + value, 0) / applied.length;
+}
+
+function formatMaturityAverage(value) {
+    return value === null ? "-" : value.toFixed(2);
+}
+
+function formatMaturityAverageLevel(value) {
+    return value === null ? "미적용" : `L${formatMaturityAverage(value)}`;
+}
+
+function getMaturityAverageChange(current, target) {
+    if (current === null && target === null) {
+        return { kind: "is-na", label: "미적용", description: "미적용 유지" };
+    }
+    if (current === null) {
+        return { kind: "is-new", label: "신규", description: "신규 적용" };
+    }
+    if (target === null) {
+        return { kind: "is-removed", label: "해제", description: "적용 해제" };
+    }
+    const delta = target - current;
+    if (delta > 0.005) {
+        return { kind: "is-up", label: `+${delta.toFixed(2)}`, description: `평균 ${delta.toFixed(2)} 상승` };
+    }
+    if (delta < -0.005) {
+        return { kind: "is-down", label: delta.toFixed(2), description: `평균 ${Math.abs(delta).toFixed(2)} 하락` };
+    }
+    return { kind: "is-stable", label: "유지", description: "동일 수준 유지" };
+}
+
+function renderCategoryAverageComparison(current, target, change) {
+    const currentLabel = formatMaturityAverageLevel(current);
+    const targetLabel = formatMaturityAverageLevel(target);
+    const toPercent = (value) => Math.max(0, Math.min(100, value / 5 * 100));
+    const currentPercent = current === null ? null : toPercent(current);
+    const targetPercent = target === null ? null : toPercent(target);
+    return `
+        <span class="category-comparison-line" aria-hidden="true">
+            <span class="category-comparison-value is-current${current === null ? " is-na" : ""}"><small>현재</small><strong>${currentLabel}</strong></span>
+            <span class="category-comparison-track">
+                ${targetPercent !== null ? `<i class="category-bar-target" style="width:${targetPercent.toFixed(1)}%"></i>` : ""}
+                ${currentPercent !== null ? `<i class="category-bar-current" style="width:${currentPercent.toFixed(1)}%"></i>` : ""}
+                ${targetPercent !== null ? `<i class="category-bar-target-marker" style="left:${targetPercent.toFixed(1)}%"></i>` : ""}
+            </span>
+            <span class="category-comparison-value is-target${target === null ? " is-na" : ""}"><small>계획</small><strong>${targetLabel}</strong></span>
+            <strong class="category-comparison-delta ${change.kind}">${change.label}</strong>
+        </span>
+    `;
+}
+
+function getBusinessMaturityStats(businessUnitId, methods = getMaturityMethodologies()) {
+    const currentScores = methods.map((method) => getMaturityScore(method, "current", businessUnitId));
+    const targetScores = methods.map((method) => getMaturityScore(method, "target", businessUnitId));
+    const changes = methods.map((method) => getMaturityChange(
+        getMaturityScore(method, "current", businessUnitId),
+        getMaturityScore(method, "target", businessUnitId)
+    ));
+    return {
+        total: methods.length,
+        currentApplied: currentScores.filter((value) => value !== null).length,
+        targetApplied: targetScores.filter((value) => value !== null).length,
+        currentAverage: averageMaturityScore(currentScores),
+        targetAverage: averageMaturityScore(targetScores),
+        levelUp: changes.filter((change) => change.kind === "level-up").length,
+        newApplications: changes.filter((change) => change.kind === "new").length,
+        currentL3Plus: currentScores.filter((value) => value !== null && value >= 3).length,
+        targetL3Plus: targetScores.filter((value) => value !== null && value >= 3).length
+    };
+}
+
+function renderMapDataStatus() {
+    const status = document.getElementById("methodology-data-status");
+    if (!methodologyLevelData) return;
+    if (status) {
+        status.innerHTML = `<span class="status-dot is-ready" aria-hidden="true"></span><span>원본 검증 완료 · ${getMaturityMethodologies().length}개 방법론</span>`;
+    }
+}
+
+function renderMaturityKpis() {
+    const stats = getBusinessMaturityStats(methodologyMapState.businessUnitId);
+    const currentAverage = stats.currentAverage === null ? "-" : `L${formatMaturityAverage(stats.currentAverage)}`;
+    const targetAverage = stats.targetAverage === null ? "-" : `L${formatMaturityAverage(stats.targetAverage)}`;
+    setText("kpi-current-applied", `${stats.currentApplied} / ${stats.total}`);
+    setText("kpi-target-applied", `${stats.targetApplied} / ${stats.total}`);
+    setText("kpi-average-maturity", `${currentAverage} → ${targetAverage}`);
+    setText("kpi-level-up", stats.levelUp);
+    setText("kpi-new-application", stats.newApplications);
+    setText("kpi-l3-plus", `${stats.currentL3Plus} → ${stats.targetL3Plus}`);
+}
+
+function renderCoverageComparison(current, target, total) {
+    const currentPercent = total > 0 ? Math.max(0, Math.min(100, current / total * 100)) : 0;
+    const targetPercent = total > 0 ? Math.max(0, Math.min(100, target / total * 100)) : 0;
+    return `
+        <span class="business-coverage-lines">
+            <span class="business-coverage-row is-current">
+                <small>현황</small>
+                <span class="coverage-track"><i class="coverage-bar-current" style="width:${currentPercent.toFixed(1)}%"></i></span>
+                <strong>${current}</strong>
+            </span>
+            <span class="business-coverage-row is-target">
+                <small>목표</small>
+                <span class="coverage-track"><i class="coverage-bar-target" style="width:${targetPercent.toFixed(1)}%"></i></span>
+                <strong>${target}</strong>
+            </span>
+        </span>
+    `;
+}
+
+function renderBusinessUnitOverview() {
+    const wrap = document.getElementById("business-unit-overview");
+    if (!wrap) return;
+    const total = getMaturityMethodologies().length;
+    wrap.innerHTML = getMaturityBusinessUnits().map((businessUnit) => {
+        const stats = getBusinessMaturityStats(businessUnit.id);
+        const isActive = methodologyMapState.businessUnitId === businessUnit.id;
+        return `
+            <button type="button" class="business-overview-row${isActive ? " active" : ""}" data-overview-business-id="${escapeHtml(businessUnit.id)}" aria-pressed="${isActive}">
+                <span class="business-overview-label">
+                    <strong>${escapeHtml(businessUnit.label)}</strong>
+                    <small>평균 ${formatMaturityAverage(stats.currentAverage)} → ${formatMaturityAverage(stats.targetAverage)}</small>
+                </span>
+                ${renderCoverageComparison(stats.currentApplied, stats.targetApplied, total)}
+                <span class="business-change-summary">
+                    <strong>${stats.levelUp}</strong><small>성숙도 향상</small>
+                    <strong>${stats.newApplications}</strong><small>신규 적용</small>
+                </span>
+            </button>
+        `;
+    }).join("");
+    wrap.querySelectorAll("[data-overview-business-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+            methodologyMapState.businessUnitId = button.dataset.overviewBusinessId;
+            refreshMaturityDashboard();
+        });
+    });
+}
+
+function renderCategoryOverview() {
+    const wrap = document.getElementById("category-overview");
+    const title = document.getElementById("category-overview-title");
+    if (!wrap) return;
+    const businessUnit = getMaturityBusinessUnits().find((item) => item.id === methodologyMapState.businessUnitId);
+    if (title) title.textContent = `${businessUnit?.label ?? "선택 사업부"} 중분류별 현황과 목표`;
+    wrap.innerHTML = getMaturityCategories().map((category) => {
+        const methods = getMaturityMethodologies().filter((method) => method.categoryId === category.id);
+        const stats = getBusinessMaturityStats(methodologyMapState.businessUnitId, methods);
+        const currentAverageLabel = formatMaturityAverageLevel(stats.currentAverage);
+        const targetAverageLabel = formatMaturityAverageLevel(stats.targetAverage);
+        const averageChange = getMaturityAverageChange(stats.currentAverage, stats.targetAverage);
+        return `
+            <button type="button" class="category-summary-row" data-category-anchor="${escapeHtml(category.id)}" aria-label="${escapeHtml(category.label)}, ${methods.length}개 방법론, 적용 현재 ${stats.currentApplied} 계획 ${stats.targetApplied}, 평균 성숙도 현재 ${currentAverageLabel} 계획 ${targetAverageLabel}, 변화 ${averageChange.description}; 방법론 그룹으로 이동">
+                <span class="category-summary-label"><strong>${escapeHtml(category.label)}</strong><small>${methods.length}개 방법론</small></span>
+                <span class="category-summary-values">
+                    <small>적용</small><strong>${stats.currentApplied} → ${stats.targetApplied}</strong>
+                </span>
+                ${renderCategoryAverageComparison(stats.currentAverage, stats.targetAverage, averageChange)}
+            </button>
+        `;
+    }).join("");
+    wrap.querySelectorAll("[data-category-anchor]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const group = document.getElementById(`method-category-${button.dataset.categoryAnchor}`);
+            if (!group) return;
+            group.scrollIntoView({
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                block: "start"
+            });
+            group.classList.remove("is-highlighted");
+            window.requestAnimationFrame(() => group.classList.add("is-highlighted"));
+            window.setTimeout(() => group.classList.remove("is-highlighted"), 1600);
+        });
+    });
+}
+
+function renderMaturityPath(current, target) {
+    if (current === null && target === null) return `<span class="path-not-applicable">미적용</span>`;
+    const position = (value) => Math.max(0, Math.min(100, (value - 1) / 4 * 100)).toFixed(1);
+    const currentPosition = current === null ? null : Number(position(current));
+    const targetPosition = target === null ? null : Number(position(target));
+    const left = currentPosition === null || targetPosition === null ? null : Math.min(currentPosition, targetPosition);
+    const width = currentPosition === null || targetPosition === null ? null : Math.abs(targetPosition - currentPosition);
+    const isSamePosition = currentPosition !== null && targetPosition !== null && Math.abs(currentPosition - targetPosition) < 0.01;
+    const isLowered = currentPosition !== null && targetPosition !== null && targetPosition < currentPosition;
+    return `
+        <span class="maturity-path" aria-label="현황 ${formatMaturityScore(current)}, 목표 ${formatMaturityScore(target)}">
+            <span class="path-axis"></span>
+            <span class="path-ticks" aria-hidden="true"><i style="left:0%"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:100%"></i></span>
+            ${left !== null && !isSamePosition ? `<span class="path-range${isLowered ? " is-lowered" : ""}" style="left:${left}%;width:${width}%"></span>` : ""}
+            ${isSamePosition ? `<i class="path-marker combined" style="left:${currentPosition}%" title="현황과 목표 ${escapeHtml(formatMaturityScore(current))}"></i>` : `
+                ${currentPosition !== null ? `<i class="path-marker current" style="left:${currentPosition}%" title="현황 ${escapeHtml(formatMaturityScore(current))}"></i>` : ""}
+                ${targetPosition !== null ? `<i class="path-marker target" style="left:${targetPosition}%" title="목표 ${escapeHtml(formatMaturityScore(target))}"></i>` : ""}
+            `}
+        </span>
+    `;
+}
+
+function renderMethodTable() {
+    const wrap = document.getElementById("method-heatmap");
+    const count = document.getElementById("methodology-result-count");
+    if (!wrap) return;
+    const methods = getMaturityMethodologies();
+    if (count) count.textContent = `전체 ${methods.length}개`;
+    if (!methods.length) {
+        wrap.innerHTML = `<div class="empty-state"><i class="bx bx-error-circle"></i><strong>표시할 방법론이 없습니다.</strong><span>원본 데이터 연결을 확인해 주세요.</span></div>`;
+        methodologyMapState.selectedMethodId = null;
+        renderMethodDetail(null);
+        return;
+    }
+    if (!methods.some((method) => method.id === methodologyMapState.selectedMethodId)) {
+        methodologyMapState.selectedMethodId = null;
+    }
+    const businessUnitId = methodologyMapState.businessUnitId;
+    const categoryGroups = getMaturityCategories().map((category) => ({
+        category,
+        methods: methods.filter((method) => method.categoryId === category.id)
+    })).filter((group) => group.methods.length > 0);
+    wrap.innerHTML = `
+        <table class="heatmap-table maturity-table">
+            <caption class="visually-hidden">선택 사업부의 중분류별 25.12 이전 기준, 26.02 현황과 26.12 올해 목표 비교</caption>
+            <thead>
+                <tr>
+                    <th scope="col">방법론</th>
+                    <th scope="col">25.12<br><small>이전 기준</small></th>
+                    <th scope="col">26.02<br><small>현황</small></th>
+                    <th scope="col">26.12<br><small>올해 목표</small></th>
+                    <th scope="col">현황 → 올해 목표 <small class="path-scale">L1 · L2 · L3 · L4 · L5</small></th>
+                </tr>
+            </thead>
+            ${categoryGroups.map(({ category, methods: groupMethods }, categoryIndex) => {
+                const stats = getBusinessMaturityStats(businessUnitId, groupMethods);
+                const categoryNumber = String(categoryIndex + 1).padStart(2, "0");
+                return `
+                    <tbody class="maturity-category-group" id="method-category-${escapeHtml(category.id)}" data-category-id="${escapeHtml(category.id)}">
+                        <tr class="maturity-category-row">
+                            <th colspan="5" scope="rowgroup">
+                                <span class="category-group-label">
+                                    <span class="category-group-index">중분류 ${categoryNumber}</span>
+                                    <strong>${escapeHtml(category.label)}</strong>
+                                    <small>${groupMethods.length}개 방법론</small>
+                                </span>
+                                <span class="category-group-meta">
+                                    <span><small>현황 적용</small><strong>${stats.currentApplied}/${stats.total}</strong></span>
+                                    <span><small>목표 적용</small><strong>${stats.targetApplied}/${stats.total}</strong></span>
+                                </span>
+                            </th>
+                        </tr>
+                        ${groupMethods.map((method) => {
+                            const baseline = getMaturityScore(method, "baseline", businessUnitId);
+                            const current = getMaturityScore(method, "current", businessUnitId);
+                            const target = getMaturityScore(method, "target", businessUnitId);
+                            const selected = method.id === methodologyMapState.selectedMethodId;
+                            return `
+                                <tr class="method-row${selected ? " selected" : ""}" data-method-id="${escapeHtml(method.id)}" tabindex="0" role="button" aria-selected="${selected}">
+                                    <th scope="row" class="method-name"><strong>${escapeHtml(getMethodologyDisplayName(method))}</strong></th>
+                                    <td>${renderMaturityScore(baseline, "is-baseline")}</td>
+                                    <td>${renderMaturityScore(current, "is-current")}</td>
+                                    <td>${renderMaturityScore(target, getMaturityTargetClass(current, target))}</td>
+                                    <td>${renderMaturityPath(current, target)}</td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                `;
+            }).join("")}
+        </table>
+    `;
+    wrap.querySelectorAll("[data-method-id]").forEach((row) => {
+        const selectMethod = () => {
+            methodologyMapState.selectedMethodId = row.dataset.methodId;
+            wrap.querySelectorAll("[data-method-id]").forEach((item) => {
+                const selected = item.dataset.methodId === methodologyMapState.selectedMethodId;
+                item.classList.toggle("selected", selected);
+                item.setAttribute("aria-selected", String(selected));
+            });
+            renderMethodDetail(getMaturityMethodologies().find((method) => method.id === methodologyMapState.selectedMethodId));
+            if (window.matchMedia("(max-width: 1120px)").matches) {
+                document.getElementById("method-detail")?.scrollIntoView({
+                    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                    block: "start"
+                });
+            }
+        };
+        row.addEventListener("click", selectMethod);
+        row.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                selectMethod();
+            }
+        });
+    });
+    renderMethodDetail(getMaturityMethodologies().find((method) => method.id === methodologyMapState.selectedMethodId));
+}
+
+function getMaturityInterpretation(current, target, businessUnitLabel) {
+    const change = getMaturityChange(current, target);
+    if (change.kind === "not-applicable") return `${businessUnitLabel} 기준 현황과 목표 모두 미적용입니다.`;
+    if (change.kind === "new") return `${businessUnitLabel}는 26.12에 ${formatMaturityScore(target)} 신규 적용을 목표로 합니다.`;
+    if (change.kind === "removed") return `${businessUnitLabel}는 목표 시점에 적용 해제로 표시되어 확인이 필요합니다.`;
+    if (change.kind === "level-up") return `${businessUnitLabel}는 ${formatMaturityScore(current)}에서 ${formatMaturityScore(target)}로 성숙도 향상을 목표로 합니다.`;
+    if (change.kind === "lowered") return `${businessUnitLabel}는 목표가 현황보다 낮아 기준 확인이 필요합니다.`;
+    return `${businessUnitLabel}는 ${formatMaturityScore(current)} 수준을 유지하는 목표입니다.`;
+}
+
+function renderMethodDetail(method) {
+    const panel = document.getElementById("method-detail");
+    if (!panel) return;
+    if (!method) {
+        panel.innerHTML = `<div class="empty-state"><i class="bx bx-detail"></i><strong>방법론을 선택해 주세요.</strong></div>`;
+        return;
+    }
+    const selectedBusiness = getMaturityBusinessUnits().find((item) => item.id === methodologyMapState.businessUnitId);
+    const current = getMaturityScore(method, "current", methodologyMapState.businessUnitId);
+    const target = getMaturityScore(method, "target", methodologyMapState.businessUnitId);
+    const libraryDomain = methodologyCategoryLibraryDomains[method.categoryId] ?? "all";
+    panel.innerHTML = `
+        <div class="method-detail-heading">
+            <div class="badge-row">
+                <span class="badge domain">${escapeHtml(method.categoryLabel)}</span>
+            </div>
+            <h2>${escapeHtml(getMethodologyDisplayName(method))}</h2>
+            <p>${escapeHtml(selectedBusiness?.label ?? "선택 사업부")} · 26.02 현황 → 26.12 올해 목표</p>
+        </div>
+        <div class="detail-score-transition">
+            <div><small>현황</small>${renderMaturityScore(current, "is-current")}</div>
+            <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+            <div><small>올해 목표</small>${renderMaturityScore(target, getMaturityTargetClass(current, target))}</div>
+        </div>
+        <p class="method-interpretation">${escapeHtml(getMaturityInterpretation(current, target, selectedBusiness?.label ?? "선택 사업부"))}</p>
+        <section class="detail-comparison-section">
+            <h3>사업부별 현황과 올해 목표</h3>
+            <div class="table-scroll">
+                <table class="detail-comparison-table">
+                    <caption class="visually-hidden">선택 방법론의 사업부별 현황과 올해 목표 비교</caption>
+                    <thead><tr><th scope="col">사업부</th><th scope="col">26.02 현황</th><th scope="col">26.12 목표</th></tr></thead>
+                    <tbody>
+                        ${getMaturityBusinessUnits().map((businessUnit) => {
+                            const currentScore = getMaturityScore(method, "current", businessUnit.id);
+                            const targetScore = getMaturityScore(method, "target", businessUnit.id);
+                            return `
+                                <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
+                                    <th scope="row">${escapeHtml(businessUnit.label)}</th>
+                                    <td>${escapeHtml(formatMaturityScore(currentScore))}</td>
+                                    <td>${escapeHtml(formatMaturityScore(targetScore))}</td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <details class="previous-record-section">
+            <summary>이전 기록 보기 <small>25.12</small></summary>
+            <div class="table-scroll">
+                <table class="detail-comparison-table previous-record-table">
+                    <caption class="visually-hidden">선택 방법론의 사업부별 25.12 이전 기록</caption>
+                    <thead><tr><th scope="col">사업부</th><th scope="col">25.12 기록</th></tr></thead>
+                    <tbody>
+                        ${getMaturityBusinessUnits().map((businessUnit) => {
+                            const baselineScore = getMaturityScore(method, "baseline", businessUnit.id);
+                            return `
+                                <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
+                                    <th scope="row">${escapeHtml(businessUnit.label)}</th>
+                                    <td>${escapeHtml(formatMaturityScore(baselineScore))}</td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </details>
+        <section class="score-reading-section">
+            <h3>점수 읽기</h3>
+            <dl>
+                <div><dt>현황</dt><dd>${escapeHtml(describeMaturityScore(current))}</dd></div>
+                <div><dt>목표</dt><dd>${escapeHtml(describeMaturityScore(target))}</dd></div>
+            </dl>
+        </section>
+        <a class="btn btn-secondary detail-library-link" href="team_technical_assets_library.html?domain=${encodeURIComponent(libraryDomain)}"><i class="bx bx-folder-open"></i> 관련 Library 보기</a>
+    `;
+}
+
+function refreshMaturityDashboard() {
+    renderMaturityKpis();
+    renderBusinessUnitOverview();
+    renderCategoryOverview();
+    renderMethodTable();
 }
 
 function renderMap() {
     renderLevelSummary();
     renderLevelGraph();
-
     const wrap = document.getElementById("method-heatmap");
-    if (!wrap) return;
-    wrap.innerHTML = "";
-
-    const rows = methodologyGroups.flatMap((group) => [
-        `<tr class="domain-row"><th colspan="8"><strong>${group.label}</strong><span>${group.description}</span></th></tr>`,
-        ...group.methods.map((method) => {
-            const current = getSimulationLevel(method.level);
-            const target = getSimulationLevel(method.target);
-            return `
-                <tr class="method-row" data-method-id="${method.id}" tabindex="0">
-                    <td class="domain-name">${group.label}</td>
-                    <td class="method-name"><strong>${method.name}</strong><small>${method.evidence}</small></td>
-                    ${simulationLevels.map((level) => {
-                        const isFilled = level.score <= method.level;
-                        const isCurrent = level.score === method.level;
-                        const isTarget = level.score === method.target;
-                        return `
-                            <td>
-                                <button class="heat-cell ${isFilled ? `level-${level.score}` : "empty"}${isCurrent ? " current" : ""}${isTarget ? " target" : ""}" type="button" data-method-id="${method.id}" aria-label="${method.name} ${level.id}">
-                                    ${isCurrent ? "현재" : isTarget ? "목표" : level.id}
-                                </button>
-                            </td>
-                        `;
-                    }).join("")}
-                    <td><span class="level-chip level-${current.score}">${current.id}</span> → <span class="level-chip level-${target.score}">${target.id}</span></td>
-                </tr>
-            `;
-        })
-    ]).join("");
-
-    wrap.innerHTML = `
-        <table class="heatmap-table">
-            <thead>
-                <tr>
-                    <th>대분류</th>
-                    <th>세부 Simulation 방법론</th>
-                    ${simulationLevels.map((level) => `<th>${level.id}</th>`).join("")}
-                    <th>현재→목표</th>
-                </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-        </table>
-    `;
-
-    wrap.querySelectorAll("[data-method-id]").forEach((node) => {
-        const show = () => {
-            const methodId = node.getAttribute("data-method-id");
-            const group = methodologyGroups.find((item) => item.methods.some((method) => method.id === methodId));
-            const method = group?.methods.find((item) => item.id === methodId);
-            if (group && method) renderMethodDetail(group, method);
-        };
-        node.addEventListener("click", show);
-        node.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                show();
-            }
-        });
-    });
-
-    renderMethodDetail(methodologyGroups[0], methodologyGroups[0].methods[0]);
+    if (!methodologyLevelData || getMaturityMethodologies().length === 0) {
+        if (wrap) wrap.innerHTML = `<div class="empty-state is-error"><i class="bx bx-error-circle"></i><strong>방법론 데이터를 불러오지 못했습니다.</strong><span>생성 데이터 파일과 배포 구성을 확인해 주세요.</span></div>`;
+        const status = document.getElementById("methodology-data-status");
+        if (status) status.textContent = "데이터 확인 필요";
+        return;
+    }
+    if (!getMaturityBusinessUnits().some((item) => item.id === methodologyMapState.businessUnitId)) {
+        methodologyMapState.businessUnitId = getMaturityBusinessUnits()[0]?.id ?? "sc";
+    }
+    renderMapDataStatus();
+    refreshMaturityDashboard();
 }
 
-function renderMethodDetail(group, method) {
-    const panel = document.getElementById("method-detail");
-    if (!panel) return;
-    const current = getSimulationLevel(method.level);
-    const target = getSimulationLevel(method.target);
-    panel.innerHTML = `
-        <div class="badge-row">
-            <span class="badge domain">${group.label}</span>
-            <span class="level-chip level-${current.score}">현재 ${current.id}</span>
-            <span class="level-chip level-${target.score}">목표 ${target.id}</span>
-        </div>
-        <h2 style="font-size: 1.25rem; line-height: 1.28; margin: 0.85rem 0 0.6rem;">${method.name}</h2>
-        <div class="detail-list">
-            <div class="detail-item"><span>현재 수준</span><strong>${current.title}: ${method.evidence}</strong></div>
-            <div class="detail-item"><span>Data Gap</span><strong>${method.gap}</strong></div>
-            <div class="detail-item"><span>다음 액션</span><strong>${method.nextAction}</strong></div>
-            <div class="detail-item"><span>목표 조건</span><strong>${target.title}: ${target.next}</strong></div>
-        </div>
-        <a class="btn btn-secondary" href="team_technical_assets_library.html?domain=${encodeURIComponent(group.id)}"><i class="bx bx-folder-open"></i> 관련 Library 보기</a>
+function renderCapabilityParts(parts) {
+    const uniqueParts = [...new Set(parts)].sort((a, b) => a - b);
+    const partTokens = uniqueParts.length === learningAllParts.length
+        ? '<span class="learning-capability-part is-all">P1–P5</span>'
+        : uniqueParts.map((part) => `<span class="learning-capability-part">P${part}</span>`).join("");
+    return `
+        <span class="learning-capability-parts" aria-label="적용 파트">
+            ${partTokens}
+        </span>
     `;
+}
+
+function getLearningPlacementChannels(node, placement) {
+    return placement.channels ?? node.channels ?? [];
+}
+
+function getLearningPlacementRequirement(node, placement) {
+    const explicitRequirement = placement.requirement ?? node.requirement;
+    if (["required", "optional"].includes(explicitRequirement)) return explicitRequirement;
+
+    const isCommonFoundation = learningRequiredFamilyIds.has(node.masterCapabilityId);
+    const isCapabilityPlacement = getLearningPlacementChannels(node, placement).length === 0;
+    return isCommonFoundation || isCapabilityPlacement ? "required" : "optional";
+}
+
+function renderCapabilityChannels(channels) {
+    if (channels.length === 0) return "";
+    return `
+        <span class="learning-capability-channels" aria-label="교육 채널">
+            ${channels.map((channel) => `
+                <span class="learning-item-channel is-${escapeHtml(channel)}">
+                    ${escapeHtml(learningEducationChannelLabels[channel])}
+                </span>
+            `).join("")}
+        </span>
+    `;
+}
+
+function matchesLearningFilters(node, placement) {
+    const selectedPart = learningPathState.selectedPart === "all"
+        ? null
+        : Number(learningPathState.selectedPart);
+    const channels = getLearningPlacementChannels(node, placement);
+    const requirement = getLearningPlacementRequirement(node, placement);
+    const partMatches = selectedPart === null || placement.parts.includes(selectedPart);
+    const requirementMatches = learningPathState.selectedRequirement === "all"
+        || requirement === learningPathState.selectedRequirement;
+    const channelMatches = learningPathState.selectedChannel === "all"
+        || channels.includes(learningPathState.selectedChannel);
+    return partMatches && requirementMatches && channelMatches;
+}
+
+function renderLearningCapabilityNode(node, placement) {
+    const selectedPart = learningPathState.selectedPart === "all"
+        ? null
+        : Number(learningPathState.selectedPart);
+    const channels = getLearningPlacementChannels(node, placement);
+    const requirement = getLearningPlacementRequirement(node, placement);
+    const isDimmed = !matchesLearningFilters(node, placement);
+    const relationApplies = !isDimmed
+        && placement.relationType === "source-link"
+        && (selectedPart === null
+            || !placement.relationParts?.length
+            || placement.relationParts.includes(selectedPart));
+    const parentLabels = relationApplies
+        ? (placement.parentIds ?? [])
+            .map((parentId) => learningCapabilityById[parentId]?.label)
+            .filter(Boolean)
+        : [];
+    const classNames = [
+        "learning-capability-node",
+        isDimmed ? "is-dimmed" : "",
+        channels.length > 0 ? "has-education-channel" : "",
+        parentLabels.length > 0 ? "has-source-link" : ""
+    ].filter(Boolean).join(" ");
+    const partsLabel = placement.parts.map((part) => `${part}파트`).join(", ");
+    const channelsLabel = channels.map((channel) => learningEducationChannelLabels[channel]).join(", ");
+    const requirementLabel = learningRequirementLabels[requirement];
+
+    return `
+        <article
+            class="${classNames}"
+            data-capability-id="${escapeHtml(node.id)}"
+            data-parts="${placement.parts.join(",")}"
+            data-channels="${channels.join(",")}"
+            data-requirement="${escapeHtml(requirement)}"
+            aria-label="${escapeHtml(`${placement.label ?? node.label}. ${partsLabel}. ${requirementLabel}${channelsLabel ? `. 교육 채널 ${channelsLabel}` : ""}`)}"
+        >
+            <strong class="learning-capability-title">${escapeHtml(placement.label ?? node.label)}</strong>
+            <span class="learning-capability-meta">
+                ${renderCapabilityParts(placement.parts)}
+                ${renderCapabilityChannels(channels)}
+            </span>
+            ${parentLabels.length > 0
+                ? `<span class="learning-source-link">${escapeHtml(parentLabels.join(" · "))} 연관 역량</span>`
+                : ""}
+        </article>
+    `;
+}
+
+function renderLearningCapabilityMap() {
+    const wrap = document.getElementById("tech-tree");
+    if (!wrap) return;
+
+    const stageHeaders = learningCareerStages.map((stage) => `
+        <div class="learning-map-stage-head">${escapeHtml(stage.label)}</div>
+    `).join("");
+
+    const familyRows = learningCapabilityFamilies.map((family) => {
+        const stageCells = learningCareerStages.map((stage) => {
+            const entries = family.nodes.flatMap((node) => (
+                node.placements
+                    .filter((placement) => placement.stageId === stage.id)
+                    .map((placement) => ({ node, placement }))
+            ));
+            return `
+                <div class="learning-route-stage" data-stage-label="${escapeHtml(stage.label)}">
+                    ${entries.length > 0
+                        ? `<div class="learning-capability-list">${entries.map(({ node, placement }) => renderLearningCapabilityNode(node, placement)).join("")}</div>`
+                        : `<span class="learning-route-empty" aria-label="확인된 항목 없음">—</span>`}
+                </div>
+            `;
+        }).join("");
+
+        return `
+            <section class="learning-route" data-family-id="${escapeHtml(family.id)}" aria-labelledby="learning-family-${escapeHtml(family.id)}">
+                <header class="learning-route-label">
+                    <h3 id="learning-family-${escapeHtml(family.id)}">${escapeHtml(family.label)}</h3>
+                    <p>${escapeHtml(family.description)}</p>
+                    ${Array.isArray(family.mapCategories) && family.mapCategories.length > 0
+                        ? `<div class="learning-route-taxonomy" aria-label="Technology Map 분류">
+                            ${family.mapCategories.map((category) => `<span>${escapeHtml(category)}</span>`).join("")}
+                        </div>`
+                        : ""}
+                </header>
+                ${stageCells}
+            </section>
+        `;
+    }).join("");
+
+    const selectedLabel = learningPathState.selectedPart === "all"
+        ? "전체 파트"
+        : `${learningPathState.selectedPart}파트 강조`;
+    const selectedRequirementLabel = learningPathState.selectedRequirement === "all"
+        ? "전체 이수 구분"
+        : `${learningRequirementLabels[learningPathState.selectedRequirement]} 항목`;
+    const selectedChannelLabel = learningPathState.selectedChannel === "all"
+        ? "전체 교육 채널"
+        : `${learningEducationChannelLabels[learningPathState.selectedChannel]} 교육 채널`;
+    wrap.setAttribute("aria-label", `${selectedLabel}, ${selectedRequirementLabel}, ${selectedChannelLabel} 역량 계열별 Learning Path`);
+    wrap.innerHTML = `
+        <div class="learning-map-head" aria-hidden="true">
+            <div class="learning-map-corner">팀 역량 계열</div>
+            ${stageHeaders}
+        </div>
+        ${familyRows}
+    `;
+}
+
+function renderLearningPartBadges(parts) {
+    return `
+        <div class="learning-part-badges" aria-label="해당 파트">
+            ${parts.map((part) => `<span class="learning-part-badge">P${part}</span>`).join("")}
+        </div>
+    `;
+}
+
+function renderLearningTrackNode(track) {
+    const scopeClass = track.parts.length > 1 ? "is-shared" : "is-part";
+    const body = track.items.length > 0
+        ? `<ul class="learning-node-items">${track.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+        : `<div class="learning-empty-state"><i class="bx bx-info-circle"></i><span>${escapeHtml(track.emptyMessage)}</span></div>`;
+
+    return `
+        <article class="learning-node ${scopeClass}">
+            <div class="learning-node-head">
+                <div>
+                    <h4 class="learning-node-title">${escapeHtml(track.title)}</h4>
+                    <p class="learning-node-meta">${escapeHtml(track.source)}</p>
+                </div>
+                ${renderLearningPartBadges(track.parts)}
+            </div>
+            ${body}
+        </article>
+    `;
+}
+
+function getVisibleLearningTracks(stageId) {
+    return learningPartTracks.filter((track) => {
+        if (track.stageId !== stageId) return false;
+        if (learningPathState.selectedPart === "all") return true;
+        return track.parts.includes(Number(learningPathState.selectedPart));
+    });
+}
+
+function renderLearningTreeFlow() {
+    const wrap = document.getElementById("tech-tree");
+    if (!wrap) return;
+
+    const commonStage = `
+        <section class="learning-stage-column is-common" aria-labelledby="learning-stage-common">
+            <header class="learning-stage-head">
+                <span class="learning-stage-kicker">START</span>
+                <h3 id="learning-stage-common">팀 공통 기반</h3>
+                <span class="learning-stage-count">${learningCommonFoundation.items.length}개 역량</span>
+            </header>
+            <div class="learning-stage-body">
+                <article class="learning-node is-team">
+                    <div class="learning-node-head">
+                        <div>
+                            <h4 class="learning-node-title">${escapeHtml(learningCommonFoundation.title)}</h4>
+                            <p class="learning-node-meta">${escapeHtml(learningCommonFoundation.source)}</p>
+                        </div>
+                        ${renderLearningPartBadges([1, 2, 3, 4, 5])}
+                    </div>
+                    <ul class="learning-node-items">
+                        ${learningCommonFoundation.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                    </ul>
+                </article>
+            </div>
+        </section>
+    `;
+
+    const careerStages = learningCareerStages.map((stage) => {
+        const tracks = getVisibleLearningTracks(stage.id);
+        return `
+            <section class="learning-stage-column" aria-labelledby="learning-stage-${stage.id}">
+                <header class="learning-stage-head">
+                    <span class="learning-stage-kicker">경력 구간</span>
+                    <h3 id="learning-stage-${stage.id}">${escapeHtml(stage.label)}</h3>
+                    <span class="learning-stage-count">${tracks.length}개 트랙</span>
+                </header>
+                <div class="learning-stage-body">
+                    ${tracks.length > 0
+                        ? tracks.map(renderLearningTrackNode).join("")
+                        : `<div class="learning-empty-state"><i class="bx bx-info-circle"></i><span>선택한 파트의 확인된 항목이 없습니다.</span></div>`}
+                </div>
+            </section>
+        `;
+    }).join("");
+
+    const selectedLabel = learningPathState.selectedPart === "all"
+        ? "전체 파트"
+        : `${learningPathState.selectedPart}파트`;
+    wrap.setAttribute("aria-label", `${selectedLabel} Learning Path. 팀 공통 기반부터 1~2년, 3~5년, 5년 이상 순서입니다.`);
+    wrap.innerHTML = commonStage + careerStages;
+}
+
+function renderLearningOverlapMatrix() {
+    const wrap = document.getElementById("learning-overlap-matrix");
+    if (!wrap) return;
+    const visibleCapabilities = learningSharedCapabilities.filter((capability) => {
+        if (learningPathState.selectedPart === "all") return true;
+        return capability.parts.includes(Number(learningPathState.selectedPart));
+    });
+
+    wrap.setAttribute("role", "table");
+    wrap.setAttribute("aria-label", "파트 간 공유 역량 매트릭스");
+    wrap.innerHTML = `
+        <div class="learning-overlap-head" role="row">
+            <span role="columnheader">공유 역량</span>
+            ${[1, 2, 3, 4, 5].map((part) => `<span role="columnheader">P${part}</span>`).join("")}
+        </div>
+        ${visibleCapabilities.map((capability) => `
+            <div class="learning-overlap-row" role="row">
+                <strong class="learning-overlap-name" role="rowheader">${escapeHtml(capability.title)}</strong>
+                ${[1, 2, 3, 4, 5].map((part) => {
+                    const included = capability.parts.includes(part);
+                    return `<span class="learning-overlap-part${included ? " is-included" : ""}" role="cell" aria-label="${part}파트 ${included ? "포함" : "미포함"}">${included ? "✓" : "–"}</span>`;
+                }).join("")}
+            </div>
+        `).join("")}
+    `;
+}
+
+function renderLearningChannelChip(channelId) {
+    const channel = learningChannelMeta[channelId] ?? learningChannelMeta.unknown;
+    return `<span class="learning-channel-chip ${channel.className}"><i class="${channel.icon}"></i>${escapeHtml(channel.label)}</span>`;
+}
+
+function renderLearningEducationGrid() {
+    const wrap = document.getElementById("learning-education-grid");
+    if (!wrap) return;
+    wrap.innerHTML = learningEducationGroups.map((group) => `
+        <article class="learning-education-card">
+            <div class="learning-education-head">
+                ${renderLearningChannelChip(group.id)}
+                <strong>${escapeHtml(group.status)}</strong>
+            </div>
+            <p class="learning-node-meta">${escapeHtml(group.source)}</p>
+            ${group.items.length > 0
+                ? `<ul class="learning-education-list">${group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+                : `<div class="learning-empty-state"><i class="bx bx-help-circle"></i><span>연결된 과정이 아직 확인되지 않았습니다.</span></div>`}
+            <p class="learning-education-note">${escapeHtml(group.note)}</p>
+        </article>
+    `).join("");
+}
+
+function renderLearningUncertaintyList() {
+    const wrap = document.getElementById("learning-uncertainty-list");
+    if (!wrap) return;
+    wrap.innerHTML = learningUncertaintyGroups.map((group) => `
+        <section class="learning-uncertainty-group">
+            <h3>${escapeHtml(group.title)}</h3>
+            <ul>${group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </section>
+    `).join("");
+}
+
+function updateLearningPartButtons() {
+    document.querySelectorAll("[data-learning-part]").forEach((button) => {
+        const active = button.dataset.learningPart === learningPathState.selectedPart;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
+}
+
+function bindLearningPartButtons() {
+    document.querySelectorAll("[data-learning-part]").forEach((button) => {
+        if (button.dataset.learningBound === "true") return;
+        button.dataset.learningBound = "true";
+        button.addEventListener("click", () => {
+            const nextPart = button.dataset.learningPart;
+            if (!["all", "1", "2", "3", "4", "5"].includes(nextPart)) return;
+            learningPathState.selectedPart = nextPart;
+            updateLearningPartButtons();
+            renderLearningCapabilityMap();
+        });
+    });
+}
+
+function updateLearningRequirementButtons() {
+    document.querySelectorAll("[data-learning-requirement]").forEach((button) => {
+        const active = button.dataset.learningRequirement === learningPathState.selectedRequirement;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
+}
+
+function bindLearningRequirementButtons() {
+    document.querySelectorAll("[data-learning-requirement]").forEach((button) => {
+        if (button.dataset.learningBound === "true") return;
+        button.dataset.learningBound = "true";
+        button.addEventListener("click", () => {
+            const nextRequirement = button.dataset.learningRequirement;
+            if (!["all", "required", "optional"].includes(nextRequirement)) return;
+            learningPathState.selectedRequirement = nextRequirement;
+            updateLearningRequirementButtons();
+            renderLearningCapabilityMap();
+        });
+    });
+}
+
+function updateLearningChannelButtons() {
+    document.querySelectorAll("[data-learning-channel]").forEach((button) => {
+        const active = button.dataset.learningChannel === learningPathState.selectedChannel;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
+}
+
+function bindLearningChannelButtons() {
+    document.querySelectorAll("[data-learning-channel]").forEach((button) => {
+        if (button.dataset.learningBound === "true") return;
+        button.dataset.learningBound = "true";
+        button.addEventListener("click", () => {
+            const nextChannel = button.dataset.learningChannel;
+            if (!["all", "team", "internal", "external"].includes(nextChannel)) return;
+            learningPathState.selectedChannel = nextChannel;
+            updateLearningChannelButtons();
+            renderLearningCapabilityMap();
+        });
+    });
 }
 
 function renderTechTree() {
-    const wrap = document.getElementById("tech-tree");
-    if (!wrap) return;
-    wrap.innerHTML = "";
-
-    techTreeStages.forEach((stage) => {
-        const card = document.createElement("article");
-        card.className = "tree-stage";
-        card.innerHTML = `
-            <span>${stage.level}</span>
-            <h3>${stage.title}</h3>
-            <p>${stage.focus}</p>
-            <div class="tree-columns">
-                <div>
-                    <strong>익힐 활동</strong>
-                    <ul>${stage.practices.map((item) => `<li>${item}</li>`).join("")}</ul>
-                </div>
-                <div>
-                    <strong>남길 산출물</strong>
-                    <ul>${stage.outputs.map((item) => `<li>${item}</li>`).join("")}</ul>
-                </div>
-            </div>
-        `;
-        wrap.appendChild(card);
-    });
+    renderLearningCapabilityMap();
+    updateLearningPartButtons();
+    updateLearningRequirementButtons();
+    updateLearningChannelButtons();
+    bindLearningPartButtons();
+    bindLearningRequirementButtons();
+    bindLearningChannelButtons();
 }
 
 function renderCulture() {

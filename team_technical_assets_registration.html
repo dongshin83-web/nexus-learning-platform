@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Guide | 우리팀 기술자산화 Hub</title>
+    <link rel="stylesheet" href="team_technical_assets_boxicons.css?v=20260717-1">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-2">
+</head>
+<body data-page="registration">
+    <header class="topbar">
+        <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
+            <span class="brand-mark"><i class="bx bx-edit-alt"></i></span>
+            <span>
+                <strong>Registration Guide</strong>
+                <span>안전하게 말하고, 정리하고, 사내에서 완성하기</span>
+            </span>
+        </a>
+        <nav class="topnav" aria-label="기술자산화 페이지">
+            <a href="team_technical_assets.html">Overview</a>
+            <a href="team_technical_assets_map.html">Technology Map</a>
+            <a href="team_technical_assets_techtree.html">Learning Path</a>
+            <a href="team_technical_assets_library.html">Library</a>
+            <a class="active" href="team_technical_assets_registration.html">Registration Guide</a>
+            <a href="team_technical_assets_culture.html">Culture & History</a>
+        </nav>
+    </header>
+
+    <main class="registration-page">
+        <section class="registration-hero container" aria-labelledby="registration-title">
+            <span class="page-kicker">AI-assisted registration</span>
+            <h1 id="registration-title">실제 정보는 사내에서 완성합니다</h1>
+            <p>유료 AI 계정이 있으면 해당 계정에서, 없으면 Gemini에서 일반화된 용어로 대화합니다. 대화가 끝나면 같은 대화창에 JSON 생성 Prompt를 붙여 넣고, 결과를 파일로 저장해 사내로 가져옵니다.</p>
+            <ol class="registration-flow" aria-label="기술자산 등록 흐름">
+                <li><span>1</span><strong>AI와 대화하기</strong><small>유료 계정이 있으면 우선 사용하고, 없으면 Gemini를 사용합니다. 실제 명칭과 수치는 말하지 않습니다.</small></li>
+                <li class="registration-flow-with-tooltip">
+                    <span>2</span>
+                    <strong>
+                        같은 대화에서 JSON 만들기
+                        <button class="registration-tooltip-trigger" type="button" aria-label="AI 도구 비교 결과 보기" aria-describedby="json-tool-test-tooltip">
+                            <i class="bx bx-info-circle" aria-hidden="true"></i>
+                        </button>
+                    </strong>
+                    <small>대화가 끝난 뒤 같은 창에 전용 Prompt를 붙여 넣습니다.</small>
+                    <span class="registration-tooltip" id="json-tool-test-tooltip" role="tooltip">
+                        <b>동일한 15분 답변으로 확인한 결과</b>
+                        <span><em>ChatGPT Pro</em> — 질문 확인 절차와 JSON 품질이 가장 안정적</span>
+                        <span><em>Gemini Pro</em> — JSON 키·자료형과 내용 품질이 우수하나 사용자 확인 전에 바로 생성</span>
+                        <span><em>무료 도구</em> — 등록 가능한 JSON 생성 가능. 중복 질문·조기 생성·자료형 오류는 도구별 차이 있음</span>
+                        <b class="registration-tooltip-subtitle">4구간 음성 시험</b>
+                        <span><em>Gemini 무료 Flash</em> — 전사를 가장 충실하게 보존하고 정식 JSON도 정상 생성. 음성 속 지시를 명령으로 실행하는 위험 있음</span>
+                        <span><em>Gemini Pro</em> — JSON은 안정적이지만 전사 누락이 큼</span>
+                        <span><em>Grok 무료</em> — 전사는 길게 보존하지만 전문용어 오인식이 JSON 값까지 전파됨</span>
+                        <span><em>ChatGPT·Copilot 무료</em> — 현재 웹 무료 환경에서는 음성 전사 불가</span>
+                        <span class="registration-tooltip-note">공통 권고: 요약을 먼저 확인하고, 사용자가 “최종 JSON 생성”을 지시한 뒤 코드 블록을 복사하세요.</span>
+                    </span>
+                </li>
+                <li><span>3</span><strong>JSON 저장·반입하기</strong><small>코드 블록을 복사해 .json으로 저장하고 승인된 메일 또는 파일 복사를 사용합니다.</small></li>
+                <li><span>4</span><strong>실제 정보로 완성하기</strong><small>사내 웹에서 용어·근거·링크를 보완합니다.</small></li>
+            </ol>
+            <p class="registration-process-rule"><i class="bx bx-check-circle"></i><strong>확정 원칙</strong> 음성 파일을 별도로 전사하지 않습니다. 음성 또는 텍스트로 대화한 동일한 대화창에서 JSON까지 생성해야 맥락이 유지됩니다.</p>
+        </section>
+
+        <section class="registration-workspace container" aria-labelledby="asset-type-title">
+            <header class="registration-section-head">
+                <span>
+                    <span class="page-kicker">Asset type</span>
+                    <h2 id="asset-type-title">등록할 자산 유형을 선택하세요</h2>
+                </span>
+                <small>VD Request부터 외부 보고 자료까지 9개 기술자산 가이드를 사용할 수 있습니다.</small>
+            </header>
+
+            <div class="asset-type-tabs" role="tablist" aria-label="기술자산 유형">
+                <button type="button" role="tab" id="tab-vd-request" aria-selected="true" aria-controls="panel-vd-request" data-asset-tab="vd-request">VD Request</button>
+                <button type="button" role="tab" id="tab-cor" aria-selected="false" aria-controls="panel-cor" data-asset-tab="cor">CoR</button>
+                <button type="button" role="tab" id="tab-methodology" aria-selected="false" aria-controls="panel-methodology" data-asset-tab="methodology">방법론</button>
+                <button type="button" role="tab" id="tab-bp" aria-selected="false" aria-controls="panel-bp" data-asset-tab="bp">BP</button>
+                <button type="button" role="tab" id="tab-technical-report" aria-selected="false" aria-controls="panel-technical-report" data-asset-tab="technical-report">기술보고서</button>
+                <button type="button" role="tab" id="tab-knowhow" aria-selected="false" aria-controls="panel-knowhow" data-asset-tab="knowhow">노하우</button>
+                <button type="button" role="tab" id="tab-tool-manual" aria-selected="false" aria-controls="panel-tool-manual" data-asset-tab="tool-manual">Tool Manual</button>
+                <button type="button" role="tab" id="tab-education-material" aria-selected="false" aria-controls="panel-education-material" data-asset-tab="education-material">교육자료</button>
+                <button type="button" role="tab" id="tab-external-report" aria-selected="false" aria-controls="panel-external-report" data-asset-tab="external-report">외부 보고 자료</button>
+            </div>
+
+            <section class="asset-guide-panel" id="panel-vd-request" role="tabpanel" aria-labelledby="tab-vd-request">
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-message-square-detail"></i></span>
+                    <span>
+                        <span class="page-kicker">VD Request</span>
+                        <h2>요청자의 판단과 실제 영향을 남깁니다</h2>
+                        <p>단순 수행 기록이 아니라, 어떤 판단이 필요했고 Simulation 결과가 요청자의 행동에 어떻게 활용됐는지 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 6가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>요청 배경과 판단 질문</strong><span>왜 요청했고 무엇을 결정해야 했나요?</span></li>
+                            <li><strong>Simulation 대응</strong><span>무엇을 비교하고 검토했나요?</span></li>
+                            <li><strong>판단 근거</strong><span>어떤 경향·메커니즘·비교 결과를 전달했나요?</span></li>
+                            <li><strong>요청자 피드백</strong><span>결과를 어떻게 평가하거나 후속 요청했나요?</span></li>
+                            <li><strong>실제 영향</strong><span>유지·변경·추가 검증·보류 중 무엇에 반영됐나요?</span></li>
+                            <li><strong>적용범위와 한계</strong><span>어디까지 재사용할 수 있고 무엇을 주의해야 하나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>실제 정보 대신 Placeholder를 사용하세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>사업부·고객명</dt><dd>[사업부], [고객]</dd></div>
+                            <div><dt>제품·Project명</dt><dd>[제품군], [개발 Project]</dd></div>
+                            <div><dt>치수·물성·조건</dt><dd>[설계안 A], [특정 조건]</dd></div>
+                            <div><dt>정확한 결과 수치</dt><dd>증가·감소, 기준 이내·초과</dd></div>
+                            <div><dt>보고서·모델·경로</dt><dd>[사내 보고서], [해석 모델]</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 실제 용어·수치·파일·링크는 JSON 반입 후 사내 웹에서만 입력합니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="example-title">
+                    <header class="registration-subhead">
+                        <span>
+                            <span class="page-kicker">Conversation example</span>
+                            <h3 id="example-title">일반화하되, 판단 맥락은 구체적으로 말합니다</h3>
+                        </span>
+                        <p>실제 명칭과 수치는 숨기고, 무엇을 비교했으며 왜 그렇게 판단했는지는 남깁니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article>
+                            <span class="conversation-step">1 · 요청 배경과 판단 질문</span>
+                            <span class="conversation-role">AI 질문</span>
+                            <p>어떤 상황에서 요청이 발생했고, 요청자는 언제까지 무엇을 결정해야 했나요?</p>
+                        </article>
+                        <article class="is-answer">
+                            <span class="conversation-role">좋은 답변 예시</span>
+                            <p>[사업부]가 [신규 제품]의 상세 설계를 확정하기 전에, 반복 충격 조건에서 [연결부] 손상 가능성이 낮은 구조를 선택해야 했습니다. 시제품 평가 전에 [설계안 A]와 [설계안 B]의 상대 위험을 비교해 달라는 요청이었습니다.</p>
+                        </article>
+                        <article>
+                            <span class="conversation-step">2 · Simulation 대응</span>
+                            <span class="conversation-role">AI 질문</span>
+                            <p>두 설계안을 어떤 조건과 관점으로 비교했나요?</p>
+                        </article>
+                        <article class="is-answer">
+                            <span class="conversation-role">좋은 답변 예시</span>
+                            <p>두 설계안에 동일한 재료 모델과 구속 조건을 적용하고, 반복 충격 시 [연결부]의 변형 집중 위치와 하중 전달 경로를 비교했습니다. 절대 수치의 합격·불합격보다 두 안의 상대 차이와 취약 위치가 반복 조건에서도 일관적인지를 확인했습니다.</p>
+                        </article>
+                        <article>
+                            <span class="conversation-step">3 · 판단 근거</span>
+                            <span class="conversation-role">AI 질문</span>
+                            <p>요청자가 설계안을 선택할 수 있도록 어떤 판단 근거를 전달했나요?</p>
+                        </article>
+                        <article class="is-answer">
+                            <span class="conversation-role">좋은 답변 예시</span>
+                            <p>[설계안 B]는 기존 취약 위치의 변형 집중을 상대적으로 낮추고 하중을 주변 구조로 분산했습니다. 다만 새로운 모서리 부위에 국부 집중이 나타나, B안을 바로 확정하기보다 해당 부위의 형상을 보완한 뒤 평가하는 것이 안전하다고 설명했습니다.</p>
+                        </article>
+                        <article>
+                            <span class="conversation-step">4 · 요청자 피드백</span>
+                            <span class="conversation-role">AI 질문</span>
+                            <p>요청자는 결과를 어떻게 받아들였고 어떤 후속 요청을 했나요?</p>
+                        </article>
+                        <article class="is-answer">
+                            <span class="conversation-role">좋은 답변 예시</span>
+                            <p>회의에서 취약 위치와 원인을 함께 설명한 점이 설계안 선택에 도움이 됐다는 피드백을 받았습니다. 요청자는 [설계안 B]의 국부 집중을 줄일 수 있는 보완 형상 두 가지를 추가로 비교해 달라고 요청했습니다.</p>
+                        </article>
+                        <article>
+                            <span class="conversation-step">5 · 실제 영향</span>
+                            <span class="conversation-role">AI 질문</span>
+                            <p>Simulation 결과 이후 실제 판단이나 다음 행동이 어떻게 달라졌나요?</p>
+                        </article>
+                        <article class="is-answer">
+                            <span class="conversation-role">좋은 답변 예시</span>
+                            <p>[설계안 A]는 다음 단계 적용 후보에서 제외됐습니다. [설계안 B]는 취약 부위를 보완한 조건으로 변경됐고, 변경안이 다음 시제품 평가 대상에 반영됐습니다. 평가 항목에도 Simulation에서 확인한 두 취약 위치가 우선 점검 부위로 추가됐습니다.</p>
+                        </article>
+                        <article>
+                            <span class="conversation-step">6 · 적용범위와 한계</span>
+                            <span class="conversation-role">AI 질문</span>
+                            <p>이 판단을 어떤 상황에 재사용할 수 있고, 그대로 적용하면 안 되는 조건은 무엇인가요?</p>
+                        </article>
+                        <article class="is-answer">
+                            <span class="conversation-role">좋은 답변 예시</span>
+                            <p>유사한 연결 구조와 동일한 종류의 충격 조건에서 설계안의 상대 위험을 비교할 때 재사용할 수 있습니다. 재료 구성, 체결 방식 또는 구속 조건이 달라지면 하중 전달 경로가 바뀔 수 있으므로 이번 결과의 절대값과 우선순위를 그대로 적용하면 안 됩니다.</p>
+                        </article>
+                    </div>
+                    <aside class="answer-quality-note">
+                        <i class="bx bx-bulb"></i>
+                        <span><strong>좋은 답변의 기준</strong> 대상 이름과 수치는 일반화하되, 요청 시점·비교 대상·판단 방식·피드백·바뀐 행동·적용 한계는 구체적으로 설명합니다.</span>
+                    </aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="prompt-title">
+                    <header class="prompt-heading">
+                        <span>
+                            <span class="page-kicker">Copy & start</span>
+                            <h3 id="prompt-title">VD Request JSON 생성 Prompt</h3>
+                            <p>앞선 대화를 나눈 같은 창에 붙여 넣어 누락을 확인하고 JSON으로 정리하세요.</p>
+                        </span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" id="copy-vd-request-prompt">
+                            <i class="bx bx-copy"></i><span>Prompt 복사</span>
+                        </button>
+                    </header>
+                    <pre class="prompt-preview" id="vd-request-prompt-preview" tabindex="0" aria-label="VD Request JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-prompt-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="after-import-title">JSON을 사내로 가져온 뒤 완성할 내용</h3>
+                    <ul>
+                        <li>실제 사업부·고객·제품·Project와 요청자</li>
+                        <li>실제 비교 조건·수치와 판단 기준</li>
+                        <li>피드백 확인일과 관련 회의·메일 정보</li>
+                        <li>보고서·모델·데이터의 사내 링크</li>
+                        <li>Owner와 Reviewer</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-cor" role="tabpanel" aria-labelledby="tab-cor" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-target-lock"></i></span>
+                    <span>
+                        <span class="page-kicker">CoR</span>
+                        <h2>완료된 과제가 바꾼 기술과 회사 프로세스를 남깁니다</h2>
+                        <p>CoR 종료 후, 해결한 기술 Gap과 확보 기술뿐 아니라 경영성과 기여와 실제 업무 프로세스의 변화를 함께 정리합니다.</p>
+                    </span>
+                </header>
+
+                <aside class="completion-policy-note">
+                    <i class="bx bx-check-shield"></i>
+                    <span><strong>등록 시점</strong> 제안·수행 중에는 기존 과제관리 체계를 사용하고, CoR이 종료되어 결과보고서가 준비된 뒤 Library에 등록합니다.</span>
+                </aside>
+
+                <div class="registration-two-column cor-overview-grid">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 7가지</span>
+                        <ol class="essential-question-list cor-essential-list">
+                            <li><strong>기술 Gap</strong><span>기존 방식으로 해결되지 않던 문제는 무엇인가요?</span></li>
+                            <li><strong>목표와 검증</strong><span>무엇을 판단할 수 있게 만들고 어떻게 검증했나요?</span></li>
+                            <li><strong>확보 기술</strong><span>새롭게 알게 된 것과 가능해진 판단은 무엇인가요?</span></li>
+                            <li><strong>경영성과 기여</strong><span>개발·시험·품질·의사결정에 어떤 기여를 했나요?</span></li>
+                            <li><strong>프로세스 변화</strong><span>회사의 일하는 방식이 기존에서 어떻게 바뀌었나요?</span></li>
+                            <li><strong>적용범위와 한계</strong><span>어디까지 재사용할 수 있고 추가 검증은 언제 필요한가요?</span></li>
+                            <li><strong>관련 자료</strong><span>제안서·중간보고서·결과보고서·방법론을 연결했나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card cor-links-card">
+                        <span class="card-label">사내에서 연결할 자료</span>
+                        <h3>내용을 다시 쓰지 않고 근거 문서를 연결합니다</h3>
+                        <dl class="generalization-list cor-link-list">
+                            <div><dt>제안서</dt><dd>기술 Gap·목표·범위</dd></div>
+                            <div><dt>중간보고서</dt><dd>검증 결과·방향 변경</dd></div>
+                            <div><dt>결과보고서</dt><dd>최종 결론·달성도</dd></div>
+                            <div><dt>개발 방법론</dt><dd>개발·검증·활용 방법론</dd></div>
+                            <div><dt>선택 자료</dt><dd>기술보고서·모델·데이터·교육자료</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 외부 AI에는 실제 문서명과 URL 대신 [CoR 결과보고서], [관련 방법론 A]처럼 표현합니다.</p>
+                    </article>
+                </div>
+
+                <section class="business-impact-section" aria-labelledby="business-impact-title">
+                    <header class="registration-subhead">
+                        <span>
+                            <span class="page-kicker">Business contribution</span>
+                            <h3 id="business-impact-title">경영성과는 금액을 추정하지 않고 확인된 기여를 씁니다</h3>
+                        </span>
+                        <p>성과 수치가 없더라도 어떤 불확실성·재작업·후기 변경을 줄였는지 구체적으로 설명합니다.</p>
+                    </header>
+                    <div class="impact-chip-list" aria-label="경영성과 기여 유형">
+                        <span>개발기간 단축</span><span>시험·시제품 감소</span><span>설계 변경 리스크 감소</span><span>품질·신뢰성 위험 사전 제거</span><span>문제 해결시간 단축</span><span>중복 검증 감소</span><span>의사결정 신뢰도 향상</span><span>적용 가능성 확대</span>
+                    </div>
+                    <article class="example-comparison-card">
+                        <span class="example-label is-weak">피해야 할 답변</span>
+                        <p>개발기간을 단축하고 비용 절감에 기여했습니다.</p>
+                        <span class="example-label is-good">좋은 답변 예시</span>
+                        <p>기존에는 시제품 평가 이후 취약부를 확인하고 설계를 다시 변경했습니다. 이번 과제로 평가 전에 위험이 높은 설계안을 제외할 수 있게 되어, 불필요한 시제품 검토와 후기 설계 변경 가능성을 줄였습니다. 구체적인 기간·비용 절감 효과는 아직 확인되지 않았습니다.</p>
+                    </article>
+                </section>
+
+                <section class="process-change-section" aria-labelledby="process-change-title">
+                    <header class="registration-subhead">
+                        <span>
+                            <span class="page-kicker">Process change</span>
+                            <h3 id="process-change-title">프로세스 변화는 기존 → 변경으로 씁니다</h3>
+                        </span>
+                        <p>변화 상태는 반영 완료·시범 적용·반영 제안·변화 없음 중 하나로 구분합니다.</p>
+                    </header>
+                    <div class="process-change-example">
+                        <article>
+                            <span>기존</span>
+                            <strong>시제품 평가 후 위험 확인</strong>
+                            <p>상세 설계와 시제품 제작 이후 취약부가 발견되면 Simulation으로 원인을 분석하고 설계를 다시 변경했습니다.</p>
+                        </article>
+                        <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+                        <article class="is-after">
+                            <span>변경 · 시범 적용</span>
+                            <strong>설계 확정 전 Simulation 선별</strong>
+                            <p>상세 설계 확정 전에 표준 Simulation 절차로 후보안을 비교하고, 위험이 낮은 설계만 시제품 평가로 넘깁니다.</p>
+                        </article>
+                    </div>
+                    <div class="process-pattern-list" aria-label="프로세스 변화 예시">
+                        <span>사후 원인분석 → 사전 위험검토</span>
+                        <span>전문가 개인 판단 → 공통 판단 기준</span>
+                        <span>과제별 모델 재작성 → 검증 모델 재사용</span>
+                        <span>전체 후보 평가 → Simulation 선별 후 평가</span>
+                    </div>
+                </section>
+
+                <section class="registration-example-section" aria-labelledby="cor-example-title">
+                    <header class="registration-subhead">
+                        <span>
+                            <span class="page-kicker">Conversation example</span>
+                            <h3 id="cor-example-title">CoR 결과를 이 정도로 설명합니다</h3>
+                        </span>
+                        <p>실제 명칭과 수치는 숨기되, 기술 Gap·검증·기여·프로세스 변화는 구체적으로 남깁니다.</p>
+                    </header>
+                    <div class="conversation-example cor-conversation-example">
+                        <article><span class="conversation-step">1 · 기술 Gap</span><span class="conversation-role">AI 질문</span><p>기존 방식으로 해결하기 어려웠던 반복 문제는 무엇이었나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>유사한 [신규 구조]에서 신뢰성 위험 검토가 반복됐지만, 기존 모델은 평가의 손상 위치를 일관되게 재현하지 못했습니다. 과제마다 조건을 조정하는 방식으로는 공통 판단 기준을 만들기 어려웠습니다.</p></article>
+                        <article><span class="conversation-step">2 · 목표와 검증</span><span class="conversation-role">AI 질문</span><p>무엇을 판단할 수 있게 만드는 것이 목표였고 어떻게 검증했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>평가 전에 설계안의 상대 위험과 취약 위치를 구분하는 것을 목표로 했습니다. 기존 평가 결과를 기준으로 주요 입력 인자를 단계적으로 바꾸고, 손상 위치와 설계안 위험 순서가 여러 조건에서 반복되는지 확인했습니다.</p></article>
+                        <article><span class="conversation-step">3 · 확보 기술</span><span class="conversation-role">AI 질문</span><p>과제를 통해 무엇을 알게 됐고 어떤 판단이 가능해졌나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[접촉 조건]이 취약 위치를 결정하는 주요 인자임을 확인하고 표준 입력 기준을 정립했습니다. 유사 구조에서는 평가 전에 설계안의 상대 위험을 비교할 수 있지만, 재료 구성이나 체결 방식이 달라지면 추가 검증이 필요합니다.</p></article>
+                        <article><span class="conversation-step">4 · 경영성과 기여</span><span class="conversation-role">AI 질문</span><p>확보한 기술이 개발·시험·품질 또는 의사결정에 어떤 기여를 했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>평가 전에 위험이 높은 후보를 제외할 수 있게 되어 불필요한 시제품 검토와 후기 설계 변경 가능성을 줄였습니다. 구체적인 비용 절감액은 확인되지 않았지만, 설계 후보를 조기에 축소할 판단 근거를 확보했습니다.</p></article>
+                        <article><span class="conversation-step">5 · 프로세스 변화</span><span class="conversation-role">AI 질문</span><p>과제 전후로 회사의 일하는 방식이 어떻게 달라졌나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>기존에는 시제품 평가 후 취약부를 확인하고 원인을 분석했습니다. 현재는 상세 설계 확정 전에 표준 Simulation으로 후보안을 비교하고 위험이 낮은 안만 평가하는 절차를 [시범 적용]하고 있습니다.</p></article>
+                        <article><span class="conversation-step">6 · 적용범위와 한계</span><span class="conversation-role">AI 질문</span><p>어디까지 재사용할 수 있으며 무엇은 아직 판단할 수 없나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>유사 연결 구조와 동일한 종류의 평가 조건에서는 상대 비교에 재사용할 수 있습니다. 다른 재료 조합이나 체결 방식에서는 하중 전달 경로가 달라질 수 있어 절대 위험을 판단할 수 없습니다.</p></article>
+                    </div>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="cor-prompt-title">
+                    <header class="prompt-heading">
+                        <span>
+                            <span class="page-kicker">Copy & start</span>
+                            <h3 id="cor-prompt-title">CoR JSON 생성 Prompt</h3>
+                            <p>완료된 CoR을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p>
+                        </span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="cor">
+                            <i class="bx bx-copy"></i><span>Prompt 복사</span>
+                        </button>
+                    </header>
+                    <pre class="prompt-preview" id="cor-prompt-preview" tabindex="0" aria-label="CoR JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-cor-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="cor-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="cor-after-import-title">사내 웹에서 실제 정보와 근거를 완성합니다</h3>
+                    <ul>
+                        <li>실제 CoR 과제명·ID·PL·참여자</li>
+                        <li>실제 목표·검증 조건·결과 수치</li>
+                        <li>확인된 경영성과와 근거</li>
+                        <li>프로세스 변화 상태와 적용 조직</li>
+                        <li>제안서·중간보고서·결과보고서·방법론 링크</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-methodology" role="tabpanel" aria-labelledby="tab-methodology" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-git-branch"></i></span>
+                    <span>
+                        <span class="page-kicker">방법론</span>
+                        <h2>다른 사람이 반복 적용할 수 있는 판단 방법을 남깁니다</h2>
+                        <p>특정 과제의 결과가 아니라, 어떤 입력과 절차로 결과를 만들고 어떤 기준으로 판단할지를 일반화합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column methodology-overview-grid">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 6가지</span>
+                        <ol class="essential-question-list methodology-essential-list">
+                            <li><strong>문제와 목적</strong><span>어떤 문제에서 무엇을 판단하나요?</span></li>
+                            <li><strong>원리와 가정</strong><span>핵심 메커니즘과 단순화는 무엇인가요?</span></li>
+                            <li><strong>입력과 절차</strong><span>무엇을 준비하고 어떤 순서로 수행하나요?</span></li>
+                            <li><strong>판단 기준</strong><span>무엇을 보고 판단하며 언제 중단하나요?</span></li>
+                            <li><strong>범위와 한계</strong><span>어디까지 적용할 수 있나요?</span></li>
+                            <li><strong>검증 근거</strong><span>어떤 CoR·VD Request·보고서가 근거인가요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card methodology-status-card">
+                        <span class="card-label">별도로 확인할 상태</span>
+                        <h3>재사용 준비와 기술 Level을 구분합니다</h3>
+                        <dl class="methodology-state-list">
+                            <div><dt>방법론 후보</dt><dd>최소 1회의 적용·검증 근거가 있음</dd></div>
+                            <div><dt>정식 방법론</dt><dd>다른 팀원이 독립적으로 적용하고 판단함</dd></div>
+                            <div><dt>현재 Level</dt><dd>기술적으로 어디까지 판단 가능한지 표시</dd></div>
+                            <div><dt>Technology Map</dt><dd>등재 여부와 연결 항목을 별도로 확인</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-info-circle"></i> Map 미등재는 NA가 아닙니다. 신규 방법론도 동일한 기준으로 L1~L5를 평가합니다.</p>
+                    </article>
+                </div>
+
+                <section class="methodology-level-section" aria-labelledby="methodology-level-title">
+                    <header class="registration-subhead">
+                        <span>
+                            <span class="page-kicker">Technology level</span>
+                            <h3 id="methodology-level-title">현재 가능한 판단과 검증 근거로 Level을 정합니다</h3>
+                        </span>
+                        <p>공식 Level은 정수로 기록하고, 다음 Level 조건을 모두 충족했을 때 승격합니다.</p>
+                    </header>
+                    <div class="methodology-level-grid">
+                        <article><span>L1</span><strong>개념 검증</strong><p>가능성과 방향만 확인</p></article>
+                        <article><span>L2</span><strong>초기 경향</strong><p>제한된 근거로 변화 방향 파악</p></article>
+                        <article class="is-pivot"><span>L3</span><strong>의사결정</strong><p>직접 검증 기반 상대 비교 가능</p></article>
+                        <article><span>L4</span><strong>정량 최적화</strong><p>교차 검증과 오차 범위 확보</p></article>
+                        <article><span>L5</span><strong>고신뢰 운영</strong><p>지속 피드백과 승인 범위 내 검증 대체</p></article>
+                    </div>
+                    <aside class="level-rule-note"><strong>판정 원칙</strong><span>판단 가능 수준·검증 근거·반복 적용 안정성 중 가장 낮은 수준을 현재 Level로 봅니다.</span></aside>
+                </section>
+
+                <section class="registration-example-section" aria-labelledby="methodology-example-title">
+                    <header class="registration-subhead">
+                        <span>
+                            <span class="page-kicker">Conversation example</span>
+                            <h3 id="methodology-example-title">방법론은 수행보다 판단 기준을 구체적으로 설명합니다</h3>
+                        </span>
+                        <p>실제 이름과 수치는 숨기되 입력·절차·중단 조건과 Level 근거는 남깁니다.</p>
+                    </header>
+                    <div class="conversation-example methodology-conversation-example">
+                        <article><span class="conversation-step">1 · 문제와 목적</span><span class="conversation-role">AI 질문</span><p>어떤 문제에서 무엇을 판단하기 위해 사용하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>유사한 [연결 구조]에서 여러 설계안의 충격 취약 위치와 상대 위험을 비교해, 상세 평가 전에 우선 검토할 설계안을 선정할 때 사용합니다. 절대 수명 예측이 목적은 아닙니다.</p></article>
+                        <article><span class="conversation-step">2 · 원리와 가정</span><span class="conversation-role">AI 질문</span><p>핵심 물리 원리와 결과 해석의 가정은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>충격 하중이 [연결부]를 통해 전달되며 발생하는 변형 집중을 주요 위험으로 봅니다. 파손 진전은 직접 모사하지 않으므로 절대값보다 취약 위치와 설계안의 위험 순서가 일관적인지를 판단합니다.</p></article>
+                        <article><span class="conversation-step">3 · 입력과 절차</span><span class="conversation-role">AI 질문</span><p>무엇을 준비하고 어떤 순서로 수행하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>구조 형상, 기본 물성, 체결·하중 조건을 준비합니다. 설계안별 공통 조건을 먼저 맞추고 기본 모델의 하중 전달 경로를 확인한 뒤, 비교할 설계 인자만 변경해 취약 위치와 상대 위험을 검토합니다.</p></article>
+                        <article><span class="conversation-step">4 · 판단 기준</span><span class="conversation-role">AI 질문</span><p>어떤 결과를 신뢰하고 언제 판단을 중단하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>Mesh를 변경해도 취약 위치와 위험 순서가 유지되고 하중 전달 경로와 일치하면 실제 위험 후보로 봅니다. 단일 절점의 최대값만 증가하거나 조건이 설계안마다 다르면 판단을 중단합니다.</p></article>
+                        <article><span class="conversation-step">5 · 범위와 한계</span><span class="conversation-role">AI 질문</span><p>어디까지 적용할 수 있고 무엇은 판단할 수 없나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>유사 구조와 같은 종류의 충격 조건에서는 상대 비교에 직접 적용할 수 있습니다. 재료나 체결 방식이 달라지면 추가 검증이 필요하며, 절대 합격 여부와 파손 수명 판단에는 사용하지 않습니다.</p></article>
+                        <article><span class="conversation-step">6 · Level과 Map</span><span class="conversation-role">AI 질문</span><p>현재 Level의 근거는 무엇이며 Technology Map에 정의돼 있나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>대표 평가 조건에서 취약 위치와 설계안 위험 순서를 직접 비교했고 실제 설계안 선별에 사용했으므로 L3입니다. 복수 제품 교차 검증과 오차 범위는 없어 L4는 아닙니다. 현재 Technology Map에는 정의돼 있지 않은 신규 방법론입니다.</p></article>
+                    </div>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="methodology-prompt-title">
+                    <header class="prompt-heading">
+                        <span>
+                            <span class="page-kicker">Copy & start</span>
+                            <h3 id="methodology-prompt-title">방법론 JSON 생성 Prompt</h3>
+                            <p>방법론을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p>
+                        </span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="methodology">
+                            <i class="bx bx-copy"></i><span>Prompt 복사</span>
+                        </button>
+                    </header>
+                    <pre class="prompt-preview" id="methodology-prompt-preview" tabindex="0" aria-label="방법론 JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-methodology-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="methodology-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="methodology-after-import-title">사내 웹에서 실제 정보와 연결을 완성합니다</h3>
+                    <ul>
+                        <li>실제 방법론명·Owner·Reviewer</li>
+                        <li>실제 입력 조건·모델·Template 링크</li>
+                        <li>개발 CoR·적용 VD Request·검증 보고서</li>
+                        <li>현재 Level의 근거와 평가자</li>
+                        <li>Technology Map 등재 항목 또는 미등재 확인</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-bp" role="tabpanel" aria-labelledby="tab-bp" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-trending-up"></i></span>
+                    <span>
+                        <span class="page-kicker">BP</span>
+                        <h2>Simulation이 만든 사업부 행동과 경영성과를 남깁니다</h2>
+                        <p>좋은 결과를 소개하는 데 그치지 않고, 어떤 판단을 가능하게 했고 사업부가 어떻게 행동했으며 성공방식을 어떻게 재현할지를 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 6가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>사업 맥락과 판단 질문</strong><span>누가 언제까지 무엇을 결정해야 했나요?</span></li>
+                            <li><strong>Simulation 대응</strong><span>어떤 제약 속에서 무엇을 판단 가능하게 했나요?</span></li>
+                            <li><strong>사업부 피드백과 행동</strong><span>결과를 받고 무엇을 결정·변경했나요?</span></li>
+                            <li><strong>경영성과</strong><span>비용·기간·품질·Risk에 어떤 영향이 있었나요?</span></li>
+                            <li><strong>재현 조건과 한계</strong><span>성공방식을 다시 쓰려면 무엇이 필요한가요?</span></li>
+                            <li><strong>근거와 상태</strong><span>무엇으로 확인했고 후보·BP 중 어느 상태인가요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>성과는 방향과 확인 수준으로 설명하세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>사업부·제품</dt><dd>[사업부], [제품군]</dd></div>
+                            <div><dt>의사결정</dt><dd>[설계 후보]를 다음 단계로 선정</dd></div>
+                            <div><dt>비용·기간</dt><dd>검토 횟수 감소, 일정 지연 Risk 축소</dd></div>
+                            <div><dt>확인 수준</dt><dd>기대효과·업무 반영·사업부 확인·실측 확인</dd></div>
+                            <div><dt>근거</dt><dd>[회의 기록], [결과 보고서]</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 확인되지 않은 금액이나 절감률은 만들지 말고, 미확인 상태를 그대로 남깁니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="bp-example-title">
+                    <header class="registration-subhead">
+                        <span><span class="page-kicker">Conversation example</span><h3 id="bp-example-title">성과보다 행동과 근거를 먼저 구체화합니다</h3></span>
+                        <p>대상은 숨기되 누가 어떤 판단을 바꾸었는지와 성과 확인 수준은 분명하게 말합니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article><span class="conversation-step">1 · 사업 맥락과 판단 질문</span><span class="conversation-role">AI 질문</span><p>사업부는 어떤 상황에서 언제까지 무엇을 결정해야 했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[사업부]는 [신규 제품]의 시제품 사양을 확정하기 전에 반복 하중에서 Risk가 낮은 [설계 후보]를 선택해야 했습니다. 평가 가능한 후보가 제한돼 있어 모든 안을 제작하기 전에 우선순위를 정할 근거가 필요했습니다.</p></article>
+                        <article><span class="conversation-step">2 · Simulation 대응</span><span class="conversation-role">AI 질문</span><p>제약 속에서 어떤 접근으로 무엇을 판단 가능하게 했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>확보된 기본 물성과 기존 평가 조건만 사용해 후보별 하중 전달 경로와 취약 위치를 같은 기준으로 비교했습니다. 절대 수명을 예측하지 않고, 평가 전에 상대 Risk가 높은 후보를 제외할 수 있도록 판단 범위를 제한했습니다.</p></article>
+                        <article><span class="conversation-step">3 · 사업부 피드백과 행동</span><span class="conversation-role">AI 질문</span><p>사업부는 결과를 어떻게 확인했고 실제로 무엇을 바꿨나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[검토 회의]에서 취약 위치와 선정 근거를 확인한 뒤, [후보 A]는 제작 대상에서 제외하고 [후보 B]의 보완안을 평가 대상으로 정했습니다. 추가로 Simulation에서 확인된 부위를 시제품 점검항목에 포함했습니다.</p></article>
+                        <article><span class="conversation-step">4 · 경영성과</span><span class="conversation-role">AI 질문</span><p>그 행동이 비용·기간·품질 또는 Risk에 어떤 영향을 주었고 어디까지 확인됐나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>제작 전 후보 수를 줄여 불필요한 시제품 검토와 후기 변경 가능성을 낮췄습니다. 실제 선정 절차에 반영된 것은 확인했지만 절감 금액과 단축 기간은 집계하지 않아 확인 수준은 ‘업무 반영’입니다.</p></article>
+                        <article><span class="conversation-step">5 · 재현 조건과 한계</span><span class="conversation-role">AI 질문</span><p>다른 업무에서 이 성공방식을 재현하려면 무엇이 필요하며 언제 쓰면 안 되나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>후보 간 공통 조건을 맞출 수 있고 과거 평가와 비교 가능한 기준 모델이 있으면 초기 선별에 재사용할 수 있습니다. 재료 구성이나 체결 방식이 달라 하중 경로가 바뀌면 기존 위험 순서를 그대로 사용하지 않고 별도 검증해야 합니다.</p></article>
+                        <article><span class="conversation-step">6 · 근거와 상태</span><span class="conversation-role">AI 질문</span><p>어떤 자료가 근거이며 현재 BP 후보인가요, 승격 가능한 BP인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[VD Request], [기술보고서], [검토 회의 기록]으로 기술 판단과 사업부 행동을 확인할 수 있습니다. 다른 제품군의 재현은 아직 없어 현재 BP 후보로 등록하고, 후속 적용과 성과 확인 후 승격을 검토합니다.</p></article>
+                    </div>
+                    <aside class="answer-quality-note"><i class="bx bx-bulb"></i><span><strong>좋은 답변의 기준</strong> 기술 성과만 쓰지 않고 사업부 행동, 확인된 경영성과 수준, 재현 조건과 근거를 함께 설명합니다.</span></aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="bp-prompt-title">
+                    <header class="prompt-heading">
+                        <span><span class="page-kicker">Copy & organize</span><h3 id="bp-prompt-title">BP JSON 생성 Prompt</h3><p>BP를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="bp"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
+                    </header>
+                    <pre class="prompt-preview" id="bp-prompt-preview" tabindex="0" aria-label="BP JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-bp-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="bp-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="bp-after-import-title">사내 웹에서 실제 성과와 근거를 완성합니다</h3>
+                    <ul>
+                        <li>실제 사업부·제품·Project와 의사결정자</li>
+                        <li>실제 사업부 피드백·행동과 확인일</li>
+                        <li>경영성과의 원 단위 수치와 확인 수준</li>
+                        <li>근거 VD Request·CoR·기술보고서·방법론 링크</li>
+                        <li>BP 후보·승격 상태와 Owner·Reviewer</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-technical-report" role="tabpanel" aria-labelledby="tab-technical-report" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-file"></i></span>
+                    <span>
+                        <span class="page-kicker">기술보고서</span>
+                        <h2>공식 기술 결론과 그 결론이 유효한 범위를 남깁니다</h2>
+                        <p>보고서 원문을 복사하지 않고, 기술 질문·검증 근거·결론·지원 가능한 판단을 검색 가능한 카드로 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 7가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>기술 질문과 목적</strong><span>무엇을 왜 검토했고 어디에 쓸 결론인가요?</span></li>
+                            <li><strong>범위와 핵심 조건</strong><span>어떤 대상·입력·가정을 전제로 했나요?</span></li>
+                            <li><strong>방법과 검증 근거</strong><span>어떻게 분석했고 무엇과 비교했나요?</span></li>
+                            <li><strong>발견과 기술 결론</strong><span>관찰·해석·결론을 구분했나요?</span></li>
+                            <li><strong>유효조건과 지원 판단</strong><span>어떤 조건에서 무엇을 결정할 수 있나요?</span></li>
+                            <li><strong>한계와 추가 확인</strong><span>아직 무엇을 판단할 수 없나요?</span></li>
+                            <li><strong>관련 자산·버전</strong><span>원문과 업무 배경을 어디에 연결하나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>결론 구조는 남기고 식별정보는 제거하세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>보고서·과제명</dt><dd>[기술보고서], [검토 과제]</dd></div>
+                            <div><dt>제품·구조</dt><dd>[제품군], [연결 구조]</dd></div>
+                            <div><dt>수치·조건</dt><dd>상대 증가·감소, [기준 조건]</dd></div>
+                            <div><dt>Tool·모델</dt><dd>[해석 Tool], [기준 모델]</dd></div>
+                            <div><dt>사내 위치</dt><dd>[공식 원문 링크], [근거 데이터]</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 검증 전·해석·제안을 사실처럼 바꾸지 말고, 근거 수준을 그대로 유지합니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="technical-report-example-title">
+                    <header class="registration-subhead">
+                        <span><span class="page-kicker">Conversation example</span><h3 id="technical-report-example-title">결론만 떼지 말고 조건과 근거를 함께 말합니다</h3></span>
+                        <p>실제 수치는 숨기되 결론을 어떤 판단에 쓸 수 있는지는 구체적으로 남깁니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article><span class="conversation-step">1 · 기술 질문과 목적</span><span class="conversation-role">AI 질문</span><p>보고서가 답하려는 기술 질문과 결과를 사용할 판단은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>“[연결 구조]의 형상 변경이 반복 충격 취약 위치를 바꾸는가?”를 검토했습니다. 상세 설계 전에 두 후보의 상대 Risk를 비교하고 시제품 평가 대상을 정하는 것이 목적이었습니다.</p></article>
+                        <article><span class="conversation-step">2 · 범위와 핵심 조건</span><span class="conversation-role">AI 질문</span><p>결론 해석에 영향을 주는 대상·입력·가정은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[제품군]의 동일 재료 구성과 체결 방식을 대상으로, 같은 반복 충격과 구속 조건을 적용했습니다. 손상 진전은 직접 모사하지 않고 초기 변형 집중을 Risk 지표로 사용하는 가정이 포함됩니다.</p></article>
+                        <article><span class="conversation-step">3 · 방법과 검증 근거</span><span class="conversation-role">AI 질문</span><p>어떤 방식으로 결론을 도출했고 어느 수준까지 검증했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>기준 모델과 변경 모델의 하중 경로·취약 위치·상대 순서를 비교했습니다. Mesh 조건을 바꿔도 위치와 순서가 유지되는 내부 일관성은 확인했지만, 신규 시제품과의 직접 비교는 아직 수행하지 않았습니다.</p></article>
+                        <article><span class="conversation-step">4 · 발견과 기술 결론</span><span class="conversation-role">AI 질문</span><p>관찰 결과, 기술적 해석, 최종 결론을 나누어 설명해 주세요.</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>관찰상 [후보 B]는 기존 취약부의 집중이 낮고 인접 모서리에 새로운 집중이 나타났습니다. 하중이 더 넓은 경로로 분산된 결과로 해석했습니다. 따라서 B는 상대 Risk가 낮지만 새 집중부를 보완한 뒤 평가해야 한다는 결론입니다.</p></article>
+                        <article><span class="conversation-step">5 · 유효조건과 지원 판단</span><span class="conversation-role">AI 질문</span><p>이 결론은 어떤 조건에서 유효하며 어떤 판단을 지원하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>같은 재료 구성·체결 방식·하중 유형의 유사 구조에서 설계안 상대 비교와 Risk Ranking을 지원합니다. 절대 수명이나 합격 여부를 판단하는 근거로는 사용할 수 없습니다.</p></article>
+                        <article><span class="conversation-step">6 · 한계와 추가 확인</span><span class="conversation-role">AI 질문</span><p>아직 판단할 수 없는 내용과 다음 확인사항은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>재료 비선형성과 손상 진전을 단순화해 실제 파손 시점은 판단할 수 없습니다. [보완 후보]에 대해 시제품의 손상 위치와 순서를 비교한 뒤 결론 범위를 확대해야 합니다.</p></article>
+                        <article><span class="conversation-step">7 · 관련 자산·버전</span><span class="conversation-role">AI 질문</span><p>어떤 업무에서 작성됐고 원문·근거·현재 버전은 어떻게 연결하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[VD Request]의 설계안 선별 근거로 작성한 [기술보고서]의 게시 버전입니다. 원문, 기준 모델, 비교 결과와 후속 평가 계획은 사내에서 연결하고, 평가 결과가 나오면 같은 카드의 버전을 개정합니다.</p></article>
+                    </div>
+                    <aside class="answer-quality-note"><i class="bx bx-bulb"></i><span><strong>좋은 답변의 기준</strong> 관찰·해석·결론을 분리하고, 유효조건과 지원하지 않는 판단까지 함께 명시합니다.</span></aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="technical-report-prompt-title">
+                    <header class="prompt-heading">
+                        <span><span class="page-kicker">Copy & organize</span><h3 id="technical-report-prompt-title">기술보고서 JSON 생성 Prompt</h3><p>기술보고서를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="technical-report"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
+                    </header>
+                    <pre class="prompt-preview" id="technical-report-prompt-preview" tabindex="0" aria-label="기술보고서 JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-technical-report-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="technical-report-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="technical-report-after-import-title">사내 웹에서 공식 보고서 정보와 근거를 완성합니다</h3>
+                    <ul>
+                        <li>공식 보고서 ID·제목·작성자·검토자</li>
+                        <li>실제 대상·입력·경계조건·결과 수치</li>
+                        <li>검증 데이터·모델과 공식 원문 링크</li>
+                        <li>현재 유효 버전·게시일·보고서 상태</li>
+                        <li>근거 VD Request·CoR와 도출 자산 연결</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-knowhow" role="tabpanel" aria-labelledby="tab-knowhow" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-bulb"></i></span>
+                    <span>
+                        <span class="page-kicker">노하우</span>
+                        <h2>반복되는 실행 난제를 해결한 판단과 조치를 남깁니다</h2>
+                        <p>하나의 명확한 증상에 대해 원인을 어떻게 좁혔고 무엇을 바꿨으며, 언제 적용하거나 되돌려야 하는지를 짧게 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 6가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>문제 증상과 발생조건</strong><span>어디에서 어떤 이상이 반복됐나요?</span></li>
+                            <li><strong>원인 가설과 진단</strong><span>무엇을 확인해 원인을 좁혔나요?</span></li>
+                            <li><strong>해결 절차</strong><span>무엇을 어떤 순서와 이유로 바꿨나요?</span></li>
+                            <li><strong>효과와 확인 근거</strong><span>조치 전후 무엇이 달라졌나요?</span></li>
+                            <li><strong>적용조건·부작용·복구</strong><span>언제 쓰면 안 되고 어떻게 되돌리나요?</span></li>
+                            <li><strong>버전·근거·연결</strong><span>어떤 환경에서 확인했고 자료는 어디에 있나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>진단 논리는 남기고 설정값은 일반화하세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>Tool·버전</dt><dd>[해석 Tool], [사용 버전]</dd></div>
+                            <div><dt>모델·경로</dt><dd>[기준 모델], [작업 위치]</dd></div>
+                            <div><dt>설정값</dt><dd>[기준 설정]보다 낮춤·높임</dd></div>
+                            <div><dt>과제·제품</dt><dd>[적용 과제], [제품군]</dd></div>
+                            <div><dt>효과 수치</dt><dd>중단 감소, 결과 안정화</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 원인이 확정되지 않았다면 ‘원인 가설’로 쓰고, 위험한 변경의 부작용을 반드시 남깁니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="knowhow-example-title">
+                    <header class="registration-subhead">
+                        <span><span class="page-kicker">Conversation example</span><h3 id="knowhow-example-title">설정값보다 진단과 적용 판단을 구체화합니다</h3></span>
+                        <p>해결 성공만 쓰지 않고 실패한 시도, 부작용과 복구방법까지 말합니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article><span class="conversation-step">1 · 문제 증상과 발생조건</span><span class="conversation-role">AI 질문</span><p>어떤 조건에서 어떤 증상이 반복됐고 업무에 어떤 영향을 주었나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[접촉 모델]에서 하중이 처음 전달되는 구간마다 time step이 급격히 감소하고 계산이 중단됐습니다. Mesh를 세분화한 조건에서도 같은 위치에서 반복돼 후보안 비교를 완료할 수 없었습니다.</p></article>
+                        <article><span class="conversation-step">2 · 원인 가설과 진단</span><span class="conversation-role">AI 질문</span><p>어떤 지표와 시험 조치로 원인을 좁혔나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>로그의 접촉 반복 횟수와 에너지 변화를 확인하고 접촉쌍을 구간별로 비활성화했습니다. 재료 모델 변경은 효과가 없었고 특정 모서리 접촉을 제외할 때만 중단이 사라져 초기 침투와 접촉 강성이 원인일 가능성을 높게 봤습니다.</p></article>
+                        <article><span class="conversation-step">3 · 해결 절차</span><span class="conversation-role">AI 질문</span><p>무엇을 어떤 순서로, 어떤 판단에 따라 변경했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>원본을 복사해 복구점을 만든 뒤 초기 침투 위치를 확인하고 국부 Mesh를 정리했습니다. 다음으로 접촉 강성을 한 단계씩 조정해 하중 경로가 유지되는 최소 변경안을 선택하고, 다른 조건은 기준 모델과 동일하게 유지했습니다.</p></article>
+                        <article><span class="conversation-step">4 · 효과와 확인 근거</span><span class="conversation-role">AI 질문</span><p>조치 전후 무엇이 달라졌고 효과를 어떻게 확인했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>동일 구간의 반복 감소 없이 계산이 완료됐고, 전체 에너지 균형과 주요 하중 경로도 기준 모델과 같은 경향을 유지했습니다. 작성자 적용 1건에서 성공했으며 타인 재현은 아직 없습니다.</p></article>
+                        <article><span class="conversation-step">5 · 적용조건·부작용·복구</span><span class="conversation-role">AI 질문</span><p>언제 적용하면 안 되며 이상이 생기면 어떻게 되돌리나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>실제 접촉 변형 자체가 핵심 결과인 문제에는 이 조정을 바로 적용하면 안 됩니다. 하중 전달 시점이나 접촉력이 기준 모델과 크게 달라지면 중단하고, 백업한 접촉 설정으로 복구한 뒤 Mesh와 초기 간격부터 다시 진단합니다.</p></article>
+                        <article><span class="conversation-step">6 · 버전·근거·연결</span><span class="conversation-role">AI 질문</span><p>어떤 환경에서 확인했고 근거 및 관련 자산은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[사용 버전]과 [모델 유형]에서 확인했고 [VD Request]의 로그와 전후 결과가 근거입니다. 실제 설정과 예제 모델은 사내에서 연결하고, 긴 메뉴 절차는 관련 Tool Manual로 분리합니다.</p></article>
+                    </div>
+                    <aside class="answer-quality-note"><i class="bx bx-bulb"></i><span><strong>좋은 답변의 기준</strong> 검색 가능한 증상, 진단 순서, 변경 이유, 확인 근거, 금지조건과 복구방법을 한 문제 단위로 씁니다.</span></aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="knowhow-prompt-title">
+                    <header class="prompt-heading">
+                        <span><span class="page-kicker">Copy & organize</span><h3 id="knowhow-prompt-title">노하우 JSON 생성 Prompt</h3><p>문제 해결 경험을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="knowhow"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
+                    </header>
+                    <pre class="prompt-preview" id="knowhow-prompt-preview" tabindex="0" aria-label="노하우 JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-knowhow-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="knowhow-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="knowhow-after-import-title">사내 웹에서 실제 설정과 재현 근거를 완성합니다</h3>
+                    <ul>
+                        <li>실제 Tool·Solver·모델·버전과 오류 메시지</li>
+                        <li>변경 전후 설정값·로그·결과 비교</li>
+                        <li>근거 VD Request·CoR·기술보고서와 예제 링크</li>
+                        <li>작성자 확인·타인 재현·복수 과제 확인 상태</li>
+                        <li>관련 방법론·Tool Manual과 Owner·Reviewer</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-tool-manual" role="tabpanel" aria-labelledby="tab-tool-manual" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-wrench"></i></span>
+                    <span>
+                        <span class="page-kicker">Tool Manual</span>
+                        <h2>하나의 Tool 작업을 안전하게 반복하는 표준 경로를 남깁니다</h2>
+                        <p>모든 메뉴를 나열하지 않고, 작업 목적·사전조건·핵심 절차·정상 완료 기준·버전 정보를 실행 가능한 단위로 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 6가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>작업 목적과 결과물</strong><span>누가 어떤 작업으로 무엇을 얻나요?</span></li>
+                            <li><strong>사전 준비와 입력</strong><span>어떤 환경·권한·파일이 필요한가요?</span></li>
+                            <li><strong>표준 실행 절차</strong><span>어떤 순서와 선택기준으로 실행하나요?</span></li>
+                            <li><strong>정상 완료 확인</strong><span>실행과 결과가 정상인지 어떻게 구분하나요?</span></li>
+                            <li><strong>오류와 주의사항</strong><span>언제 중단하고 어디서 도움받나요?</span></li>
+                            <li><strong>버전·예제·원문</strong><span>어디까지 확인했고 상세 자료는 어디에 있나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>작업 흐름은 남기고 접근정보는 제거하세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>Tool·Module</dt><dd>[대상 Tool], [필수 Module]</dd></div>
+                            <div><dt>사내 경로</dt><dd>[입력 폴더], [결과 저장 위치]</dd></div>
+                            <div><dt>Script·파일명</dt><dd>[변환 Script], [입력 파일]</dd></div>
+                            <div><dt>권한·License</dt><dd>[필수 권한], [실행 환경]</dd></div>
+                            <div><dt>인증정보</dt><dd>비밀번호·Token은 입력하지 않음</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 실제 경로·파일·버전·예제 링크는 사내 반입 후 입력하고 인증정보는 어디에도 기록하지 않습니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="tool-manual-example-title">
+                    <header class="registration-subhead">
+                        <span><span class="page-kicker">Conversation example</span><h3 id="tool-manual-example-title">버튼 목록보다 작업 성공 기준을 설명합니다</h3></span>
+                        <p>정상 경로와 중단조건을 구분하고, 기술 판단은 관련 방법론에 연결합니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article><span class="conversation-step">1 · 작업 목적과 결과물</span><span class="conversation-role">AI 질문</span><p>누가 어떤 상황에서 이 Manual을 쓰며 최종 결과물은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[해석 담당자]가 [시험 데이터]를 구조해석 입력 형식으로 변환할 때 사용합니다. 단위와 좌표계가 정리된 입력 파일과 변환 검증 로그를 만드는 한 작업만 다루며 결과 해석은 포함하지 않습니다.</p></article>
+                        <article><span class="conversation-step">2 · 사전 준비와 입력</span><span class="conversation-role">AI 질문</span><p>시작 전에 필요한 환경·권한·입력 조건은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[대상 Tool]과 [필수 Module] 접근 권한, 지정 형식의 원본 데이터, 단위·좌표계 정보가 필요합니다. 파일의 필수 열과 누락값 여부를 확인하고 원본을 읽기 전용으로 보관한 뒤 시작합니다.</p></article>
+                        <article><span class="conversation-step">3 · 표준 실행 절차</span><span class="conversation-role">AI 질문</span><p>핵심 단계와 사용자가 선택해야 할 기준은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>입력 형식을 확인하고 작업 사본을 만든 뒤 단위와 좌표계를 선택합니다. 미리보기에서 기준 지점의 방향을 확인하고 변환을 실행한 다음, 원본과 결과의 행 수·시간 순서·범위를 비교해 저장합니다.</p></article>
+                        <article><span class="conversation-step">4 · 정상 완료 확인</span><span class="conversation-role">AI 질문</span><p>단순 실행 완료와 유효한 결과를 어떻게 구분하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>완료 상태와 결과 파일 생성만으로 끝내지 않습니다. 오류 로그가 없고 원본과 결과의 항목 수가 일치하며, 기준 지점의 방향·시간 순서·값의 경향이 예상과 같아야 다음 단계로 넘깁니다.</p></article>
+                        <article><span class="conversation-step">5 · 오류와 주의사항</span><span class="conversation-role">AI 질문</span><p>자주 발생하는 실패와 즉시 중단해야 할 조건은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>단위 정보 누락과 좌표축 반전이 가장 흔합니다. 필수 열이 없거나 미리보기 방향이 기준과 다르면 변환을 중단하고 원본을 확인합니다. 변환 후 물리적 타당성 판단은 관련 방법론을 따릅니다.</p></article>
+                        <article><span class="conversation-step">6 · 버전·예제·원문</span><span class="conversation-role">AI 질문</span><p>어떤 버전에서 확인했고 예제와 상세 Manual은 어디에 있나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[사용 버전]의 [필수 Module]에서 마지막 실행을 확인했습니다. 실제 버전·확인일, 실행 가능한 예제, Template과 상세 화면 Manual은 사내에서 연결하며 다른 버전은 ‘미확인’으로 표시합니다.</p></article>
+                    </div>
+                    <aside class="answer-quality-note"><i class="bx bx-bulb"></i><span><strong>좋은 답변의 기준</strong> 하나의 작업을 대상으로 사전조건, 선택기준, 되돌리기 지점, 정상 완료와 잘못된 결과의 신호를 남깁니다.</span></aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="tool-manual-prompt-title">
+                    <header class="prompt-heading">
+                        <span><span class="page-kicker">Copy & organize</span><h3 id="tool-manual-prompt-title">Tool Manual JSON 생성 Prompt</h3><p>Tool 작업을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="tool-manual"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
+                    </header>
+                    <pre class="prompt-preview" id="tool-manual-prompt-preview" tabindex="0" aria-label="Tool Manual JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-tool-manual-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="tool-manual-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="tool-manual-after-import-title">사내 웹에서 실제 실행환경과 예제를 완성합니다</h3>
+                    <ul>
+                        <li>실제 Tool·Module·Script 버전과 호환성 상태</li>
+                        <li>사내 권한·경로·입출력 형식과 설정값</li>
+                        <li>실행 가능한 예제·Template·Checklist 링크</li>
+                        <li>공식 Manual·상세 화면 문서와 마지막 확인일</li>
+                        <li>관련 방법론·노하우·교육자료와 확인자</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-education-material" role="tabpanel" aria-labelledby="tab-education-material" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-book-open"></i></span>
+                    <span>
+                        <span class="page-kicker">교육자료</span>
+                        <h2>누가 학습한 뒤 무엇을 할 수 있는지를 남깁니다</h2>
+                        <p>강의 내용을 복사하지 않고, 학습목표·대상·활동·완료 기준과 학습할 기술자산을 하나의 재사용 가능한 콘텐츠 단위로 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 6가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>학습목표</strong><span>학습 후 무엇을 설명·판단·수행하나요?</span></li>
+                            <li><strong>대상과 사전지식</strong><span>누구에게 적합하고 무엇을 알아야 하나요?</span></li>
+                            <li><strong>핵심 내용과 구성</strong><span>무엇을 어떤 흐름으로 학습하나요?</span></li>
+                            <li><strong>활동·시간·준비물</strong><span>어떻게 학습하고 무엇이 필요한가요?</span></li>
+                            <li><strong>완료·이해 확인</strong><span>학습목표 달성을 어떻게 확인하나요?</span></li>
+                            <li><strong>기술자산·원문·버전</strong><span>무엇을 학습하며 자료는 어디에 있나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>학습 설계는 남기고 내부 사례는 일반화하세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>대상 조직·개인</dt><dd>[입문 학습자], [실무 담당자]</dd></div>
+                            <div><dt>제품·사례</dt><dd>[제품군], [적용 사례]</dd></div>
+                            <div><dt>Tool·자료</dt><dd>[실습 Tool], [교육 원문]</dd></div>
+                            <div><dt>실습 데이터</dt><dd>[예제 모델], [비식별 데이터]</dd></div>
+                            <div><dt>평가 결과</dt><dd>개인 점수·이수상태는 기록하지 않음</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 학습자의 개인 평가정보는 제외하고, 실제 사례·정답·사내 자료는 반입 후 연결합니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="education-material-example-title">
+                    <header class="registration-subhead">
+                        <span><span class="page-kicker">Conversation example</span><h3 id="education-material-example-title">‘이해한다’ 대신 관찰 가능한 행동을 씁니다</h3></span>
+                        <p>자료를 본 뒤 학습자가 실제로 설명·선택·재현할 수 있는 수준을 구체화합니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article><span class="conversation-step">1 · 학습목표</span><span class="conversation-role">AI 질문</span><p>학습 후 학습자가 무엇을 설명하거나 수행할 수 있어야 하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>학습자는 반복 충격 문제에서 하중 전달 경로와 취약 위치를 구분해 설명하고, 두 설계안의 상대 Risk를 같은 기준으로 비교하며, 이 방법으로 절대 수명을 판단하면 안 되는 이유를 말할 수 있어야 합니다.</p></article>
+                        <article><span class="conversation-step">2 · 대상과 사전지식</span><span class="conversation-role">AI 질문</span><p>누구에게 적합하고 시작 전에 무엇을 알아야 하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>기본 구조해석 결과를 읽을 수 있지만 충격 해석 경험은 적은 [실무 학습자]가 대상입니다. 응력·변형 개념과 [실습 Tool]의 기본 화면 조작이 필요하며, 절대 수명 예측 교육을 찾는 사람에게는 적합하지 않습니다.</p></article>
+                        <article><span class="conversation-step">3 · 핵심 내용과 구성</span><span class="conversation-role">AI 질문</span><p>어떤 순서로 무엇을 학습하며 다루지 않는 범위는 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>문제와 판단 질문, 하중 경로 개념, 두 후보의 결과 비교, 잘못된 최대값 해석 사례, 적용범위 순으로 구성합니다. 상세 Solver 설정과 손상 진전 모델 이론은 다루지 않고 관련 자료로 연결합니다.</p></article>
+                        <article><span class="conversation-step">4 · 활동·시간·준비물</span><span class="conversation-role">AI 질문</span><p>학습 방식과 예상 시간, 필요한 실습환경은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>개념 읽기 후 두 결과를 비교하는 개인 실습과 판단 근거 토론으로 진행합니다. [짧은 실습 시간] 안에 완료하도록 구성하며, 비식별 예제 모델·결과 파일·비교 Checklist와 결과 Viewer가 필요합니다.</p></article>
+                        <article><span class="conversation-step">5 · 완료·이해 확인</span><span class="conversation-role">AI 질문</span><p>학습목표 달성을 어떤 결과로 확인하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>학습자가 두 후보의 취약 위치와 상대 순서를 올바르게 제시하고, 하중 경로에 근거해 이유를 설명하며, 절대값 판단이 불가능한 조건을 한 가지 이상 제시하면 완료로 봅니다.</p></article>
+                        <article><span class="conversation-step">6 · 기술자산·원문·버전</span><span class="conversation-role">AI 질문</span><p>어떤 기술자산을 학습하며 원문과 현재 버전은 어떻게 관리하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[방법론]의 상대 비교 판단과 [BP]의 적용 사례를 학습합니다. 실제 슬라이드·실습 모델·정답 Guide는 사내에서 연결하고, 근거 방법론이 개정되면 자료를 ‘개정 필요’로 전환해 재검토합니다.</p></article>
+                    </div>
+                    <aside class="answer-quality-note"><i class="bx bx-bulb"></i><span><strong>좋은 답변의 기준</strong> 대상, 관찰 가능한 학습목표, 활동, 시간, 준비물과 확인기준이 서로 같은 수준으로 연결돼야 합니다.</span></aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="education-material-prompt-title">
+                    <header class="prompt-heading">
+                        <span><span class="page-kicker">Copy & organize</span><h3 id="education-material-prompt-title">교육자료 JSON 생성 Prompt</h3><p>교육자료를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="education-material"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
+                    </header>
+                    <pre class="prompt-preview" id="education-material-prompt-preview" tabindex="0" aria-label="교육자료 JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-education-material-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="education-material-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="education-material-after-import-title">사내 웹에서 실제 자료와 학습 연결을 완성합니다</h3>
+                    <ul>
+                        <li>실제 교육자료 제목·유형·난이도와 대상</li>
+                        <li>공식 슬라이드·영상·실습·정답 Guide 링크</li>
+                        <li>실제 Tool·모델·데이터·Template</li>
+                        <li>선행·후속 교육자료와 학습 대상 기술자산</li>
+                        <li>현재 버전·검토일·작성자·기술 Reviewer</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section class="asset-guide-panel" id="panel-external-report" role="tabpanel" aria-labelledby="tab-external-report" hidden>
+                <header class="asset-guide-heading">
+                    <span class="asset-guide-icon"><i class="bx bx-presentation"></i></span>
+                    <span>
+                        <span class="page-kicker">외부 보고 자료</span>
+                        <h2>확인된 기술 근거를 대상의 의사결정에 맞게 전달합니다</h2>
+                        <p>회사의 외부만이 아니라 팀 밖의 사업부·리더·협업 조직·고객에게 전달한 자료를 재사용할 수 있도록 목적·메시지·근거·공유범위를 정리합니다.</p>
+                    </span>
+                </header>
+
+                <div class="registration-two-column">
+                    <article class="registration-card registration-purpose-card">
+                        <span class="card-label">등록에 필요한 7가지</span>
+                        <ol class="essential-question-list">
+                            <li><strong>보고 목적</strong><span>왜 이 보고가 필요했나요?</span></li>
+                            <li><strong>대상과 의사결정</strong><span>누가 보고 무엇을 판단해야 하나요?</span></li>
+                            <li><strong>승인된 핵심 메시지</strong><span>무엇을 근거 확인된 메시지로 전달하나요?</span></li>
+                            <li><strong>근거 자산과 원자료</strong><span>각 메시지는 무엇에 근거하나요?</span></li>
+                            <li><strong>공유 범위</strong><span>누구에게 무엇까지 보여줄 수 있나요?</span></li>
+                            <li><strong>버전과 유효성</strong><span>언제까지 유효하고 언제 재검토하나요?</span></li>
+                            <li><strong>한계와 전달 주의</strong><span>무엇을 오해하지 않게 설명해야 하나요?</span></li>
+                        </ol>
+                    </article>
+
+                    <article class="registration-card security-card">
+                        <span class="card-label">외부 AI에서 지킬 기준</span>
+                        <h3>공유 범위를 판단하지 말고 Placeholder로 남기세요</h3>
+                        <dl class="generalization-list">
+                            <div><dt>보고 대상</dt><dd>[사업부 리더], [협업 조직], [고객]</dd></div>
+                            <div><dt>제품·고객·성과</dt><dd>[제품군], [적용 사례], 방향성 표현</dd></div>
+                            <div><dt>핵심 메시지</dt><dd>확인된 결론과 미확인 사항을 분리</dd></div>
+                            <div><dt>근거 자산</dt><dd>[기술보고서], [BP], [VD Request]</dd></div>
+                            <div><dt>공유 등급</dt><dd>[사내 공유 범위 확인 필요]</dd></div>
+                        </dl>
+                        <p class="security-note"><i class="bx bx-shield-quarter"></i> 외부 AI 결과를 공유 승인으로 간주하지 않습니다. 실제 공개범위와 제외 정보는 사내에서 확인합니다.</p>
+                    </article>
+                </div>
+
+                <section class="registration-example-section" aria-labelledby="external-report-example-title">
+                    <header class="registration-subhead">
+                        <span><span class="page-kicker">Conversation example</span><h3 id="external-report-example-title">대상·결정·메시지·근거를 한 줄로 연결합니다</h3></span>
+                        <p>기술 근거를 새로 만들지 않고 확인된 자산에서 가져와 전달 목적에 맞게 재구성합니다.</p>
+                    </header>
+                    <div class="conversation-example">
+                        <article><span class="conversation-step">1 · 보고 목적</span><span class="conversation-role">AI 질문</span><p>어떤 배경에서 왜 이 보고가 필요했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[사업부]가 다음 개발 단계에 Simulation 선별 절차를 적용할지 검토하면서, 기존 적용 결과와 활용 범위를 짧게 설명할 자료가 필요했습니다. 상세 기술 검토가 아니라 운영 적용 여부 논의가 목적이었습니다.</p></article>
+                        <article><span class="conversation-step">2 · 대상과 의사결정</span><span class="conversation-role">AI 질문</span><p>누가 자료를 보고 어떤 결정을 내려야 하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[사업부 리더]와 [개발 담당자]가 설계 확정 전 후보 선별 단계를 시범 적용할지, 적용한다면 어떤 제품군부터 시작할지를 판단하는 보고입니다.</p></article>
+                        <article><span class="conversation-step">3 · 승인된 핵심 메시지</span><span class="conversation-role">AI 질문</span><p>근거 확인이 끝난 핵심 메시지는 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>첫째, 유사 구조에서는 평가 전 상대 Risk 선별에 활용할 수 있습니다. 둘째, 적용 사례에서 실제 설계 후보 축소에 반영됐습니다. 셋째, 재료·체결 방식이 달라지면 추가 검증이 필요합니다.</p></article>
+                        <article><span class="conversation-step">4 · 근거 자산과 원자료</span><span class="conversation-role">AI 질문</span><p>각 메시지를 어떤 기술자산과 원자료로 확인했나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>활용 범위와 한계는 [기술보고서], 수행 절차는 [방법론], 사업부 행동은 [BP]와 [회의 기록]에 근거합니다. 보고 자료에는 결론을 다시 만들지 않고 근거 카드와 사내 원문을 연결합니다.</p></article>
+                        <article><span class="conversation-step">5 · 공유 범위</span><span class="conversation-role">AI 질문</span><p>누구에게 무엇까지 공유할 수 있고 어떤 정보는 제외해야 하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[사내 협업 대상]에게 적용 흐름과 일반화된 성과 방향은 공유할 수 있습니다. 제품명·고객명·상세 모델·정확한 조건과 원자료는 제외하며, 고객 공유 여부는 사내 승인 후 별도로 결정합니다.</p></article>
+                        <article><span class="conversation-step">6 · 버전과 유효성</span><span class="conversation-role">AI 질문</span><p>이 자료의 기준일과 재검토 조건은 무엇인가요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>[기준 시점]까지 확인된 적용 사례와 방법론 버전을 반영한 자료입니다. 근거 방법론의 적용범위가 바뀌거나 새 교차검증 결과가 나오거나 공유 대상이 달라지면 재검토해야 합니다.</p></article>
+                        <article><span class="conversation-step">7 · 한계와 전달 주의</span><span class="conversation-role">AI 질문</span><p>대상이 오해하지 않도록 어떤 한계와 미확인 사항을 설명해야 하나요?</p></article>
+                        <article class="is-answer"><span class="conversation-role">좋은 답변 예시</span><p>현재 근거는 상대 비교와 후보 선별까지이며 평가를 완전히 대체한다는 의미가 아닙니다. 비용 절감액은 실측하지 않았으므로 ‘절감 확인’으로 표현하지 않고, 적용 시 추가 검증 범위를 함께 설명합니다.</p></article>
+                    </div>
+                    <aside class="answer-quality-note"><i class="bx bx-bulb"></i><span><strong>좋은 답변의 기준</strong> 보고 대상의 결정에 필요한 메시지만 남기고, 메시지별 근거·공유범위·유효기간·오해 가능성을 연결합니다.</span></aside>
+                </section>
+
+                <section class="prompt-section" aria-labelledby="external-report-prompt-title">
+                    <header class="prompt-heading">
+                        <span><span class="page-kicker">Copy & organize</span><h3 id="external-report-prompt-title">외부 보고 자료 JSON 생성 Prompt</h3><p>보고 자료를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="external-report"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
+                    </header>
+                    <pre class="prompt-preview" id="external-report-prompt-preview" tabindex="0" aria-label="외부 보고 자료 JSON 생성 Prompt"></pre>
+                    <p class="copy-status" id="copy-external-report-status" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="after-import-section" aria-labelledby="external-report-after-import-title">
+                    <span class="page-kicker">Inside only</span>
+                    <h3 id="external-report-after-import-title">사내 웹에서 실제 공유범위와 원문을 완성합니다</h3>
+                    <ul>
+                        <li>실제 보고 대상·목적·의사결정 상황</li>
+                        <li>승인된 핵심 메시지와 메시지별 근거</li>
+                        <li>기술보고서·BP·VD Request·CoR 원문 링크</li>
+                        <li>실제 공유 가능 대상·익명화·제외 정보</li>
+                        <li>자료 버전·기준일·재검토 조건·Reviewer</li>
+                    </ul>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer container">
+        <span>외부 AI에는 일반화된 정보만 입력하고 실제 정보는 사내 환경에서 보완합니다.</span>
+    </footer>
+
+    <script src="team_technical_assets_registration.js?v=20260718-2"></script>
+</body>
+</html>
