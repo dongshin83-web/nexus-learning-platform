@@ -4243,6 +4243,311 @@ button.relation-item:hover {
     margin-top: 0.8rem;
 }
 
+/* Learning Path */
+body[data-page="techtree"] {
+    --accent: #2563eb;
+    --accent-soft: #e8efff;
+    --accent-rgb: 37, 99, 235;
+}
+
+.learning-path-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(0, 0.8fr));
+    gap: 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.learning-filter-group {
+    min-width: 0;
+}
+
+.learning-filter-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.learning-part-filter,
+.learning-requirement-filter,
+.learning-channel-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.learning-filter-button {
+    min-height: 2.1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0.38rem 0.7rem;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.learning-filter-button:hover,
+.learning-filter-button.is-active {
+    border-color: rgba(var(--accent-rgb), 0.42);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.learning-filter-button:focus-visible {
+    outline: 3px solid rgba(var(--accent-rgb), 0.2);
+    outline-offset: 2px;
+}
+
+.learning-capability-map {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.learning-map-head,
+.learning-route {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.8fr) repeat(3, minmax(0, 1fr));
+}
+
+.learning-map-head {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.learning-map-corner,
+.learning-map-stage-head {
+    padding: 0.78rem 0.9rem;
+    font-size: 0.76rem;
+    font-weight: 900;
+}
+
+.learning-map-stage-head {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    text-align: center;
+}
+
+.learning-route + .learning-route {
+    border-top: 1px solid var(--line);
+}
+
+.learning-route-label,
+.learning-route-stage {
+    min-width: 0;
+    padding: 0.85rem;
+}
+
+.learning-route-label {
+    background: var(--paper-soft);
+}
+
+.learning-route-label h3 {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.35;
+}
+
+.learning-route-label p {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+
+.learning-route-taxonomy,
+.learning-capability-parts,
+.learning-capability-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.learning-route-taxonomy {
+    margin-top: 0.55rem;
+}
+
+.learning-route-taxonomy span,
+.learning-capability-part,
+.learning-item-channel {
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--muted);
+    padding: 0.2rem 0.42rem;
+    font-size: 0.64rem;
+    font-weight: 900;
+}
+
+.learning-route-stage {
+    border-left: 1px solid var(--line);
+}
+
+.learning-capability-list {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.learning-capability-node {
+    display: grid;
+    gap: 0.48rem;
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    border-radius: calc(var(--radius) - 4px);
+    background: var(--paper);
+    padding: 0.7rem;
+}
+
+.learning-capability-node.has-education-channel {
+    border-left: 3px solid var(--accent);
+}
+
+.learning-capability-node.is-dimmed {
+    display: none;
+}
+
+.learning-capability-title {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.learning-capability-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.learning-capability-part {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.learning-item-channel.is-team {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.learning-item-channel.is-internal {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.learning-item-channel.is-external {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+
+.learning-source-link {
+    color: var(--muted);
+    font-size: 0.66rem;
+    line-height: 1.4;
+}
+
+.learning-route-empty {
+    display: grid;
+    min-height: 3rem;
+    place-items: center;
+    color: var(--muted);
+}
+
+@media (max-width: 980px) {
+    .learning-path-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .learning-map-head {
+        display: none;
+    }
+
+    .learning-route {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .learning-route-label {
+        border-bottom: 1px solid var(--line);
+    }
+
+    .learning-route-stage {
+        display: grid;
+        grid-template-columns: minmax(5rem, 0.24fr) minmax(0, 1fr);
+        gap: 0.75rem;
+        border-left: 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .learning-route-stage::before {
+        content: attr(data-stage-label);
+        color: var(--accent);
+        font-size: 0.76rem;
+        font-weight: 900;
+    }
+
+    .learning-route-stage:last-child {
+        border-bottom: 0;
+    }
+}
+
+@media (max-width: 720px) {
+    /* Every hub page uses the same wrapped two-column menu on mobile. */
+    body .topbar {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 0.55rem;
+        padding: 0.75rem 1rem;
+    }
+
+    body .topnav,
+    body[data-page="registration"] .topnav,
+    body[data-page="library"] .topnav,
+    body[data-page="map"] .topnav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 0.25rem;
+        overflow: visible;
+        padding: 0;
+    }
+
+    body .topnav a,
+    body[data-page="registration"] .topnav a,
+    body[data-page="library"] .topnav a,
+    body[data-page="map"] .topnav a {
+        min-width: 0;
+        width: auto;
+        flex: initial;
+        padding: 0.52rem 0.45rem;
+        font-size: 0.78rem;
+        line-height: 1.25;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .learning-path-toolbar {
+        gap: 0.9rem;
+        padding: 0.85rem;
+    }
+
+    .learning-filter-button {
+        flex: 1 1 auto;
+    }
+
+    .learning-route-stage {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+}
+
 @media (max-width: 1120px) {
     .maturity-toolbar {
         grid-template-columns: 1fr 1fr;
