@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-2">
+    <link rel="stylesheet" href="team_technical_assets.css">
 </head>
 <body data-page="library">
     <header class="topbar">
-        <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
+        <a class="brand" href="index.html" aria-label="Hub Overview로 돌아가기">
             <span class="brand-mark"><i class="bx bx-search"></i></span>
             <span>
                 <strong>Library</strong>
@@ -17,7 +17,7 @@
             </span>
         </a>
         <nav class="topnav" aria-label="기술자산화 페이지">
-            <a href="team_technical_assets.html">Overview</a>
+            <a href="index.html">Overview</a>
             <a href="team_technical_assets_map.html">Technology Map</a>
             <a href="team_technical_assets_techtree.html">Learning Path</a>
             <a class="active" href="team_technical_assets_library.html">Library</a>
@@ -33,20 +33,26 @@
                 <h1 id="library-title">기술자산 Library</h1>
                 <p>문제와 판단 질문에서 시작해 검증 근거, 적용 이력과 실행자료를 찾습니다.</p>
             </div>
-            <dl class="library-stats" aria-label="Library 현황">
-                <div>
-                    <dt>전체</dt>
-                    <dd id="library-total-count">0</dd>
-                </div>
-                <div>
-                    <dt>게시</dt>
-                    <dd id="library-published-count">0</dd>
-                </div>
-                <div>
-                    <dt>재사용 자산</dt>
-                    <dd id="library-reused-count">0</dd>
-                </div>
-            </dl>
+            <div class="library-heading-actions">
+                <dl class="library-stats" aria-label="Library 현황">
+                    <div>
+                        <dt>전체</dt>
+                        <dd id="library-total-count">0</dd>
+                    </div>
+                    <div>
+                        <dt>게시</dt>
+                        <dd id="library-published-count">0</dd>
+                    </div>
+                    <div>
+                        <dt>재사용 자산</dt>
+                        <dd id="library-reused-count">0</dd>
+                    </div>
+                </dl>
+                <button class="asset-register-button" type="button" id="open-asset-registration">
+                    <i class="bx bx-plus" aria-hidden="true"></i>
+                    <span>기술자산 등록</span>
+                </button>
+            </div>
         </section>
 
         <section class="library-workspace container" aria-label="기술자산 검색과 결과">
@@ -114,6 +120,118 @@
             <dialog class="full-detail-dialog" id="full-detail-dialog" aria-labelledby="full-detail-title">
                 <div id="full-detail-content"></div>
             </dialog>
+            <dialog class="asset-registration-dialog" id="asset-registration-dialog" aria-labelledby="asset-registration-title">
+                <form class="asset-registration-shell" id="asset-registration-form" method="dialog">
+                    <header class="asset-registration-header">
+                        <div>
+                            <span class="page-kicker">Internal Registration</span>
+                            <h2 id="asset-registration-title" tabindex="-1">기술자산 등록</h2>
+                            <p>외부에서 구조화한 JSON을 불러온 뒤 내부 등록정보를 보완합니다.</p>
+                        </div>
+                        <button class="icon-button" type="button" id="close-asset-registration" aria-label="등록 창 닫기" title="등록 창 닫기"><i class="bx bx-x"></i></button>
+                    </header>
+
+                    <ol class="asset-registration-steps" aria-label="등록 단계">
+                        <li class="is-active" data-registration-step-indicator="1"><span>1</span>JSON 불러오기</li>
+                        <li data-registration-step-indicator="2"><span>2</span>내부정보 보완</li>
+                        <li data-registration-step-indicator="3"><span>3</span>연결 확인</li>
+                        <li data-registration-step-indicator="4"><span>4</span>검증·내보내기</li>
+                    </ol>
+
+                    <div class="asset-registration-body">
+                        <section class="asset-registration-step is-active" data-registration-step="1">
+                            <div class="json-drop-zone" id="registration-drop-zone">
+                                <i class="bx bx-file-blank" aria-hidden="true"></i>
+                                <strong>외부 JSON 파일을 놓거나 선택하세요.</strong>
+                                <p>Handoff Packet 또는 Library 카드 JSON을 불러올 수 있습니다. 원본 파일은 변경하지 않습니다.</p>
+                                <label class="secondary-action-button" for="registration-json-file"><i class="bx bx-upload"></i>JSON 파일 선택</label>
+                                <input id="registration-json-file" type="file" accept="application/json,.json" hidden>
+                                <span class="json-file-name" id="registration-file-name">선택된 파일 없음</span>
+                            </div>
+                            <div class="registration-message" id="registration-import-message" aria-live="polite"></div>
+                        </section>
+
+                        <section class="asset-registration-step" data-registration-step="2" hidden>
+                            <div class="registration-id-banner">
+                                <div><span>등록 ID</span><strong id="registration-id-display">등록 전 생성</strong></div>
+                                <p>이 등록 ID로 기본정보, 연결 카드, 회사 내부 링크와 검증 이력을 하나의 등록 건으로 관리합니다.</p>
+                            </div>
+                            <p class="registration-example-notice"><i class="bx bx-info-circle"></i><strong>[예시 안내]</strong> 아래 입력 안내에 표시된 이름과 값은 형식 이해를 위한 예시이며 실제 등록정보가 아닙니다.</p>
+                            <div class="registration-form-grid">
+                                <label class="registration-field registration-field-wide">자산 제목<input name="title" required></label>
+                                <label class="registration-field">자산 ID<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="[예시] impact-risk-ranking"></label>
+                                <label class="registration-field">자료 유형<select name="type" required></select></label>
+                                <label class="registration-field">기술영역<select name="domain" required></select></label>
+                                <label class="registration-field">게시 상태<select name="publicationStatus" required></select></label>
+                                <label class="registration-field">유형별 상태<input name="status" required placeholder="[예시] 초안, 검토 중, 게시"></label>
+                                <label class="registration-field">담당자<input name="owner" required></label>
+                                <label class="registration-field">등록자<input name="registrant" required></label>
+                                <label class="registration-field">검토자<input name="reviewer" placeholder="게시 전 실제 검토자 입력 필수"></label>
+                                <label class="registration-field">활용 맥락<input name="contexts" required placeholder="[예시] 설계, 개발, 사업부"></label>
+                                <label class="registration-field registration-field-wide">요약<textarea name="summary" rows="3" required></textarea></label>
+                                <label class="registration-field registration-field-wide">활용 상황<textarea name="useCase" rows="3" required></textarea></label>
+                                <label class="registration-field registration-field-wide">핵심 내용<textarea name="contents" rows="4" required></textarea></label>
+                                <label class="registration-field registration-field-wide">검색 태그<input name="tags" placeholder="[예시] 충격, 설계안 비교, Risk Ranking"></label>
+                            </div>
+                        </section>
+
+                        <section class="asset-registration-step" data-registration-step="3" hidden>
+                            <div class="registration-connections">
+                                <section class="registration-connection-panel">
+                                    <header>
+                                        <div><h3>연결 자산 검색</h3><p>기존 Library를 검색하고 관계와 활용 내용을 기록합니다.</p></div>
+                                        <span class="required-token">게시 전 필수</span>
+                                    </header>
+                                    <label class="registration-field">검색어<input name="relationSearch" id="relation-search" placeholder="[예시] 충격 설계안 비교"></label>
+                                    <div class="relation-search-results" id="relation-search-results" aria-live="polite"></div>
+                                    <div class="selected-relations" id="selected-relations"></div>
+                                    <label class="connection-none-option"><input type="checkbox" name="noRelationFound" id="no-relation-found">검색했지만 연결할 기존 자산이 없음</label>
+                                    <label class="registration-field" id="no-relation-reason-field" hidden>연결 후보 없음 사유<textarea name="noRelationReason" rows="2" placeholder="[예시] 충격·Drop·Risk Ranking으로 검색했으나 동일 목적의 기존 카드 없음"></textarea></label>
+                                </section>
+
+                                <section class="registration-connection-panel">
+                                    <header>
+                                        <div><h3>회사 내부 자산 링크</h3><p>원본·근거·결과물의 위치와 접근 범위를 구조화해 연결합니다.</p></div>
+                                        <span class="required-token">게시 전 필수</span>
+                                    </header>
+                                    <div class="internal-link-form">
+                                        <label class="registration-field">링크 이름<input id="internal-link-label" placeholder="[예시] 충격 설계안 비교 결과보고서"></label>
+                                        <label class="registration-field">URL<input id="internal-link-url" type="url" placeholder="[예시] https://사내시스템/문서번호"></label>
+                                        <label class="registration-field">자산 유형<select id="internal-link-type"></select></label>
+                                        <label class="registration-field">원본 시스템<input id="internal-link-system" placeholder="[예시] VD Board, PLM, SharePoint"></label>
+                                        <label class="registration-field">링크 역할<select id="internal-link-role"></select></label>
+                                        <label class="registration-field">접근 범위<select id="internal-link-scope"></select></label>
+                                    </div>
+                                    <button class="secondary-action-button add-internal-link" type="button" id="add-internal-link"><i class="bx bx-link"></i>내부 링크 추가</button>
+                                    <div class="selected-links" id="selected-links"></div>
+                                </section>
+                            </div>
+                        </section>
+
+                        <section class="asset-registration-step" data-registration-step="4" hidden>
+                            <div class="registration-review-layout">
+                                <div>
+                                    <h3>등록 전 검증</h3>
+                                    <div class="registration-validation" id="registration-validation" aria-live="polite"></div>
+                                    <p class="registration-static-note"><i class="bx bx-info-circle"></i>이 사이트는 정적 페이지입니다. 다운로드한 JSON을 내부 저장소의 <code>data/cards/</code>에 반영하고 검증 절차를 실행해야 실제 Library에 게시됩니다.</p>
+                                </div>
+                                <div>
+                                    <h3>등록 JSON 미리보기</h3>
+                                    <pre class="registration-json-preview" id="registration-json-preview"></pre>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <footer class="asset-registration-footer">
+                        <button class="secondary-action-button" type="button" id="registration-previous" hidden>이전</button>
+                        <span class="registration-footer-spacer"></span>
+                        <button class="secondary-action-button" type="button" id="registration-cancel">취소</button>
+                        <button class="asset-register-button" type="button" id="registration-next" disabled>다음</button>
+                        <button class="asset-register-button" type="button" id="registration-download" hidden><i class="bx bx-download"></i>등록 JSON 다운로드</button>
+                    </footer>
+                </form>
+            </dialog>
         </section>
     </main>
 
@@ -123,5 +241,6 @@
 
     <script src="team_technical_assets_data.js?v=20260718-knowhow-1"></script>
     <script src="team_technical_assets.js?v=20260718-knowhow-1"></script>
+    <script src="team_technical_assets_registration_modal.js"></script>
 </body>
 </html>
