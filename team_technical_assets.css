@@ -4323,8 +4323,9 @@ body[data-page="techtree"] {
 }
 
 .learning-map-head {
-    background: var(--ink);
-    color: var(--paper);
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-soft);
+    color: var(--ink);
 }
 
 .learning-map-corner,
@@ -4335,7 +4336,7 @@ body[data-page="techtree"] {
 }
 
 .learning-map-stage-head {
-    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 1px solid var(--line);
     text-align: center;
 }
 
@@ -4412,7 +4413,7 @@ body[data-page="techtree"] {
 }
 
 .learning-capability-node.is-dimmed {
-    display: none;
+    opacity: 0.28;
 }
 
 .learning-capability-title {
