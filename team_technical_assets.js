@@ -1414,6 +1414,199 @@ const landingReusedAssets = [
         note: "시험 matching 기준과 반복 설정 확인에 사용"
     }
 ];
+
+
+
+const landingSpotlightFeatures = [
+    {
+        cardId: "methodology-impact-risk-ranking",
+        label: "판단 기준",
+        tone: "core",
+        reason: "충격 설계안의 취약 위치와 상대 위험을 같은 절차로 비교하는 핵심 방법론입니다.",
+        nextAction: "검증 결과와 적용 사례를 한곳에 연결하기"
+    },
+    {
+        cardId: "cor-impact",
+        label: "검증 근거",
+        tone: "validated",
+        reason: "Risk Ranking 방법론의 반복성과 평가 피드백을 확인하는 근거 과제입니다.",
+        nextAction: "후속 검증 결과가 생기면 연결해 갱신하기"
+    },
+    {
+        cardId: "methodology-warpage-relative-comparison",
+        label: "확산 후보",
+        tone: "emerging",
+        reason: "변형 과제의 상대 비교 판단을 다른 과제에서도 재현할 수 있게 만드는 후보입니다.",
+        nextAction: "실제 적용 근거를 추가로 연결하기"
+    }
+];
+
+const overviewWorkTypes = new Set(["VD Request", "CoR"]);
+const overviewWorkRelationTypes = {
+    USES: "직접 재사용",
+    ADAPTS: "조건 변경 적용",
+    REFERENCES: "참고",
+    VALIDATES: "검증 근거",
+    EVIDENCE_FOR: "검증 근거"
+};
+const overviewUsageTypeRank = {
+    "참고": 1,
+    "직접 재사용": 2,
+    "조건 변경 적용": 3,
+    "검증 근거": 4
+};
+
+function getOverviewDataContext() {
+    const available = libraryItems.filter((item) => item.publicationStatus !== "폐기");
+    const operational = available.filter((item) => item.demo !== true);
+    const demo = available.filter((item) => item.demo === true);
+    if (operational.length > 0) {
+        return { mode: "operational", items: operational, totalCount: operational.length, demoCount: demo.length };
+    }
+    return { mode: demo.length > 0 ? "demo" : "empty", items: demo, totalCount: demo.length, demoCount: demo.length };
+}
+
+function normalizeOverviewUsageType(value) {
+    const text = String(value ?? "").trim();
+    if (!text || text === "적합 자산 없음") return "";
+    if (text.includes("검증")) return "검증 근거";
+    if (text.includes("조건")) return "조건 변경 적용";
+    if (text.includes("직접")) return "직접 재사용";
+    if (text.includes("참고") || text.includes("보고 근거")) return "참고";
+    return text;
+}
+
+function getWorkUsageLinks(item, cardsById) {
+    const byTargetId = new Map();
+    const addLink = (targetId, usageType, outcome, source, actor = "") => {
+        if (!targetId || targetId === item.id || !cardsById.has(targetId)) return;
+        const normalizedType = normalizeOverviewUsageType(usageType);
+        if (!normalizedType) return;
+        const next = {
+            sourceCardId: item.id,
+            targetCardId: targetId,
+            usageType: normalizedType,
+            outcome: String(outcome ?? "").trim(),
+            actor: String(actor ?? "").trim(),
+            evidenceSource: source
+        };
+        const previous = byTargetId.get(targetId);
+        const previousRank = overviewUsageTypeRank[previous?.usageType] ?? 0;
+        const nextRank = overviewUsageTypeRank[next.usageType] ?? 0;
+        if (!previous || nextRank > previousRank) {
+            byTargetId.set(targetId, {
+                ...next,
+                outcome: next.outcome || previous?.outcome || "",
+                actor: next.actor || previous?.actor || ""
+            });
+        } else if (previous) {
+            byTargetId.set(targetId, {
+                ...previous,
+                outcome: previous.outcome || next.outcome,
+                actor: previous.actor || next.actor
+            });
+        }
+    };
+
+    const searchReuse = item.searchReuse ?? {};
+    const searchUsageType = normalizeOverviewUsageType(searchReuse.usageType);
+    if (searchReuse.performed && searchUsageType) {
+        (searchReuse.foundAssetIds ?? []).forEach((targetId) => {
+            addLink(targetId, searchUsageType, searchReuse.outcome, "searchReuse", searchReuse.searchedBy);
+        });
+    }
+
+    (item.relations ?? []).forEach((relation) => {
+        if (relation.status === "해제" || relation.status === "확인 필요") return;
+        const usageType = overviewWorkRelationTypes[relation.type];
+        if (usageType) addLink(relation.targetId, usageType, relation.note, "relation", relation.createdBy);
+    });
+
+    return [...byTargetId.values()];
+}
+
+function buildOverviewModel() {
+    const context = getOverviewDataContext();
+    const cardsById = new Map(context.items.map((item) => [item.id, item]));
+    const workItems = context.items.filter((item) => overviewWorkTypes.has(item.type));
+    const completedWorkItems = workItems.filter((item) => item.status === "완료");
+    const completedUsageLinks = completedWorkItems.flatMap((item) => getWorkUsageLinks(item, cardsById));
+    const allWorkUsageLinks = workItems.flatMap((item) => getWorkUsageLinks(item, cardsById));
+    const searchedWorkItems = completedWorkItems.filter((item) => item.searchReuse?.performed === true);
+    const utilizedSourceIds = new Set(completedUsageLinks.map((link) => link.sourceCardId));
+    const utilizedAssetIds = new Set(completedUsageLinks.map((link) => link.targetCardId));
+    const gapWorkItems = completedWorkItems.filter((item) => item.searchReuse?.performed === true
+        && (item.searchReuse?.usageType === "적합 자산 없음" || item.searchReuse?.decision === "no-candidate"));
+
+    const spotlights = landingSpotlightFeatures.map((feature) => {
+        const card = cardsById.get(feature.cardId);
+        if (!card) return null;
+        const completedLinks = completedUsageLinks.filter((link) => link.targetCardId === card.id);
+        const registeredLinks = allWorkUsageLinks.filter((link) => link.targetCardId === card.id);
+        return { ...feature, card, completedLinks, registeredLinks };
+    }).filter(Boolean);
+
+    const usageEvents = completedUsageLinks.map((link) => {
+        const sourceCard = cardsById.get(link.sourceCardId);
+        const targetCard = cardsById.get(link.targetCardId);
+        return {
+            kind: link.usageType,
+            title: targetCard?.title ?? link.targetCardId,
+            meta: `${sourceCard?.type ?? "과제"} · ${sourceCard?.title ?? link.sourceCardId}`,
+            detail: link.outcome || "활용 관계가 등록되었습니다.",
+            actor: link.actor,
+            sortDate: sourceCard?.updatedAt ?? ""
+        };
+    });
+    const reviewEvents = completedWorkItems.filter((item) => item.reviewer).map((item) => ({
+        kind: "리뷰 기록",
+        title: item.title,
+        meta: `${item.type} · 검토자 ${item.reviewer}`,
+        detail: "완료 과제의 Reviewer와 검토 이력이 명시되었습니다.",
+        actor: item.reviewer,
+        sortDate: item.updatedAt ?? ""
+    }));
+    const contributions = [...usageEvents, ...reviewEvents]
+        .sort((a, b) => String(b.sortDate).localeCompare(String(a.sortDate), "ko"))
+        .slice(0, 5);
+
+    const attentionById = new Map();
+    const addAttention = (card, priority, reason, action) => {
+        const previous = attentionById.get(card.id);
+        if (!previous || priority > previous.priority) attentionById.set(card.id, { card, priority, reason, action });
+    };
+    context.items.forEach((card) => {
+        if (card.status === "보완 필요" || card.publicationStatus === "개정 필요") {
+            addAttention(card, 4, "보완 필요 상태", "적용조건과 완료 기준을 10분 안에 보완하기");
+        }
+        if (card.searchReuse?.usageType === "적합 자산 없음") {
+            addAttention(card, 3, "적합 자산 없음", "기술 Gap 후보와 다음 검증 질문을 연결하기");
+        }
+        if ((incomingReuseCountById.get(card.id) ?? 0) > 0 && !card.reviewer && card.publicationStatus !== "게시") {
+            addAttention(card, 2, "활용 관계가 있지만 Reviewer 미지정", "적용범위와 한계를 확인할 Reviewer 지정하기");
+        }
+    });
+    const needsAttention = [...attentionById.values()]
+        .sort((a, b) => b.priority - a.priority || String(b.card.updatedAt).localeCompare(String(a.card.updatedAt), "ko"))
+        .slice(0, 4);
+
+    return {
+        context,
+        cardsById,
+        completedWorkItems,
+        completedUsageLinks,
+        searchedWorkItems,
+        utilizedSourceIds,
+        utilizedAssetIds,
+        gapWorkItems,
+        spotlights,
+        contributions,
+        needsAttention
+    };
+}
+
+const overviewModel = buildOverviewModel();
+
 function getUniqueValues(key) {
     return [...new Set(libraryItems.map((item) => item[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b, "ko"));
 }
@@ -1613,85 +1806,138 @@ function getLandingMethodGrowth() {
 
 
 function renderLandingMetrics() {
-    const methodologyGrowth = getLandingMethodGrowth();
-    setText("metric-new-assets", landingContributions.filter((item) => item.kind === "신규 등록" || item.kind === "교육자료화").length);
-    setText("metric-level-up", methodologyLevelData ? methodologyGrowth.length : "-");
-    setText("metric-reused", landingReusedAssets.reduce((sum, item) => sum + item.count, 0));
-    setText("metric-reviewed", landingContributions.filter((item) => item.kind === "리뷰 완료").length);
+    const total = overviewModel.completedWorkItems.length;
+    const formatFraction = (value) => total > 0 ? `${value} / ${total}` : "-";
+    setText("metric-search-complete", formatFraction(overviewModel.searchedWorkItems.length));
+    setText("metric-utilized-work", formatFraction(overviewModel.utilizedSourceIds.size));
+    setText("metric-used-assets", overviewModel.utilizedAssetIds.size || "-");
+    setText("metric-gap-count", overviewModel.gapWorkItems.length || "-");
+
+    const dataCard = document.getElementById("overview-data-card");
+    const dataNote = document.getElementById("overview-data-note");
+    const metricScope = document.getElementById("overview-metric-scope");
+    if (overviewModel.context.mode === "demo") {
+        dataCard?.classList.add("is-demo");
+        if (dataNote) dataNote.textContent = `아래 수치와 사례는 가상 카드 ${overviewModel.context.totalCount}건으로 계산한 화면 예시이며 실제 팀 실적·평가 데이터가 아닙니다.`;
+        if (metricScope) metricScope.textContent = `기능시험용 샘플 ${overviewModel.context.totalCount}건 전체`;
+    } else if (overviewModel.context.mode === "operational") {
+        dataCard?.classList.add("is-operational");
+        if (dataNote) dataNote.textContent = `운영 카드 ${overviewModel.context.totalCount}건의 명시적 관계만 집계합니다.`;
+        if (metricScope) metricScope.textContent = `운영 데이터 ${overviewModel.context.totalCount}건`;
+    } else {
+        if (dataNote) dataNote.textContent = "연결된 Library 카드가 없습니다.";
+        if (metricScope) metricScope.textContent = "운영 데이터 연결 전";
+    }
 }
 
-function renderLandingMethodGrowth() {
-    const wrap = document.getElementById("landing-method-growth");
+function getOverviewCardUrl(card) {
+    return `team_technical_assets_library.html?q=${encodeURIComponent(card.title)}`;
+}
+
+function renderLandingSpotlights() {
+    const wrap = document.getElementById("landing-spotlight-assets");
     if (!wrap) return;
-    const methodologyGrowth = getLandingMethodGrowth();
-    if (!methodologyLevelData || methodologyGrowth.length === 0) {
-        wrap.innerHTML = `<p class="section-empty">방법론 성숙도 데이터를 확인할 수 없습니다.</p>`;
+    if (!overviewModel.spotlights.length) {
+        wrap.innerHTML = `<p class="section-empty">큐레이션된 핵심 자산이 없습니다.</p>`;
         return;
     }
-    wrap.innerHTML = methodologyGrowth.slice(0, 6).map(({ method, changes }) => `
-        <article class="growth-card">
-            <header>
-                <span class="badge domain">${escapeHtml(method.categoryLabel)}</span>
-                <span class="growth-change-count">${changes.length}개 사업부 변화</span>
-            </header>
-            <h3>${escapeHtml(getMethodologyDisplayName(method))}</h3>
-            <div class="growth-business-list">
-                ${changes.map(({ businessUnit, current, target, change }) => `
-                    <div class="growth-business-row">
-                        <strong>${escapeHtml(businessUnit.label)}</strong>
-                        <span>${renderMaturityScore(current, "is-current")}</span>
-                        <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
-                        <span>${renderMaturityScore(target, getMaturityTargetClass(current, target))}</span>
-                        <small class="change-label change-${change.kind}">${change.kind === "new" ? "신규 적용" : "성숙도 향상"}</small>
-                    </div>
-                `).join("")}
-            </div>
-        </article>
-    `).join("") + (methodologyGrowth.length > 6
-        ? `<a class="text-link growth-more-link" href="team_technical_assets_map.html">변화 방법론 ${methodologyGrowth.length}개 전체 보기 <i class="bx bx-right-arrow-alt"></i></a>`
-        : "");
+    wrap.innerHTML = overviewModel.spotlights.map((item) => {
+        const usageTypes = [...new Set(item.registeredLinks.map((link) => link.usageType))];
+        const status = statusMeta[item.card.status] ?? statusMeta[item.card.publicationStatus] ?? statusMeta["초안"];
+        return `
+            <article class="overview-spotlight-card" data-tone="${escapeHtml(item.tone)}">
+                <header>
+                    <span class="spotlight-label">${escapeHtml(item.label)}</span>
+                    ${item.card.demo ? '<span class="sample-token">샘플 데이터</span>' : ""}
+                </header>
+                <span class="overview-card-type">${escapeHtml(item.card.type)}</span>
+                <h3>${escapeHtml(item.card.title)}</h3>
+                <p class="spotlight-reason">${escapeHtml(item.reason)}</p>
+                <dl class="spotlight-evidence">
+                    <section><dt>완료 과제 활용</dt><dd>${item.completedLinks.length}건</dd></section>
+                    <section><dt>등록된 업무 연결</dt><dd>${item.registeredLinks.length}건</dd></section>
+                </dl>
+                <p class="spotlight-usage-types">${usageTypes.length ? usageTypes.map((type) => `<span>${escapeHtml(type)}</span>`).join("") : "<span>활용 근거 보완 필요</span>"}</p>
+                <p class="spotlight-next"><strong>다음 행동</strong>${escapeHtml(item.nextAction)}</p>
+                <footer>
+                    <span class="status-token ${status.className}"><i class="${status.icon}"></i>${escapeHtml(item.card.status)}</span>
+                    <a class="text-link" href="${getOverviewCardUrl(item.card)}">상세 보기 <i class="bx bx-right-arrow-alt"></i></a>
+                </footer>
+            </article>
+        `;
+    }).join("");
 }
 
 function renderLandingContributionFeed() {
     const wrap = document.getElementById("landing-contribution-feed");
     if (!wrap) return;
-    wrap.innerHTML = landingContributions.map((item) => `
-        <article class="feed-item">
-            <div>
-                <span class="badge review">${item.kind}</span>
-                <h3>${item.title}</h3>
-                <p>${item.meta}</p>
-                <strong>${item.relation}</strong>
-            </div>
-            <div class="feed-side">
-                <span>${item.date}</span>
-                <strong>${item.contributor}</strong>
-            </div>
-        </article>
+    if (!overviewModel.contributions.length) {
+        wrap.innerHTML = `<li class="section-empty">표시할 명시적 활용·리뷰 기록이 없습니다.</li>`;
+        return;
+    }
+    wrap.innerHTML = overviewModel.contributions.map((item) => `
+        <li class="overview-row contribution-row">
+            <span class="row-icon"><i class="bx ${item.kind === "리뷰 기록" ? "bx-check-shield" : "bx-link-alt"}"></i></span>
+            <section>
+                <span class="row-kicker">${escapeHtml(item.kind)}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.detail)}</p>
+                <small>${escapeHtml(item.meta)}${item.actor ? ` · ${escapeHtml(item.actor)}` : ""}</small>
+            </section>
+        </li>
     `).join("");
 }
 
-function renderLandingReusedAssets() {
-    const wrap = document.getElementById("landing-reused-assets");
+function renderLandingUsageFlow() {
+    const wrap = document.getElementById("landing-usage-flow");
     if (!wrap) return;
-    wrap.innerHTML = landingReusedAssets.map((item) => `
-        <article class="reuse-card">
-            <div class="reuse-count"><strong>${item.count}</strong><span>회 재사용</span></div>
-            <div>
-                <h3>${item.title}</h3>
-                <p>${item.note}</p>
-                <div class="relation-line"><span>Owner</span><strong>${item.owner}</strong></div>
-                <div class="relation-line"><span>관계</span><strong>${item.relation}</strong></div>
-            </div>
-        </article>
+    if (!overviewModel.completedUsageLinks.length) {
+        wrap.innerHTML = `<li class="section-empty">완료 과제에 명시된 자산 활용 관계가 없습니다.</li>`;
+        return;
+    }
+    wrap.innerHTML = overviewModel.completedUsageLinks.map((link) => {
+        const sourceCard = overviewModel.cardsById.get(link.sourceCardId);
+        const targetCard = overviewModel.cardsById.get(link.targetCardId);
+        return `
+            <li class="overview-row usage-flow-row">
+                <span class="row-icon"><i class="bx bx-transfer-alt"></i></span>
+                <section>
+                    <span class="row-kicker">${escapeHtml(link.usageType)}</span>
+                    <h3>${escapeHtml(sourceCard?.title ?? link.sourceCardId)}</h3>
+                    <p class="usage-target"><i class="bx bx-right-arrow-alt"></i><a href="${targetCard ? getOverviewCardUrl(targetCard) : "team_technical_assets_library.html"}">${escapeHtml(targetCard?.title ?? link.targetCardId)}</a></p>
+                    <small>${escapeHtml(link.outcome || "활용 결과가 등록되었습니다.")}</small>
+                </section>
+            </li>
+        `;
+    }).join("");
+}
+
+function renderLandingCareList() {
+    const wrap = document.getElementById("landing-care-list");
+    if (!wrap) return;
+    if (!overviewModel.needsAttention.length) {
+        wrap.innerHTML = `<li class="section-empty">현재 표시할 보완 요청이 없습니다.</li>`;
+        return;
+    }
+    wrap.innerHTML = overviewModel.needsAttention.map((item) => `
+        <li class="overview-row care-row">
+            <span class="row-icon"><i class="bx bx-wrench"></i></span>
+            <section>
+                <span class="row-kicker">${escapeHtml(item.reason)}</span>
+                <h3><a href="${getOverviewCardUrl(item.card)}">${escapeHtml(item.card.title)}</a></h3>
+                <p>${escapeHtml(item.action)}</p>
+                <small>${escapeHtml(item.card.type)} · ${escapeHtml(item.card.status)}${item.card.demo ? " · 샘플" : ""}</small>
+            </section>
+        </li>
     `).join("");
 }
 
 function renderLanding() {
     renderLandingMetrics();
-    renderLandingMethodGrowth();
+    renderLandingSpotlights();
     renderLandingContributionFeed();
-    renderLandingReusedAssets();
+    renderLandingUsageFlow();
+    renderLandingCareList();
 }
 function renderMetrics() {
     setText("metric-total", libraryItems.length);

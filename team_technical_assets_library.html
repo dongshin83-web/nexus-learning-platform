@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-mobile-nav-learning-1">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-unified-heroes-1">
 </head>
 <body data-page="library">
     <header class="topbar">
@@ -27,31 +27,31 @@
     </header>
 
     <main class="library-page">
-        <section class="library-heading container" aria-labelledby="library-title">
-            <div>
-                <span class="page-kicker">Technical Asset Library</span>
-                <h1 id="library-title">기술자산 Library</h1>
-                <p>문제와 판단 질문에서 시작해 검증 근거, 적용 이력과 실행자료를 찾습니다.</p>
-            </div>
-            <div class="library-heading-actions">
-                <dl class="library-stats" aria-label="Library 현황">
-                    <div>
-                        <dt>전체</dt>
-                        <dd id="library-total-count">0</dd>
-                    </div>
-                    <div>
-                        <dt>게시</dt>
-                        <dd id="library-published-count">0</dd>
-                    </div>
-                    <div>
-                        <dt>재사용 자산</dt>
-                        <dd id="library-reused-count">0</dd>
-                    </div>
-                </dl>
-                <button class="asset-register-button" type="button" id="open-asset-registration">
-                    <i class="bx bx-plus" aria-hidden="true"></i>
-                    <span>기술자산 등록</span>
-                </button>
+        <section class="hero container library-hero" aria-labelledby="library-title">
+            <div class="hero-grid">
+                <div class="hero-main">
+                    <span class="eyebrow"><i class="bx bx-search-alt"></i> Technical Asset Library</span>
+                    <h1 id="library-title">기술자산 Library</h1>
+                    <p class="hero-copy">문제와 판단 질문에서 시작해 검증 근거, 적용 이력과 실행자료를 찾습니다.</p>
+                </div>
+                <aside class="hero-side library-hero-side">
+                    <article class="side-note library-status-note">
+                        <span>Library Status</span>
+                        <dl class="library-stats" aria-label="Library 현황">
+                            <div><dt>전체</dt><dd id="library-total-count">0</dd></div>
+                            <div><dt>게시</dt><dd id="library-published-count">0</dd></div>
+                            <div><dt>재사용</dt><dd id="library-reused-count">0</dd></div>
+                        </dl>
+                        <button class="asset-register-button" type="button" id="open-asset-registration">
+                            <i class="bx bx-plus" aria-hidden="true"></i><span>기술자산 등록</span>
+                        </button>
+                    </article>
+                    <article class="side-note">
+                        <span>Search Rule</span>
+                        <strong>자산명보다 문제와 판단 질문으로 찾습니다</strong>
+                        <p>기술영역·업무 단계·대응 대상을 함께 좁혀 실제 재사용 가능한 자료를 확인합니다.</p>
+                    </article>
+                </aside>
             </div>
         </section>
 
@@ -241,6 +241,6 @@
 
     <script src="team_technical_assets_data.js?v=20260718-knowhow-1"></script>
     <script src="team_technical_assets.js?v=20260718-knowhow-1"></script>
-    <script src="team_technical_assets_registration_modal.js"></script>
+    <script src="team_technical_assets_registration_modal.js?v=20260718-registration-3"></script>
 </body>
 </html>
