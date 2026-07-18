@@ -5522,66 +5522,45 @@ body[data-page="techtree"] .learning-route-empty {
     flex: 0 0 auto;
 }
 
-/* Shared page-title composition */
-.library-hero,
-.registration-hero {
-    padding: clamp(1rem, 2.4vw, 2rem) 0 0.9rem;
+/* Natural page headings: content first, without a large enclosing title card. */
+body[data-page="landing"] .overview-hero-grid,
+body[data-page="map"] .maturity-hero .hero-grid,
+body[data-page="techtree"] .hero > .hero-grid,
+body[data-page="culture"] .hero > .hero-grid {
+    align-items: start;
 }
 
-.library-hero .hero-main,
-.registration-hero .hero-main {
-    display: grid;
-    align-content: center;
+body[data-page="landing"] .overview-hero-main,
+body[data-page="map"] .maturity-hero .hero-main,
+body[data-page="techtree"] .hero > .hero-grid > .hero-main,
+body[data-page="culture"] .hero > .hero-grid > .hero-main {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.45rem 0.35rem 0.45rem 0;
 }
 
-.library-hero .hero-main h1,
-.registration-hero .hero-main h1 {
-    max-width: 100%;
-    margin: 0.75rem 0 0.55rem;
-    font-size: clamp(1.45rem, 1.9vw, 2.2rem);
-    line-height: 1.18;
-    letter-spacing: 0;
+body[data-page="landing"] .overview-hero-main .eyebrow {
+    width: auto;
+    justify-self: start;
 }
 
-.registration-hero .hero-main > p,
-.library-hero .hero-main > p {
-    max-width: 880px;
-    margin: 0;
-    color: var(--muted);
-    font-size: clamp(0.92rem, 1.2vw, 1.02rem);
-    line-height: 1.6;
+body[data-page="landing"] .overview-nudge-stack,
+body[data-page="techtree"] .hero > .hero-grid > .hero-side,
+body[data-page="culture"] .hero > .hero-grid > .hero-side {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
 }
 
-.library-status-note {
-    display: grid;
-    gap: 0.75rem;
-}
-
-.library-hero .library-stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    min-width: 0;
-    width: 100%;
-}
-
-.library-hero .library-stats > div {
-    padding: 0 0.55rem;
-}
-
-.library-hero .library-stats > div:first-child {
-    padding-left: 0;
-}
-
-.library-hero .library-stats dd {
-    font-size: 1.15rem;
-}
-
-.library-hero .asset-register-button {
-    width: 100%;
-    justify-content: center;
-}
-
-.registration-hero .registration-flow {
-    margin-top: 1rem;
+body[data-page="landing"] .overview-hero-main h1,
+body[data-page="map"] .maturity-hero h1,
+body[data-page="techtree"] .hero h1,
+body[data-page="culture"] .hero h1 {
+    font-size: clamp(2rem, 3.2vw, 3.35rem);
+    letter-spacing: -0.04em;
 }
 
 /* Technology Map overview bars — current markup and balanced type scale. */
