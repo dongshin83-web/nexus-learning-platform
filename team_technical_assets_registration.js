@@ -98,23 +98,34 @@ const TYPE_SPECIFIC_SCHEMAS = {
         limitationsAndNotes: ["확인 필요"]
     },
     "노하우": {
-        symptomAndConditions: "확인 필요",
+        knowhowCategory: "확인 필요",
+        symptomAndConditions: {
+            situationAndGoal: "확인 필요",
+            triggerOrFrequency: "확인 필요"
+        },
         causeAndDiagnosis: {
-            hypothesis: "확인 필요",
-            diagnosticSequence: ["확인 필요"],
+            keyDifficulty: "확인 필요",
+            checksBeforeAction: ["확인 필요"],
             ineffectiveAttempts: ["확인 필요"]
         },
-        resolution: ["확인 필요"],
+        resolution: [
+            {
+                step: 1,
+                action: "확인 필요",
+                judgment: "확인 필요"
+            }
+        ],
         effectAndEvidence: {
+            completionCriteria: ["확인 필요"],
             result: "확인 필요",
             evidenceLevel: "확인 필요"
         },
         risksAndRecovery: {
             doNotApply: ["확인 필요"],
-            sideEffects: ["확인 필요"],
-            recovery: ["확인 필요"]
+            risksOrFailureSignals: ["확인 필요"],
+            escalationOrRecovery: ["확인 필요"]
         },
-        versionsAndSources: ["[사내에서 Tool·Solver 버전과 근거 링크 복원]"]
+        versionsAndSources: ["[사내에서 Template·Checklist·SOP·사례·버전·근거 링크 복원]"]
     },
     "Tool Manual": {
         purposeAndOutput: "확인 필요",
@@ -175,8 +186,8 @@ const promptDefinitions = {
     },
     knowhow: {
         cardType: "노하우",
-        purpose: "반복되는 하나의 실행 난제에 대한 증상, 진단, 해결 절차, 효과와 위험을 정리합니다.",
-        focus: "검색 가능한 증상과 발생조건, 원인 가설과 진단 순서, 실패한 시도, 최대 7단계의 해결 절차, 전후 효과, 적용 금지 조건·부작용·복구방법을 구분하세요."
+        purpose: "기술 수행뿐 아니라 장표·보고서 작성, 요청 검토 SOP, 다른 조직과의 협업·소통에서 반복해 쓸 수 있는 판단과 실행 방식을 정리합니다.",
+        focus: "knowhowCategory는 기술 수행·산출물 작성·업무 절차·협업·소통 중 하나를 선택하세요. 적용 상황과 목표, 핵심 난점과 사전 확인, 최대 7단계의 실행 순서와 판단 이유, 완료·품질 기준과 확인 근거, 예외·위험·중단·복구·Escalation 조건, 재사용 범위와 연결 자료를 구분하세요. 산출물 원문과 공식 SOP는 복사하지 말고 사내 연결 대상으로 남기며, 공식 여부가 확인되지 않은 실무 방식은 공식 절차처럼 표현하지 마세요."
     },
     "tool-manual": {
         cardType: "Tool Manual",
@@ -224,7 +235,7 @@ function createJsonConversionPrompt({ cardType, purpose, focus }) {
     return `당신은 앞선 대화 내용을 사내 기술자산 Library 등록용 Handoff Packet JSON으로 변환하는 정리자입니다.
 
 [사용 맥락]
-이 Prompt는 사용자와 기술 경험을 대화한 바로 그 대화창에 붙여 넣었습니다. 새 인터뷰를 시작하거나 이미 답한 내용을 다시 질문하지 말고, 이 창의 앞선 대화 전체만 읽어 정리하세요.
+이 Prompt는 사용자와 기술 또는 업무 경험을 대화한 바로 그 대화창에 붙여 넣었습니다. 새 인터뷰를 시작하거나 이미 답한 내용을 다시 질문하지 말고, 이 창의 앞선 대화 전체만 읽어 정리하세요.
 
 [대상 유형]
 ${cardType}: ${purpose}

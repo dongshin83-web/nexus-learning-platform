@@ -283,6 +283,7 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "humanConfirmed": true
       },
       "content": {
+        "knowhowCategory": "기술 수행",
         "symptomAndConditions": "접촉 시작구간에서 time step이 급격히 감소하고 중단",
         "causeAndDiagnosis": "접촉 초기 침투, 강성 변화와 에너지 로그 확인",
         "resolution": "입력 정합성 확인 후 접촉·증분 설정을 단계적으로 조정",
