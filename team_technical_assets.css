@@ -4564,6 +4564,387 @@ body[data-page="techtree"] {
     }
 }
 
+/* Learning Path restoration — scoped to the 681cf96 desktop design. */
+body[data-page="techtree"] .learning-path-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: flex-end;
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    box-shadow: none;
+}
+
+body[data-page="techtree"] .learning-filter-group {
+    display: grid;
+    gap: 0.38rem;
+    min-width: 0;
+}
+
+body[data-page="techtree"] .learning-filter-group.is-channel {
+    justify-items: end;
+}
+
+body[data-page="techtree"] .learning-filter-group.is-requirement {
+    justify-items: center;
+}
+
+body[data-page="techtree"] .learning-filter-label {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.66rem;
+    font-weight: 900;
+}
+
+body[data-page="techtree"] .learning-part-filter,
+body[data-page="techtree"] .learning-requirement-filter,
+body[data-page="techtree"] .learning-channel-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+body[data-page="techtree"] .learning-filter-button {
+    min-height: 2.2rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0.38rem 0.78rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+body[data-page="techtree"] .learning-filter-button:hover {
+    border-color: rgba(var(--accent-rgb), 0.4);
+    background: var(--paper);
+    color: var(--accent);
+}
+
+body[data-page="techtree"] .learning-filter-button:focus-visible {
+    outline: 3px solid rgba(var(--accent-rgb), 0.22);
+    outline-offset: 2px;
+}
+
+body[data-page="techtree"] .learning-filter-button.is-active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--paper);
+}
+
+body[data-page="techtree"] .learning-filter-button[data-learning-channel="internal"].is-active {
+    border-color: var(--green);
+    background: var(--green);
+}
+
+body[data-page="techtree"] .learning-filter-button[data-learning-channel="external"].is-active {
+    border-color: var(--teal);
+    background: var(--teal);
+}
+
+body[data-page="techtree"] .learning-capability-map {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    box-shadow: none;
+}
+
+body[data-page="techtree"] .learning-map-head,
+body[data-page="techtree"] .learning-route {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.66fr) repeat(3, minmax(0, 1fr));
+    min-width: 0;
+}
+
+body[data-page="techtree"] .learning-map-head {
+    border-bottom: 1px solid var(--line-strong);
+    background: var(--paper-soft);
+    color: var(--ink);
+}
+
+body[data-page="techtree"] .learning-map-corner,
+body[data-page="techtree"] .learning-map-stage-head {
+    position: relative;
+    min-width: 0;
+    padding: 0.7rem 0.75rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-align: center;
+}
+
+body[data-page="techtree"] .learning-map-corner {
+    text-align: left;
+}
+
+body[data-page="techtree"] .learning-map-stage-head {
+    border-left: 1px solid var(--line);
+    color: var(--accent);
+}
+
+body[data-page="techtree"] .learning-map-stage-head:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: -0.48rem;
+    width: 0.95rem;
+    border-radius: 999px;
+    background: var(--paper-soft);
+    color: var(--accent);
+    line-height: 0.95rem;
+    transform: translateY(-50%);
+}
+
+body[data-page="techtree"] .learning-route + .learning-route {
+    border-top: 1px solid var(--line);
+}
+
+body[data-page="techtree"] .learning-route-label {
+    min-width: 0;
+    border-left: 0.22rem solid rgba(var(--accent-rgb), 0.58);
+    background: linear-gradient(100deg, var(--accent-soft), var(--paper) 82%);
+    padding: 0.8rem 0.75rem;
+}
+
+body[data-page="techtree"] .learning-route-label h3 {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.35;
+}
+
+body[data-page="techtree"] .learning-route-label p {
+    margin: 0.22rem 0 0;
+    color: var(--muted);
+    font-size: 0.66rem;
+    line-height: 1.45;
+}
+
+body[data-page="techtree"] .learning-route-taxonomy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.24rem;
+    margin-top: 0.42rem;
+}
+
+body[data-page="techtree"] .learning-route-taxonomy span {
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--accent);
+    padding: 0.1rem 0.34rem;
+    font-size: 0.58rem;
+    font-weight: 900;
+}
+
+body[data-page="techtree"] .learning-route-stage {
+    position: relative;
+    min-width: 0;
+    min-height: 4.5rem;
+    border-left: 1px solid var(--line);
+    border-bottom: 0;
+    padding: 0.58rem;
+}
+
+body[data-page="techtree"] .learning-capability-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(9.5rem, 100%), 1fr));
+    gap: 0.4rem;
+    align-content: start;
+}
+
+body[data-page="techtree"] .learning-capability-node,
+body[data-page="techtree"] .learning-capability-node.has-education-channel {
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 0.58rem;
+    background: var(--paper);
+    padding: 0.52rem 0.58rem;
+    transition: opacity 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+body[data-page="techtree"] .learning-capability-node.has-source-link {
+    border-color: rgba(var(--accent-rgb), 0.34);
+    background: linear-gradient(120deg, var(--accent-soft), var(--paper) 72%);
+}
+
+body[data-page="techtree"] .learning-capability-node.is-dimmed {
+    display: grid;
+    opacity: 0.2;
+}
+
+body[data-page="techtree"] .learning-capability-title {
+    display: block;
+    color: var(--ink);
+    font-size: 0.73rem;
+    font-weight: 800;
+    line-height: 1.42;
+    overflow-wrap: anywhere;
+}
+
+body[data-page="techtree"] .learning-capability-meta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.38rem;
+    flex-wrap: wrap;
+    margin-top: 0.38rem;
+}
+
+body[data-page="techtree"] .learning-capability-parts {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex-wrap: wrap;
+    margin-top: 0;
+}
+
+body[data-page="techtree"] .learning-capability-part {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.2rem;
+    border: 1px solid rgba(15, 118, 110, 0.2);
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    padding: 0.08rem 0.32rem;
+    font-size: 0.57rem;
+    font-weight: 900;
+}
+
+body[data-page="techtree"] .learning-capability-channels {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 0.2rem;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+body[data-page="techtree"] .learning-item-channel {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper-soft);
+    color: var(--muted);
+    padding: 0.08rem 0.32rem;
+    font-size: 0.56rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+body[data-page="techtree"] .learning-item-channel.is-team {
+    border-color: rgba(var(--accent-rgb), 0.3);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+body[data-page="techtree"] .learning-item-channel.is-internal {
+    border-color: rgba(46, 125, 50, 0.28);
+    background: var(--green-soft);
+    color: var(--green);
+}
+
+body[data-page="techtree"] .learning-item-channel.is-external {
+    border-color: rgba(15, 118, 110, 0.28);
+    background: var(--teal-soft);
+    color: var(--teal);
+}
+
+body[data-page="techtree"] .learning-source-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    margin-top: 0.36rem;
+    border-top: 1px solid rgba(var(--accent-rgb), 0.16);
+    padding-top: 0.32rem;
+    color: var(--accent);
+    font-size: 0.61rem;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+body[data-page="techtree"] .learning-source-link::before {
+    content: "←";
+    flex: 0 0 auto;
+}
+
+body[data-page="techtree"] .learning-route-empty {
+    display: grid;
+    min-height: 3rem;
+    place-items: center;
+    color: var(--line-strong);
+    font-size: 0.68rem;
+}
+
+@media (max-width: 980px) {
+    body[data-page="techtree"] .learning-map-head,
+    body[data-page="techtree"] .learning-route {
+        grid-template-columns: minmax(8.2rem, 0.52fr) repeat(3, minmax(0, 1fr));
+    }
+
+    body[data-page="techtree"] .learning-capability-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    body[data-page="techtree"] .learning-path-toolbar {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    body[data-page="techtree"] .learning-filter-group.is-channel,
+    body[data-page="techtree"] .learning-filter-group.is-requirement {
+        justify-items: stretch;
+    }
+
+    body[data-page="techtree"] .learning-map-head {
+        display: none;
+    }
+
+    body[data-page="techtree"] .learning-route {
+        display: block;
+    }
+
+    body[data-page="techtree"] .learning-route + .learning-route {
+        border-top: 0.55rem solid var(--page);
+    }
+
+    body[data-page="techtree"] .learning-route-label {
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.18);
+        border-left-width: 0.22rem;
+    }
+
+    body[data-page="techtree"] .learning-route-stage {
+        display: grid;
+        grid-template-columns: 5.2rem minmax(0, 1fr);
+        gap: 0.5rem;
+        min-height: 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+        border-bottom: 0;
+        padding: 0.55rem;
+    }
+
+    body[data-page="techtree"] .learning-route-stage::before {
+        content: attr(data-stage-label);
+        color: var(--accent);
+        padding-top: 0.44rem;
+        font-size: 0.68rem;
+        font-weight: 900;
+    }
+
+    body[data-page="techtree"] .learning-capability-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 1120px) {
     .maturity-hero .hero-grid {
         grid-template-columns: 1fr;
