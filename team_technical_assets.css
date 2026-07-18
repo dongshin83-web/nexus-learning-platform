@@ -3483,6 +3483,21 @@ button.relation-item:hover {
     max-width: 52rem;
 }
 
+.maturity-hero .hero-grid {
+    grid-template-columns: minmax(26rem, 0.9fr) minmax(0, 1.25fr);
+}
+
+.maturity-metric-grid.maturity-hero-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    align-self: stretch;
+    margin-bottom: 0;
+}
+
+.maturity-hero-kpis .metric {
+    height: 100%;
+}
+
 .source-summary {
     display: flex;
     flex-wrap: wrap;
@@ -4550,6 +4565,10 @@ body[data-page="techtree"] {
 }
 
 @media (max-width: 1120px) {
+    .maturity-hero .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
     .maturity-toolbar {
         grid-template-columns: 1fr 1fr;
     }
