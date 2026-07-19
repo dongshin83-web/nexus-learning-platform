@@ -7882,6 +7882,29 @@ body[data-page="landing"] .contributor-count {
     gap: var(--spacing-1);
 }
 
+body[data-page="landing"] .overview-contributor-list section > strong {
+    font-size: 0.96rem;
+}
+
+body[data-page="landing"] .overview-contributor-list section > p {
+    margin: 0;
+    overflow: hidden;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body[data-page="landing"] .contributor-kind {
+    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+}
+
+body[data-page="landing"] .overview-contributor-list .contributor-breakdown {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
 body[data-page="landing"] .overview-contributor-list small,
 body[data-page="landing"] .contributor-count small {
     color: var(--color-text-secondary);
@@ -7999,6 +8022,10 @@ body[data-page="landing"] .overview-quick-links i {
     }
 
     body[data-page="landing"] .overview-ranked-item p {
+        white-space: normal;
+    }
+
+    body[data-page="landing"] .overview-contributor-list section > p {
         white-space: normal;
     }
 

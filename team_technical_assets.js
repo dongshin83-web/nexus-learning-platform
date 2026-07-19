@@ -1375,11 +1375,11 @@ const landingExampleMostUsedAssets = [
 ];
 
 const landingExampleContributors = [
-    { name: "샘플 등록자 A", total: 12, kinds: ["등록"] },
-    { name: "샘플 Reviewer B", total: 9, kinds: ["검토"] },
-    { name: "샘플 협업자 C", total: 7, kinds: ["활용 연결"] },
-    { name: "샘플 등록자 D", total: 5, kinds: ["등록", "참여"] },
-    { name: "샘플 Reviewer E", total: 3, kinds: ["검토"] }
+    { name: "샘플 등록자 A", total: 12, kinds: ["등록"], summary: "충격 방법론과 계면 물성 보고서 등 신규 자산을 등록했습니다.", breakdown: ["방법론 4", "기술보고서 3", "BP 2", "기타 3"] },
+    { name: "샘플 Reviewer B", total: 9, kinds: ["검토"], summary: "적용 범위와 완료 기준을 확인하고 게시 전 내용을 검토했습니다.", breakdown: ["CoR 3", "방법론 3", "BP 2", "기술보고서 1"] },
+    { name: "샘플 협업자 C", total: 7, kinds: ["활용 연결"], summary: "기존 Library 자산을 과제와 학습 항목에 다시 연결했습니다.", breakdown: ["방법론 3", "BP 2", "Tool Manual 2"] },
+    { name: "샘플 등록자 D", total: 5, kinds: ["등록", "참여"], summary: "신규 자산 등록과 기존 카드의 내용 보완에 함께 참여했습니다.", breakdown: ["기술보고서 2", "교육자료 1", "노하우 1", "BP 1"] },
+    { name: "샘플 Reviewer E", total: 3, kinds: ["검토"], summary: "교육·실습 자산의 절차와 게시 전 완성도를 검토했습니다.", breakdown: ["Tool Manual 2", "교육자료 1"] }
 ];
 // Library 등록과 월간 집계가 안정화되면 false로 전환합니다.
 const landingOverviewExampleMode = true;
@@ -1817,26 +1817,43 @@ function getLandingContributors() {
         return landingExampleContributors.map((item) => ({ ...item, kinds: new Set(item.kinds) }));
     }
     const contributors = new Map();
-    const add = (name, kind) => {
+    const add = (name, kind, card) => {
         const normalized = String(name ?? "").trim();
         if (!normalized) return;
-        const entry = contributors.get(normalized) ?? { name: normalized, total: 0, kinds: new Set() };
+        const entry = contributors.get(normalized) ?? { name: normalized, total: 0, kinds: new Set(), assetTitles: new Set(), assetTypes: new Map() };
         entry.total += 1;
         entry.kinds.add(kind);
+        if (card?.title) entry.assetTitles.add(card.title);
+        if (card?.type) entry.assetTypes.set(card.type, (entry.assetTypes.get(card.type) ?? 0) + 1);
         contributors.set(normalized, entry);
     };
-    overviewModel.context.items.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.registrant, "등록"));
+    overviewModel.context.items.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.registrant, "등록", item));
     overviewModel.context.items.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => {
-        (item.contributors ?? []).forEach((name) => add(name, "참여"));
+        (item.contributors ?? []).forEach((name) => add(name, "참여", item));
     });
-    overviewModel.completedWorkItems.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.reviewer, "검토"));
+    overviewModel.completedWorkItems.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.reviewer, "검토", item));
     overviewModel.completedUsageLinks.filter((link) => {
         const sourceCard = overviewModel.cardsById.get(link.sourceCardId);
         return isLandingCurrentMonth(sourceCard?.updatedAt);
-    }).forEach((link) => add(link.actor, "활용 연결"));
+    }).forEach((link) => add(link.actor, "활용 연결", overviewModel.cardsById.get(link.targetCardId)));
     return [...contributors.values()]
         .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name, "ko"))
         .slice(0, 5);
+}
+
+function getLandingContributorDetail(item) {
+    if (item.summary && item.breakdown) return item;
+    const titles = [...(item.assetTitles ?? [])];
+    const types = [...(item.assetTypes ?? new Map()).entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "ko"))
+        .slice(0, 4)
+        .map(([type, count]) => `${type} ${count}`);
+    const verb = item.kinds.has("검토") ? "검토했습니다" : item.kinds.has("활용 연결") ? "연결했습니다" : "등록·보완했습니다";
+    return {
+        ...item,
+        summary: titles.length ? `${titles.slice(0, 2).join("·")}${titles.length > 2 ? " 등" : ""}에 기여했습니다.` : `이번 달 Library 자산 ${item.total}건에 기여했습니다.`,
+        breakdown: types.length ? types : [`${[...item.kinds].join("·")} ${verb}`]
+    };
 }
 
 function renderLandingContributors() {
@@ -1847,14 +1864,22 @@ function renderLandingContributors() {
         wrap.innerHTML = `<li class="section-empty">집계할 기여 기록이 없습니다.</li>`;
         return;
     }
-    wrap.innerHTML = items.map((item, index) => `
+    wrap.innerHTML = items.map((rawItem, index) => {
+        const item = getLandingContributorDetail(rawItem);
+        return `
         <li>
             <span class="overview-rank">${String(index + 1).padStart(2, "0")}</span>
             <span class="contributor-avatar">${escapeHtml(item.name.slice(0, 1))}</span>
-            <section><strong>${escapeHtml(item.name)}</strong><small>${[...item.kinds].map(escapeHtml).join(" · ")}</small></section>
+            <section>
+                <span class="contributor-kind">${[...item.kinds].map(escapeHtml).join(" · ")}</span>
+                <strong>${escapeHtml(item.name)}</strong>
+                <p>${escapeHtml(item.summary)}</p>
+                <small class="contributor-breakdown">${item.breakdown.map(escapeHtml).join(" · ")}</small>
+            </section>
             <span class="contributor-count">${item.total}<small>건</small></span>
         </li>
-    `).join("");
+    `;
+    }).join("");
 }
 
 function getKoreanDateParts() {

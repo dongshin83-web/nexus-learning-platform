@@ -25,8 +25,10 @@ test("Overview monthly rankings are capped at five and contributors include cred
   assert.match(script, /const landingOverviewExampleMode = true/);
   assert.match(script, /const landingExampleMostUsedAssets = \[[\s\S]*tool-manual-ai-search[\s\S]*\];/);
   assert.match(script, /const landingExampleContributors = \[[\s\S]*샘플 Reviewer E[\s\S]*\];/);
+  assert.match(script, /function getLandingContributorDetail/);
+  assert.match(script, /class="contributor-breakdown"/);
   assert.match(script, /registeredUsageLinks[\s\S]*\.slice\(0, 5\)/);
-  assert.match(script, /\(item\.contributors \?\? \[\]\)\.forEach\(\(name\) => add\(name, "참여"\)\)/);
+  assert.match(script, /\(item\.contributors \?\? \[\]\)\.forEach\(\(name\) => add\(name, "참여", item\)\)/);
   assert.match(script, /function getLandingContributors\(\)[\s\S]*\.slice\(0, 5\)/);
   assert.match(script, /class="overview-rank"/);
 });
