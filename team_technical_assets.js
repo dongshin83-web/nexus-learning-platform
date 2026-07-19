@@ -286,7 +286,9 @@ const methodologyDisplayNameOverrides = {
 };
 const methodologyMapState = {
     businessUnitId: "sc",
-    selectedMethodId: null
+    selectedCategoryId: null,
+    selectedMethodId: null,
+    showAllMethods: false
 };
 
 const statusMeta = {
@@ -1235,6 +1237,34 @@ const learningCapabilityFamilies = [
 const learningCapabilityById = Object.fromEntries(
     learningCapabilityFamilies.flatMap((family) => family.nodes.map((node) => [node.id, node]))
 );
+const learningCapabilityDetails = window.LEARNING_CAPABILITY_DETAILS ?? {};
+const learningFamilyByCapabilityId = new Map(
+    learningCapabilityFamilies.flatMap((family) => family.nodes.map((node) => [node.id, family]))
+);
+
+window.TECHNICAL_ASSET_FRAMEWORKS = {
+    decisionOptions: [
+        { id: "linked", label: "연결됨" },
+        { id: "not_applicable", label: "해당 없음" },
+        { id: "target_missing", label: "대상 없음" }
+    ],
+    technologyMap: {
+        methodologies: (methodologyLevelData?.methodologies ?? []).map((methodology) => ({
+            id: methodology.id,
+            label: methodologyDisplayNameOverrides[methodology.id] ?? methodology.name,
+            categoryId: methodology.categoryId,
+            categoryLabel: methodology.categoryLabel
+        }))
+    },
+    learningPath: {
+        stages: learningCareerStages.map((stage) => ({ ...stage })),
+        families: learningCapabilityFamilies.map((family) => ({
+            id: family.id,
+            label: family.label,
+            capabilities: family.nodes.map((node) => ({ id: node.id, label: node.label }))
+        }))
+    }
+};
 
 const cultureRecords = [
     {
@@ -1831,7 +1861,7 @@ function renderLandingMetrics() {
 }
 
 function getOverviewCardUrl(card) {
-    return `team_technical_assets_library.html?q=${encodeURIComponent(card.title)}`;
+    return `team_technical_assets_library.html?asset=${encodeURIComponent(card.id)}`;
 }
 
 function renderLandingSpotlights() {
@@ -1932,12 +1962,145 @@ function renderLandingCareList() {
     `).join("");
 }
 
+function getLandingMostUsedAssets() {
+    const usageByAsset = new Map();
+    overviewModel.completedUsageLinks.filter((link) => {
+        const sourceCard = overviewModel.cardsById.get(link.sourceCardId);
+        return isLandingCurrentMonth(sourceCard?.updatedAt);
+    }).forEach((link) => {
+        const entry = usageByAsset.get(link.targetCardId) ?? {
+            card: overviewModel.cardsById.get(link.targetCardId),
+            workIds: new Set(),
+            usageTypes: new Set()
+        };
+        entry.workIds.add(link.sourceCardId);
+        entry.usageTypes.add(link.usageType);
+        usageByAsset.set(link.targetCardId, entry);
+    });
+    return [...usageByAsset.values()]
+        .filter((item) => item.card)
+        .sort((a, b) => b.workIds.size - a.workIds.size || String(a.card.title).localeCompare(String(b.card.title), "ko"))
+        .slice(0, 5);
+}
+
+function renderLandingMostUsedAssets() {
+    const wrap = document.getElementById("landing-most-used-assets");
+    if (!wrap) return;
+    const items = getLandingMostUsedAssets();
+    if (!items.length) {
+        wrap.innerHTML = `<li class="section-empty">완료 과제에 연결된 활용 기록이 없습니다.</li>`;
+        return;
+    }
+    wrap.innerHTML = items.map((item, index) => `
+        <li class="overview-ranked-item">
+            <span class="overview-rank">${String(index + 1).padStart(2, "0")}</span>
+            <section>
+                <span class="overview-card-type">${escapeHtml(item.card.type)}</span>
+                <h3><a href="${getOverviewCardUrl(item.card)}">${escapeHtml(item.card.title)}</a></h3>
+                <p>${escapeHtml(item.card.summary || item.card.useCase || "등록된 자산의 상세 내용을 확인하세요.")}</p>
+                <small>${[...item.usageTypes].map(escapeHtml).join(" · ") || "활용 관계"}</small>
+            </section>
+            <strong>${item.workIds.size}<small>개 과제</small></strong>
+        </li>
+    `).join("");
+}
+
+function getLandingContributors() {
+    const contributors = new Map();
+    const add = (name, kind) => {
+        const normalized = String(name ?? "").trim();
+        if (!normalized) return;
+        const entry = contributors.get(normalized) ?? { name: normalized, total: 0, kinds: new Set() };
+        entry.total += 1;
+        entry.kinds.add(kind);
+        contributors.set(normalized, entry);
+    };
+    overviewModel.context.items.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.registrant, "등록"));
+    overviewModel.completedWorkItems.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.reviewer, "검토"));
+    overviewModel.completedUsageLinks.filter((link) => {
+        const sourceCard = overviewModel.cardsById.get(link.sourceCardId);
+        return isLandingCurrentMonth(sourceCard?.updatedAt);
+    }).forEach((link) => add(link.actor, "활용 연결"));
+    return [...contributors.values()]
+        .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name, "ko"))
+        .slice(0, 3);
+}
+
+function renderLandingContributors() {
+    const wrap = document.getElementById("landing-contributors");
+    if (!wrap) return;
+    const items = getLandingContributors();
+    if (!items.length) {
+        wrap.innerHTML = `<li class="section-empty">집계할 기여 기록이 없습니다.</li>`;
+        return;
+    }
+    wrap.innerHTML = items.map((item, index) => `
+        <li>
+            <span class="contributor-avatar">${escapeHtml(item.name.slice(0, 1))}</span>
+            <section><strong>${escapeHtml(item.name)}</strong><small>${[...item.kinds].map(escapeHtml).join(" · ")}</small></section>
+            <span class="contributor-count">${item.total}<small>건</small></span>
+        </li>
+    `).join("");
+}
+
+function getKoreanDateParts() {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Seoul",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).formatToParts(new Date());
+    return Object.fromEntries(parts.map((part) => [part.type, part.value]));
+}
+
+function isLandingCurrentMonth(value) {
+    const date = getKoreanDateParts();
+    return String(value ?? "").startsWith(`${date.year}-${date.month}`);
+}
+
+function renderLandingDailyAsset() {
+    const wrap = document.getElementById("landing-daily-asset");
+    if (!wrap) return;
+    const candidates = overviewModel.context.items
+        .filter((item) => !overviewWorkTypes.has(item.type))
+        .sort((a, b) => String(a.id).localeCompare(String(b.id), "ko"));
+    if (!candidates.length) {
+        wrap.innerHTML = `<p class="section-empty">오늘 소개할 자산이 없습니다.</p>`;
+        return;
+    }
+    const date = getKoreanDateParts();
+    const dateKey = Number(`${date.year}${date.month}${date.day}`);
+    const item = candidates[dateKey % candidates.length];
+    setText("daily-asset-date", `${date.month}.${date.day}`);
+    wrap.innerHTML = `
+        <article class="overview-daily-asset">
+            <span class="overview-card-type">${escapeHtml(item.type)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.summary || item.useCase || "오늘의 기술자산을 확인해 보세요.")}</p>
+            <div class="overview-daily-tags">${(item.tags ?? []).slice(0, 3).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
+            <a class="btn btn-secondary" href="${getOverviewCardUrl(item)}">자산 확인하기 <i class="bx bx-right-arrow-alt"></i></a>
+        </article>
+    `;
+}
+
+function renderLandingGapSummary() {
+    const note = document.getElementById("overview-data-note");
+    if (!note) return;
+    if (overviewModel.context.mode === "demo") {
+        note.textContent = `현재는 기능시험용 등록 기록에서 ${overviewModel.gapWorkItems.length}건을 확인했습니다. 실제 검색 로그 집계에는 저장소 연결이 필요합니다.`;
+    } else if (overviewModel.context.mode === "operational") {
+        note.textContent = `운영 카드에 저장된 검색 결과를 기준으로 집계했습니다. 실시간 검색어와 무결과 검색까지 보려면 로그 저장이 필요합니다.`;
+    } else {
+        note.textContent = "등록된 검색 기록이 없습니다.";
+    }
+}
+
 function renderLanding() {
     renderLandingMetrics();
-    renderLandingSpotlights();
-    renderLandingContributionFeed();
-    renderLandingUsageFlow();
-    renderLandingCareList();
+    renderLandingMostUsedAssets();
+    renderLandingContributors();
+    renderLandingDailyAsset();
+    renderLandingGapSummary();
 }
 function renderMetrics() {
     setText("metric-total", libraryItems.length);
@@ -2570,6 +2733,43 @@ const methodologyCategoryLibraryDomains = {
     "thermal-flow": "thermal-flow"
 };
 
+const maturityPeriodFallbackLabels = {
+    baseline: "25.12",
+    current: "26.02",
+    target: "26.12"
+};
+
+function getMaturityPeriodLabel(periodId) {
+    const period = Array.isArray(methodologyLevelData?.periods)
+        ? methodologyLevelData.periods.find((item) => item.id === periodId)
+        : null;
+    const label = typeof period?.label === "string" ? period.label.trim() : "";
+    return label || maturityPeriodFallbackLabels[periodId] || "-";
+}
+
+function getMaturityPeriodPairLabel() {
+    return `${getMaturityPeriodLabel("current")} 현황 → ${getMaturityPeriodLabel("target")} 목표`;
+}
+
+function renderMapPeriodCopy() {
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
+    const periodPair = getMaturityPeriodPairLabel();
+    const copyById = {
+        "map-brand-period": `구조 Simulation 방법론 ${currentPeriod} 현황과 ${targetPeriod} 목표`,
+        "map-na-period-note": `미적용은 미확보와 적용 필요 없음이 함께 포함된 ${currentPeriod} 현황 값이며, 자체적으로 부족이나 우선순위를 뜻하지 않습니다.`,
+        "portfolio-title": `중분류별 ${currentPeriod} 현황과 ${targetPeriod} 목표`,
+        "map-category-coverage-heading": `적용 · ${periodPair}`,
+        "map-category-average-heading": `평균 성숙도 · ${currentPeriod} → ${targetPeriod}`,
+        "map-category-change-heading": `${targetPeriod} 목표 변화`,
+        "map-comparison-description": `동일한 55개 방법론을 기준으로 사업부별 ${currentPeriod} 현황과 ${targetPeriod} 목표를 비교합니다.`
+    };
+    Object.entries(copyById).forEach(([id, copy]) => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = copy;
+    });
+}
+
 function getMaturityCategories() {
     if (Array.isArray(methodologyLevelData?.categories)) return methodologyLevelData.categories;
     const categories = new Map();
@@ -2619,18 +2819,20 @@ function getMaturityAverageChange(current, target) {
 function renderCategoryAverageComparison(current, target, change) {
     const currentLabel = formatMaturityAverageLevel(current);
     const targetLabel = formatMaturityAverageLevel(target);
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
     const toPercent = (value) => Math.max(0, Math.min(100, value / 5 * 100));
     const currentPercent = current === null ? null : toPercent(current);
     const targetPercent = target === null ? null : toPercent(target);
     return `
         <span class="category-comparison-line" aria-hidden="true">
-            <span class="category-comparison-value is-current${current === null ? " is-na" : ""}"><small>현재</small><strong>${currentLabel}</strong></span>
+            <span class="category-comparison-value is-current${current === null ? " is-na" : ""}"><small>${escapeHtml(currentPeriod)} 현황</small><strong>${currentLabel}</strong></span>
             <span class="category-comparison-track">
                 ${targetPercent !== null ? `<i class="category-bar-target" style="width:${targetPercent.toFixed(1)}%"></i>` : ""}
                 ${currentPercent !== null ? `<i class="category-bar-current" style="width:${currentPercent.toFixed(1)}%"></i>` : ""}
                 ${targetPercent !== null ? `<i class="category-bar-target-marker" style="left:${targetPercent.toFixed(1)}%"></i>` : ""}
             </span>
-            <span class="category-comparison-value is-target${target === null ? " is-na" : ""}"><small>계획</small><strong>${targetLabel}</strong></span>
+            <span class="category-comparison-value is-target${target === null ? " is-na" : ""}"><small>${escapeHtml(targetPeriod)} 목표</small><strong>${targetLabel}</strong></span>
             <strong class="category-comparison-delta ${change.kind}">${change.label}</strong>
         </span>
     `;
@@ -2660,20 +2862,26 @@ function renderMapDataStatus() {
     const status = document.getElementById("methodology-data-status");
     if (!methodologyLevelData) return;
     if (status) {
-        status.innerHTML = `<span class="status-dot is-ready" aria-hidden="true"></span><span>원본 검증 완료 · ${getMaturityMethodologies().length}개 방법론</span>`;
+        status.innerHTML = `<span class="status-dot is-ready" aria-hidden="true"></span><span>원본 검증 완료</span>`;
     }
 }
 
 function renderMaturityKpis() {
+    const wrap = document.getElementById("maturity-kpis");
+    if (!wrap) return;
     const stats = getBusinessMaturityStats(methodologyMapState.businessUnitId);
-    const currentAverage = stats.currentAverage === null ? "-" : `L${formatMaturityAverage(stats.currentAverage)}`;
-    const targetAverage = stats.targetAverage === null ? "-" : `L${formatMaturityAverage(stats.targetAverage)}`;
-    setText("kpi-current-applied", `${stats.currentApplied} / ${stats.total}`);
-    setText("kpi-target-applied", `${stats.targetApplied} / ${stats.total}`);
-    setText("kpi-average-maturity", `${currentAverage} → ${targetAverage}`);
-    setText("kpi-level-up", stats.levelUp);
-    setText("kpi-new-application", stats.newApplications);
-    setText("kpi-l3-plus", `${stats.currentL3Plus} → ${stats.targetL3Plus}`);
+    const businessUnit = getMaturityBusinessUnits().find((item) => item.id === methodologyMapState.businessUnitId);
+    const targetPeriod = getMaturityPeriodLabel("target");
+    const periodPair = getMaturityPeriodPairLabel();
+    wrap.innerHTML = `
+        <div class="map-summary-cell map-summary-business">
+            <small>선택 사업부</small><strong>${escapeHtml(businessUnit?.label ?? "-")}</strong>
+        </div>
+        <div class="map-summary-cell"><small>평균 성숙도 · ${escapeHtml(periodPair)}</small><strong>${formatMaturityAverageLevel(stats.currentAverage)} → ${formatMaturityAverageLevel(stats.targetAverage)}</strong></div>
+        <div class="map-summary-cell"><small>적용 · ${escapeHtml(periodPair)}</small><strong>${stats.currentApplied} → ${stats.targetApplied}</strong></div>
+        <div class="map-summary-cell"><small>신규 적용 · ${escapeHtml(targetPeriod)} 목표</small><strong>${stats.newApplications}</strong></div>
+        <div class="map-summary-cell"><small>성숙도 향상 · ${escapeHtml(targetPeriod)} 목표</small><strong>${stats.levelUp}</strong></div>
+    `;
 }
 
 function renderCoverageComparison(current, target, total) {
@@ -2682,12 +2890,12 @@ function renderCoverageComparison(current, target, total) {
     return `
         <span class="business-coverage-lines">
             <span class="business-coverage-row is-current">
-                <small>현황</small>
+                <small>${escapeHtml(getMaturityPeriodLabel("current"))} 현황</small>
                 <span class="coverage-track"><i class="coverage-bar-current" style="width:${currentPercent.toFixed(1)}%"></i></span>
                 <strong>${current}</strong>
             </span>
             <span class="business-coverage-row is-target">
-                <small>목표</small>
+                <small>${escapeHtml(getMaturityPeriodLabel("target"))} 목표</small>
                 <span class="coverage-track"><i class="coverage-bar-target" style="width:${targetPercent.toFixed(1)}%"></i></span>
                 <strong>${target}</strong>
             </span>
@@ -2698,67 +2906,152 @@ function renderCoverageComparison(current, target, total) {
 function renderBusinessUnitOverview() {
     const wrap = document.getElementById("business-unit-overview");
     if (!wrap) return;
-    const total = getMaturityMethodologies().length;
     wrap.innerHTML = getMaturityBusinessUnits().map((businessUnit) => {
-        const stats = getBusinessMaturityStats(businessUnit.id);
         const isActive = methodologyMapState.businessUnitId === businessUnit.id;
         return `
-            <button type="button" class="business-overview-row${isActive ? " active" : ""}" data-overview-business-id="${escapeHtml(businessUnit.id)}" aria-pressed="${isActive}">
-                <span class="business-overview-label">
-                    <strong>${escapeHtml(businessUnit.label)}</strong>
-                    <small>평균 ${formatMaturityAverage(stats.currentAverage)} → ${formatMaturityAverage(stats.targetAverage)}</small>
-                </span>
-                ${renderCoverageComparison(stats.currentApplied, stats.targetApplied, total)}
-                <span class="business-change-summary">
-                    <strong>${stats.levelUp}</strong><small>성숙도 향상</small>
-                    <strong>${stats.newApplications}</strong><small>신규 적용</small>
-                </span>
+            <button type="button" class="map-business-tab${isActive ? " active" : ""}"
+                data-overview-business-id="${escapeHtml(businessUnit.id)}" aria-pressed="${isActive}">
+                ${escapeHtml(businessUnit.label)}
             </button>
         `;
     }).join("");
     wrap.querySelectorAll("[data-overview-business-id]").forEach((button) => {
         button.addEventListener("click", () => {
             methodologyMapState.businessUnitId = button.dataset.overviewBusinessId;
+            methodologyMapState.selectedMethodId = null;
             refreshMaturityDashboard();
         });
     });
 }
 
+function isTargetChange(change) {
+    return !["stable", "not-applicable"].includes(change.kind);
+}
+
+function getMapChangeLabel(change) {
+    if (change.kind === "new") return "신규 적용";
+    if (change.kind === "level-up") return "성숙도 향상";
+    if (change.kind === "removed") return "적용 해제";
+    if (change.kind === "lowered") return "목표 하향";
+    if (change.kind === "not-applicable") return "미적용";
+    return "유지";
+}
+
+function renderCategoryChangeSummary(stats) {
+    const parts = [];
+    if (stats.newApplications > 0) parts.push(`<span class="map-change-pill is-new">신규 적용 ${stats.newApplications}</span>`);
+    if (stats.levelUp > 0) parts.push(`<span class="map-change-pill is-up">성숙도 향상 ${stats.levelUp}</span>`);
+    return parts.length ? parts.join("") : `<span class="map-change-none">변화 없음</span>`;
+}
+
+function renderCategoryMethodArea(category, methods) {
+    const businessUnitId = methodologyMapState.businessUnitId;
+    const changedMethods = methods.filter((method) => isTargetChange(getMaturityChange(
+        getMaturityScore(method, "current", businessUnitId),
+        getMaturityScore(method, "target", businessUnitId)
+    )));
+    const visibleMethods = methodologyMapState.showAllMethods ? methods : changedMethods;
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
+    const periodPair = getMaturityPeriodPairLabel();
+    if (!visibleMethods.some((method) => method.id === methodologyMapState.selectedMethodId)) {
+        methodologyMapState.selectedMethodId = null;
+    }
+    return `
+        <div class="map-category-detail" id="map-category-detail-${escapeHtml(category.id)}">
+            <div class="map-method-browser">
+                <div class="map-method-toolbar">
+                    <div>
+                        <strong>${escapeHtml(category.label)} 방법론</strong>
+                        <span>${methodologyMapState.showAllMethods ? `${escapeHtml(currentPeriod)} 현황 전체` : `${escapeHtml(targetPeriod)} 목표 변화`}를 표시합니다.</span>
+                    </div>
+                    <button type="button" class="map-view-switch" data-map-view-toggle role="switch"
+                        aria-checked="${methodologyMapState.showAllMethods}" aria-label="전체 방법론 표시">
+                        <span class="map-switch-label${methodologyMapState.showAllMethods ? "" : " active"}">올해 변화 <strong>${changedMethods.length}</strong></span>
+                        <span class="map-switch-track" aria-hidden="true"><i></i></span>
+                        <span class="map-switch-label${methodologyMapState.showAllMethods ? " active" : ""}">전체 <strong>${methods.length}</strong></span>
+                    </button>
+                </div>
+                <div class="map-method-columns" aria-hidden="true"><span>방법론</span><span>${escapeHtml(periodPair)}</span><span>변화</span><span></span></div>
+                <div class="map-method-list">
+                    ${visibleMethods.length ? visibleMethods.map((method) => {
+                        const current = getMaturityScore(method, "current", businessUnitId);
+                        const target = getMaturityScore(method, "target", businessUnitId);
+                        const change = getMaturityChange(current, target);
+                        const selected = method.id === methodologyMapState.selectedMethodId;
+                        return `
+                            <button type="button" class="map-method-row${selected ? " selected" : ""}" data-map-method-id="${escapeHtml(method.id)}" aria-pressed="${selected}">
+                                <strong>${escapeHtml(getMethodologyDisplayName(method))}</strong>
+                                <span class="map-method-score">${escapeHtml(formatMaturityScore(current))} <i class="bx bx-right-arrow-alt" aria-hidden="true"></i> ${escapeHtml(formatMaturityScore(target))}</span>
+                                <span class="map-method-change is-${escapeHtml(change.kind)}">${escapeHtml(getMapChangeLabel(change))}</span>
+                                <i class="bx bx-chevron-right map-row-chevron" aria-hidden="true"></i>
+                            </button>
+                        `;
+                    }).join("") : `
+                        <div class="map-method-empty">
+                            <strong>${escapeHtml(targetPeriod)} 목표 변화가 없습니다.</strong>
+                            <span>전체 방법론을 선택하면 ${escapeHtml(currentPeriod)} 현황 유지 및 미적용 항목도 확인할 수 있습니다.</span>
+                        </div>
+                    `}
+                </div>
+            </div>
+            <aside class="map-method-detail" id="method-detail" aria-live="polite"></aside>
+        </div>
+    `;
+}
+
 function renderCategoryOverview() {
     const wrap = document.getElementById("category-overview");
-    const title = document.getElementById("category-overview-title");
     if (!wrap) return;
-    const businessUnit = getMaturityBusinessUnits().find((item) => item.id === methodologyMapState.businessUnitId);
-    if (title) title.textContent = `${businessUnit?.label ?? "선택 사업부"} 중분류별 현황과 목표`;
+    const businessUnitId = methodologyMapState.businessUnitId;
+    const periodPair = getMaturityPeriodPairLabel();
     wrap.innerHTML = getMaturityCategories().map((category) => {
         const methods = getMaturityMethodologies().filter((method) => method.categoryId === category.id);
-        const stats = getBusinessMaturityStats(methodologyMapState.businessUnitId, methods);
-        const currentAverageLabel = formatMaturityAverageLevel(stats.currentAverage);
-        const targetAverageLabel = formatMaturityAverageLevel(stats.targetAverage);
-        const averageChange = getMaturityAverageChange(stats.currentAverage, stats.targetAverage);
+        const stats = getBusinessMaturityStats(businessUnitId, methods);
+        const isOpen = methodologyMapState.selectedCategoryId === category.id;
         return `
-            <button type="button" class="category-summary-row" data-category-anchor="${escapeHtml(category.id)}" aria-label="${escapeHtml(category.label)}, ${methods.length}개 방법론, 적용 현재 ${stats.currentApplied} 계획 ${stats.targetApplied}, 평균 성숙도 현재 ${currentAverageLabel} 계획 ${targetAverageLabel}, 변화 ${averageChange.description}; 방법론 그룹으로 이동">
-                <span class="category-summary-label"><strong>${escapeHtml(category.label)}</strong><small>${methods.length}개 방법론</small></span>
-                <span class="category-summary-values">
-                    <small>적용</small><strong>${stats.currentApplied} → ${stats.targetApplied}</strong>
-                </span>
-                ${renderCategoryAverageComparison(stats.currentAverage, stats.targetAverage, averageChange)}
-            </button>
+            <section class="map-category-item${isOpen ? " open" : ""}" data-map-category-item="${escapeHtml(category.id)}">
+                <button type="button" class="map-category-row" data-map-category-id="${escapeHtml(category.id)}" aria-expanded="${isOpen}">
+                    <span class="map-category-name"><strong>${escapeHtml(category.label)}</strong><small>${methods.length}개 방법론</small></span>
+                    <strong class="map-category-value" data-label="적용 · ${escapeHtml(periodPair)}">${stats.currentApplied} → ${stats.targetApplied}</strong>
+                    <span class="map-category-average"><strong>${formatMaturityAverageLevel(stats.currentAverage)} → ${formatMaturityAverageLevel(stats.targetAverage)}</strong></span>
+                    <span class="map-category-changes" data-label="${escapeHtml(getMaturityPeriodLabel("target"))} 목표 변화">${renderCategoryChangeSummary(stats)}</span>
+                    <i class="bx bx-chevron-down map-category-chevron" aria-hidden="true"></i>
+                </button>
+                ${isOpen ? renderCategoryMethodArea(category, methods) : ""}
+            </section>
         `;
     }).join("");
-    wrap.querySelectorAll("[data-category-anchor]").forEach((button) => {
+
+    wrap.querySelectorAll("[data-map-category-id]").forEach((button) => {
         button.addEventListener("click", () => {
-            const group = document.getElementById(`method-category-${button.dataset.categoryAnchor}`);
-            if (!group) return;
-            group.scrollIntoView({
-                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-                block: "start"
-            });
-            group.classList.remove("is-highlighted");
-            window.requestAnimationFrame(() => group.classList.add("is-highlighted"));
-            window.setTimeout(() => group.classList.remove("is-highlighted"), 1600);
+            const categoryId = button.dataset.mapCategoryId;
+            methodologyMapState.selectedCategoryId = methodologyMapState.selectedCategoryId === categoryId ? null : categoryId;
+            methodologyMapState.selectedMethodId = null;
+            methodologyMapState.showAllMethods = false;
+            renderCategoryOverview();
         });
     });
+    wrap.querySelectorAll("[data-map-view-toggle]").forEach((button) => {
+        button.addEventListener("click", () => {
+            methodologyMapState.showAllMethods = !methodologyMapState.showAllMethods;
+            methodologyMapState.selectedMethodId = null;
+            renderCategoryOverview();
+        });
+    });
+    wrap.querySelectorAll("[data-map-method-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+            methodologyMapState.selectedMethodId = button.dataset.mapMethodId;
+            renderCategoryOverview();
+            if (window.matchMedia("(max-width: 920px)").matches) {
+                document.getElementById("method-detail")?.scrollIntoView({
+                    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                    block: "start"
+                });
+            }
+        });
+    });
+    renderMethodDetail(getMaturityMethodologies().find((method) => method.id === methodologyMapState.selectedMethodId));
 }
 
 function renderMaturityPath(current, target) {
@@ -2770,14 +3063,16 @@ function renderMaturityPath(current, target) {
     const width = currentPosition === null || targetPosition === null ? null : Math.abs(targetPosition - currentPosition);
     const isSamePosition = currentPosition !== null && targetPosition !== null && Math.abs(currentPosition - targetPosition) < 0.01;
     const isLowered = currentPosition !== null && targetPosition !== null && targetPosition < currentPosition;
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
     return `
-        <span class="maturity-path" aria-label="현황 ${formatMaturityScore(current)}, 목표 ${formatMaturityScore(target)}">
+        <span class="maturity-path" aria-label="${escapeHtml(currentPeriod)} 현황 ${formatMaturityScore(current)}, ${escapeHtml(targetPeriod)} 목표 ${formatMaturityScore(target)}">
             <span class="path-axis"></span>
             <span class="path-ticks" aria-hidden="true"><i style="left:0%"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:100%"></i></span>
             ${left !== null && !isSamePosition ? `<span class="path-range${isLowered ? " is-lowered" : ""}" style="left:${left}%;width:${width}%"></span>` : ""}
-            ${isSamePosition ? `<i class="path-marker combined" style="left:${currentPosition}%" title="현황과 목표 ${escapeHtml(formatMaturityScore(current))}"></i>` : `
-                ${currentPosition !== null ? `<i class="path-marker current" style="left:${currentPosition}%" title="현황 ${escapeHtml(formatMaturityScore(current))}"></i>` : ""}
-                ${targetPosition !== null ? `<i class="path-marker target" style="left:${targetPosition}%" title="목표 ${escapeHtml(formatMaturityScore(target))}"></i>` : ""}
+            ${isSamePosition ? `<i class="path-marker combined" style="left:${currentPosition}%" title="${escapeHtml(currentPeriod)} 현황과 ${escapeHtml(targetPeriod)} 목표 ${escapeHtml(formatMaturityScore(current))}"></i>` : `
+                ${currentPosition !== null ? `<i class="path-marker current" style="left:${currentPosition}%" title="${escapeHtml(currentPeriod)} 현황 ${escapeHtml(formatMaturityScore(current))}"></i>` : ""}
+                ${targetPosition !== null ? `<i class="path-marker target" style="left:${targetPosition}%" title="${escapeHtml(targetPeriod)} 목표 ${escapeHtml(formatMaturityScore(target))}"></i>` : ""}
             `}
         </span>
     `;
@@ -2799,20 +3094,24 @@ function renderMethodTable() {
         methodologyMapState.selectedMethodId = null;
     }
     const businessUnitId = methodologyMapState.businessUnitId;
+    const baselinePeriod = getMaturityPeriodLabel("baseline");
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
+    const periodPair = getMaturityPeriodPairLabel();
     const categoryGroups = getMaturityCategories().map((category) => ({
         category,
         methods: methods.filter((method) => method.categoryId === category.id)
     })).filter((group) => group.methods.length > 0);
     wrap.innerHTML = `
         <table class="heatmap-table maturity-table">
-            <caption class="visually-hidden">선택 사업부의 중분류별 25.12 이전 기준, 26.02 현황과 26.12 올해 목표 비교</caption>
+            <caption class="visually-hidden">선택 사업부의 중분류별 ${escapeHtml(baselinePeriod)} 이전 기록, ${escapeHtml(periodPair)} 비교</caption>
             <thead>
                 <tr>
                     <th scope="col">방법론</th>
-                    <th scope="col">25.12<br><small>이전 기준</small></th>
-                    <th scope="col">26.02<br><small>현황</small></th>
-                    <th scope="col">26.12<br><small>올해 목표</small></th>
-                    <th scope="col">현황 → 올해 목표 <small class="path-scale">L1 · L2 · L3 · L4 · L5</small></th>
+                    <th scope="col">${escapeHtml(baselinePeriod)}<br><small>이전 기록</small></th>
+                    <th scope="col">${escapeHtml(currentPeriod)}<br><small>현황</small></th>
+                    <th scope="col">${escapeHtml(targetPeriod)}<br><small>목표</small></th>
+                    <th scope="col">${escapeHtml(periodPair)} <small class="path-scale">L1 · L2 · L3 · L4 · L5</small></th>
                 </tr>
             </thead>
             ${categoryGroups.map(({ category, methods: groupMethods }, categoryIndex) => {
@@ -2828,8 +3127,8 @@ function renderMethodTable() {
                                     <small>${groupMethods.length}개 방법론</small>
                                 </span>
                                 <span class="category-group-meta">
-                                    <span><small>현황 적용</small><strong>${stats.currentApplied}/${stats.total}</strong></span>
-                                    <span><small>목표 적용</small><strong>${stats.targetApplied}/${stats.total}</strong></span>
+                                    <span><small>${escapeHtml(currentPeriod)} 현황 적용</small><strong>${stats.currentApplied}/${stats.total}</strong></span>
+                                    <span><small>${escapeHtml(targetPeriod)} 목표 적용</small><strong>${stats.targetApplied}/${stats.total}</strong></span>
                                 </span>
                             </th>
                         </tr>
@@ -2882,9 +3181,11 @@ function renderMethodTable() {
 
 function getMaturityInterpretation(current, target, businessUnitLabel) {
     const change = getMaturityChange(current, target);
-    if (change.kind === "not-applicable") return `${businessUnitLabel} 기준 현황과 목표 모두 미적용입니다.`;
-    if (change.kind === "new") return `${businessUnitLabel}는 26.12에 ${formatMaturityScore(target)} 신규 적용을 목표로 합니다.`;
-    if (change.kind === "removed") return `${businessUnitLabel}는 목표 시점에 적용 해제로 표시되어 확인이 필요합니다.`;
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
+    if (change.kind === "not-applicable") return `${businessUnitLabel} 기준 ${currentPeriod} 현황과 ${targetPeriod} 목표 모두 미적용입니다.`;
+    if (change.kind === "new") return `${businessUnitLabel}는 ${targetPeriod}에 ${formatMaturityScore(target)} 신규 적용을 목표로 합니다.`;
+    if (change.kind === "removed") return `${businessUnitLabel}는 ${targetPeriod} 목표 시점에 적용 해제로 표시되어 확인이 필요합니다.`;
     if (change.kind === "level-up") return `${businessUnitLabel}는 ${formatMaturityScore(current)}에서 ${formatMaturityScore(target)}로 성숙도 향상을 목표로 합니다.`;
     if (change.kind === "lowered") return `${businessUnitLabel}는 목표가 현황보다 낮아 기준 확인이 필요합니다.`;
     return `${businessUnitLabel}는 ${formatMaturityScore(current)} 수준을 유지하는 목표입니다.`;
@@ -2894,91 +3195,129 @@ function renderMethodDetail(method) {
     const panel = document.getElementById("method-detail");
     if (!panel) return;
     if (!method) {
-        panel.innerHTML = `<div class="empty-state"><i class="bx bx-detail"></i><strong>방법론을 선택해 주세요.</strong></div>`;
+        const periodPair = getMaturityPeriodPairLabel();
+        panel.innerHTML = `
+            <div class="map-detail-empty">
+                <i class="bx bx-pointer" aria-hidden="true"></i>
+                <strong>방법론을 선택해 주세요.</strong>
+                <span>사업부별 ${escapeHtml(periodPair)}를 이곳에서 빠르게 비교할 수 있습니다.</span>
+            </div>
+        `;
         return;
     }
     const selectedBusiness = getMaturityBusinessUnits().find((item) => item.id === methodologyMapState.businessUnitId);
     const current = getMaturityScore(method, "current", methodologyMapState.businessUnitId);
     const target = getMaturityScore(method, "target", methodologyMapState.businessUnitId);
     const libraryDomain = methodologyCategoryLibraryDomains[method.categoryId] ?? "all";
+    const baselinePeriod = getMaturityPeriodLabel("baseline");
+    const currentPeriod = getMaturityPeriodLabel("current");
+    const targetPeriod = getMaturityPeriodLabel("target");
+    const periodPair = getMaturityPeriodPairLabel();
     panel.innerHTML = `
-        <div class="method-detail-heading">
-            <div class="badge-row">
-                <span class="badge domain">${escapeHtml(method.categoryLabel)}</span>
-            </div>
-            <h2>${escapeHtml(getMethodologyDisplayName(method))}</h2>
-            <p>${escapeHtml(selectedBusiness?.label ?? "선택 사업부")} · 26.02 현황 → 26.12 올해 목표</p>
+        <div class="map-detail-heading">
+            <span>${escapeHtml(method.categoryLabel)}</span>
+            <h3>${escapeHtml(getMethodologyDisplayName(method))}</h3>
+            <p>${escapeHtml(selectedBusiness?.label ?? "선택 사업부")} · ${escapeHtml(periodPair)}</p>
         </div>
-        <div class="detail-score-transition">
-            <div><small>현황</small>${renderMaturityScore(current, "is-current")}</div>
+        <div class="map-detail-transition">
+            <span><small>${escapeHtml(currentPeriod)} 현황</small><strong>${escapeHtml(formatMaturityScore(current))}</strong></span>
             <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
-            <div><small>올해 목표</small>${renderMaturityScore(target, getMaturityTargetClass(current, target))}</div>
+            <span><small>${escapeHtml(targetPeriod)} 목표</small><strong>${escapeHtml(formatMaturityScore(target))}</strong></span>
         </div>
-        <p class="method-interpretation">${escapeHtml(getMaturityInterpretation(current, target, selectedBusiness?.label ?? "선택 사업부"))}</p>
-        <section class="detail-comparison-section">
-            <h3>사업부별 현황과 올해 목표</h3>
+        <section class="map-detail-comparison">
+            <h4>사업부별 현황과 목표</h4>
             <div class="table-scroll">
-                <table class="detail-comparison-table">
-                    <caption class="visually-hidden">선택 방법론의 사업부별 현황과 올해 목표 비교</caption>
-                    <thead><tr><th scope="col">사업부</th><th scope="col">26.02 현황</th><th scope="col">26.12 목표</th></tr></thead>
+                <table>
+                    <caption class="visually-hidden">선택 방법론의 사업부별 ${escapeHtml(periodPair)}</caption>
+                    <thead><tr><th scope="col">사업부</th><th scope="col">${escapeHtml(currentPeriod)}<br><small>현황</small></th><th scope="col">${escapeHtml(targetPeriod)}<br><small>목표</small></th></tr></thead>
                     <tbody>
-                        ${getMaturityBusinessUnits().map((businessUnit) => {
-                            const currentScore = getMaturityScore(method, "current", businessUnit.id);
-                            const targetScore = getMaturityScore(method, "target", businessUnit.id);
-                            return `
-                                <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
-                                    <th scope="row">${escapeHtml(businessUnit.label)}</th>
-                                    <td>${escapeHtml(formatMaturityScore(currentScore))}</td>
-                                    <td>${escapeHtml(formatMaturityScore(targetScore))}</td>
-                                </tr>
-                            `;
-                        }).join("")}
+                        ${getMaturityBusinessUnits().map((businessUnit) => `
+                            <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
+                                <th scope="row">${escapeHtml(businessUnit.label)}</th>
+                                <td>${escapeHtml(formatMaturityScore(getMaturityScore(method, "current", businessUnit.id)))}</td>
+                                <td>${escapeHtml(formatMaturityScore(getMaturityScore(method, "target", businessUnit.id)))}</td>
+                            </tr>
+                        `).join("")}
                     </tbody>
                 </table>
             </div>
         </section>
-        <details class="previous-record-section">
-            <summary>이전 기록 보기 <small>25.12</small></summary>
+        <a class="btn btn-secondary map-detail-library" href="team_technical_assets_library.html?domain=${encodeURIComponent(libraryDomain)}">
+            <i class="bx bx-folder-open" aria-hidden="true"></i> 관련 Library 보기
+        </a>
+        <details class="map-previous-record">
+            <summary>이전 기록</summary>
             <div class="table-scroll">
-                <table class="detail-comparison-table previous-record-table">
-                    <caption class="visually-hidden">선택 방법론의 사업부별 25.12 이전 기록</caption>
-                    <thead><tr><th scope="col">사업부</th><th scope="col">25.12 기록</th></tr></thead>
+                <table>
+                    <caption class="visually-hidden">선택 방법론의 사업부별 ${escapeHtml(baselinePeriod)} 이전 기록</caption>
+                    <thead><tr><th scope="col">사업부</th><th scope="col">${escapeHtml(baselinePeriod)}</th></tr></thead>
                     <tbody>
-                        ${getMaturityBusinessUnits().map((businessUnit) => {
-                            const baselineScore = getMaturityScore(method, "baseline", businessUnit.id);
-                            return `
-                                <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
-                                    <th scope="row">${escapeHtml(businessUnit.label)}</th>
-                                    <td>${escapeHtml(formatMaturityScore(baselineScore))}</td>
-                                </tr>
-                            `;
-                        }).join("")}
+                        ${getMaturityBusinessUnits().map((businessUnit) => `
+                            <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
+                                <th scope="row">${escapeHtml(businessUnit.label)}</th>
+                                <td>${escapeHtml(formatMaturityScore(getMaturityScore(method, "baseline", businessUnit.id)))}</td>
+                            </tr>
+                        `).join("")}
                     </tbody>
                 </table>
             </div>
         </details>
-        <section class="score-reading-section">
-            <h3>점수 읽기</h3>
-            <dl>
-                <div><dt>현황</dt><dd>${escapeHtml(describeMaturityScore(current))}</dd></div>
-                <div><dt>목표</dt><dd>${escapeHtml(describeMaturityScore(target))}</dd></div>
-            </dl>
-        </section>
-        <a class="btn btn-secondary detail-library-link" href="team_technical_assets_library.html?domain=${encodeURIComponent(libraryDomain)}"><i class="bx bx-folder-open"></i> 관련 Library 보기</a>
     `;
+}
+
+function renderBusinessComparison() {
+    const wrap = document.getElementById("map-comparison-content");
+    if (!wrap) return;
+    const periodPair = getMaturityPeriodPairLabel();
+    wrap.innerHTML = `
+        <table class="map-comparison-table">
+            <caption class="visually-hidden">전체 사업부 방법론 ${escapeHtml(periodPair)} 비교</caption>
+            <thead><tr><th scope="col">사업부</th><th scope="col">평균 성숙도<br><small>${escapeHtml(periodPair)}</small></th><th scope="col">적용<br><small>${escapeHtml(periodPair)}</small></th><th scope="col">신규 적용</th><th scope="col">성숙도 향상</th></tr></thead>
+            <tbody>
+                ${getMaturityBusinessUnits().map((businessUnit) => {
+                    const stats = getBusinessMaturityStats(businessUnit.id);
+                    return `
+                        <tr${businessUnit.id === methodologyMapState.businessUnitId ? ` class="selected"` : ""}>
+                            <th scope="row">${escapeHtml(businessUnit.label)}</th>
+                            <td>${formatMaturityAverageLevel(stats.currentAverage)} → ${formatMaturityAverageLevel(stats.targetAverage)}</td>
+                            <td>${stats.currentApplied} → ${stats.targetApplied}</td>
+                            <td>${stats.newApplications}</td>
+                            <td>${stats.levelUp}</td>
+                        </tr>
+                    `;
+                }).join("")}
+            </tbody>
+        </table>
+    `;
+}
+
+function bindMapComparisonDialog() {
+    const dialog = document.getElementById("map-comparison-dialog");
+    const openButton = document.getElementById("map-open-comparison");
+    const closeButton = document.getElementById("map-close-comparison");
+    if (!dialog || !openButton || !closeButton) return;
+    openButton.addEventListener("click", () => {
+        renderBusinessComparison();
+        if (typeof dialog.showModal === "function") dialog.showModal();
+        else dialog.setAttribute("open", "");
+    });
+    closeButton.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+    });
 }
 
 function refreshMaturityDashboard() {
     renderMaturityKpis();
     renderBusinessUnitOverview();
     renderCategoryOverview();
-    renderMethodTable();
+    renderBusinessComparison();
 }
 
 function renderMap() {
     renderLevelSummary();
-    renderLevelGraph();
-    const wrap = document.getElementById("method-heatmap");
+    renderMapPeriodCopy();
+    const wrap = document.getElementById("category-overview");
     if (!methodologyLevelData || getMaturityMethodologies().length === 0) {
         if (wrap) wrap.innerHTML = `<div class="empty-state is-error"><i class="bx bx-error-circle"></i><strong>방법론 데이터를 불러오지 못했습니다.</strong><span>생성 데이터 파일과 배포 구성을 확인해 주세요.</span></div>`;
         const status = document.getElementById("methodology-data-status");
@@ -2988,18 +3327,27 @@ function renderMap() {
     if (!getMaturityBusinessUnits().some((item) => item.id === methodologyMapState.businessUnitId)) {
         methodologyMapState.businessUnitId = getMaturityBusinessUnits()[0]?.id ?? "sc";
     }
+    bindMapComparisonDialog();
     renderMapDataStatus();
     refreshMaturityDashboard();
 }
 
 function renderCapabilityParts(parts) {
     const uniqueParts = [...new Set(parts)].sort((a, b) => a - b);
-    const partTokens = uniqueParts.length === learningAllParts.length
-        ? '<span class="learning-capability-part is-all">P1–P5</span>'
-        : uniqueParts.map((part) => `<span class="learning-capability-part">P${part}</span>`).join("");
+    const partTokens = uniqueParts
+        .map((part) => `<span class="learning-capability-part is-part-${part}">P${part}</span>`)
+        .join("");
     return `
         <span class="learning-capability-parts" aria-label="적용 파트">
             ${partTokens}
+        </span>
+    `;
+}
+
+function renderCapabilityRequirement(requirement) {
+    return `
+        <span class="learning-capability-requirement is-${escapeHtml(requirement)}">
+            ${escapeHtml(learningRequirementLabels[requirement])}
         </span>
     `;
 }
@@ -3072,24 +3420,259 @@ function renderLearningCapabilityNode(node, placement) {
     const requirementLabel = learningRequirementLabels[requirement];
 
     return `
-        <article
+        <button
+            type="button"
             class="${classNames}"
             data-capability-id="${escapeHtml(node.id)}"
+            data-stage-id="${escapeHtml(placement.stageId)}"
             data-parts="${placement.parts.join(",")}"
             data-channels="${channels.join(",")}"
             data-requirement="${escapeHtml(requirement)}"
-            aria-label="${escapeHtml(`${placement.label ?? node.label}. ${partsLabel}. ${requirementLabel}${channelsLabel ? `. 교육 채널 ${channelsLabel}` : ""}`)}"
+            aria-haspopup="dialog"
+            aria-controls="learning-detail-dialog"
+            aria-label="${escapeHtml(`${placement.label ?? node.label}. ${partsLabel}. ${requirementLabel}${channelsLabel ? `. 교육 채널 ${channelsLabel}` : ""}. 상세 보기`)}"
         >
-            <strong class="learning-capability-title">${escapeHtml(placement.label ?? node.label)}</strong>
+            <span class="learning-capability-heading">
+                <strong class="learning-capability-title">${escapeHtml(placement.label ?? node.label)}</strong>
+                <i class="bx bx-chevron-right" aria-hidden="true"></i>
+            </span>
             <span class="learning-capability-meta">
                 ${renderCapabilityParts(placement.parts)}
+                ${renderCapabilityRequirement(requirement)}
                 ${renderCapabilityChannels(channels)}
             </span>
             ${parentLabels.length > 0
                 ? `<span class="learning-source-link">${escapeHtml(parentLabels.join(" · "))} 연관 역량</span>`
                 : ""}
-        </article>
+        </button>
     `;
+}
+
+const learningLibraryRoleMeta = {
+    DEFINES: { label: "방법론·판단 기준", order: 1 },
+    TEACHES: { label: "학습자료", order: 2 },
+    PRACTICES: { label: "실습자료", order: 3 },
+    ENABLES: { label: "실행 도구", order: 4 },
+    EXAMPLE_OF: { label: "적용 사례", order: 5 },
+    APPLIES: { label: "적용 사례", order: 5 },
+    VALIDATES: { label: "검증 근거", order: 6 },
+    EVIDENCE_FOR: { label: "검증 근거", order: 6 },
+    REFERENCES: { label: "참고자료", order: 7 }
+};
+const learningLibrarySections = [
+    { id: "learning", label: "학습자료", order: 1 },
+    { id: "practice-tool", label: "실습·Tool Manual", order: 2 },
+    { id: "methodology-criteria", label: "방법론·판단 기준", order: 3 },
+    { id: "application-evidence", label: "적용 사례·검증 근거", order: 4 }
+];
+const learningLibrarySectionById = Object.fromEntries(
+    learningLibrarySections.map((section) => [section.id, section])
+);
+const learningLibrarySectionByRelation = {
+    TEACHES: "learning",
+    PRACTICES: "practice-tool",
+    ENABLES: "practice-tool",
+    DEFINES: "methodology-criteria",
+    EXAMPLE_OF: "application-evidence",
+    APPLIES: "application-evidence",
+    VALIDATES: "application-evidence",
+    EVIDENCE_FOR: "application-evidence"
+};
+let learningDetailReturnFocus = null;
+
+function getLearningLibrarySectionId(item, link) {
+    const relationSection = learningLibrarySectionByRelation[link.relationType];
+    if (relationSection) return relationSection;
+    if (item.type === "교육자료") return "learning";
+    if (item.type === "Tool Manual" || item.type === "노하우") return "practice-tool";
+    if (item.type === "방법론") return "methodology-criteria";
+    return "application-evidence";
+}
+
+function getLearningCapabilityContext(capabilityId, stageId) {
+    const node = learningCapabilityById[capabilityId];
+    const family = learningFamilyByCapabilityId.get(capabilityId);
+    const placement = node?.placements?.find((candidate) => candidate.stageId === stageId) ?? node?.placements?.[0];
+    const stage = learningCareerStages.find((candidate) => candidate.id === placement?.stageId);
+    if (!node || !family || !placement) return null;
+    return { node, family, placement, stage };
+}
+
+function getLearningLibraryConnections(capabilityId) {
+    return libraryItems.flatMap((item) => (item.frameworkLinks ?? [])
+        .filter((link) => link.framework === "learning-path" && link.targetId === capabilityId && link.confirmed !== false)
+        .map((link) => {
+            const sectionId = getLearningLibrarySectionId(item, link);
+            return {
+                item,
+                link,
+                sectionId,
+                section: learningLibrarySectionById[sectionId],
+                role: learningLibraryRoleMeta[link.relationType] ?? learningLibraryRoleMeta.REFERENCES
+            };
+        }))
+        .sort((a, b) => a.section.order - b.section.order || a.role.order - b.role.order || a.item.title.localeCompare(b.item.title, "ko"));
+}
+
+function renderLearningLibraryConnection({ item, link, role }) {
+    const publicationStatus = publicationStatusMeta[item.publicationStatus] ?? publicationStatusMeta["초안"];
+    return `
+        <a class="learning-linked-asset" href="team_technical_assets_library.html?asset=${encodeURIComponent(item.id)}">
+            <span class="learning-linked-asset-top">
+                <span class="learning-linked-role">${escapeHtml(role.label)}</span>
+                <span class="badge ${publicationStatus.className}">${escapeHtml(item.publicationStatus ?? "초안")}</span>
+            </span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <p>${escapeHtml(item.summary ?? "요약 정보가 없습니다.")}</p>
+            ${link.note ? `<small>${escapeHtml(link.note)}</small>` : ""}
+            <span class="learning-linked-open">Library에서 전체 보기 <i class="bx bx-right-arrow-alt" aria-hidden="true"></i></span>
+        </a>
+    `;
+}
+
+function renderLearningLibrarySections(connections) {
+    const sections = learningLibrarySections.map((section, index) => {
+        const sectionConnections = connections.filter((connection) => connection.sectionId === section.id);
+        return `
+            <section class="learning-library-section${sectionConnections.length ? " has-assets" : ""}">
+                <header>
+                    <span class="learning-library-section-index">${String(index + 1).padStart(2, "0")}</span>
+                    <h4>${escapeHtml(section.label)}</h4>
+                    <strong aria-label="연결 자료 ${sectionConnections.length}개">${sectionConnections.length}</strong>
+                </header>
+                ${sectionConnections.length
+                    ? `<div class="learning-linked-assets">${sectionConnections.map(renderLearningLibraryConnection).join("")}</div>`
+                    : `<p class="learning-library-section-empty">현재 연결 자료 없음</p>`}
+            </section>
+        `;
+    }).join("");
+
+    return `
+        <div class="learning-library-sections" aria-label="Library 자료 4개 섹션">${sections}</div>
+        ${connections.length ? "" : `<p class="learning-library-status-note">현재 연결된 자료가 없다는 현황이며, 역량의 부족이나 우선순위를 뜻하지 않습니다.</p>`}
+    `;
+}
+
+function renderLearningCapabilityDetail(capabilityId, stageId) {
+    const content = document.getElementById("learning-detail-content");
+    const context = getLearningCapabilityContext(capabilityId, stageId);
+    if (!content || !context) return false;
+
+    const { node, family, placement, stage } = context;
+    const details = learningCapabilityDetails[capabilityId] ?? {};
+    const channels = getLearningPlacementChannels(node, placement);
+    const requirement = getLearningPlacementRequirement(node, placement);
+    const parts = [...new Set(placement.parts)].sort((a, b) => a - b);
+    const partDetailTokens = parts
+        .map((part) => `<span class="learning-detail-chip is-part is-part-${part}">P${part}</span>`)
+        .join("");
+    const parentLabels = (placement.parentIds ?? [])
+        .map((parentId) => learningCapabilityById[parentId]?.label)
+        .filter(Boolean);
+    const libraryConnections = getLearningLibraryConnections(capabilityId);
+    const mapConnectionEntries = libraryConnections.flatMap(({ item }) => (item.frameworkLinks ?? [])
+        .filter((link) => link.framework === "technology-map")
+        .map((link) => {
+            const methodology = window.TECHNICAL_ASSET_FRAMEWORKS?.technologyMap?.methodologies
+                ?.find((candidate) => candidate.id === link.targetId);
+            return [link.targetId, methodology?.label ?? link.targetId];
+        }));
+    const mapConnections = [...new Map(mapConnectionEntries).values()];
+
+    content.innerHTML = `
+        <div class="learning-detail-shell">
+            <button type="button" class="learning-detail-close" id="learning-detail-close" aria-label="역량 상세 닫기">
+                <i class="bx bx-x" aria-hidden="true"></i>
+            </button>
+            <header class="learning-detail-header">
+                <span class="learning-detail-kicker">Learning Path</span>
+                <p>${escapeHtml(family.label)}</p>
+                <h2 id="learning-detail-title">${escapeHtml(placement.label ?? node.label)}</h2>
+                <div class="learning-detail-chips" aria-label="역량 적용 정보">
+                    <span class="learning-detail-chip is-stage">${escapeHtml(stage?.label ?? placement.stageId)}</span>
+                    ${partDetailTokens}
+                    <span class="learning-detail-chip is-requirement is-${escapeHtml(requirement)}">${escapeHtml(learningRequirementLabels[requirement])}</span>
+                    ${channels.map((channel) => `<span class="learning-detail-chip is-channel is-${escapeHtml(channel)}">${escapeHtml(learningEducationChannelLabels[channel])}</span>`).join("")}
+                </div>
+            </header>
+
+            <div class="learning-detail-grid">
+                <div class="learning-detail-primary">
+                    <section class="learning-detail-section">
+                        <span class="learning-detail-section-label">역량 설명</span>
+                        <p>${escapeHtml(details.definition ?? family.description)}</p>
+                    </section>
+                    <section class="learning-detail-section is-performance">
+                        <span class="learning-detail-section-label">기대 수행</span>
+                        <p>${escapeHtml(details.expectedPerformance ?? "이 역량과 연결된 Library 자료를 확인해 기대 수행을 구체화합니다.")}</p>
+                    </section>
+                    ${parentLabels.length ? `
+                        <section class="learning-detail-section">
+                            <span class="learning-detail-section-label">연관 역량</span>
+                            <div class="learning-detail-related">${parentLabels.map((label) => `<span>${escapeHtml(label)}</span>`).join("")}</div>
+                        </section>
+                    ` : ""}
+                    ${mapConnections.length ? `
+                        <section class="learning-detail-section">
+                            <span class="learning-detail-section-label">관련 Technology Map</span>
+                            <div class="learning-detail-related">${mapConnections.map((label) => `<span>${escapeHtml(label)}</span>`).join("")}</div>
+                        </section>
+                    ` : ""}
+                </div>
+
+                <aside class="learning-detail-library">
+                    <div class="learning-detail-library-heading">
+                        <div>
+                            <span>RELATED LIBRARY</span>
+                            <h3>이 역량에서 확인할 자료</h3>
+                        </div>
+                        <strong>${libraryConnections.length}</strong>
+                    </div>
+                    ${renderLearningLibrarySections(libraryConnections)}
+                </aside>
+            </div>
+        </div>
+    `;
+    return true;
+}
+
+function openLearningCapabilityDetail(capabilityId, stageId, trigger) {
+    const dialog = document.getElementById("learning-detail-dialog");
+    if (!dialog || !renderLearningCapabilityDetail(capabilityId, stageId)) return;
+    learningDetailReturnFocus = trigger;
+    document.body.classList.add("learning-detail-open");
+    if (!dialog.open) dialog.showModal();
+    window.setTimeout(() => document.getElementById("learning-detail-close")?.focus({ preventScroll: true }), 0);
+}
+
+function closeLearningCapabilityDetail() {
+    const dialog = document.getElementById("learning-detail-dialog");
+    if (dialog?.open) dialog.close();
+}
+
+function bindLearningCapabilityDetails() {
+    const wrap = document.getElementById("tech-tree");
+    const dialog = document.getElementById("learning-detail-dialog");
+    if (wrap && wrap.dataset.learningDetailBound !== "true") {
+        wrap.dataset.learningDetailBound = "true";
+        wrap.addEventListener("click", (event) => {
+            const trigger = event.target.closest("[data-capability-id][data-stage-id]");
+            if (!trigger) return;
+            openLearningCapabilityDetail(trigger.dataset.capabilityId, trigger.dataset.stageId, trigger);
+        });
+    }
+    if (dialog && dialog.dataset.learningDetailBound !== "true") {
+        dialog.dataset.learningDetailBound = "true";
+        dialog.addEventListener("click", (event) => {
+            if (event.target === dialog || event.target.closest("#learning-detail-close")) closeLearningCapabilityDetail();
+        });
+        dialog.addEventListener("close", () => {
+            document.body.classList.remove("learning-detail-open");
+            const returnTarget = learningDetailReturnFocus;
+            learningDetailReturnFocus = null;
+            window.setTimeout(() => returnTarget?.isConnected && returnTarget.focus({ preventScroll: true }), 0);
+        });
+    }
 }
 
 function renderLearningCapabilityMap() {
@@ -3375,6 +3958,7 @@ function renderTechTree() {
     bindLearningPartButtons();
     bindLearningRequirementButtons();
     bindLearningChannelButtons();
+    bindLearningCapabilityDetails();
 }
 
 function renderCulture() {
@@ -3527,6 +4111,10 @@ function initPage() {
         renderLibraryMetrics();
         bindLibraryEvents();
         renderLibrary();
+        const assetId = new URLSearchParams(window.location.search).get("asset");
+        if (assetId && libraryItems.some((item) => item.id === assetId)) {
+            window.requestAnimationFrame(() => openFullDetail(assetId));
+        }
     }
     if (page === "map") {
         renderMap();

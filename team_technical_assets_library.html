@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-natural-headings-1">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260719-library-registration-3">
 </head>
 <body data-page="library">
     <header class="topbar">
-        <a class="brand" href="index.html" aria-label="Hub Overview로 돌아가기">
+        <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
             <span class="brand-mark"><i class="bx bx-search"></i></span>
             <span>
                 <strong>Library</strong>
@@ -17,7 +17,7 @@
             </span>
         </a>
         <nav class="topnav" aria-label="기술자산화 페이지">
-            <a href="index.html">Overview</a>
+            <a href="team_technical_assets.html">Overview</a>
             <a href="team_technical_assets_map.html">Technology Map</a>
             <a href="team_technical_assets_techtree.html">Learning Path</a>
             <a class="active" href="team_technical_assets_library.html">Library</a>
@@ -27,11 +27,11 @@
     </header>
 
     <main class="library-page">
-        <section class="library-heading container" aria-labelledby="library-title">
+        <section class="library-page-header container" aria-labelledby="library-title">
             <div>
-                <span class="page-kicker">Technical Asset Library</span>
+                <span class="library-context-label">Library</span>
                 <h1 id="library-title">기술자산 Library</h1>
-                <p>문제와 판단 질문에서 시작해 검증 근거, 적용 이력과 실행자료를 찾습니다.</p>
+                <p>문제와 판단 질문으로 필요한 근거와 재사용 자산을 찾습니다.</p>
             </div>
             <div class="library-heading-actions">
                 <dl class="library-stats" aria-label="Library 현황">
@@ -125,7 +125,7 @@
                         <li class="is-active" data-registration-step-indicator="1"><span>1</span>JSON 불러오기</li>
                         <li data-registration-step-indicator="2"><span>2</span>내부정보 보완</li>
                         <li data-registration-step-indicator="3"><span>3</span>연결 확인</li>
-                        <li data-registration-step-indicator="4"><span>4</span>검증·내보내기</li>
+                        <li data-registration-step-indicator="4"><span>4</span>검증·JSON 다운로드</li>
                     </ol>
 
                     <div class="asset-registration-body">
@@ -184,6 +184,10 @@
                                         <div><h3>회사 내부 자산 링크</h3><p>원본·근거·결과물의 위치와 접근 범위를 구조화해 연결합니다.</p></div>
                                         <span class="required-token">게시 전 필수</span>
                                     </header>
+                                    <div class="internal-link-section-heading">
+                                        <strong>직접 링크 추가</strong>
+                                        <span>추천 목록에 없는 원본·근거·결과물도 여러 개 추가할 수 있습니다.</span>
+                                    </div>
                                     <div class="internal-link-form">
                                         <label class="registration-field">링크 이름<input id="internal-link-label" placeholder="[예시] 충격 설계안 비교 결과보고서"></label>
                                         <label class="registration-field">URL<input id="internal-link-url" type="url" placeholder="[예시] https://사내시스템/문서번호"></label>
@@ -193,6 +197,10 @@
                                         <label class="registration-field">접근 범위<select id="internal-link-scope"></select></label>
                                     </div>
                                     <button class="secondary-action-button add-internal-link" type="button" id="add-internal-link"><i class="bx bx-link"></i>내부 링크 추가</button>
+                                    <div class="internal-link-section-heading is-selected">
+                                        <strong>연결된 링크</strong>
+                                        <span>자동 추천과 직접 추가 링크를 함께 확인합니다.</span>
+                                    </div>
                                     <div class="selected-links" id="selected-links"></div>
                                 </section>
                             </div>
@@ -203,7 +211,15 @@
                                 <div>
                                     <h3>등록 전 검증</h3>
                                     <div class="registration-validation" id="registration-validation" aria-live="polite"></div>
-                                    <p class="registration-static-note"><i class="bx bx-info-circle"></i>이 사이트는 정적 페이지입니다. 다운로드한 JSON을 내부 저장소의 <code>data/cards/</code>에 반영하고 검증 절차를 실행해야 실제 Library에 게시됩니다.</p>
+                                    <p class="registration-static-note"><i class="bx bx-info-circle"></i>다운로드는 등록 완료가 아니라, 검증된 게시 요청 파일을 만드는 단계입니다.</p>
+                                    <section class="registration-publish-process" aria-labelledby="registration-publish-process-title">
+                                        <h4 id="registration-publish-process-title">다운로드 후 게시 순서</h4>
+                                        <ol>
+                                            <li><span>1</span><div><strong>JSON 저장</strong><p>검증을 통과한 등록 JSON을 다운로드합니다.</p></div></li>
+                                            <li><span>2</span><div><strong>내부 반영 요청</strong><p>등록 담당자에게 전달하거나 승인된 변경 절차로 <code>data/cards/</code> 반영을 요청합니다.</p></div></li>
+                                            <li><span>3</span><div><strong>검증·게시</strong><p>계약 검증과 Reviewer 확인 후 저장소에 반영되면 Library에 표시됩니다.</p></div></li>
+                                        </ol>
+                                    </section>
                                 </div>
                                 <div>
                                     <h3>등록 JSON 미리보기</h3>
@@ -218,7 +234,7 @@
                         <span class="registration-footer-spacer"></span>
                         <button class="secondary-action-button" type="button" id="registration-cancel">취소</button>
                         <button class="asset-register-button" type="button" id="registration-next" disabled>다음</button>
-                        <button class="asset-register-button" type="button" id="registration-download" hidden><i class="bx bx-download"></i>등록 JSON 다운로드</button>
+                        <button class="asset-register-button" type="button" id="registration-download" hidden><i class="bx bx-download"></i>검증 완료 JSON 다운로드</button>
                     </footer>
                 </form>
             </dialog>
@@ -229,8 +245,9 @@
         <span>현재 화면은 기능 검증용 샘플 데이터를 포함합니다.</span>
     </footer>
 
-    <script src="team_technical_assets_data.js?v=20260718-knowhow-1"></script>
-    <script src="team_technical_assets.js?v=20260718-knowhow-1"></script>
-    <script src="team_technical_assets_registration_modal.js?v=20260718-registration-3"></script>
+    <script src="team_technical_assets_data.js?v=20260719-library-registration-3"></script>
+    <script src="team_technical_assets_methodology_levels.js?v=20260719-library-registration-3"></script>
+    <script src="team_technical_assets.js?v=20260719-library-registration-3"></script>
+    <script src="team_technical_assets_registration_modal.js?v=20260719-library-registration-3"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // config.js
-// 발급받은 Gemini API Key를 여기에 문자열로 입력해두면 매번 번거롭게 입력하지 않아도 됩니다.
-// 이 파일은 로컬에서만 사용되므로 안심하셔도 됩니다.
+// 공개 저장소에는 API Key를 저장하지 않습니다.
+// 필요한 경우 화면에서 직접 입력한 키를 브라우저의 LocalStorage에만 보관합니다.
 const CONFIG = {
-    GEMINI_API_KEY: "AIzaSyAw6XTPdAd3tC_ig_J0_bKpcuOjmxBrwSE" 
+    GEMINI_API_KEY: ""
 };

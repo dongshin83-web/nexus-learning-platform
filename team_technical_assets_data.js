@@ -1,5 +1,5 @@
 window.TECHNICAL_ASSET_LIBRARY = {
-  "schemaVersion": "0.1",
+  "schemaVersion": "1.1",
   "cardCount": 14,
   "cards": [
     {
@@ -59,6 +59,17 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "의사결정 반영 사례를 메시지 근거로 참조"
         }
       ],
+      "frameworkLinks": [],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "not_applicable",
+          "reason": "외부 보고 자료는 특정 해석 방법론 자체가 아니라 여러 기술자산의 메시지를 재구성하는 자료입니다."
+        },
+        "learningPath": {
+          "status": "not_applicable",
+          "reason": "외부 보고 자료는 특정 역량을 학습하기 위한 자료가 아니라 대외 커뮤니케이션을 위한 결과물입니다."
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [
@@ -171,6 +182,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "기존 검증범위와 평가 피드백 참고"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-043",
+          "relationType": "APPLIES",
+          "note": "충격 취약부 Risk Ranking을 설계안 상대 비교에 적용한 VD Request 사례입니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "set-drop",
+          "relationType": "EXAMPLE_OF",
+          "note": "Drop 조건에서 후보 구조의 취약부를 비교하고 설계 우선순위를 판단한 사례입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [
@@ -271,6 +306,24 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "충격 과제 수행 중 확인한 샘플"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "contact-convergence",
+          "relationType": "ENABLES",
+          "note": "접촉 시작구간의 수렴 실패 원인을 진단하고 설정을 단계적으로 안정화할 때 보는 실무 참고자료입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "target_missing",
+          "reason": "접촉 수렴 안정화와 직접 대응하는 Technology Map 방법론 항목이 현재 없습니다."
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -357,6 +410,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "CoR 제안의 선행 근거 샘플"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-029",
+          "relationType": "EVIDENCE_FOR",
+          "note": "계면 물성 변화에 따른 취약부 Ranking의 민감도와 유효조건을 기록한 검증 근거입니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "delamination-properties",
+          "relationType": "EVIDENCE_FOR",
+          "note": "계면 물성 범위가 박리 취약성 판단에 미치는 영향을 확인할 때 보는 기술 근거입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [
@@ -445,6 +522,17 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "타 Domain 전달조건 참고"
         }
       ],
+      "frameworkLinks": [],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "not_applicable",
+          "reason": "복합 Domain 협업 범위만 정의된 진행 중 요청으로 특정 구조 Simulation 방법론이 확정되지 않았습니다."
+        },
+        "learningPath": {
+          "status": "not_applicable",
+          "reason": "특정 기술 수행이나 학습 대상이 확정되지 않은 협업 요청이므로 개별 역량과 직접 연결하지 않습니다."
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [
@@ -537,6 +625,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "Risk Ranking 반복성 검토"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-043",
+          "relationType": "VALIDATES",
+          "note": "Drop 조건별 취약부 Risk Ranking의 반복성과 평가 피드백 연계를 검증합니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "set-drop",
+          "relationType": "VALIDATES",
+          "note": "Drop 해석 결과와 평가 취약 위치를 비교해 판단 기준의 유효성을 확인한 자료입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [
@@ -623,6 +735,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "변형 상대 비교 절차 활용"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-017",
+          "relationType": "APPLIES",
+          "note": "박막 적층 구조의 변형 위험을 비교해 설계·공정 선택지를 좁힌 적용 사례입니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "bending",
+          "relationType": "EXAMPLE_OF",
+          "note": "굽힘·Warpage 거동을 물성 및 공정조건과 연결해 판단한 BP 사례입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [
@@ -710,6 +846,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "CoR 샘플에서 비교 기준을 검토"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-043",
+          "relationType": "DEFINES",
+          "note": "동일 충격조건에서 취약 위치와 상대 위험 순위를 비교하는 방법론 기준을 정의합니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "set-drop",
+          "relationType": "TEACHES",
+          "note": "Drop 해석에서 취약부의 반복성과 상대 Risk Ranking을 판단하는 절차를 학습할 수 있습니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -792,6 +952,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
         }
       ],
       "relations": [],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-017",
+          "relationType": "DEFINES",
+          "note": "적층 구조의 물성·공정조건 변화에 따른 Warpage 상대 비교 절차와 판단 범위를 정의합니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "bending",
+          "relationType": "TEACHES",
+          "note": "굽힘·변형 응답을 설계안과 공정안의 상대 비교로 해석하는 방법을 학습할 수 있습니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -876,6 +1060,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
         }
       ],
       "relations": [],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-029",
+          "relationType": "VALIDATES",
+          "note": "계면 박리 방법론에 필요한 물성·모델·실험 검증 Gap과 성공기준을 정의합니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "delamination-p1",
+          "relationType": "VALIDATES",
+          "note": "계면 박리 해석 역량을 확보하기 위해 검증해야 할 물성·모델·실험 항목을 보여줍니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -950,6 +1158,17 @@ window.TECHNICAL_ASSET_LIBRARY = {
         }
       ],
       "relations": [],
+      "frameworkLinks": [],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "not_applicable",
+          "reason": "Library 검색·요약 절차는 특정 구조 Simulation 방법론에 직접 대응하지 않습니다."
+        },
+        "learningPath": {
+          "status": "not_applicable",
+          "reason": "Library 검색 도구 사용법은 현재 Learning Path의 구조 Simulation 역량 항목과 직접 대응하지 않습니다."
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -1039,6 +1258,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "데이터 변환 확인절차 예시"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-049",
+          "relationType": "APPLIES",
+          "note": "열유동 결과의 온도장과 시간축을 구조해석 입력으로 전달한 연계 적용 사례입니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "coupled-thermal-p1",
+          "relationType": "EXAMPLE_OF",
+          "note": "서로 다른 Mesh와 시간축 사이에서 온도장을 전달하고 정합성을 확인하는 사례입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -1125,6 +1368,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
           "note": "샘플 관계"
         }
       ],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-030",
+          "relationType": "ENABLES",
+          "note": "진동 모드 해석의 세팅, 정상 완료 확인과 시험 모드 비교 절차를 제공합니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "vibration-p1",
+          "relationType": "ENABLES",
+          "note": "진동 모델을 구성하고 모드 형상과 경계조건 민감도를 확인할 때 사용하는 실무 절차입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],
@@ -1205,6 +1472,30 @@ window.TECHNICAL_ASSET_LIBRARY = {
         }
       ],
       "relations": [],
+      "frameworkLinks": [
+        {
+          "framework": "technology-map",
+          "targetType": "methodology",
+          "targetId": "structural-041",
+          "relationType": "TEACHES",
+          "note": "열사이클 피로 방법론을 학습하기 위한 기본 개념, 입력과 결과 해석 기준을 제공합니다."
+        },
+        {
+          "framework": "learning-path",
+          "targetType": "capability",
+          "targetId": "fatigue",
+          "relationType": "TEACHES",
+          "note": "피로수명 결과의 상대 비교와 절대 수명 판단을 구분하는 기초 학습자료입니다."
+        }
+      ],
+      "frameworkLinkDecisions": {
+        "technologyMap": {
+          "status": "linked"
+        },
+        "learningPath": {
+          "status": "linked"
+        }
+      },
       "searchReuse": {
         "performed": true,
         "foundAssetIds": [],

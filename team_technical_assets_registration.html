@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Guide | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css?v=20260717-1">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-natural-headings-1">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260719-registration-guide-13">
 </head>
 <body data-page="registration">
     <header class="topbar">
@@ -28,66 +28,73 @@
 
     <main class="registration-page">
         <section class="registration-hero container" aria-labelledby="registration-title">
-            <span class="page-kicker">AI-assisted registration</span>
-            <h1 id="registration-title">실제 정보는 사내에서 완성합니다</h1>
-            <p>유료 AI 계정이 있으면 해당 계정에서, 없으면 Gemini에서 일반화된 용어로 대화합니다. 대화가 끝나면 같은 대화창에 JSON 생성 Prompt를 붙여 넣고, 결과를 파일로 저장해 사내로 가져옵니다.</p>
-            <ol class="registration-flow" aria-label="기술자산 등록 흐름">
-                <li><span>1</span><strong>AI와 대화하기</strong><small>유료 계정이 있으면 우선 사용하고, 없으면 Gemini를 사용합니다. 실제 명칭과 수치는 말하지 않습니다.</small></li>
-                <li class="registration-flow-with-tooltip">
-                    <span>2</span>
-                    <strong>
-                        같은 대화에서 JSON 만들기
-                        <button class="registration-tooltip-trigger" type="button" aria-label="AI 도구 비교 결과 보기" aria-describedby="json-tool-test-tooltip">
-                            <i class="bx bx-info-circle" aria-hidden="true"></i>
-                        </button>
-                    </strong>
-                    <small>대화가 끝난 뒤 같은 창에 전용 Prompt를 붙여 넣습니다.</small>
-                    <span class="registration-tooltip" id="json-tool-test-tooltip" role="tooltip">
-                        <b>동일한 15분 답변으로 확인한 결과</b>
-                        <span><em>ChatGPT Pro</em> — 질문 확인 절차와 JSON 품질이 가장 안정적</span>
-                        <span><em>Gemini Pro</em> — JSON 키·자료형과 내용 품질이 우수하나 사용자 확인 전에 바로 생성</span>
-                        <span><em>무료 도구</em> — 등록 가능한 JSON 생성 가능. 중복 질문·조기 생성·자료형 오류는 도구별 차이 있음</span>
-                        <b class="registration-tooltip-subtitle">4구간 음성 시험</b>
-                        <span><em>Gemini 무료 Flash</em> — 전사를 가장 충실하게 보존하고 정식 JSON도 정상 생성. 음성 속 지시를 명령으로 실행하는 위험 있음</span>
-                        <span><em>Gemini Pro</em> — JSON은 안정적이지만 전사 누락이 큼</span>
-                        <span><em>Grok 무료</em> — 전사는 길게 보존하지만 전문용어 오인식이 JSON 값까지 전파됨</span>
-                        <span><em>ChatGPT·Copilot 무료</em> — 현재 웹 무료 환경에서는 음성 전사 불가</span>
-                        <span class="registration-tooltip-note">공통 권고: 요약을 먼저 확인하고, 사용자가 “최종 JSON 생성”을 지시한 뒤 코드 블록을 복사하세요.</span>
-                    </span>
-                </li>
-                <li><span>3</span><strong>JSON 저장·반입하기</strong><small>코드 블록을 복사해 .json으로 저장하고 승인된 메일 또는 파일 복사를 사용합니다.</small></li>
-                <li><span>4</span><strong>실제 정보로 완성하기</strong><small>사내 웹에서 용어·근거·링크를 보완합니다.</small></li>
-            </ol>
-            <p class="registration-process-rule"><i class="bx bx-check-circle"></i><strong>확정 원칙</strong> 음성 파일을 별도로 전사하지 않습니다. 음성 또는 텍스트로 대화한 동일한 대화창에서 JSON까지 생성해야 맥락이 유지됩니다.</p>
+            <span class="registration-context-label">Registration Guide</span>
+            <h1 id="registration-title">기술자산 등록 가이드</h1>
+            <p>Asset type을 선택하고, 외부에서 구조화한 초안을 사내 정보와 연결해 완성합니다.</p>
         </section>
 
         <section class="registration-workspace container" aria-labelledby="asset-type-title">
-            <header class="registration-section-head">
-                <span>
-                    <span class="page-kicker">Asset type</span>
-                    <h2 id="asset-type-title">등록할 자산 유형을 선택하세요</h2>
-                </span>
-                <small>VD Request부터 외부 보고 자료까지 9개 기술자산 가이드를 사용할 수 있습니다.</small>
-            </header>
+            <section class="registration-overview-card registration-asset-selector-card" aria-labelledby="asset-type-title">
+                <header class="registration-section-head">
+                    <div>
+                        <span class="page-kicker">Asset type</span>
+                        <h2 id="asset-type-title">등록할 자산 유형을 선택하세요</h2>
+                        <p>Asset type이 가장 큰 분류입니다. 유형을 선택하면 그 아래에서 동일한 4단계를 순서대로 펼쳐 확인할 수 있습니다.</p>
+                    </div>
+                    <span class="registration-section-count">9 TYPES</span>
+                </header>
 
-            <div class="asset-type-tabs" role="tablist" aria-label="기술자산 유형">
-                <button type="button" role="tab" id="tab-vd-request" aria-selected="true" aria-controls="panel-vd-request" data-asset-tab="vd-request">VD Request</button>
-                <button type="button" role="tab" id="tab-cor" aria-selected="false" aria-controls="panel-cor" data-asset-tab="cor">CoR</button>
-                <button type="button" role="tab" id="tab-methodology" aria-selected="false" aria-controls="panel-methodology" data-asset-tab="methodology">방법론</button>
-                <button type="button" role="tab" id="tab-bp" aria-selected="false" aria-controls="panel-bp" data-asset-tab="bp">BP</button>
-                <button type="button" role="tab" id="tab-technical-report" aria-selected="false" aria-controls="panel-technical-report" data-asset-tab="technical-report">기술보고서</button>
-                <button type="button" role="tab" id="tab-knowhow" aria-selected="false" aria-controls="panel-knowhow" data-asset-tab="knowhow">노하우</button>
-                <button type="button" role="tab" id="tab-tool-manual" aria-selected="false" aria-controls="panel-tool-manual" data-asset-tab="tool-manual">Tool Manual</button>
-                <button type="button" role="tab" id="tab-education-material" aria-selected="false" aria-controls="panel-education-material" data-asset-tab="education-material">교육자료</button>
-                <button type="button" role="tab" id="tab-external-report" aria-selected="false" aria-controls="panel-external-report" data-asset-tab="external-report">외부 보고 자료</button>
-            </div>
+                <div class="asset-type-tabs" role="tablist" aria-label="기술자산 유형">
+                    <button type="button" role="tab" id="tab-vd-request" aria-selected="true" aria-controls="panel-vd-request" data-asset-tab="vd-request">VD Request</button>
+                    <button type="button" role="tab" id="tab-cor" aria-selected="false" aria-controls="panel-cor" data-asset-tab="cor">CoR</button>
+                    <button type="button" role="tab" id="tab-methodology" aria-selected="false" aria-controls="panel-methodology" data-asset-tab="methodology">방법론</button>
+                    <button type="button" role="tab" id="tab-bp" aria-selected="false" aria-controls="panel-bp" data-asset-tab="bp">BP</button>
+                    <button type="button" role="tab" id="tab-technical-report" aria-selected="false" aria-controls="panel-technical-report" data-asset-tab="technical-report">기술보고서</button>
+                    <button type="button" role="tab" id="tab-knowhow" aria-selected="false" aria-controls="panel-knowhow" data-asset-tab="knowhow">노하우</button>
+                    <button type="button" role="tab" id="tab-tool-manual" aria-selected="false" aria-controls="panel-tool-manual" data-asset-tab="tool-manual">Tool Manual</button>
+                    <button type="button" role="tab" id="tab-education-material" aria-selected="false" aria-controls="panel-education-material" data-asset-tab="education-material">교육자료</button>
+                    <button type="button" role="tab" id="tab-external-report" aria-selected="false" aria-controls="panel-external-report" data-asset-tab="external-report">외부 보고 자료</button>
+                </div>
+            </section>
+
+            <section class="registration-overview-card registration-process-card" aria-labelledby="registration-flow-title">
+                <div class="registration-flow-heading">
+                    <div>
+                        <span class="page-kicker">Registration flow</span>
+                        <h2 id="registration-flow-title">등록 순서를 확인하세요</h2>
+                        <p>모든 Asset type은 같은 4단계를 따르며, 선택한 유형 안에서 단계별 상세 기준과 예시를 펼쳐 확인합니다.</p>
+                    </div>
+                    <span>4 STEPS</span>
+                </div>
+                <ol class="registration-flow" aria-label="기술자산 등록 흐름">
+                    <li class="registration-flow-with-tooltip" tabindex="0" aria-describedby="json-tool-test-tooltip">
+                        <span>1</span>
+                        <strong>AI와 대화하기</strong>
+                        <small>선택한 Asset type의 질문 순서에 따라 경험과 판단을 설명합니다. 실제 명칭·수치·파일·링크는 Placeholder와 방향성 표현으로 바꿉니다.</small>
+                        <span class="registration-tooltip" id="json-tool-test-tooltip" role="tooltip">
+                            <b>권장 AI 도구</b>
+                            <span><em>유료 AI 계정이 있다면</em> — 현재 사용 중인 ChatGPT, Gemini, Copilot 등의 유료 계정을 그대로 활용하세요.</span>
+                            <span><em>유료 AI 계정이 없다면</em> — 무료 Gemini를 우선 권장합니다. 음성 또는 텍스트 답변부터 JSON 생성까지 같은 대화에서 이어갈 수 있습니다.</span>
+                            <span class="registration-tooltip-note">공통 권고: AI가 만든 요약을 먼저 확인한 뒤 최종 JSON 생성을 요청하고, 코드 블록과 다운로드 파일의 내용이 같은지 확인하세요.</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span>2</span>
+                        <strong>반입용 JSON 파일 만들기</strong>
+                        <small>같은 AI 대화창에 유형별 Prompt를 붙여 넣고, AI 답변에 첨부된 Handoff .json 파일을 다운로드합니다.</small>
+                    </li>
+                    <li><span>3</span><strong>JSON 확인·사내 반입하기</strong><small>다운로드한 .json 파일 또는 코드 블록으로 직접 저장한 UTF-8 파일을 검토한 뒤 승인된 방식으로 사내 등록 화면에 가져옵니다.</small></li>
+                    <li><span>4</span><strong>실제 정보로 완성하기</strong><small>사내에서 실제 용어·근거·원본 링크를 복원하고, 중복 자산과 Framework 연결 판단, Owner·Reviewer 검토까지 완료합니다.</small></li>
+                </ol>
+                <p class="registration-process-rule"><i class="bx bx-check-circle"></i><strong>확정 원칙</strong> 음성 파일을 별도로 전사하지 않습니다. 음성 또는 텍스트로 설명한 동일한 대화창에서 JSON까지 생성하고, 실제 정보는 외부 대화가 아니라 사내 등록 화면에서만 복원합니다.</p>
+            </section>
 
             <section class="asset-guide-panel" id="panel-vd-request" role="tabpanel" aria-labelledby="tab-vd-request">
                 <header class="asset-guide-heading">
                     <span class="asset-guide-icon"><i class="bx bx-message-square-detail"></i></span>
                     <span>
                         <span class="page-kicker">VD Request</span>
-                        <h2>요청자의 판단과 실제 영향을 남깁니다</h2>
+                        <h2>요청자의 판단과 실제 영향을 기록하세요</h2>
                         <p>단순 수행 기록이 아니라, 어떤 판단이 필요했고 Simulation 결과가 요청자의 행동에 어떻게 활용됐는지 정리합니다.</p>
                     </span>
                 </header>
@@ -192,15 +199,15 @@
                 <section class="prompt-section" aria-labelledby="prompt-title">
                     <header class="prompt-heading">
                         <span>
-                            <span class="page-kicker">Copy & start</span>
-                            <h3 id="prompt-title">VD Request JSON 생성 Prompt</h3>
-                            <p>앞선 대화를 나눈 같은 창에 붙여 넣어 누락을 확인하고 JSON으로 정리하세요.</p>
+                            <span class="page-kicker">Copy & download</span>
+                            <h3 id="prompt-title">VD Request JSON 생성·다운로드 Prompt</h3>
+                            <p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p>
                         </span>
                         <button class="btn btn-primary copy-prompt-button" type="button" id="copy-vd-request-prompt">
                             <i class="bx bx-copy"></i><span>Prompt 복사</span>
                         </button>
                     </header>
-                    <pre class="prompt-preview" id="vd-request-prompt-preview" tabindex="0" aria-label="VD Request JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="vd-request-prompt-preview" tabindex="0" aria-label="VD Request JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-prompt-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -222,7 +229,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-target-lock"></i></span>
                     <span>
                         <span class="page-kicker">CoR</span>
-                        <h2>완료된 과제가 바꾼 기술과 회사 프로세스를 남깁니다</h2>
+                        <h2>완료 과제가 바꾼 기술과 회사 프로세스를 기록하세요</h2>
                         <p>CoR 종료 후, 해결한 기술 Gap과 확보 기술뿐 아니라 경영성과 기여와 실제 업무 프로세스의 변화를 함께 정리합니다.</p>
                     </span>
                 </header>
@@ -335,15 +342,15 @@
                 <section class="prompt-section" aria-labelledby="cor-prompt-title">
                     <header class="prompt-heading">
                         <span>
-                            <span class="page-kicker">Copy & start</span>
-                            <h3 id="cor-prompt-title">CoR JSON 생성 Prompt</h3>
-                            <p>완료된 CoR을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p>
+                            <span class="page-kicker">Copy & download</span>
+                            <h3 id="cor-prompt-title">CoR JSON 생성·다운로드 Prompt</h3>
+                            <p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p>
                         </span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="cor">
                             <i class="bx bx-copy"></i><span>Prompt 복사</span>
                         </button>
                     </header>
-                    <pre class="prompt-preview" id="cor-prompt-preview" tabindex="0" aria-label="CoR JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="cor-prompt-preview" tabindex="0" aria-label="CoR JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-cor-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -365,7 +372,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-git-branch"></i></span>
                     <span>
                         <span class="page-kicker">방법론</span>
-                        <h2>다른 사람이 반복 적용할 수 있는 판단 방법을 남깁니다</h2>
+                        <h2>반복 적용할 수 있는 판단 방법을 기록하세요</h2>
                         <p>특정 과제의 결과가 아니라, 어떤 입력과 절차로 결과를 만들고 어떤 기준으로 판단할지를 일반화합니다.</p>
                     </span>
                 </header>
@@ -441,15 +448,15 @@
                 <section class="prompt-section" aria-labelledby="methodology-prompt-title">
                     <header class="prompt-heading">
                         <span>
-                            <span class="page-kicker">Copy & start</span>
-                            <h3 id="methodology-prompt-title">방법론 JSON 생성 Prompt</h3>
-                            <p>방법론을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p>
+                            <span class="page-kicker">Copy & download</span>
+                            <h3 id="methodology-prompt-title">방법론 JSON 생성·다운로드 Prompt</h3>
+                            <p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p>
                         </span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="methodology">
                             <i class="bx bx-copy"></i><span>Prompt 복사</span>
                         </button>
                     </header>
-                    <pre class="prompt-preview" id="methodology-prompt-preview" tabindex="0" aria-label="방법론 JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="methodology-prompt-preview" tabindex="0" aria-label="방법론 JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-methodology-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -471,7 +478,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-trending-up"></i></span>
                     <span>
                         <span class="page-kicker">BP</span>
-                        <h2>Simulation이 만든 사업부 행동과 경영성과를 남깁니다</h2>
+                        <h2>Simulation으로 달라진 사업부 행동과 성과를 기록하세요</h2>
                         <p>좋은 결과를 소개하는 데 그치지 않고, 어떤 판단을 가능하게 했고 사업부가 어떻게 행동했으며 성공방식을 어떻게 재현할지를 정리합니다.</p>
                     </span>
                 </header>
@@ -527,10 +534,10 @@
 
                 <section class="prompt-section" aria-labelledby="bp-prompt-title">
                     <header class="prompt-heading">
-                        <span><span class="page-kicker">Copy & organize</span><h3 id="bp-prompt-title">BP JSON 생성 Prompt</h3><p>BP를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <span><span class="page-kicker">Copy & download</span><h3 id="bp-prompt-title">BP JSON 생성·다운로드 Prompt</h3><p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p></span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="bp"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
                     </header>
-                    <pre class="prompt-preview" id="bp-prompt-preview" tabindex="0" aria-label="BP JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="bp-prompt-preview" tabindex="0" aria-label="BP JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-bp-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -552,7 +559,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-file"></i></span>
                     <span>
                         <span class="page-kicker">기술보고서</span>
-                        <h2>공식 기술 결론과 그 결론이 유효한 범위를 남깁니다</h2>
+                        <h2>공식 기술 결론과 유효 범위를 기록하세요</h2>
                         <p>보고서 원문을 복사하지 않고, 기술 질문·검증 근거·결론·지원 가능한 판단을 검색 가능한 카드로 정리합니다.</p>
                     </span>
                 </header>
@@ -611,10 +618,10 @@
 
                 <section class="prompt-section" aria-labelledby="technical-report-prompt-title">
                     <header class="prompt-heading">
-                        <span><span class="page-kicker">Copy & organize</span><h3 id="technical-report-prompt-title">기술보고서 JSON 생성 Prompt</h3><p>기술보고서를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <span><span class="page-kicker">Copy & download</span><h3 id="technical-report-prompt-title">기술보고서 JSON 생성·다운로드 Prompt</h3><p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p></span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="technical-report"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
                     </header>
-                    <pre class="prompt-preview" id="technical-report-prompt-preview" tabindex="0" aria-label="기술보고서 JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="technical-report-prompt-preview" tabindex="0" aria-label="기술보고서 JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-technical-report-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -636,7 +643,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-bulb"></i></span>
                     <span>
                         <span class="page-kicker">노하우</span>
-                        <h2>반복되는 기술·업무 난제를 해결한 판단과 실행 방식을 남깁니다</h2>
+                        <h2>반복 가능한 판단과 실행 방식을 기록하세요</h2>
                         <p>수렴성·모델링과 방법론 적용뿐 아니라 장표·보고서 작성, 요청 검토 SOP, 다른 조직과의 협업에서 다시 쓸 수 있는 실무 방식을 한 상황 단위로 정리합니다.</p>
                     </span>
                 </header>
@@ -703,10 +710,10 @@
 
                 <section class="prompt-section" aria-labelledby="knowhow-prompt-title">
                     <header class="prompt-heading">
-                        <span><span class="page-kicker">Copy & organize</span><h3 id="knowhow-prompt-title">노하우 JSON 생성 Prompt</h3><p>기술 또는 업무 경험을 설명한 같은 대화창에서 4개 범주 중 하나를 선택하고 JSON으로 정리하세요.</p></span>
+                        <span><span class="page-kicker">Copy & download</span><h3 id="knowhow-prompt-title">노하우 JSON 생성·다운로드 Prompt</h3><p>같은 대화창에서 범주와 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p></span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="knowhow"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
                     </header>
-                    <pre class="prompt-preview" id="knowhow-prompt-preview" tabindex="0" aria-label="노하우 JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="knowhow-prompt-preview" tabindex="0" aria-label="노하우 JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-knowhow-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -728,7 +735,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-wrench"></i></span>
                     <span>
                         <span class="page-kicker">Tool Manual</span>
-                        <h2>하나의 Tool 작업을 안전하게 반복하는 표준 경로를 남깁니다</h2>
+                        <h2>Tool 작업의 표준 수행 절차를 기록하세요</h2>
                         <p>모든 메뉴를 나열하지 않고, 작업 목적·사전조건·핵심 절차·정상 완료 기준·버전 정보를 실행 가능한 단위로 정리합니다.</p>
                     </span>
                 </header>
@@ -784,10 +791,10 @@
 
                 <section class="prompt-section" aria-labelledby="tool-manual-prompt-title">
                     <header class="prompt-heading">
-                        <span><span class="page-kicker">Copy & organize</span><h3 id="tool-manual-prompt-title">Tool Manual JSON 생성 Prompt</h3><p>Tool 작업을 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <span><span class="page-kicker">Copy & download</span><h3 id="tool-manual-prompt-title">Tool Manual JSON 생성·다운로드 Prompt</h3><p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p></span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="tool-manual"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
                     </header>
-                    <pre class="prompt-preview" id="tool-manual-prompt-preview" tabindex="0" aria-label="Tool Manual JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="tool-manual-prompt-preview" tabindex="0" aria-label="Tool Manual JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-tool-manual-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -809,7 +816,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-book-open"></i></span>
                     <span>
                         <span class="page-kicker">교육자료</span>
-                        <h2>누가 학습한 뒤 무엇을 할 수 있는지를 남깁니다</h2>
+                        <h2>학습 후 수행할 수 있는 역량을 기록하세요</h2>
                         <p>강의 내용을 복사하지 않고, 학습목표·대상·활동·완료 기준과 학습할 기술자산을 하나의 재사용 가능한 콘텐츠 단위로 정리합니다.</p>
                     </span>
                 </header>
@@ -865,10 +872,10 @@
 
                 <section class="prompt-section" aria-labelledby="education-material-prompt-title">
                     <header class="prompt-heading">
-                        <span><span class="page-kicker">Copy & organize</span><h3 id="education-material-prompt-title">교육자료 JSON 생성 Prompt</h3><p>교육자료를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <span><span class="page-kicker">Copy & download</span><h3 id="education-material-prompt-title">교육자료 JSON 생성·다운로드 Prompt</h3><p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p></span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="education-material"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
                     </header>
-                    <pre class="prompt-preview" id="education-material-prompt-preview" tabindex="0" aria-label="교육자료 JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="education-material-prompt-preview" tabindex="0" aria-label="교육자료 JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-education-material-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -890,7 +897,7 @@
                     <span class="asset-guide-icon"><i class="bx bx-presentation"></i></span>
                     <span>
                         <span class="page-kicker">외부 보고 자료</span>
-                        <h2>확인된 기술 근거를 대상의 의사결정에 맞게 전달합니다</h2>
+                        <h2>확인된 기술 근거를 의사결정에 맞게 기록하세요</h2>
                         <p>회사의 외부만이 아니라 팀 밖의 사업부·리더·협업 조직·고객에게 전달한 자료를 재사용할 수 있도록 목적·메시지·근거·공유범위를 정리합니다.</p>
                     </span>
                 </header>
@@ -949,10 +956,10 @@
 
                 <section class="prompt-section" aria-labelledby="external-report-prompt-title">
                     <header class="prompt-heading">
-                        <span><span class="page-kicker">Copy & organize</span><h3 id="external-report-prompt-title">외부 보고 자료 JSON 생성 Prompt</h3><p>보고 자료를 설명한 같은 대화창에서 누락을 확인하고 JSON으로 정리하세요.</p></span>
+                        <span><span class="page-kicker">Copy & download</span><h3 id="external-report-prompt-title">외부 보고 자료 JSON 생성·다운로드 Prompt</h3><p>같은 대화창에서 누락을 확인하고, 복사용 JSON 코드와 동일한 UTF-8 .json 파일을 받으세요.</p></span>
                         <button class="btn btn-primary copy-prompt-button" type="button" data-copy-prompt="external-report"><i class="bx bx-copy"></i><span>Prompt 복사</span></button>
                     </header>
-                    <pre class="prompt-preview" id="external-report-prompt-preview" tabindex="0" aria-label="외부 보고 자료 JSON 생성 Prompt"></pre>
+                    <pre class="prompt-preview" id="external-report-prompt-preview" tabindex="0" aria-label="외부 보고 자료 JSON 생성·다운로드 Prompt"></pre>
                     <p class="copy-status" id="copy-external-report-status" role="status" aria-live="polite"></p>
                 </section>
 
@@ -975,6 +982,6 @@
         <span>외부 AI에는 일반화된 정보만 입력하고 실제 정보는 사내 환경에서 보완합니다.</span>
     </footer>
 
-    <script src="team_technical_assets_registration.js?v=20260718-3"></script>
+    <script src="team_technical_assets_registration.js?v=20260719-registration-guide-13"></script>
 </body>
 </html>
