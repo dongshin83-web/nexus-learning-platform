@@ -73,7 +73,13 @@ test("Library switches from static sample data to published API assets in API mo
 
 test("Registration Guide preserves semantic card tones and translucent capture regions", () => {
   const css = read("team_technical_assets.css");
+  assert.match(css, /\.registration-guide-block\.is-completion\s*\{[^}]*background:\s*var\(--green-soft\)/s);
   assert.match(css, /\.registration-guide-block\.is-completion\s*\{[^}]*var\(--green-soft\)/s);
+  assert.match(css, /\.registration-guide-caution\s*\{[^}]*background:\s*var\(--amber-soft\)/s);
   assert.match(css, /\.registration-guide-caution\s*\{[^}]*var\(--amber-soft\)/s);
+  assert.match(css, /\.is-ai\s*\{[^}]*--role-tint:\s*rgba\(37, 99, 235, 0\.07\)/s);
+  assert.match(css, /\.is-registrant\s*\{[^}]*--role-tint:\s*rgba\(183, 121, 31, 0\.07\)/s);
+  assert.match(css, /\.is-system\s*\{[^}]*--role-tint:\s*rgba\(15, 118, 110, 0\.07\)/s);
+  assert.match(css, /\.registration-screen-region\s*\{[^}]*background:\s*var\(--role-tint\)/s);
   assert.match(css, /\.registration-screen-region\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--role-color\) 7%, transparent\)/s);
 });
