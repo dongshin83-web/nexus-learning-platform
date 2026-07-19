@@ -8890,13 +8890,18 @@ body[data-page="culture"] #culture-records {
 
 .culture-record-cover {
     display: block;
-    aspect-ratio: 16 / 9;
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 56.25%;
     overflow: hidden;
     border-bottom: 1px solid var(--line);
     background: var(--paper-soft);
 }
 
 .culture-record-cover img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -8910,10 +8915,11 @@ body[data-page="culture"] #culture-records {
 
 .culture-cover-empty {
     display: grid;
-    position: relative;
+    position: absolute;
+    inset: 0;
     isolation: isolate;
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     place-items: center;
     align-content: center;
     gap: var(--spacing-1);
