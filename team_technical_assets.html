@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260719-overview-monthly-3">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260719-overview-pairs-1">
 </head>
 <body data-page="landing">
     <header class="topbar">
@@ -35,47 +35,47 @@
             </div>
         </section>
 
-        <section class="section container overview-focus-grid">
+        <section class="section container overview-paired-grid overview-ranking-grid">
             <article class="panel overview-primary-panel">
                 <header class="overview-card-heading">
                     <section>
-                        <span class="section-kicker">MOST USED</span>
+                        <div class="overview-kicker-row"><span class="section-kicker">MOST USED · TOP 5</span><span class="overview-example-badge">예시 데이터</span></div>
                         <h2>이번 달 가장 많이 활용된 자산</h2>
-                        <p>이번 달 완료 과제에서 실제 연결된 횟수를 기준으로 보여줍니다.</p>
+                        <p id="most-used-description">이번 달 Library에 명시적으로 등록된 활용 연결을 기준으로 집계합니다.</p>
                     </section>
                     <a class="text-link" href="team_technical_assets_library.html">Library 전체 보기 <i class="bx bx-right-arrow-alt"></i></a>
                 </header>
                 <ol id="landing-most-used-assets" class="overview-ranked-list" aria-live="polite"></ol>
             </article>
 
+            <article class="panel overview-contributor-panel">
+                <header class="overview-card-heading">
+                    <section>
+                        <div class="overview-kicker-row"><span class="section-kicker">CONTRIBUTION · TOP 5</span><span class="overview-example-badge">예시 데이터</span></div>
+                        <h2>이번 달 기여 하이라이트</h2>
+                        <p id="contribution-description">이번 달 등록·검토·활용 연결 기록을 기준으로 집계합니다.</p>
+                    </section>
+                </header>
+                <ol id="landing-contributors" class="overview-contributor-list" aria-live="polite"></ol>
+            </article>
+        </section>
+
+        <section class="section container overview-paired-grid overview-discovery-grid">
             <aside class="panel overview-daily-panel">
                 <header class="overview-card-heading">
                     <section>
-                        <span class="section-kicker">DAILY PICK</span>
+                        <div class="overview-kicker-row"><span class="section-kicker">DAILY PICK</span><span class="overview-example-badge">예시 데이터</span></div>
                         <h2>오늘의 자산</h2>
                     </section>
                     <time id="daily-asset-date"></time>
                 </header>
                 <section id="landing-daily-asset" aria-live="polite"></section>
             </aside>
-        </section>
-
-        <section class="section container overview-secondary-focus">
-            <article class="panel overview-contributor-panel">
-                <header class="overview-card-heading">
-                    <section>
-                        <span class="section-kicker">CONTRIBUTION</span>
-                        <h2>이번 달 기여 하이라이트</h2>
-                        <p>이번 달 등록·검토·활용 연결 기록을 기준으로 집계합니다.</p>
-                    </section>
-                </header>
-                <ol id="landing-contributors" class="overview-contributor-list" aria-live="polite"></ol>
-            </article>
 
             <article class="panel overview-gap-panel">
                 <header class="overview-card-heading">
                     <section>
-                        <span class="section-kicker">SEARCH GAP</span>
+                        <div class="overview-kicker-row"><span class="section-kicker">SEARCH GAP</span><span class="overview-example-badge">예시 데이터</span></div>
                         <div class="overview-title-with-info">
                             <h2>검색으로 발견한 Gap</h2>
                             <button class="overview-info-button" type="button" aria-label="Search Gap 설명">
@@ -105,6 +105,6 @@
 
     <script src="team_technical_assets_data.js?v=20260718-overview-unified-1"></script>
     <script src="team_technical_assets_methodology_levels.js?v=20260718-overview-unified-1"></script>
-    <script src="team_technical_assets.js?v=20260719-overview-monthly-2"></script>
+    <script src="team_technical_assets.js?v=20260719-overview-pairs-1"></script>
 </body>
 </html>

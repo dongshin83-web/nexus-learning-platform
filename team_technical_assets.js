@@ -1366,6 +1366,22 @@ const overviewUsageTypeRank = {
     "검증 근거": 4
 };
 
+const landingExampleMostUsedAssets = [
+    { id: "methodology-impact-risk-ranking", type: "방법론", title: "충격 취약부 Risk Ranking 방법론", summary: "후보 구조의 취약 위치와 상대 위험 순위를 같은 기준으로 비교합니다.", count: 8, usageType: "조건 변경 적용" },
+    { id: "cor-impact", type: "CoR", title: "Drop 충격 취약부 검증 CoR", summary: "충격조건별 취약부와 설계안 차이를 비교해 검토 우선순위를 정리합니다.", count: 6, usageType: "검증 근거" },
+    { id: "bp-deformation-warpage", type: "BP", title: "박막 적층 구조 변형 예측 BP", summary: "공정조건 변경 전 변형 리스크를 비교하고 설계 선택지를 좁힙니다.", count: 5, usageType: "직접 재사용" },
+    { id: "technical-report-interface-sensitivity", type: "기술보고서", title: "계면 물성 민감도 기술보고서", summary: "계면 물성 변화가 취약부 Ranking에 미치는 영향을 정리합니다.", count: 4, usageType: "검증 근거" },
+    { id: "tool-manual-ai-search", type: "Tool Manual", title: "AI 기반 기술자산 검색·요약 가이드", summary: "기존 자산을 찾고 결과를 검증하는 순서를 안내합니다.", count: 3, usageType: "참고" }
+];
+
+const landingExampleContributors = [
+    { name: "샘플 등록자 A", total: 12, kinds: ["등록"] },
+    { name: "샘플 Reviewer B", total: 9, kinds: ["검토"] },
+    { name: "샘플 협업자 C", total: 7, kinds: ["활용 연결"] },
+    { name: "샘플 등록자 D", total: 5, kinds: ["등록", "참여"] },
+    { name: "샘플 Reviewer E", total: 3, kinds: ["검토"] }
+];
+
 function getOverviewDataContext() {
     const available = libraryItems.filter((item) => item.publicationStatus !== "폐기");
     const operational = available.filter((item) => item.demo !== true);
@@ -1442,6 +1458,7 @@ function buildOverviewModel() {
     const completedWorkItems = workItems.filter((item) => item.status === "완료");
     const completedUsageLinks = completedWorkItems.flatMap((item) => getWorkUsageLinks(item, cardsById));
     const allWorkUsageLinks = workItems.flatMap((item) => getWorkUsageLinks(item, cardsById));
+    const registeredUsageLinks = context.items.flatMap((item) => getWorkUsageLinks(item, cardsById));
     const searchedWorkItems = completedWorkItems.filter((item) => item.searchReuse?.performed === true);
     const utilizedSourceIds = new Set(completedUsageLinks.map((link) => link.sourceCardId));
     const utilizedAssetIds = new Set(completedUsageLinks.map((link) => link.targetCardId));
@@ -1505,6 +1522,7 @@ function buildOverviewModel() {
         cardsById,
         completedWorkItems,
         completedUsageLinks,
+        registeredUsageLinks,
         searchedWorkItems,
         utilizedSourceIds,
         utilizedAssetIds,
@@ -1743,23 +1761,30 @@ function renderLandingCareList() {
 }
 
 function getLandingMostUsedAssets() {
+    if (overviewModel.context.mode === "demo") {
+        return landingExampleMostUsedAssets.map((item) => ({
+            card: overviewModel.cardsById.get(item.id) ?? item,
+            count: item.count,
+            usageTypes: new Set([item.usageType])
+        }));
+    }
     const usageByAsset = new Map();
-    overviewModel.completedUsageLinks.filter((link) => {
+    overviewModel.registeredUsageLinks.filter((link) => {
         const sourceCard = overviewModel.cardsById.get(link.sourceCardId);
         return isLandingCurrentMonth(sourceCard?.updatedAt);
     }).forEach((link) => {
         const entry = usageByAsset.get(link.targetCardId) ?? {
             card: overviewModel.cardsById.get(link.targetCardId),
-            workIds: new Set(),
+            sourceIds: new Set(),
             usageTypes: new Set()
         };
-        entry.workIds.add(link.sourceCardId);
+        entry.sourceIds.add(link.sourceCardId);
         entry.usageTypes.add(link.usageType);
         usageByAsset.set(link.targetCardId, entry);
     });
     return [...usageByAsset.values()]
         .filter((item) => item.card)
-        .sort((a, b) => b.workIds.size - a.workIds.size || String(a.card.title).localeCompare(String(b.card.title), "ko"))
+        .sort((a, b) => b.sourceIds.size - a.sourceIds.size || String(a.card.title).localeCompare(String(b.card.title), "ko"))
         .slice(0, 5);
 }
 
@@ -1768,7 +1793,7 @@ function renderLandingMostUsedAssets() {
     if (!wrap) return;
     const items = getLandingMostUsedAssets();
     if (!items.length) {
-        wrap.innerHTML = `<li class="section-empty">완료 과제에 연결된 활용 기록이 없습니다.</li>`;
+        wrap.innerHTML = `<li class="section-empty">이번 달에 등록된 활용 연결 기록이 없습니다.</li>`;
         return;
     }
     wrap.innerHTML = items.map((item, index) => `
@@ -1780,12 +1805,15 @@ function renderLandingMostUsedAssets() {
                 <p>${escapeHtml(item.card.summary || item.card.useCase || "등록된 자산의 상세 내용을 확인하세요.")}</p>
                 <small>${[...item.usageTypes].map(escapeHtml).join(" · ") || "활용 관계"}</small>
             </section>
-            <strong>${item.workIds.size}<small>개 과제</small></strong>
+            <strong>${item.count ?? item.sourceIds.size}<small>건 연결</small></strong>
         </li>
     `).join("");
 }
 
 function getLandingContributors() {
+    if (overviewModel.context.mode === "demo") {
+        return landingExampleContributors.map((item) => ({ ...item, kinds: new Set(item.kinds) }));
+    }
     const contributors = new Map();
     const add = (name, kind) => {
         const normalized = String(name ?? "").trim();
@@ -1796,6 +1824,9 @@ function getLandingContributors() {
         contributors.set(normalized, entry);
     };
     overviewModel.context.items.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.registrant, "등록"));
+    overviewModel.context.items.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => {
+        (item.contributors ?? []).forEach((name) => add(name, "참여"));
+    });
     overviewModel.completedWorkItems.filter((item) => isLandingCurrentMonth(item.updatedAt)).forEach((item) => add(item.reviewer, "검토"));
     overviewModel.completedUsageLinks.filter((link) => {
         const sourceCard = overviewModel.cardsById.get(link.sourceCardId);
@@ -1803,7 +1834,7 @@ function getLandingContributors() {
     }).forEach((link) => add(link.actor, "활용 연결"));
     return [...contributors.values()]
         .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name, "ko"))
-        .slice(0, 3);
+        .slice(0, 5);
 }
 
 function renderLandingContributors() {
@@ -1816,6 +1847,7 @@ function renderLandingContributors() {
     }
     wrap.innerHTML = items.map((item, index) => `
         <li>
+            <span class="overview-rank">${String(index + 1).padStart(2, "0")}</span>
             <span class="contributor-avatar">${escapeHtml(item.name.slice(0, 1))}</span>
             <section><strong>${escapeHtml(item.name)}</strong><small>${[...item.kinds].map(escapeHtml).join(" · ")}</small></section>
             <span class="contributor-count">${item.total}<small>건</small></span>
@@ -1841,9 +1873,11 @@ function isLandingCurrentMonth(value) {
 function renderLandingDailyAsset() {
     const wrap = document.getElementById("landing-daily-asset");
     if (!wrap) return;
-    const candidates = overviewModel.context.items
-        .filter((item) => !overviewWorkTypes.has(item.type))
-        .sort((a, b) => String(a.id).localeCompare(String(b.id), "ko"));
+    const candidates = overviewModel.context.mode === "demo"
+        ? landingExampleMostUsedAssets.map((item) => overviewModel.cardsById.get(item.id) ?? { ...item, tags: [item.usageType, "샘플 데이터"] })
+        : overviewModel.context.items
+            .filter((item) => !overviewWorkTypes.has(item.type))
+            .sort((a, b) => String(a.id).localeCompare(String(b.id), "ko"));
     if (!candidates.length) {
         wrap.innerHTML = `<p class="section-empty">오늘 소개할 자산이 없습니다.</p>`;
         return;
@@ -1867,7 +1901,8 @@ function renderLandingGapSummary() {
     const note = document.getElementById("overview-data-note");
     if (!note) return;
     if (overviewModel.context.mode === "demo") {
-        note.textContent = `현재는 기능시험용 등록 기록에서 ${overviewModel.gapWorkItems.length}건을 확인했습니다. 실제 검색 로그 집계에는 저장소 연결이 필요합니다.`;
+        setText("metric-gap-count", 1);
+        note.textContent = "등록 기능 완성 전 화면 구성을 확인하기 위한 예시 Gap 1건입니다. 실제 집계값이 아닙니다.";
     } else if (overviewModel.context.mode === "operational") {
         note.textContent = `운영 카드에 저장된 검색 결과를 기준으로 집계했습니다. 실시간 검색어와 무결과 검색까지 보려면 로그 저장이 필요합니다.`;
     } else {
@@ -1876,6 +1911,14 @@ function renderLandingGapSummary() {
 }
 
 function renderLanding() {
+    const isExample = overviewModel.context.mode === "demo";
+    document.querySelectorAll(".overview-example-badge").forEach((badge) => { badge.hidden = !isExample; });
+    setText("most-used-description", isExample
+        ? "등록 기능 완성 전, 현재 Library 자산으로 구성한 활용 순위 예시입니다."
+        : "이번 달 Library에 명시적으로 등록된 활용 연결을 기준으로 집계합니다.");
+    setText("contribution-description", isExample
+        ? "등록 기능 완성 전 기여 순위의 표시 방식을 확인하기 위한 예시입니다."
+        : "이번 달 등록·검토·활용 연결 기록을 기준으로 집계합니다.");
     renderLandingMetrics();
     renderLandingMostUsedAssets();
     renderLandingContributors();
