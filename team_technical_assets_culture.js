@@ -53,7 +53,7 @@
         if (cover) {
             return `<img src="${escapeHtml(cover.src)}" alt="${escapeHtml(cover.alt)}" loading="lazy">`;
         }
-        return `<div class="culture-cover-empty"><i class="${typeIcon(record.type)}"></i><span>내부 이미지 연결</span></div>`;
+        return `<span class="culture-cover-empty"><i class="${typeIcon(record.type)}"></i><strong>${escapeHtml(record.type)}</strong><small>내부 자료 연결 전</small></span>`;
     }
 
     function renderRecords() {
