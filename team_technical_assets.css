@@ -3625,21 +3625,6 @@ body[data-page="techtree"] .learning-route-empty {
 }
 
 @media (max-width: 760px) {
-    body[data-page="map"] .topnav {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        width: 100%;
-        overflow-x: auto;
-        padding-bottom: 0.15rem;
-        scrollbar-width: thin;
-    }
-
-    body[data-page="map"] .topnav a {
-        flex: 0 0 auto;
-        white-space: nowrap;
-    }
-
     .maturity-section-head {
         align-items: flex-start;
     }
