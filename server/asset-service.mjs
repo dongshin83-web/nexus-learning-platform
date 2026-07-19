@@ -1,4 +1,3 @@
-import path from "node:path";
 import { validateCard, findDuplicateCandidates, scoreCard } from "../tools/card-contract.mjs";
 import { assert, HttpError } from "./errors.mjs";
 import { requireRole } from "./auth.mjs";
@@ -129,4 +128,46 @@ export class AssetService {
             : [];
         return { recommended, searchResults, selected: current.relations ?? [] };
     }
+
+    listCultureRecords(user) {
+        requireRole(user, "registrant", "reviewer");
+        return this.store.listCultureRecords();
+    }
+
+    createCultureRecord(record, user) {
+        requireRole(user, "registrant");
+        const prepared = validateCultureRecord(record);
+        return this.store.transaction(() => this.store.createCultureRecord(prepared, user.id));
+    }
+
+    updateCultureRecord(id, patch, user) {
+        requireRole(user, "registrant", "reviewer");
+        const current = this.store.getCultureRecord(id);
+        assert(current, 404, "Culture 기록을 찾을 수 없습니다.");
+        assert(current.createdBy === user.id || user.roles.includes("reviewer") || user.roles.includes("admin"), 403, "등록자 또는 Reviewer만 수정할 수 있습니다.");
+        const prepared = validateCultureRecord({ ...current, ...patch, id });
+        return this.store.transaction(() => this.store.updateCultureRecord(id, prepared, user.id));
+    }
+}
+
+function validateCultureRecord(record) {
+    const prepared = {
+        ...record,
+        id: String(record?.id ?? "").trim(),
+        type: String(record?.type ?? "").trim(),
+        title: String(record?.title ?? "").trim(),
+        summary: String(record?.summary ?? "").trim(),
+        images: Array.isArray(record?.images) ? record.images : [],
+        links: Array.isArray(record?.links) ? record.links : []
+    };
+    const errors = [];
+    if (!/^[a-z0-9][a-z0-9-]*$/.test(prepared.id)) errors.push("Culture 기록 ID는 영문 소문자, 숫자, 하이픈만 사용할 수 있습니다.");
+    if (!prepared.type) errors.push("기록 유형이 필요합니다.");
+    if (!prepared.title) errors.push("제목이 필요합니다.");
+    if (!prepared.summary) errors.push("요약이 필요합니다.");
+    if (!prepared.images.length && !prepared.links.length) errors.push("이미지 또는 연결 자료가 하나 이상 필요합니다.");
+    prepared.images.forEach((image) => { if (!String(image.src ?? "").trim() || !String(image.alt ?? "").trim()) errors.push("모든 이미지에는 경로와 대체 설명이 필요합니다."); });
+    prepared.links.forEach((link) => { if (!String(link.label ?? "").trim() || !String(link.href ?? "").trim() || !String(link.kind ?? "").trim()) errors.push("모든 연결 자료에는 이름, URL과 자료 구분이 필요합니다."); });
+    if (errors.length) throw new HttpError(422, "Culture 기록 검증에 실패했습니다.", errors);
+    return { ...prepared, status: "초안" };
 }

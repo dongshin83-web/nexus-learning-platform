@@ -23,6 +23,22 @@ function parsePayload(row) {
     };
 }
 
+function parseCulturePayload(row) {
+    if (!row) return null;
+    return {
+        ...JSON.parse(row.payload_json),
+        id: row.id,
+        type: row.record_type,
+        title: row.title,
+        series: row.series || "",
+        summary: row.summary,
+        date: row.record_date || "",
+        status: row.publication_status,
+        createdBy: row.created_by,
+        updatedBy: row.updated_by
+    };
+}
+
 export class SqliteAssetStore {
     constructor({ databasePath, schemaPath }) {
         fs.mkdirSync(path.dirname(databasePath), { recursive: true });
@@ -177,5 +193,52 @@ export class SqliteAssetStore {
             });
             return { inserted, skipped, unresolvedRelations };
         });
+    }
+
+    listCultureRecords() {
+        return this.db.prepare("SELECT * FROM culture_records ORDER BY record_date DESC, updated_at DESC").all().map(parseCulturePayload);
+    }
+
+    getCultureRecord(id) {
+        return parseCulturePayload(this.db.prepare("SELECT * FROM culture_records WHERE id = ?").get(id));
+    }
+
+    createCultureRecord(record, actorId) {
+        try {
+            this.db.prepare(`INSERT INTO culture_records
+                (id, record_type, title, series, summary, record_date, publication_status, payload_json, created_by, updated_by)
+                VALUES (?, ?, ?, ?, ?, ?, '초안', ?, ?, ?)`)
+                .run(record.id, record.type, record.title, record.series || null, record.summary, record.date || null,
+                    JSON.stringify({ ...record, status: "초안" }), actorId, actorId);
+            this.replaceCultureChildren(record.id, record);
+            this.audit("culture_record", record.id, "culture.created", actorId, null, record);
+            return this.getCultureRecord(record.id);
+        } catch (error) {
+            if (String(error.message).includes("UNIQUE constraint failed")) throw new HttpError(409, "이미 사용 중인 Culture 기록 ID입니다.");
+            throw error;
+        }
+    }
+
+    updateCultureRecord(id, patch, actorId) {
+        const current = this.getCultureRecord(id);
+        if (!current) throw new HttpError(404, "Culture 기록을 찾을 수 없습니다.");
+        const next = { ...current, ...patch, id, status: "초안" };
+        this.db.prepare(`UPDATE culture_records SET record_type = ?, title = ?, series = ?, summary = ?, record_date = ?,
+            publication_status = '초안', payload_json = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`)
+            .run(next.type, next.title, next.series || null, next.summary, next.date || null, JSON.stringify(next), actorId, id);
+        this.replaceCultureChildren(id, next);
+        this.audit("culture_record", id, "culture.updated", actorId, current, next);
+        return this.getCultureRecord(id);
+    }
+
+    replaceCultureChildren(recordId, record) {
+        this.db.prepare("DELETE FROM culture_media WHERE record_id = ?").run(recordId);
+        this.db.prepare("DELETE FROM culture_links WHERE record_id = ?").run(recordId);
+        const insertMedia = this.db.prepare(`INSERT INTO culture_media
+            (record_id, media_type, source_url, alt_text, sort_order) VALUES (?, 'image', ?, ?, ?)`);
+        (record.images ?? []).forEach((image, index) => insertMedia.run(recordId, image.src, image.alt, index));
+        const insertLink = this.db.prepare(`INSERT INTO culture_links
+            (record_id, label, href, link_kind, sort_order) VALUES (?, ?, ?, ?, ?)`);
+        (record.links ?? []).forEach((link, index) => insertLink.run(recordId, link.label, link.href, link.kind, index));
     }
 }

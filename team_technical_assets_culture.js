@@ -287,7 +287,10 @@
             submitButton.disabled = true;
             try {
                 if (isApiMode && repository) {
-                    await repository.createCultureRecord(record);
+                    const created = await repository.createCultureRecord(record);
+                    records.unshift(created);
+                    renderFilters();
+                    renderRecords();
                     window.alert("팀 기록 초안을 저장했습니다.");
                 } else {
                     downloadJson(record);
@@ -322,8 +325,18 @@
         });
     }
 
-    function initCulturePage() {
+    async function initCulturePage() {
         if (document.body.dataset.page !== "culture") return;
+        if (runtime.mode === "api" && repository) {
+            try {
+                const storedRecords = await repository.listCultureRecords();
+                const merged = new Map(records.map((record) => [record.id, record]));
+                storedRecords.forEach((record) => merged.set(record.id, record));
+                records.splice(0, records.length, ...merged.values());
+            } catch (error) {
+                console.warn("Culture 기록 API를 불러오지 못해 정적 기록을 사용합니다.", error);
+            }
+        }
         renderFilters();
         renderRecords();
         bindDialog();

@@ -135,3 +135,25 @@ test("Reviewer 수정 요청과 중복 등록 충돌을 기록한다", async () 
     const duplicate = await api("/api/v1/asset-registration-requests", { method: "POST", body: card, roles: "registrant" });
     assert.equal(duplicate.status, 409);
 });
+
+test("Culture 기록의 이미지와 링크를 DB에 초안 저장하고 다시 수정한다", async () => {
+    const record = {
+        id: "culture-backend-e2e",
+        type: "워크샵 결과",
+        title: "Backend Culture E2E",
+        series: "조직문화 워크샵",
+        date: "2026.07.19",
+        summary: "이미지와 결과물 링크 저장을 검증합니다.",
+        tags: ["워크샵"],
+        images: [{ src: "/assets/culture/sample.png", alt: "워크샵 결과 예시" }],
+        links: [{ label: "워크샵 결과", href: "https://internal.example.test/workshop", kind: "결과물" }]
+    };
+    const created = await api("/api/v1/culture-records", { method: "POST", body: record, roles: "registrant" });
+    assert.equal(created.status, 201);
+    assert.equal((await created.json()).status, "초안");
+    const updated = await api("/api/v1/culture-records/culture-backend-e2e", { method: "PATCH", body: { summary: "수정된 워크샵 요약" }, roles: "registrant" });
+    assert.equal(updated.status, 200);
+    assert.equal((await updated.json()).summary, "수정된 워크샵 요약");
+    const records = await (await api("/api/v1/culture-records", { roles: "registrant" })).json();
+    assert.equal(records.some((item) => item.id === record.id && item.images.length === 1 && item.links.length === 1), true);
+});

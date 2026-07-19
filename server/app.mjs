@@ -76,6 +76,11 @@ export function createApp({ config, service }) {
                 if (request.method === "GET" && apiPath === "/session") return send(response, 200, { user }, { "Content-Type": contentTypes[".json"] });
                 if (request.method === "GET" && apiPath === "/assets") return send(response, 200, service.list(url.searchParams, user), { "Content-Type": contentTypes[".json"] });
                 if (request.method === "GET" && apiPath === "/review-queue") return send(response, 200, service.reviewQueue(user), { "Content-Type": contentTypes[".json"] });
+                if (request.method === "GET" && apiPath === "/culture-records") return send(response, 200, service.listCultureRecords(user), { "Content-Type": contentTypes[".json"] });
+                if (request.method === "POST" && apiPath === "/culture-records") {
+                    const result = service.createCultureRecord(await readJson(request, config.maxBodyBytes), user);
+                    return send(response, 201, result, { "Content-Type": contentTypes[".json"] });
+                }
                 if (request.method === "POST" && apiPath === "/asset-registration-requests") {
                     const result = service.register(await readJson(request, config.maxBodyBytes), user);
                     return send(response, 201, result, { "Content-Type": contentTypes[".json"] });
@@ -97,6 +102,9 @@ export function createApp({ config, service }) {
                 if ((match = routeMatch(apiPath, "/assets/:id")) && request.method === "PATCH") {
                     const expectedVersion = Number(request.headers["if-match"] || 0) || undefined;
                     return send(response, 200, service.update(match.id, await readJson(request, config.maxBodyBytes), user, expectedVersion), { "Content-Type": contentTypes[".json"] });
+                }
+                if ((match = routeMatch(apiPath, "/culture-records/:id")) && request.method === "PATCH") {
+                    return send(response, 200, service.updateCultureRecord(match.id, await readJson(request, config.maxBodyBytes), user), { "Content-Type": contentTypes[".json"] });
                 }
                 throw new HttpError(404, "API 경로를 찾을 수 없습니다.");
             }
