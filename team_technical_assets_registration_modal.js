@@ -792,12 +792,12 @@
         if (isApiMode && repository) {
             downloadButton.disabled = true;
             try {
-                const created = await repository.createAsset({ ...card, workflowStatus: "초안" });
-                await repository.submitAsset(created?.id || card.id);
+                await repository.registerAsset(card);
                 window.alert("사내 Library 등록을 완료하고 Reviewer 검토를 요청했습니다.");
                 closeDialog();
+                window.location.reload();
             } catch (error) {
-                window.alert(error.message || "초안 저장 중 오류가 발생했습니다.");
+                window.alert(error.message || "Library 등록 요청 중 오류가 발생했습니다.");
             } finally {
                 downloadButton.disabled = false;
             }

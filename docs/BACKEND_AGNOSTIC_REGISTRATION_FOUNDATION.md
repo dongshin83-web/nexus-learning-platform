@@ -13,6 +13,9 @@
 
 - `docs/internal-library-api.openapi.yaml`: REST API 계약
 - `team_technical_assets_repository.js`: 정적/API 저장 방식 교체 어댑터
+- `server/`: Node.js 22 내장 HTTP·SQLite 기반으로 실행 가능한 Pilot 서버
+- `team_technical_assets_reviews.html`: Reviewer 수정 요청·승인·게시 화면
+- `docs/INTERNAL_BACKEND_STARTER.md`: 사내 SSO·DB·배포 연결 절차
 - `database/library_schema.postgresql.sql`: 다중 사용자 운영 권장 스키마
 - `database/library_schema.sqlite.sql`: 단일 서버 파일럿 스키마
 - `tools/card-contract.mjs`: 서버에서도 재사용할 카드 검증 규칙
@@ -23,7 +26,7 @@
 | --- | --- |
 | PostgreSQL 또는 관리형 관계형 DB 사용 가능 | PostgreSQL 스키마와 REST API로 운영 |
 | 단일 서버만 있고 별도 DB 신청이 어려움 | SQLite로 파일럿 후 PostgreSQL 이관 |
-| GitLab Pages만 있고 서버 실행 불가 | 현재 JSON 다운로드·Merge Request 방식 유지 |
+| GitLab Pages만 있고 서버 실행 불가 | 직접 등록은 불가능하므로 API 실행 환경을 먼저 확보. JSON·Merge Request는 최초 이관 도구로만 사용 |
 | 사내 Low-code 데이터 서비스가 있음 | OpenAPI와 데이터 계약을 해당 서비스에 매핑 |
 
 IndexedDB나 LocalStorage는 사용자별 브라우저에 데이터가 분리되므로 팀 공동 Library의 운영 DB로 사용하지 않는다. 브라우저에서 GitLab Access Token을 보유하고 직접 커밋하는 방식도 사용하지 않는다.

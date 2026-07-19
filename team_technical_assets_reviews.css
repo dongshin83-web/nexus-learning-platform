@@ -1,0 +1,28 @@
+.review-page { padding-top: 48px; padding-bottom: 72px; }
+.review-page-header { margin-bottom: 28px; }
+.review-page-header h1 { margin: 8px 0 10px; font-size: clamp(32px, 4vw, 48px); line-height: 1.15; }
+.review-page-header p { margin: 0; color: var(--muted); }
+.review-workspace { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 24px; }
+.review-section-header { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.review-section-header h2 { margin: 6px 0 0; font-size: 24px; }
+.review-count { color: var(--muted); font-weight: 700; }
+.review-mode-note { margin: 18px 0; color: var(--muted); }
+.review-list { display: grid; gap: 12px; }
+.review-item { border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.review-item header { display: flex; justify-content: space-between; gap: 20px; }
+.review-item h3 { margin: 4px 0 8px; font-size: 18px; }
+.review-item p { margin: 0; color: var(--muted); line-height: 1.6; }
+.review-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.review-meta span { padding: 5px 9px; border-radius: 999px; background: var(--surface-soft); color: var(--muted); font-size: 12px; }
+.review-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.review-actions button { min-height: 40px; border-radius: 10px; padding: 0 15px; font: inherit; font-weight: 700; cursor: pointer; }
+.review-request-changes { border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); }
+.review-publish { border: 1px solid var(--accent); background: var(--accent); color: white; }
+.review-empty { padding: 56px 20px; text-align: center; color: var(--muted); }
+@media (max-width: 640px) {
+    .review-page { padding-top: 28px; }
+    .review-workspace { padding: 18px; border-radius: 16px; }
+    .review-item header { display: block; }
+    .review-actions { flex-direction: column; }
+    .review-actions button { width: 100%; }
+}

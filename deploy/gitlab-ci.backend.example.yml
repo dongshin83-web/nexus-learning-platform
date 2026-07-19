@@ -1,0 +1,35 @@
+stages:
+  - validate
+  - package
+  - deploy
+
+backend_validate:
+  stage: validate
+  tags: [windows]
+  script:
+    - node --version
+    - powershell -ExecutionPolicy Bypass -File tools/check-internal-api.ps1
+
+backend_package:
+  stage: package
+  tags: [windows]
+  script:
+    - powershell -ExecutionPolicy Bypass -File tools/build-internal-backend-package.ps1
+  artifacts:
+    paths:
+      - dist/team-technical-assets-internal-backend.zip
+    expire_in: 14 days
+
+# 실제 서비스 경로와 Windows Service 이름을 GitLab CI 변수로 등록한 뒤에만 사용합니다.
+# TECH_ASSET_SERVICE_PATH 예: D:\Services\team-technical-assets
+# TECH_ASSET_SERVICE_NAME 예: team-technical-assets
+backend_deploy:
+  stage: deploy
+  tags: [windows]
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - if (-not $env:TECH_ASSET_SERVICE_PATH) { throw "TECH_ASSET_SERVICE_PATH 변수가 필요합니다." }
+    - if (-not $env:TECH_ASSET_SERVICE_NAME) { throw "TECH_ASSET_SERVICE_NAME 변수가 필요합니다." }
+    - powershell -ExecutionPolicy Bypass -File tools/deploy-internal-service.ps1 -PackagePath dist/team-technical-assets-internal-backend.zip -ServicePath $env:TECH_ASSET_SERVICE_PATH -ServiceName $env:TECH_ASSET_SERVICE_NAME

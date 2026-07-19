@@ -1,11 +1,46 @@
 openapi: 3.0.3
 info:
   title: Team Technical Assets Internal API
-  version: 0.1.0
+  version: 0.2.0
   description: 백엔드 제품과 무관하게 유지하는 사내 Library 및 Culture 기록 API 계약
 servers:
   - url: /api/v1
 paths:
+  /session:
+    get:
+      summary: 현재 로그인 사용자와 역할 조회
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { description: 사용자 조회 완료 }
+  /asset-registration-requests:
+    post:
+      summary: 자산 등록과 Reviewer 검토 요청을 한 트랜잭션으로 처리
+      security: [{ sessionAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Asset' }
+      responses:
+        '201':
+          description: 등록 및 검토 요청 완료
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Asset' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /review-queue:
+    get:
+      summary: Reviewer 검토 요청 목록
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200':
+          description: 검토 요청 목록
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Asset' }
   /assets:
     get:
       summary: Library 자산 검색

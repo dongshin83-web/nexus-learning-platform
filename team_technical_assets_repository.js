@@ -21,9 +21,12 @@
         }
 
         createAsset(payload) { return this.write(payload); }
+        registerAsset(payload) { return this.write(payload); }
         updateAsset(id, payload) { return this.write({ id, ...payload }); }
         submitAsset(id) { return this.write({ id }); }
+        requestChanges(id, comment) { return this.write({ id, comment }); }
         publishAsset(id) { return this.write({ id }); }
+        async reviewQueue() { return []; }
         createCultureRecord(payload) { return this.write(payload); }
         updateCultureRecord(id, payload) { return this.write({ id, ...payload }); }
     }
@@ -65,6 +68,10 @@
             return this.request("/assets", { method: "POST", body: JSON.stringify(payload) });
         }
 
+        registerAsset(payload) {
+            return this.request("/asset-registration-requests", { method: "POST", body: JSON.stringify(payload) });
+        }
+
         updateAsset(id, payload) {
             return this.request(`/assets/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(payload) });
         }
@@ -77,8 +84,19 @@
             return this.request(`/assets/${encodeURIComponent(id)}/submit`, { method: "POST" });
         }
 
+        requestChanges(id, comment) {
+            return this.request(`/assets/${encodeURIComponent(id)}/request-changes`, {
+                method: "POST",
+                body: JSON.stringify({ comment })
+            });
+        }
+
         publishAsset(id) {
             return this.request(`/assets/${encodeURIComponent(id)}/publish`, { method: "POST" });
+        }
+
+        reviewQueue() {
+            return this.request("/review-queue");
         }
 
         listCultureRecords(query = "") {

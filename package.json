@@ -7,6 +7,9 @@
     "register:check": "node tools/register-card.mjs",
     "register:import": "node tools/register-card.mjs --import",
     "register:sandbox": "node tools/register-handoff.mjs --handoff sandbox/handoff/vdr-drop-design-selection.json --internal sandbox/internal/vdr-drop-design-selection.internal.json --force && node tools/build-library-data.mjs",
+    "api:start": "node server/index.mjs",
+    "api:seed": "node server/seed.mjs",
+    "api:test": "node --test tests/backend-api.test.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "node tools/build-library-data.mjs --check && node --test tests/*.test.mjs"
   }

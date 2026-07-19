@@ -1,0 +1,13 @@
+# Internal backend starter is versioned for transfer, but never published as static files.
+server/
+database/
+tests/
+tools/
+sync/
+deploy/
+docs/
+data/
+dist/
+var/
+package.json
+team_technical_assets_runtime_config.internal.example.js

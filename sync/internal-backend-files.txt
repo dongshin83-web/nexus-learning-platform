@@ -1,0 +1,46 @@
+# Shared UI
+team_technical_assets.html
+team_technical_assets_map.html
+team_technical_assets_techtree.html
+team_technical_assets_registration.html
+team_technical_assets_culture.html
+team_technical_assets_growth.html
+team_technical_assets.css
+team_technical_assets.js
+team_technical_assets_learning_path_details.js
+team_technical_assets_methodology_levels.js
+team_technical_assets_registration.js
+team_technical_assets_registration_modal.js
+team_technical_assets_culture.js
+team_technical_assets_repository.js
+team_technical_assets_boxicons.css
+team_technical_assets_boxicons.woff2
+assets/registration-guide
+
+# Internal Library UI and review workflow
+team_technical_assets_library.html
+team_technical_assets_library.css
+team_technical_assets_library.js
+team_technical_assets_reviews.html
+team_technical_assets_reviews.css
+team_technical_assets_reviews.js
+team_technical_assets_runtime_config.internal.example.js
+
+# Backend starter and contract
+server
+database
+tests
+tools/card-contract.mjs
+tools/build-library-data.mjs
+tools/register-card.mjs
+tools/register-handoff.mjs
+tools/start-internal-api.ps1
+tools/check-internal-api.ps1
+tools/build-internal-backend-package.ps1
+tools/deploy-internal-service.ps1
+deploy/gitlab-ci.backend.example.yml
+package.json
+docs/internal-library-api.openapi.yaml
+docs/INTERNAL_BACKEND_STARTER.md
+docs/INTERNAL_LIBRARY_REGISTRATION.md
+docs/BACKEND_AGNOSTIC_REGISTRATION_FOUNDATION.md

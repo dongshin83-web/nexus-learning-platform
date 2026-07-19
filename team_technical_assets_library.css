@@ -73,6 +73,24 @@ body[data-page="library"] {
     white-space: nowrap;
 }
 
+.library-review-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 42px;
+    padding: 0 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.library-review-link:hover { border-color: var(--accent); color: var(--accent-strong); }
+
 .asset-register-button,
 .secondary-action-button {
     display: inline-flex;
@@ -1229,6 +1247,7 @@ button.relation-item:hover {
     }
 
     .library-heading-actions { width: 100%; align-items: stretch; flex-direction: column; gap: 0.65rem; }
+    .library-review-link { width: 100%; }
     .asset-register-button { width: 100%; }
     .asset-registration-dialog { width: calc(100% - 1rem); max-height: calc(100dvh - 1rem); }
     .asset-registration-shell { max-height: calc(100dvh - 1rem); }

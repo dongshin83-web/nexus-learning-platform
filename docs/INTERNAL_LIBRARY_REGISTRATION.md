@@ -7,9 +7,9 @@
 ## 운영 원칙
 
 - 외부 AI Handoff JSON은 환경 간 이동을 위한 반입 파일이며 Library 원본이 아니다.
-- 사내 등록 화면은 검증 후 `POST /assets`로 등록하고 `POST /assets/{assetId}/submit`으로 Reviewer 검토를 요청한다.
+- 사내 등록 화면은 검증 후 `POST /asset-registration-requests` 한 번으로 등록과 Reviewer 검토 요청을 원자적으로 처리한다.
 - 사내 DB가 카드와 검토 이력의 단일 원본이다.
-- 실제 카드와 내부 링크는 사내 GitLab에만 저장한다.
+- 실제 카드와 내부 링크 메타데이터는 사내망 DB에만 저장하고, 원본 파일은 기존 사내 문서 시스템에 둔다.
 - Reviewer 승인 후에만 게시한다.
 - AI 사용 여부와 무관하게 수동 구조화와 사람 확인만으로 등록할 수 있다.
 
@@ -41,12 +41,12 @@
 
 ## 3. 검증·등록·검토 요청
 
-`Library 등록 요청`을 누르면 프런트엔드는 다음을 순서대로 수행한다.
+`Library 등록 요청`을 누르면 다음을 수행한다.
 
 1. 브라우저에서 필수정보와 관계를 검사한다.
-2. `POST /assets`로 사내 Library에 초안을 등록한다.
-3. 성공 응답의 자산 ID로 `POST /assets/{assetId}/submit`을 호출한다.
-4. Reviewer에게 검토 요청 상태로 전환한다.
+2. `POST /asset-registration-requests`로 자산·연결·내부 링크·검토 요청을 한 트랜잭션에 저장한다.
+3. 서버가 로그인 사용자를 등록자로 기록하고 `검토 요청` 상태와 감사 로그를 남긴다.
+4. 어느 한 항목이라도 실패하면 전체 등록을 취소해 중간 상태가 남지 않게 한다.
 
 확인 사항:
 
@@ -71,13 +71,12 @@ Reviewer는 사내 화면에서 내용, 근거 링크, 공개 범위, 관계와 
 
 ## 정적 JSON CLI의 지위
 
-`register:check`와 `register:import`는 기존 정적 데이터 이관, 초기 Seed, 장애 복구와 관리자용 검증 도구로만 유지한다. 일반 등록자가 4단계에서 게시용 JSON을 다시 다운로드하는 표준 절차로 사용하지 않는다.
+`register:check`와 `register:import`는 기존 정적 데이터의 최초 이관과 관리자용 계약 검증에만 사용한다. 일반 등록자가 4단계에서 게시용 JSON을 다시 다운로드하는 표준 절차로 사용하지 않으며, DB와 Git JSON을 병행 기준본으로 운영하지 않는다.
 
 ## 장애 시 판단
 
 | 증상 | 판단 |
 | --- | --- |
 | Handoff JSON 불러오기 실패 | 외부 반입 JSON 형식·계약 문제 |
-| `POST /assets` 실패 | 인증·필수정보·중복 ID·API 문제 |
-| `/submit` 실패 | Reviewer·관계·검증 상태 문제 |
+| `POST /asset-registration-requests` 실패 | 인증·필수정보·중복 ID·연결 대상·API 문제 |
 | 승인 후 화면 미반영 | 게시 Transaction·검색 색인·Cache 문제 |
