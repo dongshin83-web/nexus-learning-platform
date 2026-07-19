@@ -38,6 +38,7 @@ tools/register-handoff.mjs
 tools/start-internal-api.ps1
 tools/check-internal-api.ps1
 tools/audit-registration-guide-ui.mjs
+tools/audit-internal-deployment.ps1
 tools/capture-registration-guide-screenshots.mjs
 tools/build-internal-backend-package.ps1
 tools/deploy-internal-service.ps1
@@ -45,6 +46,7 @@ deploy/gitlab-ci.backend.example.yml
 package.json
 docs/internal-library-api.openapi.yaml
 docs/INTERNAL_BACKEND_STARTER.md
+docs/INTERNAL_RELEASE_SOP.md
 docs/INTERNAL_LIBRARY_REGISTRATION.md
 docs/BACKEND_AGNOSTIC_REGISTRATION_FOUNDATION.md
 docs/ASSETMANAGEMENT_BACKEND_PATTERN_ADOPTION.md
