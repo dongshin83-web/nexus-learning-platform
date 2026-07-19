@@ -126,7 +126,7 @@
                         <li class="is-active" data-registration-step-indicator="1"><span>1</span>JSON 불러오기</li>
                         <li data-registration-step-indicator="2"><span>2</span>내부정보 보완</li>
                         <li data-registration-step-indicator="3"><span>3</span>연결 확인</li>
-                        <li data-registration-step-indicator="4"><span>4</span>검증·JSON 다운로드</li>
+                        <li data-registration-step-indicator="4"><span>4</span>검증·등록</li>
                     </ol>
 
                     <div class="asset-registration-body">
@@ -212,13 +212,13 @@
                                 <div>
                                     <h3>등록 전 검증</h3>
                                     <div class="registration-validation" id="registration-validation" aria-live="polite"></div>
-                                    <p class="registration-static-note"><i class="bx bx-info-circle"></i>다운로드는 등록 완료가 아니라, 검증된 게시 요청 파일을 만드는 단계입니다.</p>
+                                    <p class="registration-static-note" id="registration-submit-note"><i class="bx bx-info-circle"></i>검증 후 사내 Library에 등록하고 Reviewer 검토를 요청합니다.</p>
                                     <section class="registration-publish-process" aria-labelledby="registration-publish-process-title">
-                                        <h4 id="registration-publish-process-title">다운로드 후 게시 순서</h4>
-                                        <ol>
-                                            <li><span>1</span><div><strong>JSON 저장</strong><p>검증을 통과한 등록 JSON을 다운로드합니다.</p></div></li>
-                                            <li><span>2</span><div><strong>사내에서 검사</strong><p><code>npm run register:check -- --file &lt;JSON 경로&gt;</code>로 계약과 연결을 확인합니다.</p></div></li>
-                                            <li><span>3</span><div><strong>반입·검증·게시</strong><p><code>npm run register:import -- --file &lt;JSON 경로&gt;</code> 후 <code>npm run check</code>를 통과해 Merge합니다.</p></div></li>
+                                        <h4 id="registration-publish-process-title">등록 후 게시 순서</h4>
+                                        <ol id="registration-publish-process-list">
+                                            <li><span>1</span><div><strong>Library 등록</strong><p>검증을 통과한 자산을 사내 Library에 등록합니다.</p></div></li>
+                                            <li><span>2</span><div><strong>Reviewer 검토</strong><p>등록과 동시에 Reviewer에게 검토를 요청합니다.</p></div></li>
+                                            <li><span>3</span><div><strong>승인·게시</strong><p>Reviewer 승인 후 Library 검색과 상세 화면에 게시됩니다.</p></div></li>
                                         </ol>
                                     </section>
                                 </div>
@@ -235,7 +235,7 @@
                         <span class="registration-footer-spacer"></span>
                         <button class="secondary-action-button" type="button" id="registration-cancel">취소</button>
                         <button class="asset-register-button" type="button" id="registration-next" disabled>다음</button>
-                        <button class="asset-register-button" type="button" id="registration-download" hidden><i class="bx bx-download"></i>검증 완료 JSON 다운로드</button>
+                        <button class="asset-register-button" type="button" id="registration-download" hidden><i class="bx bx-send"></i>Library 등록 요청</button>
                     </footer>
                 </form>
             </dialog>

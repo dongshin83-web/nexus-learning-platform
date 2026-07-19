@@ -23,7 +23,7 @@ test("static repository reads page data and blocks direct writes", async () => {
     await assert.rejects(repository.createAsset({ id: "new" }), /정적 모드에서는 직접 등록할 수 없습니다/);
 });
 
-test("REST repository sends a draft to the configured internal API", async () => {
+test("REST repository creates an asset and submits it for review", async () => {
     const requests = [];
     const context = createContext({
         fetch: async (url, options) => {
@@ -37,4 +37,7 @@ test("REST repository sends a draft to the configured internal API", async () =>
     assert.equal(requests[0].url, "https://internal.example/api/v1/assets");
     assert.equal(requests[0].options.method, "POST");
     assert.equal(JSON.parse(requests[0].options.body).id, "new-asset");
+    await repository.submitAsset(result.id);
+    assert.equal(requests[1].url, "https://internal.example/api/v1/assets/new-asset/submit");
+    assert.equal(requests[1].options.method, "POST");
 });

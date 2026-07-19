@@ -44,6 +44,9 @@
     const importMessage = document.getElementById("registration-import-message");
     const preview = document.getElementById("registration-json-preview");
     const validation = document.getElementById("registration-validation");
+    const submitNote = document.getElementById("registration-submit-note") || form.querySelector(".registration-static-note");
+    const publishProcessTitle = document.getElementById("registration-publish-process-title");
+    const publishProcessList = document.getElementById("registration-publish-process-list") || form.querySelector(".registration-publish-process ol");
     const runtime = window.TECHNICAL_ASSET_RUNTIME ?? { mode: "static" };
     const repository = typeof window.createTechnicalAssetRepository === "function"
         ? window.createTechnicalAssetRepository(runtime)
@@ -60,6 +63,23 @@
     let internalLinks = [];
     let relationSearchPerformed = false;
     let registrationId = "";
+
+    function configureRegistrationCompletionUi() {
+        const finalIndicator = form.querySelector('[data-registration-step-indicator="4"]');
+        if (finalIndicator) finalIndicator.innerHTML = "<span>4</span>검증·등록";
+
+        if (submitNote) {
+            submitNote.innerHTML = '<i class="bx bx-info-circle"></i>검증 후 Library에 등록하고 Reviewer 검토를 요청합니다.';
+        }
+        if (publishProcessTitle) publishProcessTitle.textContent = "등록 후 게시 순서";
+        if (publishProcessList) {
+            publishProcessList.innerHTML = `
+                <li><span>1</span><div><strong>Library 등록</strong><p>검증을 통과한 자산을 Library에 등록합니다.</p></div></li>
+                <li><span>2</span><div><strong>Reviewer 검토</strong><p>등록과 동시에 Reviewer에게 검토를 요청합니다.</p></div></li>
+                <li><span>3</span><div><strong>승인·게시</strong><p>Reviewer 승인 후 Library 검색과 상세 화면에 게시됩니다.</p></div></li>
+            `;
+        }
+    }
 
     const field = (name) => form.elements.namedItem(name);
     const text = (value) => String(value ?? "").trim();
@@ -584,9 +604,9 @@
         const errors = validateCard(card);
         validation.innerHTML = errors.length
             ? errors.map((error) => `<div class="registration-validation-item is-error"><i class="bx bx-error-circle"></i><span>${error}</span></div>`).join("")
-            : `<div class="registration-validation-item is-success"><i class="bx bx-check-circle"></i><span>${isApiMode ? "필수 등록정보 검증을 통과했습니다. 사내 Library에 초안으로 저장할 수 있습니다." : "필수 등록정보 검증을 통과했습니다. 게시 요청용 JSON을 다운로드할 수 있습니다."}</span></div>`;
+            : '<div class="registration-validation-item is-success"><i class="bx bx-check-circle"></i><span>필수 등록정보 검증을 통과했습니다. Library 등록과 Reviewer 검토를 요청할 수 있습니다.</span></div>';
         preview.textContent = JSON.stringify(card, null, 2);
-        downloadButton.disabled = errors.length > 0;
+        downloadButton.disabled = errors.length > 0 || !repository;
     }
 
     function setStep(step) {
@@ -604,9 +624,7 @@
         previousButton.hidden = step === 1;
         nextButton.hidden = step === 4;
         downloadButton.hidden = step !== 4;
-        downloadButton.innerHTML = isApiMode
-            ? '<i class="bx bx-save"></i> Library 초안 저장'
-            : '<i class="bx bx-download"></i> 검증 완료 JSON 다운로드';
+        downloadButton.innerHTML = '<i class="bx bx-send"></i> Library 등록 요청';
         nextButton.textContent = step === 3 ? "검증하기" : "다음";
         nextButton.disabled = step === 1 && !sourcePacket;
         if (step === 3) {
@@ -774,8 +792,9 @@
         if (isApiMode && repository) {
             downloadButton.disabled = true;
             try {
-                await repository.createAsset({ ...card, workflowStatus: "초안" });
-                window.alert("사내 Library에 초안을 저장했습니다.");
+                const created = await repository.createAsset({ ...card, workflowStatus: "초안" });
+                await repository.submitAsset(created?.id || card.id);
+                window.alert("사내 Library 등록을 완료하고 Reviewer 검토를 요청했습니다.");
                 closeDialog();
             } catch (error) {
                 window.alert(error.message || "초안 저장 중 오류가 발생했습니다.");
@@ -784,17 +803,14 @@
             }
             return;
         }
-        const blob = new Blob([`${JSON.stringify(card, null, 2)}\n`], { type: "application/json;charset=utf-8" });
-        const anchor = document.createElement("a");
-        anchor.href = URL.createObjectURL(blob);
-        anchor.download = `${card.id}.json`;
-        anchor.click();
-        URL.revokeObjectURL(anchor.href);
+        window.alert("Library 등록과 Reviewer 검토 요청 흐름을 완료했습니다. Nexus 검토본에는 데이터가 저장되지 않습니다.");
+        closeDialog();
     });
     dialog.addEventListener("cancel", (event) => event.preventDefault());
     dialog.addEventListener("close", () => {
         document.body.classList.remove("asset-registration-open");
         window.setTimeout(() => returnFocus?.isConnected && returnFocus.focus({ preventScroll: true }), 0);
     });
+    configureRegistrationCompletionUi();
     if (window.location.hash === "#register") openDialog(document.getElementById("open-asset-registration"));
 })();

@@ -328,7 +328,7 @@ const registrationStepDefinitions = [
         number: "04",
         phase: "INSIDE ONLY",
         title: "실제 정보 완성·검증·게시하기",
-        summary: "사내 정보 보완 → 게시용 등록 JSON 다운로드",
+        summary: "사내 정보 보완 → Library 등록·검토 요청",
         purpose: "일반화된 초안을 실제 사내 정보·근거·관계로 복원하고, 다른 팀원이 검색하고 재사용할 수 있는 Library 자산으로 완성합니다.",
         actions: [
             "실제 제목·조직·제품·과제 ID·조건·수치와 확인일을 사내에서 복원합니다.",
@@ -342,7 +342,7 @@ const registrationStepDefinitions = [
             "실제 근거와 원본 링크, 적용범위·한계·주의사항이 있습니다.",
             "검색 분류와 기존 자산 관계, Technology Map·Learning Path 연결 판단이 확인됐습니다.",
             "Owner·Reviewer와 사람의 최종 사실 확인을 완료했습니다.",
-            "검증을 통과한 JSON이 내부 저장소 data/cards/에 반영돼야 실제 Library에 게시된다는 점을 확인했습니다."
+            "검증을 통과한 자산을 사내 Library에 등록하고 Reviewer 검토를 요청했습니다."
         ],
         caution: "Library는 공식 원본 저장소를 대체하지 않습니다. AI가 제안한 분류·관계·성과는 사람이 승인하기 전까지 확정하지 않으며, 근거가 없는 내용은 ‘확인 필요’로 유지합니다."
     }
@@ -528,17 +528,17 @@ const registrationCompletionWalkthrough = [
     },
     {
         number: "04",
-        shortTitle: "검증·다운로드",
-        title: "검증 후 등록 JSON 다운로드",
-        description: "오류를 수정하고 최종 결과를 파일로 보존합니다.",
+        shortTitle: "검증·등록",
+        title: "검증 후 Library 등록",
+        description: "오류를 수정하고 사내 Library 등록과 Reviewer 검토를 요청합니다.",
         src: "assets/registration-guide/step4-04-review-download.png",
-        alt: "등록 전 검증과 최종 JSON 다운로드 모달 전체 화면",
+        alt: "등록 전 검증과 사내 Library 등록 요청 모달 전체 화면",
         regions: [
             ["1", "등록 전 검증", "1.5%", "18.5%", "41.1%", "45.9%", "system"],
-            ["2", "최종 JSON 확인", "43.2%", "18.5%", "55.3%", "45.9%", "registrant"],
-            ["3", "등록 JSON 다운로드", "81.3%", "93.6%", "17.2%", "5.4%", "registrant"]
+            ["2", "최종 등록 내용 확인", "43.2%", "18.5%", "55.3%", "45.9%", "registrant"],
+            ["3", "Library 등록 요청", "81.3%", "93.6%", "17.2%", "5.4%", "registrant"]
         ],
-        actions: ["검증 오류 수정 후 최종 JSON 확인", "다운로드 후 내부 저장소 반영"]
+        actions: ["검증 오류 수정 후 최종 내용 확인", "Library 등록과 Reviewer 검토 요청"]
     }
 ];
 
@@ -553,7 +553,7 @@ function createRegistrationCompletionWalkthrough() {
     walkthrough.innerHTML = `
         <header class="registration-capture-heading">
             <span class="registration-guide-label">ACTUAL SCREEN WALKTHROUGH</span>
-            <h3>JSON 반입 후 게시용 등록 JSON을 완성하는 순서</h3>
+            <h3>JSON 반입 후 사내 Library 등록을 완료하는 순서</h3>
             <p>반투명 박스가 각 단계에서 확인하거나 입력할 화면 영역을 표시합니다.</p>
             <ol class="registration-walkthrough-flow" aria-label="등록 완료 흐름">
                 ${registrationCompletionWalkthrough.map((step) => `<li><b>${step.number}</b><span>${step.shortTitle}</span></li>`).join("")}
@@ -561,7 +561,7 @@ function createRegistrationCompletionWalkthrough() {
             <div class="registration-role-legend" aria-label="입력 역할 구분">
                 ${Object.entries(roleLabels).map(([role, label]) => `<span class="is-${role}">${label}</span>`).join("")}
             </div>
-            <p class="registration-save-note"><strong>입력 유지</strong> 이전·다음 동안 유지 · 취소 시 초기화 · 검증 후 게시용 등록 JSON 다운로드</p>
+            <p class="registration-save-note"><strong>입력 유지</strong> 이전·다음 동안 유지 · 취소 시 초기화 · 검증 후 Library 등록·Reviewer 검토 요청</p>
         </header>
         <div class="registration-walkthrough-list">
             ${registrationCompletionWalkthrough.map((step) => `

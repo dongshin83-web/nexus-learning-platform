@@ -1,39 +1,28 @@
-# 사내 Library 카드 등록 절차
+# 사내 Library 카드 직접 등록 절차
 
 ## 목적
 
-Library 등록 화면에서 다운로드한 카드 JSON을 사내 GitLab 저장소의 `data/cards/`에 안전하게 반입하고, 생성 데이터와 시험을 통과한 변경만 Merge하기 위한 절차다. Codex나 Cline 없이 PowerShell과 Node.js만으로 실행할 수 있다.
+외부 AI에서 만든 Handoff JSON을 3단계에서 사내로 반입한 뒤, 4단계의 사내 Library 등록 화면에서 실제 정보와 관계를 완성하고 직접 등록·검토 요청하는 절차다. 사내 등록 화면에서 게시용 JSON을 다시 다운로드하지 않는다.
 
 ## 운영 원칙
 
-- `data/cards/*.json`이 카드 원본이다.
-- `team_technical_assets_data.js`는 생성 파일이므로 직접 수정하지 않는다.
-- 등록 화면의 다운로드는 게시 완료가 아니라 게시 요청 JSON 생성이다.
+- 외부 AI Handoff JSON은 환경 간 이동을 위한 반입 파일이며 Library 원본이 아니다.
+- 사내 등록 화면은 검증 후 `POST /assets`로 등록하고 `POST /assets/{assetId}/submit`으로 Reviewer 검토를 요청한다.
+- 사내 DB가 카드와 검토 이력의 단일 원본이다.
 - 실제 카드와 내부 링크는 사내 GitLab에만 저장한다.
-- 등록은 `main` 직접 수정이 아니라 Branch와 Merge Request로 진행한다.
+- Reviewer 승인 후에만 게시한다.
 - AI 사용 여부와 무관하게 수동 구조화와 사람 확인만으로 등록할 수 있다.
 
-## 1. Branch 생성
+## 사전조건
 
-```powershell
-$repo = "C:\path\to\team-technical-assets"
-Set-Location $repo
+- `team_technical_assets_runtime_config.js`가 `mode: "api"`로 설정돼 있다.
+- `apiBaseUrl`의 사내 Library API가 OpenAPI 계약을 구현한다.
+- 사내 로그인·등록자 식별과 Reviewer 권한 검사가 서버에서 동작한다.
+- 위 조건이 없으면 화면에서 직접 등록할 수 없다. 이 경우 두 번째 JSON 다운로드로 우회하지 않고 사내 API 구축 전 상태로 명시한다.
 
-git status --short --branch
-git checkout main
-git pull origin main
+## 1. 3단계 — Handoff JSON 사내 반입
 
-$branch = "register/$(Get-Date -Format yyyyMMdd)-asset-name"
-git checkout -b $branch
-```
-
-작업 트리에 기존 변경이 있으면 새 등록과 섞지 않는다.
-
-## 2. 다운로드 JSON 검사
-
-```powershell
-npm run register:check -- --file "$env:USERPROFILE\Downloads\asset-id.json"
-```
+외부 AI의 일반화 JSON을 승인된 방식으로 사내에 반입하고, 사내 Library의 `기술자산 등록` 화면에서 불러온다. 등록 화면이 JSON 파싱과 기본 계약을 검사하고 내부정보 보완 화면을 만든다.
 
 검사 항목:
 
@@ -44,31 +33,20 @@ npm run register:check -- --file "$env:USERPROFILE\Downloads\asset-id.json"
 - 기존 Library 관계 대상과 검색·재사용 대상
 - 게시 카드의 Reviewer·근거 링크·사람 확인
 
-오류가 있으면 JSON을 수정하고 다시 검사한다. `WARN`은 확인이 필요한 항목이며 자동 반입을 막지는 않지만 Reviewer가 판단해야 한다.
+오류가 있으면 등록 화면에서 반입을 중단한다. 실제 정보는 외부 JSON을 다시 만들지 않고 사내 화면에서 보완한다.
 
-## 3. `data/cards` 반입과 데이터 생성
+## 2. 4단계 — 실제 정보 완성
 
-```powershell
-npm run register:import -- --file "$env:USERPROFILE\Downloads\asset-id.json"
-```
+등록자는 실제 제목·ID·Owner·Reviewer, 사내 원본 링크, 기존 Library 관계, Technology Map·Learning Path 연결 판단을 완성한다. 추천 결과와 직접 검색한 결과를 구분하고, 여러 링크와 관계를 빠짐없이 확인한다.
 
-정상 반입 시 다음이 함께 수행된다.
+## 3. 검증·등록·검토 요청
 
-1. `data/cards/<asset-id>.json` 생성
-2. 전체 Library 계약 재검사
-3. `team_technical_assets_data.js` 재생성
+`Library 등록 요청`을 누르면 프런트엔드는 다음을 순서대로 수행한다.
 
-기존 ID와 같은 카드가 있으면 자동으로 덮어쓰지 않는다. 기존 카드 수정은 원본 파일을 직접 수정하고 변경 이력을 갱신한다.
-
-## 4. 전체 검사와 변경 확인
-
-```powershell
-npm run check
-git status --short
-git diff --stat
-git diff --check
-git diff -- data/cards team_technical_assets_data.js
-```
+1. 브라우저에서 필수정보와 관계를 검사한다.
+2. `POST /assets`로 사내 Library에 초안을 등록한다.
+3. 성공 응답의 자산 ID로 `POST /assets/{assetId}/submit`을 호출한다.
+4. Reviewer에게 검토 요청 상태로 전환한다.
 
 확인 사항:
 
@@ -78,32 +56,28 @@ git diff -- data/cards team_technical_assets_data.js
 - Technology Map·Learning Path 연결을 빠뜨리지 않았는가
 - 기존 카드·관계가 의도치 않게 바뀌지 않았는가
 
-## 5. Commit과 Merge Request
+## 4. Reviewer 승인·게시
 
-```powershell
-git add "data/cards/<asset-id>.json" team_technical_assets_data.js
-git diff --cached --check
-git commit -m "Register technical asset <asset-id>"
-git push -u origin $branch
-```
-
-Merge Request에서 Reviewer가 내용, 근거 링크, 공개 범위, 관계와 Framework 연결을 확인한다. Merge 후 `pages`, `pages:deploy`와 실제 Library 검색 결과를 확인한다.
+Reviewer는 사내 화면에서 내용, 근거 링크, 공개 범위, 관계와 Framework 연결을 확인한다. 수정이 필요하면 사유와 함께 반환하고, 승인할 때만 `/assets/{assetId}/publish`로 게시한다.
 
 ## 기존 카드 수정
 
 기존 카드는 새 파일로 중복 등록하지 않는다.
 
-1. `data/cards`에서 해당 ID를 가진 원본을 찾는다.
-2. `updatedAt`, 본문, 관계와 `changeLog`를 함께 수정한다.
-3. `npm run build:data`와 `npm run check`를 실행한다.
-4. 별도 Branch와 Merge Request로 제출한다.
+1. 사내 Library에서 해당 ID를 연다.
+2. 현재 `version`을 기준으로 본문·관계·링크를 수정한다.
+3. 서버는 `If-Match` 또는 version으로 동시 편집 충돌을 막는다.
+4. 변경 이력을 남기고 다시 Reviewer 검토를 요청한다.
+
+## 정적 JSON CLI의 지위
+
+`register:check`와 `register:import`는 기존 정적 데이터 이관, 초기 Seed, 장애 복구와 관리자용 검증 도구로만 유지한다. 일반 등록자가 4단계에서 게시용 JSON을 다시 다운로드하는 표준 절차로 사용하지 않는다.
 
 ## 장애 시 판단
 
 | 증상 | 판단 |
 | --- | --- |
-| `register:check` 오류 | 카드 JSON·계약 문제 |
-| `build:data` 오류 | 전체 카드 원본 또는 중복 ID 문제 |
-| `npm run check` 시험 실패 | 생성 결과·검색·계약 회귀 문제 |
-| Pipeline 시작 전 실패 | GitLab Runner·CI 환경 문제 |
-| Pipeline 성공 후 화면 미반영 | Pages Artifact·Cache·참조 경로 문제 |
+| Handoff JSON 불러오기 실패 | 외부 반입 JSON 형식·계약 문제 |
+| `POST /assets` 실패 | 인증·필수정보·중복 ID·API 문제 |
+| `/submit` 실패 | Reviewer·관계·검증 상태 문제 |
+| 승인 후 화면 미반영 | 게시 Transaction·검색 색인·Cache 문제 |
