@@ -1381,6 +1381,8 @@ const landingExampleContributors = [
     { name: "샘플 등록자 D", total: 5, kinds: ["등록", "참여"] },
     { name: "샘플 Reviewer E", total: 3, kinds: ["검토"] }
 ];
+// Library 등록과 월간 집계가 안정화되면 false로 전환합니다.
+const landingOverviewExampleMode = true;
 
 function getOverviewDataContext() {
     const available = libraryItems.filter((item) => item.publicationStatus !== "폐기");
@@ -1644,7 +1646,7 @@ function renderLandingMetrics() {
     const dataCard = document.getElementById("overview-data-card");
     const dataNote = document.getElementById("overview-data-note");
     const metricScope = document.getElementById("overview-metric-scope");
-    if (overviewModel.context.mode === "demo") {
+    if (landingOverviewExampleMode) {
         dataCard?.classList.add("is-demo");
         if (dataNote) dataNote.textContent = `아래 수치와 사례는 가상 카드 ${overviewModel.context.totalCount}건으로 계산한 화면 예시이며 실제 팀 실적·평가 데이터가 아닙니다.`;
         if (metricScope) metricScope.textContent = `기능시험용 샘플 ${overviewModel.context.totalCount}건 전체`;
@@ -1761,7 +1763,7 @@ function renderLandingCareList() {
 }
 
 function getLandingMostUsedAssets() {
-    if (overviewModel.context.mode === "demo") {
+    if (landingOverviewExampleMode) {
         return landingExampleMostUsedAssets.map((item) => ({
             card: overviewModel.cardsById.get(item.id) ?? item,
             count: item.count,
@@ -1873,7 +1875,7 @@ function isLandingCurrentMonth(value) {
 function renderLandingDailyAsset() {
     const wrap = document.getElementById("landing-daily-asset");
     if (!wrap) return;
-    const candidates = overviewModel.context.mode === "demo"
+    const candidates = landingOverviewExampleMode
         ? landingExampleMostUsedAssets.map((item) => overviewModel.cardsById.get(item.id) ?? { ...item, tags: [item.usageType, "샘플 데이터"] })
         : overviewModel.context.items
             .filter((item) => !overviewWorkTypes.has(item.type))
@@ -1900,7 +1902,7 @@ function renderLandingDailyAsset() {
 function renderLandingGapSummary() {
     const note = document.getElementById("overview-data-note");
     if (!note) return;
-    if (overviewModel.context.mode === "demo") {
+    if (landingOverviewExampleMode) {
         setText("metric-gap-count", 1);
         note.textContent = "등록 기능 완성 전 화면 구성을 확인하기 위한 예시 Gap 1건입니다. 실제 집계값이 아닙니다.";
     } else if (overviewModel.context.mode === "operational") {
@@ -1911,7 +1913,7 @@ function renderLandingGapSummary() {
 }
 
 function renderLanding() {
-    const isExample = overviewModel.context.mode === "demo";
+    const isExample = landingOverviewExampleMode;
     document.querySelectorAll(".overview-example-badge").forEach((badge) => { badge.hidden = !isExample; });
     setText("most-used-description", isExample
         ? "등록 기능 완성 전, 현재 Library 자산으로 구성한 활용 순위 예시입니다."

@@ -22,6 +22,7 @@ test("Overview monthly rankings are capped at five and contributors include cred
   const script = read("team_technical_assets.js");
 
   assert.equal((html.match(/overview-example-badge/g) ?? []).length, 4);
+  assert.match(script, /const landingOverviewExampleMode = true/);
   assert.match(script, /const landingExampleMostUsedAssets = \[[\s\S]*tool-manual-ai-search[\s\S]*\];/);
   assert.match(script, /const landingExampleContributors = \[[\s\S]*샘플 Reviewer E[\s\S]*\];/);
   assert.match(script, /registeredUsageLinks[\s\S]*\.slice\(0, 5\)/);
