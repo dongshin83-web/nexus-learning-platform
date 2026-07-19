@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "0.1",
+  "id": "external-report-simulation-overview",
+  "type": "외부 보고 자료",
+  "title": "[샘플] Simulation 적용 현황 외부 보고 자료",
+  "domain": "other",
+  "secondaryDomains": [],
+  "publicationStatus": "초안",
+  "status": "작성 중",
+  "owner": "샘플 담당자",
+  "registrant": "샘플 등록자",
+  "reviewer": "",
+  "contributors": [],
+  "createdAt": "2026-07-13",
+  "updatedAt": "2026-07-13",
+  "tags": [
+    "외부 보고",
+    "의사결정 반영",
+    "고객/사업부 대응",
+    "샘플 데이터"
+  ],
+  "contexts": [
+    "사업부",
+    "CTO"
+  ],
+  "aliases": [
+    "외부 보고",
+    "임원 보고",
+    "사업부 보고",
+    "Simulation 적용 현황"
+  ],
+  "summary": "기술자산의 근거와 적용 이력을 팀 외부 이해관계자가 확인할 수 있는 메시지로 재구성한 보고 자료 샘플입니다.",
+  "useCase": "사업부 또는 리더 협의에서 Simulation의 적용 범위, 의사결정 반영 내용과 남은 한계를 설명할 때 사용합니다.",
+  "contents": "보고 목적, 대상과 의사결정, 전달 메시지, 근거 자산, 공유 범위, 버전과 유효기간, 한계와 주의사항",
+  "sourceIds": [
+    "EXT-REPORT-DEMO-001"
+  ],
+  "links": [
+    {
+      "label": "외부 보고 자료 원문",
+      "href": "#",
+      "type": "외부 보고",
+      "status": "확인 필요"
+    }
+  ],
+  "relations": [
+    {
+      "type": "DERIVED_FROM",
+      "targetId": "technical-report-interface-sensitivity",
+      "note": "기술 결론과 판단 한계의 근거를 참조"
+    },
+    {
+      "type": "REFERENCES",
+      "targetId": "bp-deformation-warpage",
+      "note": "의사결정 반영 사례를 메시지 근거로 참조"
+    }
+  ],
+  "frameworkLinks": [],
+  "frameworkLinkDecisions": {
+    "technologyMap": {
+      "status": "not_applicable",
+      "reason": "외부 보고 자료는 특정 해석 방법론 자체가 아니라 여러 기술자산의 메시지를 재구성하는 자료입니다."
+    },
+    "learningPath": {
+      "status": "not_applicable",
+      "reason": "외부 보고 자료는 특정 역량을 학습하기 위한 자료가 아니라 대외 커뮤니케이션을 위한 결과물입니다."
+    }
+  },
+  "searchReuse": {
+    "performed": true,
+    "foundAssetIds": [
+      "technical-report-interface-sensitivity",
+      "bp-deformation-warpage"
+    ],
+    "usageType": "보고 근거 재사용",
+    "outcome": "팀 외부 보고 메시지 구성"
+  },
+  "aiAssistance": {
+    "externalStructured": false,
+    "internalClineStructured": false,
+    "humanConfirmed": true
+  },
+  "content": {
+    "reportPurpose": "Simulation 적용 현황과 의사결정 반영 사례를 팀 외부 이해관계자에게 설명",
+    "audienceAndDecision": "CTO 및 사업부 리더 / 후속 검증과 적용 범위 협의",
+    "approvedMessages": [
+      "Simulation 결과는 적용 범위와 판단 한계를 함께 설명한다",
+      "기존 기술자산이 실제 의사결정에 다시 사용된 이력을 근거로 제시한다"
+    ],
+    "sourceAssetsAndEvidence": [
+      "계면 물성 민감도 기술보고서",
+      "박막 적층 구조 변형 예측 BP"
+    ],
+    "disclosureScope": "팀 외부 공유 전 고객·제품·수치·사내 링크의 공개 범위를 확인",
+    "versionAndValidity": "2026-07-13 초안 / 근거 자산 개정 시 재검토",
+    "limitationsAndNotes": [
+      "실제 수치와 식별정보를 포함하지 않은 기능시험용 샘플",
+      "외부 전달 전 Reviewer 확인 필요"
+    ]
+  },
+  "changeLog": [
+    {
+      "changedAt": "2026-07-13",
+      "changedBy": "샘플 등록자",
+      "changeType": "생성",
+      "reason": "외부 보고 자료 유형 기능시험"
+    }
+  ],
+  "demo": true
+}

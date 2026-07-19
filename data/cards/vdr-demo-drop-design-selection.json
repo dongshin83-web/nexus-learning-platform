@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "0.1",
+  "id": "vdr-demo-drop-design-selection",
+  "type": "VD Request",
+  "title": "[샘플] Drop 설계안 취약부 상대 비교 VD Request",
+  "domain": "impact",
+  "secondaryDomains": [],
+  "contexts": [
+    "설계",
+    "개발",
+    "품질",
+    "사업부"
+  ],
+  "publicationStatus": "게시",
+  "status": "완료",
+  "owner": "샘플 담당자",
+  "registrant": "샘플 등록자",
+  "reviewer": "샘플 Reviewer",
+  "contributors": [
+    "샘플 협업자"
+  ],
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11",
+  "tags": [
+    "샘플 데이터",
+    "신뢰성 연계",
+    "실험/평가 연계",
+    "기존 자산 재사용"
+  ],
+  "aliases": [
+    "충격",
+    "Drop",
+    "취약부",
+    "설계안 비교",
+    "Risk Ranking",
+    "Drop 설계안 비교",
+    "충격 Risk Ranking"
+  ],
+  "summary": "[제품군]의 설계동결 전에 [설계안 A·B] 중 충격 취약 가능성이 낮은 안을 선택해야 했으나 실물 평가 데이터가 없었다.",
+  "useCase": "[설계동결 시점] 전에 두 설계안 중 충격 취약 가능성이 낮은 구조를 선택할 수 있는가?",
+  "contents": "동일 충격조건에서 두 구조안의 결과 패턴과 민감도를 비교하고 취약부 Risk Ranking을 검토했다. / 한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다. / 절대 파손수명 판단 불가 / 동적 물성 미확보 / 실험 상관 필요",
+  "sourceIds": [
+    "VDR-DEMO-001"
+  ],
+  "links": [
+    {
+      "label": "샘플 VD Request 원문",
+      "href": "https://internal.example/vdr/VDR-DEMO-001",
+      "type": "요청",
+      "status": "정상"
+    },
+    {
+      "label": "샘플 결과 요약",
+      "href": "https://internal.example/report/VDR-DEMO-001",
+      "type": "결과",
+      "status": "정상"
+    }
+  ],
+  "relations": [
+    {
+      "type": "USES",
+      "targetId": "methodology-impact-risk-ranking",
+      "note": "충격 취약부 Risk Ranking 절차를 조건 변경 적용"
+    },
+    {
+      "type": "REFERENCES",
+      "targetId": "cor-impact",
+      "note": "기존 검증범위와 평가 피드백 참고"
+    }
+  ],
+  "frameworkLinks": [
+    {
+      "framework": "technology-map",
+      "targetType": "methodology",
+      "targetId": "structural-043",
+      "relationType": "APPLIES",
+      "note": "충격 취약부 Risk Ranking을 설계안 상대 비교에 적용한 VD Request 사례입니다."
+    },
+    {
+      "framework": "learning-path",
+      "targetType": "capability",
+      "targetId": "set-drop",
+      "relationType": "EXAMPLE_OF",
+      "note": "Drop 조건에서 후보 구조의 취약부를 비교하고 설계 우선순위를 판단한 사례입니다."
+    }
+  ],
+  "frameworkLinkDecisions": {
+    "technologyMap": {
+      "status": "linked"
+    },
+    "learningPath": {
+      "status": "linked"
+    }
+  },
+  "searchReuse": {
+    "performed": true,
+    "foundAssetIds": [
+      "methodology-impact-risk-ranking",
+      "cor-impact"
+    ],
+    "usageType": "조건 변경 적용",
+    "outcome": "설계안 선택 근거"
+  },
+  "aiAssistance": {
+    "externalStructured": true,
+    "externalStructuredAt": "2026-07-11",
+    "internalClineStructured": true,
+    "internalClineStructuredAt": "2026-07-11",
+    "humanConfirmed": true,
+    "confirmedBy": "샘플 등록자"
+  },
+  "content": {
+    "context": "[제품군]의 설계동결 전에 [설계안 A·B] 중 충격 취약 가능성이 낮은 안을 선택해야 했으나 실물 평가 데이터가 없었다.",
+    "primaryQuestion": "[설계동결 시점] 전에 두 설계안 중 충격 취약 가능성이 낮은 구조를 선택할 수 있는가?",
+    "inputsAndConstraints": [
+      "후보 형상 2안",
+      "기존 충격 평가조건",
+      "변형률 속도 의존 물성 미확보",
+      "제한된 일정 안에 답변 필요"
+    ],
+    "approach": "동일 충격조건에서 두 구조안의 결과 패턴과 민감도를 비교하고 취약부 Risk Ranking을 검토했다.",
+    "result": "한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다.",
+    "judgmentScope": "동일 충격조건에서 후보안 간 상대 비교와 Risk Ranking",
+    "limitations": [
+      "절대 파손수명 판단 불가",
+      "동적 물성 미확보",
+      "실험 상관 필요"
+    ],
+    "followUp": [
+      "기존 충격 방법론 활용",
+      "후속 실물 평가 비교",
+      "사업부 피드백 후 BP 후보 여부 판단"
+    ]
+  },
+  "changeLog": [
+    {
+      "changedAt": "2026-07-11",
+      "changedBy": "샘플 등록자",
+      "changeType": "생성",
+      "reason": "외부 AI Handoff Packet과 내부 보완정보로 샌드박스 카드 생성"
+    }
+  ],
+  "demo": true
+}

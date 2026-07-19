@@ -1,0 +1,37 @@
+{
+  "cardId": "vdr-demo-drop-design-selection",
+  "actualTitle": "[샘플] Drop 설계안 취약부 상대 비교 VD Request",
+  "type": "VD Request",
+  "domain": "impact",
+  "secondaryDomains": [],
+  "contexts": ["설계", "개발", "품질", "사업부"],
+  "publicationStatus": "게시",
+  "status": "완료",
+  "owner": "샘플 담당자",
+  "registrant": "샘플 등록자",
+  "reviewer": "샘플 Reviewer",
+  "contributors": ["샘플 협업자"],
+  "createdAt": "2026-07-11",
+  "updatedAt": "2026-07-11",
+  "externalStructuredAt": "2026-07-11",
+  "tags": ["샘플 데이터", "신뢰성 연계", "실험/평가 연계", "기존 자산 재사용"],
+  "aliases": ["Drop 설계안 비교", "충격 Risk Ranking"],
+  "sourceIds": ["VDR-DEMO-001"],
+  "links": [
+    { "label": "샘플 VD Request 원문", "href": "https://internal.example/vdr/VDR-DEMO-001", "type": "요청", "status": "정상" },
+    { "label": "샘플 결과 요약", "href": "https://internal.example/report/VDR-DEMO-001", "type": "결과", "status": "정상" }
+  ],
+  "relations": [
+    { "type": "USES", "targetId": "methodology-impact-risk-ranking", "note": "충격 취약부 Risk Ranking 절차를 조건 변경 적용" },
+    { "type": "REFERENCES", "targetId": "cor-impact", "note": "기존 검증범위와 평가 피드백 참고" }
+  ],
+  "searchReuse": {
+    "performed": true,
+    "foundAssetIds": ["methodology-impact-risk-ranking", "cor-impact"],
+    "usageType": "조건 변경 적용",
+    "outcome": "설계안 선택 근거"
+  },
+  "judgmentScope": "동일 충격조건에서 후보안 간 상대 비교와 Risk Ranking",
+  "humanConfirmed": true,
+  "demo": true
+}

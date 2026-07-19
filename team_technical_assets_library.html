@@ -6,6 +6,7 @@
     <title>Library | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
     <link rel="stylesheet" href="team_technical_assets.css?v=20260719-library-registration-3">
+    <link rel="stylesheet" href="team_technical_assets_library.css?v=20260719-library-split-1">
 </head>
 <body data-page="library">
     <header class="topbar">
@@ -22,7 +23,7 @@
             <a href="team_technical_assets_techtree.html">Learning Path</a>
             <a class="active" href="team_technical_assets_library.html">Library</a>
             <a href="team_technical_assets_registration.html">Registration Guide</a>
-            <a href="team_technical_assets_culture.html">Culture & History</a>
+            <a href="team_technical_assets_culture.html?v=20260719-culture-records-2">Culture & History</a>
         </nav>
     </header>
 
@@ -216,8 +217,8 @@
                                         <h4 id="registration-publish-process-title">다운로드 후 게시 순서</h4>
                                         <ol>
                                             <li><span>1</span><div><strong>JSON 저장</strong><p>검증을 통과한 등록 JSON을 다운로드합니다.</p></div></li>
-                                            <li><span>2</span><div><strong>내부 반영 요청</strong><p>등록 담당자에게 전달하거나 승인된 변경 절차로 <code>data/cards/</code> 반영을 요청합니다.</p></div></li>
-                                            <li><span>3</span><div><strong>검증·게시</strong><p>계약 검증과 Reviewer 확인 후 저장소에 반영되면 Library에 표시됩니다.</p></div></li>
+                                            <li><span>2</span><div><strong>사내에서 검사</strong><p><code>npm run register:check -- --file &lt;JSON 경로&gt;</code>로 계약과 연결을 확인합니다.</p></div></li>
+                                            <li><span>3</span><div><strong>반입·검증·게시</strong><p><code>npm run register:import -- --file &lt;JSON 경로&gt;</code> 후 <code>npm run check</code>를 통과해 Merge합니다.</p></div></li>
                                         </ol>
                                     </section>
                                 </div>
@@ -248,6 +249,9 @@
     <script src="team_technical_assets_data.js?v=20260719-library-registration-3"></script>
     <script src="team_technical_assets_methodology_levels.js?v=20260719-library-registration-3"></script>
     <script src="team_technical_assets.js?v=20260719-library-registration-3"></script>
+    <script src="team_technical_assets_library.js?v=20260719-library-split-1"></script>
+    <script src="team_technical_assets_runtime_config.js?v=20260719-api-foundation-1"></script>
+    <script src="team_technical_assets_repository.js?v=20260719-api-foundation-1"></script>
     <script src="team_technical_assets_registration_modal.js?v=20260719-library-registration-3"></script>
 </body>
 </html>

@@ -44,6 +44,11 @@
     const importMessage = document.getElementById("registration-import-message");
     const preview = document.getElementById("registration-json-preview");
     const validation = document.getElementById("registration-validation");
+    const runtime = window.TECHNICAL_ASSET_RUNTIME ?? { mode: "static" };
+    const repository = typeof window.createTechnicalAssetRepository === "function"
+        ? window.createTechnicalAssetRepository(runtime)
+        : null;
+    const isApiMode = runtime.mode === "api";
     let currentStep = 1;
     let sourcePacket = null;
     let sourceFileName = "";
@@ -513,8 +518,10 @@
                 reviewerConfirmed: Boolean(text(field("reviewer").value))
             },
             aiAssistance: original.aiAssistance || {
-                externalStructured: true,
-                internalClineStructured: true,
+                externalStructured: false,
+                internalStructured: false,
+                internalClineStructured: false,
+                manualStructured: true,
                 humanConfirmed: true
             },
             changeLog: [...(original.changeLog || []), { date: today(), author: text(field("registrant").value), summary: "Library 등록 화면에서 내부정보 보완" }],
@@ -577,7 +584,7 @@
         const errors = validateCard(card);
         validation.innerHTML = errors.length
             ? errors.map((error) => `<div class="registration-validation-item is-error"><i class="bx bx-error-circle"></i><span>${error}</span></div>`).join("")
-            : `<div class="registration-validation-item is-success"><i class="bx bx-check-circle"></i><span>필수 등록정보 검증을 통과했습니다. 게시 요청용 JSON을 다운로드할 수 있습니다.</span></div>`;
+            : `<div class="registration-validation-item is-success"><i class="bx bx-check-circle"></i><span>${isApiMode ? "필수 등록정보 검증을 통과했습니다. 사내 Library에 초안으로 저장할 수 있습니다." : "필수 등록정보 검증을 통과했습니다. 게시 요청용 JSON을 다운로드할 수 있습니다."}</span></div>`;
         preview.textContent = JSON.stringify(card, null, 2);
         downloadButton.disabled = errors.length > 0;
     }
@@ -597,6 +604,9 @@
         previousButton.hidden = step === 1;
         nextButton.hidden = step === 4;
         downloadButton.hidden = step !== 4;
+        downloadButton.innerHTML = isApiMode
+            ? '<i class="bx bx-save"></i> Library 초안 저장'
+            : '<i class="bx bx-download"></i> 검증 완료 JSON 다운로드';
         nextButton.textContent = step === 3 ? "검증하기" : "다음";
         nextButton.disabled = step === 1 && !sourcePacket;
         if (step === 3) {
@@ -758,9 +768,22 @@
         if (currentStep === 2 && !form.reportValidity()) return;
         setStep(Math.min(4, currentStep + 1));
     });
-    downloadButton.addEventListener("click", () => {
+    downloadButton.addEventListener("click", async () => {
         const card = buildCard();
         if (validateCard(card).length) return;
+        if (isApiMode && repository) {
+            downloadButton.disabled = true;
+            try {
+                await repository.createAsset({ ...card, workflowStatus: "초안" });
+                window.alert("사내 Library에 초안을 저장했습니다.");
+                closeDialog();
+            } catch (error) {
+                window.alert(error.message || "초안 저장 중 오류가 발생했습니다.");
+            } finally {
+                downloadButton.disabled = false;
+            }
+            return;
+        }
         const blob = new Blob([`${JSON.stringify(card, null, 2)}\n`], { type: "application/json;charset=utf-8" });
         const anchor = document.createElement("a");
         anchor.href = URL.createObjectURL(blob);

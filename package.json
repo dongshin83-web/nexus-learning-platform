@@ -1,0 +1,13 @@
+{
+  "name": "team-technical-assets-gitlab-pages",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:data": "node tools/build-library-data.mjs",
+    "register:check": "node tools/register-card.mjs",
+    "register:import": "node tools/register-card.mjs --import",
+    "register:sandbox": "node tools/register-handoff.mjs --handoff sandbox/handoff/vdr-drop-design-selection.json --internal sandbox/internal/vdr-drop-design-selection.internal.json --force && node tools/build-library-data.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node tools/build-library-data.mjs --check && node --test tests/*.test.mjs"
+  }
+}

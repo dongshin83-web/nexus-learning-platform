@@ -1,0 +1,42 @@
+[
+  {
+    "id": "search-vdr-impact-design",
+    "query": "충격 설계안 비교",
+    "expectedTopIds": ["vdr-demo-drop-design-selection", "methodology-impact-risk-ranking"]
+  },
+  {
+    "id": "search-cor-technical-gap",
+    "query": "박리 기술 gap 과제",
+    "expectedTopIds": ["cor-delamination"]
+  },
+  {
+    "id": "search-methodology-warpage",
+    "query": "warpage 상대 비교",
+    "expectedTopIds": ["methodology-warpage-relative-comparison"]
+  },
+  {
+    "id": "search-bp-business-context",
+    "query": "박막 공정 변형 성공사례",
+    "expectedTopIds": ["bp-deformation-warpage"]
+  },
+  {
+    "id": "search-report-interface",
+    "query": "계면 물성 민감도",
+    "expectedTopIds": ["technical-report-interface-sensitivity"]
+  },
+  {
+    "id": "search-knowhow-convergence",
+    "query": "접촉 수렴 time step",
+    "expectedTopIds": ["knowhow-contact-convergence"]
+  },
+  {
+    "id": "search-manual-modal",
+    "query": "진동 모드 시험 matching",
+    "expectedTopIds": ["tool-manual-vibration"]
+  },
+  {
+    "id": "search-education-fatigue",
+    "query": "열사이클 피로 입문",
+    "expectedTopIds": ["education-fatigue"]
+  }
+]

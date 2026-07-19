@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Culture & History | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260718-natural-headings-1">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260719-culture-records-1">
 </head>
 <body data-page="culture">
     <header class="topbar">
@@ -22,78 +22,125 @@
             <a href="team_technical_assets_techtree.html">Learning Path</a>
             <a href="team_technical_assets_library.html">Library</a>
             <a href="team_technical_assets_registration.html">Registration Guide</a>
-            <a class="active" href="team_technical_assets_culture.html">Culture & History</a>
+            <a class="active" href="team_technical_assets_culture.html?v=20260719-culture-records-2">Culture & History</a>
         </nav>
     </header>
 
     <main>
-        <section class="hero container">
-            <div class="hero-grid">
-                <div class="hero-main">
-                    <span class="eyebrow"><i class="bx bx-time-five"></i> Team Memory</span>
-                    <h1>팀 기록</h1>
-                    <p class="hero-copy">
-                        팀장레터, 워크샵 결과, 운영 원칙을 모아 팀이 어떤 방향으로 일해 왔는지 남깁니다.
-                    </p>
-                </div>
-                <aside class="hero-side">
-                    <article class="side-note">
-                        <span>Why Separate</span>
-                        <strong>기술 Library와 섞지 않는다</strong>
-                        <p>BP나 보고서는 문제 해결 자료이고, 레터와 워크샵 결과는 팀의 맥락을 설명하는 기록입니다.</p>
-                    </article>
-                    <article class="side-note">
-                        <span>Use</span>
-                        <strong>온보딩과 방향성 정렬</strong>
-                        <p>신규 인원과 파트리더가 팀의 방향, 가치, 일하는 방식을 이해할 때 사용합니다.</p>
-                    </article>
-                </aside>
+        <section class="hero container culture-hero">
+            <div class="hero-main">
+                <span class="eyebrow"><i class="bx bx-time-five"></i> Culture & History</span>
+                <h1>우리팀이 합의하고 변화해 온 기록</h1>
+                <p class="hero-copy">팀장레터와 워크샵 결과를 모아 목표, 비전, 일하는 방식의 맥락을 다시 찾습니다.</p>
             </div>
         </section>
 
-        <section class="section container">
-            <div class="section-head">
+        <section class="section container culture-browser-card">
+            <div class="culture-browser-head">
                 <div>
-                    <h2>팀 기록 Library</h2>
-                    <p>팀장레터, 워크샵 결과, 운영 원칙, 회고 자료를 내부 링크로 연결합니다.</p>
+                    <span class="section-kicker">TEAM MEMORY</span>
+                    <h2>팀 기록 둘러보기</h2>
+                    <p>기록 유형을 선택하고, 카드에서 이미지와 내부 자료를 함께 확인합니다.</p>
+                </div>
+                <div class="culture-browser-actions">
+                    <span id="culture-result-count" class="culture-result-count">0개 기록</span>
+                    <button class="culture-register-button" id="culture-register-open" type="button"><i class="bx bx-plus"></i> 기록 등록</button>
                 </div>
             </div>
-            <div class="asset-list" id="culture-records"></div>
-        </section>
-
-        <section class="section container">
-            <div class="section-head">
-                <div>
-                    <h2>넣으면 좋은 항목</h2>
-                    <p>팀 문화 페이지는 감성 아카이브가 아니라 팀의 의사결정과 성장 맥락을 남기는 공간입니다.</p>
-                </div>
-            </div>
-            <div class="guide-grid">
-                <article class="guide-card">
-                    <h3>팀장레터</h3>
-                    <p>조직 방향, 성장 기준, 기술자산화의 의미를 반복적으로 공유한 리더십 기록입니다.</p>
-                </article>
-                <article class="guide-card">
-                    <h3>팀 워크샵 결과</h3>
-                    <p>팀이 합의한 일하는 방식, 개선 과제, 후속 액션을 남깁니다.</p>
-                </article>
-                <article class="guide-card">
-                    <h3>운영 원칙</h3>
-                    <p>리뷰, 자산 등록, 교육 연결, 협업 방식에서 반복 적용할 기준입니다.</p>
-                </article>
-                <article class="guide-card">
-                    <h3>회고와 변화 기록</h3>
-                    <p>팀이 어떤 문제를 겪었고 어떻게 바꾸었는지를 남겨 다음 변화의 기준으로 씁니다.</p>
-                </article>
+            <div id="culture-type-filters" class="culture-filter-row" aria-label="팀 기록 유형"></div>
+            <div class="culture-record-grid" id="culture-records"></div>
+            <div class="culture-internal-note">
+                <i class="bx bx-lock-alt"></i>
+                <span><strong>사내 운영</strong> 기록마다 여러 이미지와 원본·결과·후속 액션 링크를 함께 등록할 수 있습니다.</span>
             </div>
         </section>
     </main>
 
+    <dialog class="culture-detail-dialog" id="culture-detail-dialog" aria-labelledby="culture-modal-title">
+        <div class="culture-dialog-shell">
+            <button class="culture-dialog-close" id="culture-modal-close" type="button" aria-label="상세 닫기"><i class="bx bx-x"></i></button>
+            <div class="culture-dialog-layout">
+                <section class="culture-modal-media" id="culture-modal-media"></section>
+                <section class="culture-modal-copy">
+                    <span class="culture-modal-type" id="culture-modal-type"></span>
+                    <small id="culture-modal-series"></small>
+                    <h2 id="culture-modal-title"></h2>
+                    <p id="culture-modal-summary"></p>
+                    <div class="culture-modal-tags" id="culture-modal-tags"></div>
+                    <div id="culture-modal-links"></div>
+                </section>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="culture-register-dialog" id="culture-register-dialog" aria-labelledby="culture-register-title">
+        <form class="culture-register-shell" id="culture-register-form" method="dialog">
+            <header>
+                <span class="section-kicker">TEAM MEMORY REGISTRATION</span>
+                <h2 id="culture-register-title">팀 기록 등록</h2>
+                <p>여러 이미지와 원본·결과·후속 액션 링크를 한 기록에 함께 연결합니다.</p>
+                <button type="button" id="culture-register-close" aria-label="등록 취소"><i class="bx bx-x"></i></button>
+            </header>
+
+            <div class="culture-register-grid">
+                <label>기록 유형
+                    <select name="type" required>
+                        <option>팀장레터</option>
+                        <option>워크샵 결과</option>
+                        <option>운영 원칙</option>
+                        <option>회고</option>
+                    </select>
+                </label>
+                <label>일자
+                    <input name="date" type="date">
+                </label>
+                <label class="is-wide">제목
+                    <input name="title" required placeholder="예: 우리팀의 목표와 비전 워크샵">
+                </label>
+                <label>시리즈·구분
+                    <input name="series" placeholder="예: 팀장레터 #21">
+                </label>
+                <label>태그
+                    <input name="tags" placeholder="쉼표로 구분">
+                </label>
+                <label class="is-wide">요약
+                    <textarea name="summary" required rows="3" placeholder="왜 남기는 기록인지와 다시 활용할 상황을 적습니다."></textarea>
+                </label>
+            </div>
+
+            <section class="culture-register-repeater">
+                <div>
+                    <span><strong>이미지</strong><small>카드뉴스나 워크샵 결과 이미지를 순서대로 등록합니다.</small></span>
+                    <button type="button" id="culture-add-image"><i class="bx bx-plus"></i> 이미지 추가</button>
+                </div>
+                <div id="culture-image-fields"></div>
+            </section>
+
+            <section class="culture-register-repeater">
+                <div>
+                    <span><strong>연결 자료</strong><small>원본, 발표자료, 결과물과 후속 액션 링크를 등록합니다.</small></span>
+                    <button type="button" id="culture-add-link"><i class="bx bx-plus"></i> 링크 추가</button>
+                </div>
+                <div id="culture-link-fields"></div>
+            </section>
+
+            <footer>
+                <span id="culture-register-mode">정적 검토 환경 · JSON 다운로드</span>
+                <button type="button" class="secondary-action-button" id="culture-register-cancel">취소</button>
+                <button type="submit" class="culture-register-button" id="culture-register-submit"><i class="bx bx-download"></i> 등록 JSON 다운로드</button>
+            </footer>
+        </form>
+    </dialog>
+
     <footer class="footer container">
-        <span>Culture records are part of team memory. Replace sample links in the internal environment.</span>
+        <span>팀의 목표와 비전, 일하는 방식의 변화를 다시 찾을 수 있는 기록으로 남깁니다.</span>
     </footer>
 
     <script src="team_technical_assets_data.js"></script>
     <script src="team_technical_assets.js"></script>
+    <script src="team_technical_assets_culture_data.js"></script>
+    <script src="team_technical_assets_runtime_config.js"></script>
+    <script src="team_technical_assets_repository.js"></script>
+    <script src="team_technical_assets_culture.js"></script>
 </body>
 </html>

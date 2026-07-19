@@ -1,0 +1,24 @@
+{
+  "packetVersion": "0.1",
+  "cardTypeCandidate": "VD Request",
+  "workingTitle": "두 구조안의 충격 취약 가능성 비교",
+  "abstractContext": "[제품군]의 설계동결 전에 [설계안 A·B] 중 충격 취약 가능성이 낮은 안을 선택해야 했으나 실물 평가 데이터가 없었다.",
+  "primaryQuestion": "[설계동결 시점] 전에 두 설계안 중 충격 취약 가능성이 낮은 구조를 선택할 수 있는가?",
+  "inputsAndConstraints": [
+    "후보 형상 2안",
+    "기존 충격 평가조건",
+    "변형률 속도 의존 물성 미확보",
+    "제한된 일정 안에 답변 필요"
+  ],
+  "approachOrContent": "동일 충격조건에서 두 구조안의 결과 패턴과 민감도를 비교하고 취약부 Risk Ranking을 검토했다.",
+  "observationsAndResult": "한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다.",
+  "evidenceAvailable": ["후보안 비교 결과", "입력 민감도 검토"],
+  "validConditions": ["동일 평가조건 아래 후보안 간 상대 비교", "현재 확보한 재료모델 범위"],
+  "limitationsAndUnknowns": ["절대 파손수명 판단 불가", "동적 물성 미확보", "실험 상관 필요"],
+  "reuseOrFollowUp": ["기존 충격 방법론 활용", "후속 실물 평가 비교", "사업부 피드백 후 BP 후보 여부 판단"],
+  "searchTerms": ["충격", "Drop", "취약부", "설계안 비교", "Risk Ranking"],
+  "relatedAssetCandidates": ["충격 취약부 방법론", "Drop CoR 결과"],
+  "placeholdersToRestoreInternally": ["[제품군]", "[설계안 A·B]", "[설계동결 시점]"],
+  "itemsToConfirm": ["실제 VDR ID", "설계안 명칭", "필요일", "공식 결과 링크", "사업부 결과 활용 여부"],
+  "securitySelfCheck": "pass"
+}
