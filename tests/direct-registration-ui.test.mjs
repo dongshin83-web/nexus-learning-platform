@@ -70,3 +70,10 @@ test("Library switches from static sample data to published API assets in API mo
   assert.match(library, /runtime\.mode === "api"/);
   assert.match(library, /libraryItems = await repository\.listAssets\(\)/);
 });
+
+test("Registration Guide preserves semantic card tones and translucent capture regions", () => {
+  const css = read("team_technical_assets.css");
+  assert.match(css, /\.registration-guide-block\.is-completion\s*\{[^}]*var\(--green-soft\)/s);
+  assert.match(css, /\.registration-guide-caution\s*\{[^}]*var\(--amber-soft\)/s);
+  assert.match(css, /\.registration-screen-region\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--role-color\) 7%, transparent\)/s);
+});

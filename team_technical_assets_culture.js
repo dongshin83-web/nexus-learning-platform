@@ -297,9 +297,7 @@
     function bindDialog() {
         const dialog = document.getElementById("culture-detail-dialog");
         document.getElementById("culture-modal-close")?.addEventListener("click", closeRecord);
-        dialog?.addEventListener("click", (event) => {
-            if (event.target === dialog) closeRecord();
-        });
+        dialog?.addEventListener("cancel", (event) => event.preventDefault());
         dialog?.addEventListener("close", () => document.body.classList.remove("modal-open"));
         document.addEventListener("keydown", (event) => {
             if (!activeRecord || event.key === "Escape") return;

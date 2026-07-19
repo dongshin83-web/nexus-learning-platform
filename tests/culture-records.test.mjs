@@ -40,3 +40,10 @@ test("팀장레터 21호의 seven card-news images exist in order", async () => 
         await fs.access(path.join(rootDir, image.src));
     }
 });
+
+test("Culture detail dialog closes only through its explicit close control", async () => {
+    const source = await fs.readFile(path.join(rootDir, "team_technical_assets_culture.js"), "utf8");
+    assert.match(source, /culture-modal-close"\)\?\.addEventListener\("click", closeRecord\)/);
+    assert.match(source, /dialog\?\.addEventListener\("cancel", \(event\) => event\.preventDefault\(\)\)/);
+    assert.doesNotMatch(source, /if \(event\.target === dialog\) closeRecord\(\)/);
+});
