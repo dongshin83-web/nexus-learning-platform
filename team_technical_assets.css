@@ -7255,9 +7255,9 @@ body[data-page="registration"] .registration-import-actions {
 
 body[data-page="registration"] .registration-step-intro {
     padding: var(--spacing-4);
-    border: 1px solid rgba(var(--accent-rgb), 0.22);
+    border: 1px solid var(--line);
     border-radius: var(--radius-element);
-    background: color-mix(in srgb, var(--accent-soft) 40%, var(--paper));
+    background: var(--paper);
 }
 
 body[data-page="registration"] .registration-step-intro p,
@@ -7316,14 +7316,14 @@ body[data-page="registration"] .registration-guide-block.is-purpose {
 }
 
 body[data-page="registration"] .registration-guide-block.is-completion {
-    border-color: color-mix(in srgb, var(--green) 25%, var(--line));
-    background: color-mix(in srgb, var(--green-soft) 42%, var(--paper));
+    border-color: var(--line);
+    background: var(--paper);
 }
 
 body[data-page="registration"] .registration-guide-block.is-caution,
 body[data-page="registration"] .registration-guide-block[data-guide-tone="caution"] {
-    border-color: color-mix(in srgb, var(--amber) 27%, var(--line));
-    background: color-mix(in srgb, var(--amber-soft) 50%, var(--paper));
+    border-color: var(--line);
+    background: var(--paper);
 }
 
 body[data-page="registration"] .registration-guide-block h3,
@@ -7439,8 +7439,8 @@ body[data-page="registration"] .registration-import-actions > .btn {
 }
 
 body[data-page="registration"] .registration-guide-caution {
-    border-color: color-mix(in srgb, var(--amber) 27%, var(--line));
-    background: color-mix(in srgb, var(--amber-soft) 50%, var(--paper));
+    border-color: var(--line);
+    background: var(--paper);
     color: var(--text-muted);
     font-size: 0.72rem;
     line-height: 1.6;
@@ -8610,8 +8610,8 @@ body[data-page="registration"] .registration-screen-region {
     box-sizing: border-box;
     border: 0.12rem solid var(--role-color);
     border-radius: var(--radius-element);
-    background: color-mix(in srgb, var(--role-color) 7%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--paper) 72%, transparent);
+    background: transparent;
+    box-shadow: none;
     pointer-events: none;
 }
 
