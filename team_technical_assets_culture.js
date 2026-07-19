@@ -163,18 +163,6 @@
         activeRecord = null;
     }
 
-    function downloadJson(record) {
-        const blob = new Blob([`${JSON.stringify(record, null, 2)}\n`], { type: "application/json;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement("a");
-        anchor.href = url;
-        anchor.download = `${record.id}.json`;
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
-        URL.revokeObjectURL(url);
-    }
-
     function createRepeaterRow(kind) {
         const row = document.createElement("div");
         row.className = "culture-register-row";
@@ -268,8 +256,10 @@
         const form = document.getElementById("culture-register-form");
         const isApiMode = runtime.mode === "api";
         const submitButton = document.getElementById("culture-register-submit");
-        document.getElementById("culture-register-mode").textContent = isApiMode ? "사내 API 연결 · 초안 저장" : "정적 검토 환경 · JSON 다운로드";
-        submitButton.innerHTML = isApiMode ? '<i class="bx bx-save"></i> 초안 저장' : '<i class="bx bx-download"></i> 등록 JSON 다운로드';
+        document.getElementById("culture-register-mode").textContent = isApiMode
+            ? "사내 API 연결 · 팀 기록 등록"
+            : "Nexus 검토 모드 · 등록 흐름 확인";
+        submitButton.innerHTML = '<i class="bx bx-send"></i> 팀 기록 등록';
         document.getElementById("culture-register-open")?.addEventListener("click", openRegistration);
         document.getElementById("culture-register-close")?.addEventListener("click", closeRegistration);
         document.getElementById("culture-register-cancel")?.addEventListener("click", closeRegistration);
@@ -291,9 +281,9 @@
                     records.unshift(created);
                     renderFilters();
                     renderRecords();
-                    window.alert("팀 기록 초안을 저장했습니다.");
+                    window.alert("Culture & History에 팀 기록 초안을 등록했습니다.");
                 } else {
-                    downloadJson(record);
+                    window.alert("Culture & History 등록 흐름을 완료했습니다. Nexus 검토본에는 데이터가 저장되지 않습니다.");
                 }
                 closeRegistration();
             } catch (error) {

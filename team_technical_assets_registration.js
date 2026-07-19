@@ -327,24 +327,24 @@ const registrationStepDefinitions = [
         id: "complete",
         number: "04",
         phase: "INSIDE ONLY",
-        title: "실제 정보 완성·검증·게시하기",
-        summary: "사내 정보 보완 → Library 등록·검토 요청",
-        purpose: "일반화된 초안을 실제 사내 정보·근거·관계로 복원하고, 다른 팀원이 검색하고 재사용할 수 있는 Library 자산으로 완성합니다.",
+        title: "사내 Library에 등록하기",
+        summary: "사내 정보 보완 → 직접 등록 → Reviewer 검토 요청",
+        purpose: "반입한 JSON 초안에 실제 사내 정보·근거·관계를 보완한 뒤, 같은 등록 화면에서 Library 자산을 저장하고 Reviewer 검토를 요청합니다.",
         actions: [
             "실제 제목·조직·제품·과제 ID·조건·수치와 확인일을 사내에서 복원합니다.",
             "유형별 필수 본문과 공통 메타데이터, Owner·Reviewer를 입력합니다.",
             "공식 원문·모델·데이터·회의·Template은 중복 업로드하지 않고 사내 원본 링크로 연결합니다.",
             "기존 Library의 중복 후보와 관계를 확인하고, Technology Map·Learning Path에는 ‘연결됨 / 해당 없음 / 대상 없음’ 중 하나와 판단 사유를 기록합니다.",
-            "미리보기에서 사실·적용범위·한계·보안 경계를 확인하고 검토를 요청합니다."
+            "등록 전 검증에서 사실·적용범위·한계·보안 경계를 확인한 뒤 ‘Library 등록 요청’을 누릅니다."
         ],
         completion: [
             "제목·요약·Asset type·게시 상태와 유형별 필수 내용이 완성됐습니다.",
             "실제 근거와 원본 링크, 적용범위·한계·주의사항이 있습니다.",
             "검색 분류와 기존 자산 관계, Technology Map·Learning Path 연결 판단이 확인됐습니다.",
             "Owner·Reviewer와 사람의 최종 사실 확인을 완료했습니다.",
-            "검증을 통과한 자산을 사내 Library에 등록하고 Reviewer 검토를 요청했습니다."
+            "‘Library 등록 요청’으로 DB에 초안과 연결정보를 함께 저장하고 Reviewer 검토를 요청했습니다."
         ],
-        caution: "Library는 공식 원본 저장소를 대체하지 않습니다. AI가 제안한 분류·관계·성과는 사람이 승인하기 전까지 확정하지 않으며, 근거가 없는 내용은 ‘확인 필요’로 유지합니다."
+        caution: "4단계에서 별도의 등록 JSON을 다시 만들거나 다운로드하지 않습니다. Library는 공식 원본 저장소를 대체하지 않으며, AI가 제안한 분류·관계·성과는 사람이 승인하기 전까지 확정하지 않습니다."
     }
 ];
 
@@ -529,8 +529,8 @@ const registrationCompletionWalkthrough = [
     {
         number: "04",
         shortTitle: "검증·등록",
-        title: "검증 후 Library 등록",
-        description: "오류를 수정하고 사내 Library 등록과 Reviewer 검토를 요청합니다.",
+        title: "검증 후 바로 Library 등록",
+        description: "오류를 수정한 뒤 같은 화면에서 DB 저장과 Reviewer 검토를 요청합니다.",
         src: "assets/registration-guide/step4-04-review-download.png",
         alt: "등록 전 검증과 사내 Library 등록 요청 모달 전체 화면",
         regions: [
@@ -538,7 +538,7 @@ const registrationCompletionWalkthrough = [
             ["2", "최종 등록 내용 확인", "43.2%", "18.5%", "55.3%", "45.9%", "registrant"],
             ["3", "Library 등록 요청", "81.3%", "93.6%", "17.2%", "5.4%", "registrant"]
         ],
-        actions: ["검증 오류 수정 후 최종 내용 확인", "Library 등록과 Reviewer 검토 요청"]
+        actions: ["검증 오류 수정 후 최종 내용 확인", "‘Library 등록 요청’을 눌러 DB 저장과 Reviewer 검토 요청"]
     }
 ];
 
@@ -553,7 +553,7 @@ function createRegistrationCompletionWalkthrough() {
     walkthrough.innerHTML = `
         <header class="registration-capture-heading">
             <span class="registration-guide-label">ACTUAL SCREEN WALKTHROUGH</span>
-            <h3>JSON 반입 후 사내 Library 등록을 완료하는 순서</h3>
+            <h3>반입한 JSON으로 사내 Library 등록을 완료하는 순서</h3>
             <p>반투명 박스가 각 단계에서 확인하거나 입력할 화면 영역을 표시합니다.</p>
             <ol class="registration-walkthrough-flow" aria-label="등록 완료 흐름">
                 ${registrationCompletionWalkthrough.map((step) => `<li><b>${step.number}</b><span>${step.shortTitle}</span></li>`).join("")}
@@ -561,7 +561,7 @@ function createRegistrationCompletionWalkthrough() {
             <div class="registration-role-legend" aria-label="입력 역할 구분">
                 ${Object.entries(roleLabels).map(([role, label]) => `<span class="is-${role}">${label}</span>`).join("")}
             </div>
-            <p class="registration-save-note"><strong>입력 유지</strong> 이전·다음 동안 유지 · 취소 시 초기화 · 검증 후 Library 등록·Reviewer 검토 요청</p>
+            <p class="registration-save-note"><strong>저장 시점</strong> 이전·다음 동안 화면에 유지 · 취소 시 초기화 · ‘Library 등록 요청’ 시 DB에 한 번 저장</p>
         </header>
         <div class="registration-walkthrough-list">
             ${registrationCompletionWalkthrough.map((step) => `

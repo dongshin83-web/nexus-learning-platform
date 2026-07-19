@@ -22,7 +22,23 @@ foreach ($entry in Get-Content -LiteralPath $manifest -Encoding utf8) {
     $destination = Join-Path $staging $relative
     $parent = Split-Path -Parent $destination
     if ($parent) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
-    Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force
+    if ($relative -eq "backend-nextjs") {
+        Get-ChildItem -LiteralPath $source -Recurse -File | Where-Object {
+            $candidate = $_.FullName.Substring($source.Length).TrimStart('\')
+            $segments = $candidate -split '[\\/]'
+            -not ($segments | Where-Object { $_ -in @('node_modules', '.next', 'public') }) -and
+            $_.Extension -ne '.tsbuildinfo' -and
+            (-not $_.Name.StartsWith('.env') -or $_.Name -eq '.env.example')
+        } | ForEach-Object {
+            $candidate = $_.FullName.Substring($source.Length).TrimStart('\')
+            $target = Join-Path $destination $candidate
+            $targetParent = Split-Path -Parent $target
+            if ($targetParent) { New-Item -ItemType Directory -Path $targetParent -Force | Out-Null }
+            Copy-Item -LiteralPath $_.FullName -Destination $target -Force
+        }
+    } else {
+        Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force
+    }
 }
 
 $archiveParent = Split-Path -Parent $archive

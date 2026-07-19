@@ -28,6 +28,7 @@ team_technical_assets_runtime_config.internal.example.js
 
 # Backend starter and contract
 server
+backend-nextjs
 database
 tests
 tools/card-contract.mjs
@@ -44,3 +45,5 @@ docs/internal-library-api.openapi.yaml
 docs/INTERNAL_BACKEND_STARTER.md
 docs/INTERNAL_LIBRARY_REGISTRATION.md
 docs/BACKEND_AGNOSTIC_REGISTRATION_FOUNDATION.md
+docs/ASSETMANAGEMENT_BACKEND_PATTERN_ADOPTION.md
+docs/CULTURE_RECORDS_REGISTRATION.md

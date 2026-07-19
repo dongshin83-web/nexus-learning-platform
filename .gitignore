@@ -2,3 +2,9 @@
 dist/
 var/
 sandbox/output/
+backend-nextjs/node_modules/
+backend-nextjs/.next/
+backend-nextjs/public/
+backend-nextjs/.env*
+!backend-nextjs/.env.example
+backend-nextjs/*.tsbuildinfo

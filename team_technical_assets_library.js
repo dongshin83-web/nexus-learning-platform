@@ -842,8 +842,18 @@ function bindLibraryEvents() {
     });
 }
 
-function initLibraryPage() {
+async function initLibraryPage() {
     if (document.body.dataset.page !== "library") return;
+    const runtime = window.TECHNICAL_ASSET_RUNTIME ?? { mode: "static" };
+    if (runtime.mode === "api" && typeof window.createTechnicalAssetRepository === "function") {
+        try {
+            const repository = window.createTechnicalAssetRepository(runtime);
+            libraryItems = await repository.listAssets();
+        } catch (error) {
+            console.error("Library API 데이터를 불러오지 못했습니다.", error);
+            libraryItems = [];
+        }
+    }
     renderLibraryMetrics();
     bindLibraryEvents();
     renderLibrary();

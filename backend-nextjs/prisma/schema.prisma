@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AssetWorkflowStatus {
+  DRAFT
+  REVIEW_REQUESTED
+  CHANGES_REQUESTED
+  PUBLISHED
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model TechnicalAsset {
+  id                String              @id @default(cuid())
+  assetId           String              @unique
+  assetType         String
+  title             String
+  summary           String              @db.Text
+  payload           Json
+  workflowStatus    AssetWorkflowStatus @default(DRAFT)
+  publicationStatus PublicationStatus   @default(DRAFT)
+  registrantId      String
+  reviewerId        String?
+  version           Int                 @default(1)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  publishedAt       DateTime?
+  links             TechnicalAssetLink[]
+  relations         TechnicalAssetRelation[]
+  frameworkLinks    TechnicalAssetFrameworkLink[]
+  reviews           TechnicalAssetReview[]
+  auditEvents       TechnicalAssetAuditEvent[]
+
+  @@index([publicationStatus, updatedAt])
+  @@index([workflowStatus, updatedAt])
+  @@index([assetType])
+}
+
+model TechnicalAssetLink {
+  id          String         @id @default(cuid())
+  assetDbId   String
+  label       String
+  href        String
+  linkType    String
+  linkRole    String?
+  sourceSystem String?
+  accessScope String?
+  status      String?
+  verifiedAt DateTime?
+  asset       TechnicalAsset @relation(fields: [assetDbId], references: [id], onDelete: Cascade)
+
+  @@index([assetDbId])
+}
+
+model TechnicalAssetRelation {
+  id            String         @id @default(cuid())
+  assetDbId     String
+  relationType  String
+  targetAssetId String
+  note          String?        @db.Text
+  source        String?
+  asset         TechnicalAsset @relation(fields: [assetDbId], references: [id], onDelete: Cascade)
+
+  @@unique([assetDbId, relationType, targetAssetId])
+  @@index([targetAssetId])
+}
+
+model TechnicalAssetFrameworkLink {
+  id           String         @id @default(cuid())
+  assetDbId    String
+  framework    String
+  targetId     String
+  relationType String
+  note         String?        @db.Text
+  confirmed    Boolean        @default(false)
+  source       String?
+  asset        TechnicalAsset @relation(fields: [assetDbId], references: [id], onDelete: Cascade)
+
+  @@unique([assetDbId, framework, targetId, relationType])
+  @@index([framework, targetId])
+}
+
+model TechnicalAssetReview {
+  id         String         @id @default(cuid())
+  assetDbId  String
+  action     String
+  comment    String?        @db.Text
+  actorId    String
+  createdAt  DateTime       @default(now())
+  asset      TechnicalAsset @relation(fields: [assetDbId], references: [id], onDelete: Cascade)
+
+  @@index([assetDbId, createdAt])
+}
+
+model TechnicalAssetAuditEvent {
+  id         String         @id @default(cuid())
+  assetDbId  String
+  action     String
+  actorId    String
+  detail     Json?
+  createdAt  DateTime       @default(now())
+  asset      TechnicalAsset @relation(fields: [assetDbId], references: [id], onDelete: Cascade)
+
+  @@index([assetDbId, createdAt])
+}
+
+model CultureRecord {
+  id          String         @id @default(cuid())
+  recordId    String         @unique
+  recordType  String
+  title       String
+  series      String?
+  summary     String         @db.Text
+  recordDate  String?
+  tags        String[]
+  status      String         @default("초안")
+  registrantId String
+  payload     Json
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  media       CultureMedia[]
+  links       CultureLink[]
+
+  @@index([recordType, updatedAt])
+}
+
+model CultureMedia {
+  id          String        @id @default(cuid())
+  recordDbId  String
+  src         String
+  alt         String
+  sortOrder   Int
+  record      CultureRecord @relation(fields: [recordDbId], references: [id], onDelete: Cascade)
+
+  @@index([recordDbId, sortOrder])
+}
+
+model CultureLink {
+  id          String        @id @default(cuid())
+  recordDbId  String
+  label       String
+  href        String
+  kind        String
+  record      CultureRecord @relation(fields: [recordDbId], references: [id], onDelete: Cascade)
+
+  @@index([recordDbId])
+}

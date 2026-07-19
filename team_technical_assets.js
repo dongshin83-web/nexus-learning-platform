@@ -327,7 +327,7 @@ const publicationStatusMeta = {
     "폐기": { className: "need", icon: "bx bx-archive" }
 };
 
-const libraryItems = Array.isArray(window.TECHNICAL_ASSET_LIBRARY?.cards)
+let libraryItems = Array.isArray(window.TECHNICAL_ASSET_LIBRARY?.cards)
     ? window.TECHNICAL_ASSET_LIBRARY.cards
     : [];
 const reuseRelationTypes = new Set(["USES", "REFERENCES", "VALIDATES", "VALIDATED_BY", "DERIVED_FROM", "DOCUMENTS", "BASED_ON"]);

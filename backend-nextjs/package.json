@@ -1,0 +1,32 @@
+{
+  "name": "team-technical-assets-backend",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "sync:ui": "node scripts/sync-ui.mjs",
+    "build": "npm run sync:ui && prisma generate && next build",
+    "start": "next start",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:dev": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "next": "16.2.10",
+    "next-auth": "5.0.0-beta.30",
+    "postcss": "8.5.10",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.10"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "prisma": "6.19.3",
+    "typescript": "^5.7.0"
+  }
+}

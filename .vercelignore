@@ -1,5 +1,6 @@
 # Internal backend starter is versioned for transfer, but never published as static files.
 server/
+backend-nextjs/
 database/
 tests/
 tools/

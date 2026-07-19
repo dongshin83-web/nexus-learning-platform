@@ -1,5 +1,14 @@
 # 사내 Library Backend Starter
 
+## 권장 운영안
+
+현재 저장소에는 목적이 다른 두 백엔드가 준비되어 있다.
+
+- `server/`: 외부 패키지 설치 없이 흐름을 검증하는 Node.js + SQLite 로컬 Pilot
+- `backend-nextjs/`: AssetManagement와 같은 Next.js Route Handler + Prisma + PostgreSQL/Supabase + NextAuth 패턴을 적용한 사내 운영 후보
+
+사내 클라우드가 Next.js 서버와 PostgreSQL을 지원하면 `backend-nextjs/`를 운영 기준으로 사용한다. AssetManagement의 실제 금융 DB와 Vercel 프로젝트는 공유하지 않고 기술자산 전용 DB·인증·배포 서비스로 분리한다. 상세 내용은 `docs/ASSETMANAGEMENT_BACKEND_PATTERN_ADOPTION.md`를 따른다.
+
 ## 1. 준비된 범위
 
 이 Starter는 사내 백엔드 제품이 확정되지 않은 상태에서도 등록 흐름을 끝까지 검증할 수 있도록 만든 실행 기준본이다.
