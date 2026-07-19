@@ -493,10 +493,10 @@ const registrationCompletionWalkthrough = [
         src: "assets/registration-guide/step4-01-basic-information.png",
         alt: "기술자산 등록 모달의 내부정보 보완 전체 화면",
         regions: [
-            ["1", "등록 ID", "1.5%", "18.5%", "97%", "8%", "system"],
-            ["2", "자산 식별정보", "1.5%", "31%", "97%", "25%", "ai"],
-            ["3", "Owner·Reviewer", "1.5%", "56.4%", "97%", "16.5%", "registrant"],
-            ["4", "활용 맥락·요약", "1.5%", "73.4%", "97%", "19.7%", "ai"]
+            ["1", "등록 ID", "3.5%", "20.7%", "90.2%", "7%", "system"],
+            ["2", "자산 식별정보", "3.5%", "33.2%", "90.2%", "24%", "ai"],
+            ["3", "Owner·Reviewer", "3.5%", "59.1%", "90.2%", "15.2%", "registrant"],
+            ["4", "활용 맥락·요약", "3.5%", "75.9%", "90.2%", "15.4%", "ai"]
         ],
         actions: ["실제 제목·ID·분류로 교체", "Owner·Reviewer와 사내 맥락 확인"]
     },
@@ -508,8 +508,8 @@ const registrationCompletionWalkthrough = [
         src: "assets/registration-guide/step4-02-library-and-links.png",
         alt: "기존 Library 검색과 회사 내부 자산 링크 등록 모달 전체 화면",
         regions: [
-            ["1", "기존 Library 검색·관계", "1.5%", "18.5%", "48.2%", "74.6%", "registrant"],
-            ["2", "사내 원본·근거 링크", "50.3%", "18.5%", "48.2%", "74.6%", "registrant"]
+            ["1", "기존 Library 검색·관계", "3.5%", "20.7%", "44.2%", "70.6%", "registrant"],
+            ["2", "사내 원본·근거 링크", "49.3%", "20.7%", "44.2%", "70.6%", "registrant"]
         ],
         actions: ["기존 자산을 연결하거나 후보 없음 사유 기록", "사내 링크 추가 후 접근 가능 여부 확인"]
     },
@@ -521,8 +521,8 @@ const registrationCompletionWalkthrough = [
         src: "assets/registration-guide/step4-03-framework-connections.png",
         alt: "Technology Map과 Learning Path 연결 판정 등록 모달 전체 화면",
         regions: [
-            ["1", "Technology Map 연결", "1.5%", "29.4%", "48.2%", "61.7%", "registrant"],
-            ["2", "Learning Path 연결", "50.3%", "29.4%", "48.2%", "61.7%", "registrant"]
+            ["1", "Technology Map 연결", "3.5%", "18.6%", "44.2%", "72.7%", "registrant"],
+            ["2", "Learning Path 연결", "49.3%", "18.6%", "44.2%", "72.7%", "registrant"]
         ],
         actions: ["연결됨·해당 없음·대상 없음 중 하나 선택", "연결됨이면 대상·관계·설명을 추가"]
     },
@@ -531,18 +531,18 @@ const registrationCompletionWalkthrough = [
         shortTitle: "검증·등록",
         title: "검증 후 바로 Library 등록",
         description: "오류를 수정한 뒤 같은 화면에서 DB 저장과 Reviewer 검토를 요청합니다.",
-        src: "assets/registration-guide/step4-04-review-download.png",
+        src: "assets/registration-guide/step4-04-review-register.png",
         alt: "등록 전 검증과 사내 Library 등록 요청 모달 전체 화면",
         regions: [
-            ["1", "등록 전 검증", "1.5%", "18.5%", "41.1%", "45.9%", "system"],
-            ["2", "최종 등록 내용 확인", "43.2%", "18.5%", "55.3%", "45.9%", "registrant"],
-            ["3", "Library 등록 요청", "81.3%", "93.6%", "17.2%", "5.4%", "registrant"]
+            ["1", "등록 전 검증", "3.5%", "32.4%", "38.9%", "35.6%", "system"],
+            ["2", "최종 등록 내용 확인", "43.9%", "32.4%", "52.6%", "44.8%", "registrant"],
+            ["3", "Library 등록 요청", "81.7%", "80.7%", "14.7%", "4.5%", "registrant"]
         ],
         actions: ["검증 오류 수정 후 최종 내용 확인", "‘Library 등록 요청’을 눌러 DB 저장과 Reviewer 검토 요청"]
     }
 ];
 
-function createRegistrationCompletionWalkthrough() {
+function createRegistrationCompletionWalkthrough(assetMeta) {
     const roleLabels = {
         ai: "AI 초안",
         registrant: "등록자 입력·판정",
@@ -554,7 +554,7 @@ function createRegistrationCompletionWalkthrough() {
         <header class="registration-capture-heading">
             <span class="registration-guide-label">ACTUAL SCREEN WALKTHROUGH</span>
             <h3>반입한 JSON으로 사내 Library 등록을 완료하는 순서</h3>
-            <p>반투명 박스가 각 단계에서 확인하거나 입력할 화면 영역을 표시합니다.</p>
+            <p><strong>${assetMeta.label} 등록도 아래 4개 공통 화면을 사용합니다.</strong> 캡처의 입력값은 방법론 예시이며, 반투명 박스는 각 단계에서 실제로 확인하거나 입력할 영역만 표시합니다.</p>
             <ol class="registration-walkthrough-flow" aria-label="등록 완료 흐름">
                 ${registrationCompletionWalkthrough.map((step) => `<li><b>${step.number}</b><span>${step.shortTitle}</span></li>`).join("")}
             </ol>
@@ -663,7 +663,7 @@ function createRegistrationStepGuide(step, assetKey) {
     }
 
     if (step.id === "complete") {
-        guide.appendChild(createRegistrationCompletionWalkthrough());
+        guide.appendChild(createRegistrationCompletionWalkthrough(assetMeta));
     }
 
     return guide;

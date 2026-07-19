@@ -37,6 +37,8 @@ tools/register-card.mjs
 tools/register-handoff.mjs
 tools/start-internal-api.ps1
 tools/check-internal-api.ps1
+tools/audit-registration-guide-ui.mjs
+tools/capture-registration-guide-screenshots.mjs
 tools/build-internal-backend-package.ps1
 tools/deploy-internal-service.ps1
 deploy/gitlab-ci.backend.example.yml

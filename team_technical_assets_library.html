@@ -156,11 +156,11 @@
                                 <label class="registration-field">자산 ID<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="[예시] impact-risk-ranking"></label>
                                 <label class="registration-field">자료 유형<select name="type" required></select></label>
                                 <label class="registration-field">기술영역<select name="domain" required></select></label>
-                                <label class="registration-field">게시 상태<select name="publicationStatus" required></select></label>
+                                <label class="registration-field">등록 상태<select name="publicationStatus" required disabled title="Reviewer 승인 전에는 초안으로 등록됩니다."></select></label>
                                 <label class="registration-field">유형별 상태<input name="status" required placeholder="[예시] 초안, 검토 중, 게시"></label>
                                 <label class="registration-field">담당자<input name="owner" required></label>
                                 <label class="registration-field">등록자<input name="registrant" required></label>
-                                <label class="registration-field">검토자<input name="reviewer" placeholder="게시 전 실제 검토자 입력 필수"></label>
+                                <label class="registration-field">검토자<input name="reviewer" placeholder="검토를 요청할 Reviewer 입력"></label>
                                 <label class="registration-field">활용 맥락<input name="contexts" required placeholder="[예시] 설계, 개발, 사업부"></label>
                                 <label class="registration-field registration-field-wide">요약<textarea name="summary" rows="3" required></textarea></label>
                                 <label class="registration-field registration-field-wide">활용 상황<textarea name="useCase" rows="3" required></textarea></label>

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -25,6 +26,29 @@ test("Registration Guide keeps one Handoff JSON and registers directly in step f
   assert.match(html, /등록 JSON을 다시 다운로드하지 않습니다/);
   assert.match(script, /Library 등록 요청/);
   assert.match(script, /DB에 한 번 저장/);
+});
+
+test("all nine asset types share four valid common registration captures", () => {
+  const source = read("team_technical_assets_registration.js");
+  const sandbox = { document: { addEventListener() {} } };
+  vm.runInNewContext(`${source}\nglobalThis.audit = { TYPE_SPECIFIC_SCHEMAS, promptDefinitions, assetTypeGuideMeta, registrationCompletionWalkthrough };`, sandbox);
+  const { TYPE_SPECIFIC_SCHEMAS: schemas, promptDefinitions: prompts, assetTypeGuideMeta: meta, registrationCompletionWalkthrough: captures } = sandbox.audit;
+  const expectedKeys = ["vd-request", "cor", "methodology", "bp", "technical-report", "knowhow", "tool-manual", "education-material", "external-report"];
+  assert.deepEqual(Object.keys(prompts), expectedKeys);
+  assert.deepEqual(Object.keys(meta), expectedKeys);
+  assert.deepEqual(Object.values(prompts).map((definition) => definition.cardType).sort(), Object.keys(schemas).sort());
+  assert.equal(captures.length, 4);
+  assert.deepEqual(Array.from(captures, (capture) => capture.regions.length), [4, 2, 2, 3]);
+  captures.forEach((capture) => {
+    const png = fs.readFileSync(path.join(root, capture.src));
+    assert.equal(png.readUInt32BE(16), 1056, `${capture.src}: unexpected width`);
+    assert.equal(png.readUInt32BE(20), 968, `${capture.src}: unexpected height`);
+    capture.regions.forEach(([, , x, y, width, height]) => {
+      const values = [x, y, width, height].map((value) => Number.parseFloat(value));
+      assert.ok(values.every(Number.isFinite));
+      assert.ok(values[0] >= 0 && values[1] >= 0 && values[0] + values[2] <= 100 && values[1] + values[3] <= 100);
+    });
+  });
 });
 
 test("Next.js backend template exposes atomic asset and direct Culture routes", () => {

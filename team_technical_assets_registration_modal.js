@@ -142,7 +142,7 @@
         field("id").value = text(packet.id || packet.cardId || slugify(title));
         field("type").value = normalizeAssetType(packet.type || packet.cardTypeCandidate || "VD Request");
         field("domain").value = text(packet.domain || "other");
-        field("publicationStatus").value = text(packet.publicationStatus || "초안");
+        field("publicationStatus").value = "초안";
         field("status").value = text(packet.status || "초안");
         field("owner").value = text(packet.owner);
         field("registrant").value = text(packet.registrant);
@@ -504,7 +504,7 @@
             domain: field("domain").value,
             secondaryDomains: original.secondaryDomains || [],
             contexts: list(field("contexts").value),
-            publicationStatus: field("publicationStatus").value,
+            publicationStatus: "초안",
             status: text(field("status").value),
             owner: text(field("owner").value),
             registrant: text(field("registrant").value),
@@ -682,7 +682,8 @@
 
     setOptions(field("type"), TYPES.map((item) => [item, item]));
     setOptions(field("domain"), DOMAINS);
-    setOptions(field("publicationStatus"), PUBLICATION_STATUSES.map((item) => [item, item]));
+    setOptions(field("publicationStatus"), [["초안", "초안 · Reviewer 승인 전"]]);
+    field("publicationStatus").disabled = true;
     setOptions(document.getElementById("internal-link-type"), LINK_TYPES.map((item) => [item, item]));
     setOptions(document.getElementById("internal-link-role"), LINK_ROLES);
     setOptions(document.getElementById("internal-link-scope"), ACCESS_SCOPES.map((item) => [item, item]));
