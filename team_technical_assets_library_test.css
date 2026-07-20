@@ -1,0 +1,95 @@
+body[data-page="library-test"] {
+    --accent: var(--teal);
+    --accent-soft: var(--teal-soft);
+    --accent-rgb: 15, 118, 110;
+}
+
+/* Existing Library card based registration test */
+.basis-test-page { padding-top: var(--spacing-8); padding-bottom: var(--spacing-10); }
+.basis-test-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.6fr); gap: var(--spacing-8); align-items: end; margin-bottom: var(--spacing-6); }
+.basis-test-hero h1 { margin: var(--spacing-2) 0; font-size: clamp(1.8rem, 3vw, 2.65rem); line-height: 1.18; }
+.basis-test-hero header > p { max-width: 48rem; margin: 0; color: var(--muted); }
+.basis-test-rule { display: flex; gap: var(--spacing-3); border-left: 0.2rem solid var(--accent); background: var(--paper); padding: var(--spacing-4); }
+.basis-test-rule > i { color: var(--accent); font-size: 1.35rem; }
+.basis-test-rule p { margin: 0; }
+.basis-test-rule strong, .basis-test-rule span { display: block; }
+.basis-test-rule span { margin-top: var(--spacing-1); color: var(--muted); font-size: 0.78rem; }
+
+.basis-test-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); margin-bottom: var(--spacing-4); }
+.basis-test-metrics article { padding: var(--spacing-4) var(--spacing-5); }
+.basis-test-metrics article + article { border-left: 1px solid var(--line); }
+.basis-test-metrics span { display: block; color: var(--muted); font-size: 0.72rem; font-weight: 800; }
+.basis-test-metrics strong { display: block; margin-top: var(--spacing-1); font-size: 1.25rem; }
+#basis-readiness[data-state="passed"] { color: var(--green); }
+
+.basis-test-workspace { display: grid; grid-template-columns: minmax(17rem, 0.82fr) minmax(24rem, 1.18fr) minmax(19rem, 0.9fr); min-height: 44rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); overflow: hidden; box-shadow: var(--shadow); }
+.basis-source-panel, .basis-draft-panel, .basis-review-panel { min-width: 0; padding: var(--spacing-5); }
+.basis-draft-panel, .basis-review-panel { border-left: 1px solid var(--line); }
+.basis-review-panel { background: var(--paper-soft); }
+.basis-panel-header { display: flex; gap: var(--spacing-3); align-items: center; margin-bottom: var(--spacing-5); }
+.basis-panel-header > span { display: grid; place-items: center; flex: 0 0 1.75rem; height: 1.75rem; border-radius: var(--radius-full); background: var(--accent); color: var(--paper); font-size: 0.78rem; font-weight: 900; }
+.basis-panel-header p, .basis-panel-header strong, .basis-panel-header small { display: block; margin: 0; }
+.basis-panel-header small { color: var(--muted); font-size: 0.7rem; font-weight: 500; }
+
+.basis-search-field, .basis-filter-field { display: grid; gap: var(--spacing-1); margin-bottom: var(--spacing-3); color: var(--muted); font-size: 0.72rem; font-weight: 800; }
+.basis-search-field input, .basis-filter-field select, .basis-draft-form input, .basis-draft-form select, .basis-draft-form textarea { width: 100%; border: 1px solid var(--line-strong); border-radius: var(--radius-element); background: var(--paper); color: var(--ink); padding: 0.66rem 0.72rem; font: inherit; }
+.basis-search-field input:focus, .basis-filter-field select:focus, .basis-draft-form input:focus, .basis-draft-form select:focus, .basis-draft-form textarea:focus { border-color: var(--accent); outline: 0.15rem solid var(--accent-soft); }
+.basis-result-summary { margin: var(--spacing-4) 0 var(--spacing-2); color: var(--muted); font-size: 0.72rem; font-weight: 800; }
+.basis-card-list { display: grid; max-height: 35rem; overflow: auto; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.basis-card-row { display: grid; grid-template-columns: auto 1fr; gap: var(--spacing-3); align-items: start; padding: var(--spacing-3) var(--spacing-2); border-bottom: 1px solid var(--line); cursor: pointer; }
+.basis-card-row:last-child { border-bottom: 0; }
+.basis-card-row:hover, .basis-card-row.is-selected { background: var(--accent-soft); }
+.basis-card-row input { margin-top: 0.3rem; accent-color: var(--accent); }
+.basis-card-row-copy, .basis-card-row-copy > span, .basis-card-row-copy strong, .basis-card-row-copy small { display: block; }
+.basis-card-row-copy > span { display: flex; gap: var(--spacing-1); flex-wrap: wrap; }
+.basis-card-row-copy b, .basis-card-row-copy em { border-radius: var(--radius-full); background: var(--paper-soft); padding: 0.1rem 0.42rem; color: var(--muted); font-size: 0.62rem; font-style: normal; }
+.basis-card-row-copy b { background: var(--accent-soft); color: var(--accent); }
+.basis-card-row-copy strong { margin-top: var(--spacing-2); font-size: 0.83rem; line-height: 1.4; }
+.basis-card-row-copy small { margin-top: var(--spacing-1); color: var(--muted); font-size: 0.7rem; line-height: 1.5; }
+
+.basis-selected-strip { margin-bottom: var(--spacing-5); border-bottom: 1px solid var(--line); padding-bottom: var(--spacing-4); }
+.basis-selected-strip header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-2); }
+.basis-selected-strip header > strong { font-size: 0.78rem; }
+.basis-selected-strip button { border: 0; background: transparent; color: var(--accent); font: inherit; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+.basis-selected-strip ul { display: grid; gap: var(--spacing-1); margin: 0; padding: 0; list-style: none; }
+.basis-selected-strip li { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-2); background: var(--accent-soft); padding: var(--spacing-2) var(--spacing-3); font-size: 0.72rem; }
+.basis-selected-strip li b { margin-right: var(--spacing-2); color: var(--accent); }
+.basis-selected-strip li button { display: grid; place-items: center; color: var(--muted); }
+.basis-empty { color: var(--muted); font-size: 0.76rem; }
+
+.basis-draft-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-3); }
+.basis-draft-form label { display: grid; gap: var(--spacing-1); color: var(--muted); font-size: 0.72rem; font-weight: 800; }
+.basis-draft-form textarea { resize: vertical; line-height: 1.5; }
+.basis-field-wide { grid-column: 1 / -1; }
+
+.basis-inheritance { border-bottom: 1px solid var(--line); padding-bottom: var(--spacing-4); }
+.basis-inheritance > strong, .basis-test-boundary > strong { font-size: 0.8rem; }
+.basis-inheritance dl { display: grid; grid-template-columns: 5rem 1fr; gap: var(--spacing-2); margin: var(--spacing-3) 0 0; font-size: 0.72rem; }
+.basis-inheritance dt { color: var(--muted); font-weight: 800; }
+.basis-inheritance dd { margin: 0; }
+.basis-validation { display: grid; gap: var(--spacing-2); margin-top: var(--spacing-4); }
+.basis-validation-item { display: flex; gap: var(--spacing-2); margin: 0; border-left: 0.18rem solid var(--line-strong); background: var(--paper); padding: var(--spacing-3); font-size: 0.72rem; line-height: 1.5; }
+.basis-validation-item.is-error { border-color: var(--rose); color: var(--rose); }
+.basis-validation-item.is-success { border-color: var(--green); color: var(--green); }
+.basis-validation-item.is-warning, .basis-validation-item.is-info { border-color: var(--amber); }
+.basis-test-boundary { margin-top: var(--spacing-4); border-top: 1px solid var(--line); padding-top: var(--spacing-4); }
+.basis-test-boundary p { margin: var(--spacing-1) 0 0; color: var(--muted); font-size: 0.72rem; }
+.basis-json-details { margin-top: var(--spacing-4); }
+.basis-json-details summary { color: var(--accent); font-size: 0.76rem; font-weight: 800; cursor: pointer; }
+.basis-json-details pre { max-height: 19rem; overflow: auto; border-radius: var(--radius-element); background: var(--ink); color: var(--paper); padding: var(--spacing-3); font-size: 0.66rem; white-space: pre-wrap; word-break: break-word; }
+.basis-review-actions { display: grid; grid-template-columns: 1fr; gap: var(--spacing-2); margin-top: var(--spacing-4); }
+.basis-review-actions button { justify-content: center; width: 100%; }
+
+@media (max-width: 72rem) {
+    .basis-test-workspace { grid-template-columns: minmax(16rem, 0.8fr) minmax(22rem, 1.2fr); }
+    .basis-review-panel { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+}
+
+@media (max-width: 48rem) {
+    .basis-test-hero, .basis-test-workspace, .basis-draft-form { grid-template-columns: 1fr; }
+    .basis-test-metrics { grid-template-columns: 1fr; }
+    .basis-test-metrics article + article { border-left: 0; border-top: 1px solid var(--line); }
+    .basis-draft-panel, .basis-review-panel { border-left: 0; border-top: 1px solid var(--line); }
+    .basis-field-wide { grid-column: auto; }
+    .basis-card-list { max-height: 24rem; }
+}
