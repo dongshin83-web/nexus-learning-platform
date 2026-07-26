@@ -7271,6 +7271,7 @@ body[data-page="registration"] .registration-step-guide {
 
 body[data-page="registration"] .registration-step-intro,
 body[data-page="registration"] .registration-type-focus,
+body[data-page="registration"] .registration-interview-prompt,
 body[data-page="registration"] .registration-step-guide-grid,
 body[data-page="registration"] .registration-guide-caution,
 body[data-page="registration"] .registration-import-actions {
@@ -7316,6 +7317,40 @@ body[data-page="registration"] .registration-guide-caution strong {
     margin-bottom: var(--spacing-1);
     color: var(--text);
     font-size: 0.78rem;
+}
+
+body[data-page="registration"] .registration-interview-prompt {
+    min-width: 0;
+    padding: var(--spacing-4);
+    border: 1px solid rgba(var(--accent-rgb), 0.28);
+    border-radius: var(--radius-element);
+    background: color-mix(in srgb, var(--accent-soft) 36%, var(--paper));
+}
+
+body[data-page="registration"] .registration-interview-prompt-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+}
+
+body[data-page="registration"] .registration-interview-prompt-heading strong {
+    display: block;
+    margin-top: var(--spacing-1);
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+body[data-page="registration"] .registration-interview-prompt-heading p {
+    margin: var(--spacing-1) 0 0;
+    color: var(--text-muted);
+    font-size: 0.73rem;
+    line-height: 1.6;
+}
+
+body[data-page="registration"] .registration-interview-prompt-preview {
+    max-height: 24rem;
+    margin-top: var(--spacing-3);
 }
 
 body[data-page="registration"] .registration-step-guide-grid {
@@ -7524,6 +7559,16 @@ body[data-page="registration"] .registration-stage-content > * + * {
 
     body[data-page="registration"] .registration-step-guide-grid {
         grid-template-columns: 1fr;
+    }
+
+    body[data-page="registration"] .registration-interview-prompt-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body[data-page="registration"] .registration-interview-prompt-heading .copy-prompt-button {
+        width: 100%;
+        justify-content: center;
     }
 
     body[data-page="registration"] .registration-step-guide > .registration-guide-block:first-child,

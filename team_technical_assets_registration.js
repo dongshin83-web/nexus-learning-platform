@@ -271,6 +271,32 @@ const assetTypeGuideMeta = {
     }
 };
 
+function createInterviewStartPrompt(cardType) {
+    return `당신은 Simulation/VDE 조직의 기술 경험을 사내 Wiki 등록용 기술자산으로 구조화하는 인터뷰 진행자입니다.
+
+내가 등록하려는 자산유형은 \`${cardType}\`입니다.
+
+이 대화의 목적은 단순 요약이 아니라, 해당 자산유형의 등록 필수정보와 검색 메타데이터를 빠짐없이 확보해 사내 반입용 JSON을 거의 완성하는 것입니다.
+
+대화 규칙:
+1. 먼저 내가 이 경험 또는 자료를 자유롭게 설명하게 해주세요.
+2. 자유 설명에서 이미 확인된 내용은 다시 묻지 마세요.
+3. 이 대화에서 제공하는 자산유형별 필수 질문 중 답이 없거나 불명확한 항목만 한 번에 1~2개씩 질문하세요.
+4. 답변에서 확인된 사실, 기술적 해석, 제안, 미확인 사항을 구분하세요.
+5. 답변에 없는 사실·성과·검증·관계를 추정하지 마세요.
+6. 모르는 항목은 억지로 채우지 말고 \`확인 필요\`로 기록하세요.
+7. 실제 회사·조직·고객·제품·과제·사람·보고서명·ID·URL·파일경로를 요구하거나 반복하지 마세요.
+8. 정확한 치수·물성·조건·수치·일정은 요구하지 말고 상대적 경향이나 판단 가능한 범위로 일반화하세요.
+9. 사내에서 복원해야 하는 값은 \`[제품군]\`, \`[과제]\`, \`[담당자]\`, \`[사내 보고서]\`, \`[실제 조건]\`처럼 Placeholder로 남기세요.
+10. 사내 문서·모델·이미지·로그·파일을 업로드하라고 요청하지 마세요.
+11. 모든 유형별 필수 질문과 공통 분류·검색 질문을 점검하기 전에는 최종 JSON을 만들지 마세요.
+12. 질문이 끝나면 \`확보 완료 / 확인 필요 / 사내 복원\`으로 나눈 완료점검표를 먼저 보여주세요.`;
+}
+
+const interviewStartPrompts = Object.fromEntries(
+    Object.entries(promptDefinitions).map(([key, definition]) => [key, createInterviewStartPrompt(definition.cardType)])
+);
+
 const registrationStepDefinitions = [
     {
         id: "conversation",
@@ -543,8 +569,10 @@ window.TECHNICAL_ASSET_REGISTRATION = Object.freeze({
     controlledVisibleTags: CONTROLLED_VISIBLE_TAGS,
     promptDefinitions,
     prompts,
+    interviewStartPrompts,
     createSearchMetadataTemplate,
     createHandoffTemplate,
+    createInterviewStartPrompt,
     createJsonConversionPrompt,
     getPromptForCardType
 });
@@ -594,6 +622,41 @@ async function copyPrompt(promptKey, button) {
         window.setTimeout(() => {
             button.classList.remove("is-copied");
             if (buttonLabel) buttonLabel.textContent = "JSON 파일 생성 Prompt 복사";
+        }, 2400);
+    }
+}
+
+async function copyInterviewStartPrompt(assetKey, button) {
+    const prompt = interviewStartPrompts[assetKey];
+    if (!prompt) return;
+
+    const status = document.getElementById(`copy-${assetKey}-interview-status`);
+    const buttonLabel = button.querySelector("span");
+    let copied = false;
+
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(prompt);
+            copied = true;
+        } else {
+            copied = fallbackCopy(prompt);
+        }
+    } catch {
+        copied = fallbackCopy(prompt);
+    }
+
+    if (status) {
+        status.textContent = copied
+            ? "복사했습니다. 외부 AI의 새 대화창에 붙여 넣은 뒤 경험 또는 자료를 자유롭게 설명하세요."
+            : "자동 복사가 되지 않았습니다. Prompt 영역을 선택해 직접 복사해 주세요.";
+    }
+    button.classList.toggle("is-copied", copied);
+    if (buttonLabel) buttonLabel.textContent = copied ? "복사 완료" : "AI 대화 시작 Prompt 복사";
+
+    if (copied) {
+        window.setTimeout(() => {
+            button.classList.remove("is-copied");
+            if (buttonLabel) buttonLabel.textContent = "AI 대화 시작 Prompt 복사";
         }, 2400);
     }
 }
@@ -856,6 +919,37 @@ function createRegistrationStepGuide(step, assetKey) {
             </span>
         `;
         guide.appendChild(focus);
+    }
+
+    if (step.id === "conversation" && definition) {
+        const promptSection = document.createElement("section");
+        promptSection.className = "registration-interview-prompt";
+        promptSection.innerHTML = `
+            <div class="registration-interview-prompt-heading">
+                <span>
+                    <span class="registration-guide-label">외부 AI 대화 시작</span>
+                    <strong>${assetMeta.label} 공통 인트로 Prompt</strong>
+                    <p>선택한 자산유형이 반영된 Prompt입니다. 외부 AI의 새 대화창에 먼저 붙여 넣으세요.</p>
+                </span>
+                <button class="btn btn-primary copy-prompt-button"
+                        type="button"
+                        data-copy-interview-prompt="${assetKey}">
+                    <i class="bx bx-copy" aria-hidden="true"></i>
+                    <span>AI 대화 시작 Prompt 복사</span>
+                </button>
+            </div>
+            <pre class="prompt-preview registration-interview-prompt-preview"
+                 id="${assetKey}-interview-prompt-preview"></pre>
+            <p class="copy-status"
+               id="copy-${assetKey}-interview-status"
+               role="status"
+               aria-live="polite"></p>
+        `;
+        const preview = promptSection.querySelector(".registration-interview-prompt-preview");
+        if (preview) preview.textContent = interviewStartPrompts[assetKey];
+        const copyButton = promptSection.querySelector("[data-copy-interview-prompt]");
+        copyButton?.addEventListener("click", () => copyInterviewStartPrompt(assetKey, copyButton));
+        guide.appendChild(promptSection);
     }
 
     const grid = document.createElement("div");

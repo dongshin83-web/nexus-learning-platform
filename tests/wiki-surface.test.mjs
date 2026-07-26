@@ -25,6 +25,18 @@ test("Wiki와 Wiki Guide가 필요한 실행 모듈을 연결한다", async () =
     assert.match(guide, /team_technical_assets_registration\.js/);
 });
 
+test("Wiki Guide Step 01은 자산유형별 AI 대화 시작 Prompt를 제공한다", async () => {
+    const [script, css] = await Promise.all([
+        read("team_technical_assets_registration.js"),
+        read("team_technical_assets_registration_guide.css")
+    ]);
+    assert.match(script, /function createInterviewStartPrompt\(cardType\)/);
+    assert.match(script, /내가 등록하려는 자산유형은/);
+    assert.match(script, /data-copy-interview-prompt/);
+    assert.match(script, /AI 대화 시작 Prompt 복사/);
+    assert.match(css, /\.registration-interview-prompt/);
+});
+
 test("구 Library와 Registration Guide 운영 페이지는 제거되어 있다", async () => {
     for (const file of ["team_technical_assets_library.html", "team_technical_assets_registration.html"]) {
         await assert.rejects(
