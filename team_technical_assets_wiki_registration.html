@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Guide | 우리팀 기술자산화 Hub</title>
+    <title>Wiki Registration Guide | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css?v=20260717-1">
-    <link rel="stylesheet" href="team_technical_assets.css?v=20260720-registration-guide-15">
+    <link rel="stylesheet" href="team_technical_assets.css?v=20260720-page-header-2">
+  <link rel="stylesheet" href="team_technical_assets_registration_guide.css?v=20260721-tag-guide-2">
 </head>
-<body data-page="registration">
+<body data-page="registration" data-registration-context="wiki">
     <header class="topbar">
         <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
             <span class="brand-mark"><i class="bx bx-edit-alt"></i></span>
             <span>
-                <strong>Registration Guide</strong>
+                <strong>Wiki Registration Guide</strong>
                 <span>안전하게 말하고, 정리하고, 사내에서 완성하기</span>
             </span>
         </a>
@@ -20,17 +21,19 @@
             <a href="team_technical_assets.html">Overview</a>
             <a href="team_technical_assets_map.html">Technology Map</a>
             <a href="team_technical_assets_techtree.html">Learning Path</a>
-            <a href="team_technical_assets_library.html">Library</a>
-            <a class="active" href="team_technical_assets_registration.html">Registration Guide</a>
+            <a href="team_technical_assets_wiki.html">Wiki</a>
+            <a class="active" href="team_technical_assets_wiki_registration.html">Wiki Guide</a>
             <a href="team_technical_assets_culture.html?v=20260719-culture-records-2">Culture & History</a>
         </nav>
     </header>
 
     <main class="registration-page">
-        <section class="registration-hero container" aria-labelledby="registration-title">
-            <span class="registration-context-label">Registration Guide</span>
-            <h1 id="registration-title">기술자산 등록 가이드</h1>
-            <p>Asset type을 선택하고, 외부에서 구조화한 초안을 사내 정보와 연결해 완성합니다.</p>
+        <section class="registration-hero container technical-page-header" aria-labelledby="registration-title">
+            <div class="technical-page-intro">
+                <span class="registration-context-label technical-page-badge">GitLab Wiki Registration Guide</span>
+                <h1 class="technical-page-title" id="registration-title">기술자산 등록 가이드</h1>
+                <p class="technical-page-copy">AI Handoff JSON을 사내에서 보완하고 GitLab 네이티브 Wiki 문서로 직접 등록하는 방법을 자산유형별로 설명합니다.</p>
+            </div>
         </section>
 
         <section class="registration-workspace container" aria-labelledby="asset-type-title">
@@ -39,7 +42,7 @@
                     <div>
                         <span class="page-kicker">Asset type</span>
                         <h2 id="asset-type-title">등록할 자산 유형을 선택하세요</h2>
-                        <p>Asset type이 가장 큰 분류입니다. 유형을 선택하면 그 아래에서 동일한 4단계를 순서대로 펼쳐 확인할 수 있습니다.</p>
+                        <p>Asset type이 가장 큰 분류입니다. 유형을 선택하면 상위 등록 흐름 4단계를 확인하고, 마지막 등록 화면은 실제 입력 행동에 맞춰 8개 해설로 더 세분화해 볼 수 있습니다.</p>
                     </div>
                     <span class="registration-section-count">9 TYPES</span>
                 </header>
@@ -62,15 +65,16 @@
                     <div>
                         <span class="page-kicker">Registration flow</span>
                         <h2 id="registration-flow-title">등록 순서를 확인하세요</h2>
-                        <p>모든 Asset type은 같은 4단계를 따르며, 선택한 유형 안에서 단계별 상세 기준과 예시를 펼쳐 확인합니다.</p>
+                        <p>모든 Asset type은 같은 상위 4단계를 따릅니다. 캡처 해설은 4개에 맞추지 않고 검색 표현·필수 분류·추가 태그·연결·검증·등록 등 실제 행동 단위로 충분히 나눕니다.</p>
                     </div>
-                    <span>4 STEPS</span>
+                    <span>4 TOP-LEVEL STEPS</span>
                 </div>
                 <ol class="registration-flow" aria-label="기술자산 등록 흐름">
                     <li class="registration-flow-with-tooltip" tabindex="0" aria-describedby="json-tool-test-tooltip">
                         <span>1</span>
                         <strong>AI와 대화하기</strong>
                         <small>선택한 Asset type의 질문 순서에 따라 경험과 판단을 설명합니다. 실제 명칭·수치·파일·링크는 Placeholder와 방향성 표현으로 바꿉니다.</small>
+                        <span class="registration-tooltip-cue"><i class="bx bx-info-circle" aria-hidden="true"></i>AI 도구 안내 보기</span>
                         <span class="registration-tooltip" id="json-tool-test-tooltip" role="tooltip">
                             <b>권장 AI 도구</b>
                             <span><em>유료 AI 계정이 있다면</em> — 현재 사용 중인 ChatGPT, Gemini, Copilot 등의 유료 계정을 그대로 활용하세요.</span>
@@ -84,7 +88,7 @@
                         <small>같은 AI 대화창에 유형별 Prompt를 붙여 넣고, AI 답변에 첨부된 Handoff .json 파일을 다운로드합니다.</small>
                     </li>
                     <li><span>3</span><strong>JSON 확인·사내 반입하기</strong><small>다운로드한 .json 파일 또는 코드 블록으로 직접 저장한 UTF-8 파일을 검토한 뒤 승인된 방식으로 사내 등록 화면에 가져옵니다.</small></li>
-                    <li><span>4</span><strong>사내 Library에 직접 등록하기</strong><small>실제 용어·근거·원본 링크와 관계를 보완한 뒤 같은 화면에서 DB 저장과 Reviewer 검토를 요청합니다. 등록 JSON을 다시 다운로드하지 않습니다.</small></li>
+                    <li><span>4</span><strong>사내 Wiki에 바로 등록하기</strong><small>실제 정보·검색 분류·원본 링크·관계·Framework 판단을 보완하고, 현재 사용자 권한으로 GitLab 네이티브 Wiki 문서를 생성합니다.</small></li>
                 </ol>
                 <p class="registration-process-rule"><i class="bx bx-check-circle"></i><strong>확정 원칙</strong> 음성 파일을 별도로 전사하지 않습니다. 음성 또는 텍스트로 설명한 동일한 대화창에서 JSON까지 생성하고, 실제 정보는 외부 대화가 아니라 사내 등록 화면에서만 복원합니다.</p>
             </section>
@@ -982,6 +986,6 @@
         <span>외부 AI에는 일반화된 정보만 입력하고 실제 정보는 사내 환경에서 보완합니다.</span>
     </footer>
 
-    <script src="team_technical_assets_registration.js?v=20260720-registration-guide-15"></script>
+    <script src="team_technical_assets_registration.js?v=20260723-answer-evidence-1"></script>
 </body>
 </html>

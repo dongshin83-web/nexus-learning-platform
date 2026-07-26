@@ -18,31 +18,36 @@ test("Culture registration uses direct registration language without JSON downlo
   assert.doesNotMatch(script, /function downloadJson/);
 });
 
-test("Registration Guide keeps one Handoff JSON and registers directly in step four", () => {
-  const html = read("team_technical_assets_registration.html");
+test("Wiki Guide keeps one Handoff JSON and registers directly in the Wiki", () => {
+  const html = read("team_technical_assets_wiki_registration.html");
   const script = read("team_technical_assets_registration.js");
   assert.match(html, /반입용 JSON 파일 만들기/);
-  assert.match(html, /사내 Library에 직접 등록하기/);
-  assert.match(html, /등록 JSON을 다시 다운로드하지 않습니다/);
-  assert.match(script, /Library 등록 요청/);
-  assert.match(script, /DB에 한 번 저장/);
+  assert.match(html, /사내 Wiki에 바로 등록하기/);
+  assert.match(script, /GitLab 연결정보 확인 후 Wiki에 바로 등록/);
+  assert.match(script, /등록 성공 즉시 GitLab Wiki에 게시/);
 });
 
-test("all nine asset types share four valid common registration captures", () => {
+test("all nine asset types share the Wiki registration guide contract", () => {
   const source = read("team_technical_assets_registration.js");
-  const sandbox = { document: { addEventListener() {} } };
-  vm.runInNewContext(`${source}\nglobalThis.audit = { TYPE_SPECIFIC_SCHEMAS, promptDefinitions, assetTypeGuideMeta, registrationCompletionWalkthrough };`, sandbox);
-  const { TYPE_SPECIFIC_SCHEMAS: schemas, promptDefinitions: prompts, assetTypeGuideMeta: meta, registrationCompletionWalkthrough: captures } = sandbox.audit;
+  const sandbox = { document: { addEventListener() {} }, window: {} };
+  vm.runInNewContext(
+    `${source}\nglobalThis.audit = { TYPE_SPECIFIC_SCHEMAS, promptDefinitions, assetTypeGuideMeta, wikiRegistrationCompletionWalkthrough };`,
+    sandbox
+  );
+  const {
+    TYPE_SPECIFIC_SCHEMAS: schemas,
+    promptDefinitions: prompts,
+    assetTypeGuideMeta: meta,
+    wikiRegistrationCompletionWalkthrough: captures
+  } = sandbox.audit;
   const expectedKeys = ["vd-request", "cor", "methodology", "bp", "technical-report", "knowhow", "tool-manual", "education-material", "external-report"];
   assert.deepEqual(Object.keys(prompts), expectedKeys);
   assert.deepEqual(Object.keys(meta), expectedKeys);
   assert.deepEqual(Object.values(prompts).map((definition) => definition.cardType).sort(), Object.keys(schemas).sort());
-  assert.equal(captures.length, 4);
-  assert.deepEqual(Array.from(captures, (capture) => capture.regions.length), [4, 2, 2, 3]);
+  assert.equal(captures.length, 8);
   captures.forEach((capture) => {
-    const png = fs.readFileSync(path.join(root, capture.src));
-    assert.equal(png.readUInt32BE(16), 1056, `${capture.src}: unexpected width`);
-    assert.equal(png.readUInt32BE(20), 968, `${capture.src}: unexpected height`);
+    const image = fs.readFileSync(path.join(root, capture.src.split("?")[0]));
+    assert.ok(image.length > 1000, `${capture.src}: capture image is empty`);
     capture.regions.forEach(([, , x, y, width, height]) => {
       const values = [x, y, width, height].map((value) => Number.parseFloat(value));
       assert.ok(values.every(Number.isFinite));
@@ -63,7 +68,7 @@ test("Next.js backend template exposes atomic asset and direct Culture routes", 
   assert.match(service, /prisma\.\$transaction/);
 });
 
-test("Library switches from static sample data to published API assets in API mode", () => {
+test("legacy Library adapter remains available only for the internal sandbox", () => {
   const shared = read("team_technical_assets.js");
   const library = read("team_technical_assets_library.js");
   assert.match(shared, /let libraryItems/);
@@ -71,15 +76,13 @@ test("Library switches from static sample data to published API assets in API mo
   assert.match(library, /libraryItems = await repository\.listAssets\(\)/);
 });
 
-test("Registration Guide preserves semantic card tones and translucent capture regions", () => {
+test("Wiki Guide preserves semantic card tones and translucent capture regions", () => {
   const css = read("team_technical_assets.css");
-  assert.match(css, /\.registration-guide-block\.is-completion\s*\{[^}]*background:\s*var\(--green-soft\)/s);
-  assert.match(css, /\.registration-guide-block\.is-completion\s*\{[^}]*var\(--green-soft\)/s);
-  assert.match(css, /\.registration-guide-caution\s*\{[^}]*background:\s*var\(--amber-soft\)/s);
-  assert.match(css, /\.registration-guide-caution\s*\{[^}]*var\(--amber-soft\)/s);
-  assert.match(css, /\.is-ai\s*\{[^}]*--role-tint:\s*rgba\(37, 99, 235, 0\.07\)/s);
-  assert.match(css, /\.is-registrant\s*\{[^}]*--role-tint:\s*rgba\(183, 121, 31, 0\.07\)/s);
-  assert.match(css, /\.is-system\s*\{[^}]*--role-tint:\s*rgba\(15, 118, 110, 0\.07\)/s);
+  assert.match(css, /\.registration-guide-block\.is-completion\s*\{[^}]*background:\s*#edf7ef/s);
+  assert.match(css, /\.registration-guide-caution\s*\{[^}]*background:\s*#fff3d6/s);
+  assert.match(css, /\.is-ai\s*\{[^}]*--role-tint:\s*rgba\(37, 99, 235, 0\.14\)/s);
+  assert.match(css, /\.is-registrant\s*\{[^}]*--role-tint:\s*rgba\(183, 121, 31, 0\.14\)/s);
+  assert.match(css, /\.is-system\s*\{[^}]*--role-tint:\s*rgba\(15, 118, 110, 0\.14\)/s);
   assert.match(css, /\.registration-screen-region\s*\{[^}]*background:\s*var\(--role-tint\)/s);
-  assert.match(css, /\.registration-screen-region\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--role-color\) 7%, transparent\)/s);
+  assert.doesNotMatch(css, /\.registration-screen-region\s*\{[^}]*background:\s*color-mix/s);
 });

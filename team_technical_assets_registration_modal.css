@@ -1,0 +1,134 @@
+.library-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.asset-register-button,
+.secondary-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    min-height: 2.55rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 0.62rem 0.9rem;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.asset-register-button { background: var(--accent); color: white; }
+.asset-register-button:hover { filter: brightness(0.94); }
+.asset-register-button:disabled { cursor: not-allowed; opacity: 0.45; }
+.secondary-action-button { background: var(--paper); color: var(--accent); }
+.secondary-action-button:hover { background: var(--accent-soft); }
+
+.asset-registration-dialog {
+    width: min(66rem, calc(100% - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 24px 64px rgba(37, 37, 42, 0.28);
+}
+
+.asset-registration-dialog::backdrop { background: rgba(37, 37, 42, 0.52); }
+.asset-registration-dialog:not([open]) { display: none; }
+body.asset-registration-open { overflow: hidden; }
+.asset-registration-shell { display: flex; max-height: calc(100dvh - 2rem); flex-direction: column; }
+.asset-registration-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-4); border-bottom: 1px solid var(--line); padding: var(--spacing-5); }
+.asset-registration-header h2 { margin: 0.15rem 0 0.25rem; font-size: 1.45rem; }
+.asset-registration-header p { margin: 0; color: var(--muted); font-size: 0.86rem; }
+.asset-registration-steps { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; padding: 0; border-bottom: 1px solid var(--line); list-style: none; }
+.asset-registration-steps li { display: flex; align-items: center; justify-content: center; gap: var(--spacing-2); padding: 0.72rem; color: var(--muted); font-size: 0.78rem; font-weight: 800; }
+.asset-registration-steps li span { display: grid; width: 1.35rem; height: 1.35rem; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; font-size: 0.7rem; }
+.asset-registration-steps li.is-active { background: var(--accent-soft); color: var(--accent); }
+.asset-registration-steps li.is-complete { color: var(--ink); }
+.asset-registration-body { min-height: 25rem; overflow: auto; padding: var(--spacing-5); }
+.asset-registration-step:not(.is-active) { display: none; }
+
+.json-drop-zone { display: flex; min-height: 19rem; flex-direction: column; align-items: center; justify-content: center; gap: var(--spacing-3); border: 1px dashed var(--line-strong); border-radius: var(--radius); background: var(--surface); padding: var(--spacing-8); text-align: center; }
+.json-drop-zone.is-dragging { border-color: var(--accent); background: var(--accent-soft); }
+.json-drop-zone > i { color: var(--accent); font-size: 2.3rem; }
+.json-drop-zone p { max-width: 34rem; margin: 0 0 var(--spacing-2); color: var(--muted); font-size: 0.84rem; line-height: 1.55; }
+.json-file-name { color: var(--muted); font-size: 0.76rem; }
+.registration-message { min-height: 1.5rem; margin-top: var(--spacing-3); font-size: 0.8rem; font-weight: 700; }
+.registration-message.is-error { color: var(--danger, #b42318); }
+.registration-message.is-success { color: var(--accent); }
+
+.registration-form-grid,
+.registration-framework-grid,
+.registration-publish-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-4); }
+.registration-connections { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-4); }
+.registration-field { display: flex; flex-direction: column; gap: var(--spacing-2); color: var(--muted); font-size: 0.74rem; font-weight: 800; }
+.registration-field-wide,
+.registration-framework-panel,
+.registration-tag-panel { grid-column: 1 / -1; }
+.registration-field input,
+.registration-field select,
+.registration-field textarea { width: 100%; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); padding: 0.66rem 0.72rem; font: inherit; font-size: 0.84rem; font-weight: 500; }
+.registration-field textarea { resize: vertical; line-height: 1.5; }
+.registration-field input:focus,
+.registration-field select:focus,
+.registration-field textarea:focus { border-color: var(--accent); outline: 2px solid var(--accent-soft); }
+.registration-id-banner { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-4); margin-bottom: var(--spacing-3); border: 1px solid var(--accent); border-radius: var(--radius-sm); background: var(--accent-soft); padding: 0.75rem 0.85rem; }
+.registration-id-banner span { display: block; color: var(--accent); font-size: 0.66rem; font-weight: 900; }
+.registration-id-banner p { margin: 0; color: var(--muted); font-size: 0.74rem; line-height: 1.45; text-align: right; }
+.registration-connection-panel,
+.registration-publish-settings { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: var(--spacing-4); }
+.registration-tag-confirmation { margin-top: var(--spacing-5); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: var(--spacing-4); }
+.registration-tag-confirmation > header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-3); margin-bottom: var(--spacing-4); }
+.registration-tag-confirmation h3,
+.registration-tag-confirmation p { margin: 0; }
+.registration-tag-confirmation header p { margin-top: var(--spacing-1); color: var(--muted); font-size: 0.76rem; line-height: 1.5; }
+.registration-classification-tags,
+.registration-additional-tags { display: grid; gap: var(--spacing-2); margin-bottom: var(--spacing-4); }
+.registration-classification-tags > strong,
+.registration-additional-tags > strong { font-size: 0.76rem; }
+#registration-classification-tag-list { display: flex; flex-wrap: wrap; gap: var(--spacing-2); }
+#registration-classification-tag-list span { border: 1px solid var(--accent); border-radius: 999px; background: var(--accent-soft); color: var(--accent); padding: 0.34rem 0.58rem; font-size: 0.72rem; font-weight: 800; }
+.relation-recommendation-group { display: grid; gap: var(--spacing-2); margin-bottom: var(--spacing-4); }
+.relation-recommendation-group > strong { font-size: 0.76rem; }
+.registration-connection-panel > header,
+.registration-publish-settings > header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-3); margin-bottom: var(--spacing-3); }
+.registration-tag-candidates { display: flex; flex-wrap: wrap; gap: var(--spacing-2); margin-bottom: var(--spacing-3); }
+.registration-tag-candidate { display: flex; max-width: 22rem; align-items: flex-start; gap: var(--spacing-2); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); padding: 0.58rem 0.7rem; cursor: pointer; }
+.registration-tag-candidate:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.registration-review-layout { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: var(--spacing-4); }
+.registration-validation { display: grid; gap: var(--spacing-2); }
+.registration-validation-item { display: flex; align-items: flex-start; gap: var(--spacing-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.65rem 0.7rem; font-size: 0.78rem; line-height: 1.45; }
+.registration-validation-item.is-error { border-color: #f3b8b3; background: #fff4f2; color: #9f1c13; }
+.registration-validation-item.is-success { background: var(--accent-soft); color: var(--accent); }
+.registration-final-tags { margin-top: var(--spacing-4); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: var(--spacing-4); }
+.registration-final-tags h4 { margin: 0; font-size: 0.9rem; }
+.registration-final-tags p { margin: var(--spacing-1) 0 var(--spacing-3); color: var(--muted); font-size: 0.72rem; }
+.registration-final-tags div { display: flex; flex-wrap: wrap; gap: var(--spacing-2); }
+.registration-final-tags span { border: 1px solid var(--accent); border-radius: 999px; background: var(--accent-soft); color: var(--accent); padding: 0.3rem 0.55rem; font-size: 0.72rem; font-weight: 800; }
+.registration-json-preview { max-height: 25rem; overflow: auto; margin: 0; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #202126; color: #f4f4f5; padding: 0.85rem; font-size: 0.7rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+.asset-registration-footer { display: flex; align-items: center; gap: var(--spacing-2); border-top: 1px solid var(--line); padding: 0.85rem var(--spacing-5); }
+.asset-registration-footer [hidden] { display: none !important; }
+.registration-footer-spacer { flex: 1; }
+
+@media (max-width: 45rem) {
+    .library-heading-actions { width: 100%; align-items: stretch; flex-direction: column; }
+    .asset-register-button { width: 100%; }
+    .asset-registration-dialog { width: calc(100% - 1rem); max-height: calc(100dvh - 1rem); }
+    .asset-registration-shell { max-height: calc(100dvh - 1rem); }
+    .asset-registration-steps li { padding: 0.62rem 0.25rem; font-size: 0.7rem; }
+    .registration-form-grid,
+    .registration-connections,
+    .registration-framework-grid,
+    .registration-publish-grid,
+    .registration-review-layout { grid-template-columns: 1fr; }
+    .registration-id-banner { align-items: flex-start; flex-direction: column; }
+    .registration-id-banner p { text-align: left; }
+    .asset-registration-footer { flex-wrap: wrap; }
+    .asset-registration-footer .asset-register-button { width: auto; }
+}

@@ -1661,7 +1661,7 @@ function renderLandingMetrics() {
 }
 
 function getOverviewCardUrl(card) {
-    return `team_technical_assets_library.html?asset=${encodeURIComponent(card.id)}`;
+    return `team_technical_assets_wiki.html#${encodeURIComponent(card.id)}`;
 }
 
 function renderLandingSpotlights() {
@@ -1734,7 +1734,7 @@ function renderLandingUsageFlow() {
                 <section>
                     <span class="row-kicker">${escapeHtml(link.usageType)}</span>
                     <h3>${escapeHtml(sourceCard?.title ?? link.sourceCardId)}</h3>
-                    <p class="usage-target"><i class="bx bx-right-arrow-alt"></i><a href="${targetCard ? getOverviewCardUrl(targetCard) : "team_technical_assets_library.html"}">${escapeHtml(targetCard?.title ?? link.targetCardId)}</a></p>
+        <p class="usage-target"><i class="bx bx-right-arrow-alt"></i><a href="${targetCard ? getOverviewCardUrl(targetCard) : "team_technical_assets_wiki.html"}">${escapeHtml(targetCard?.title ?? link.targetCardId)}</a></p>
                     <small>${escapeHtml(link.outcome || "활용 결과가 등록되었습니다.")}</small>
                 </section>
             </li>
@@ -2554,8 +2554,8 @@ function renderMethodDetail(method) {
                 </table>
             </div>
         </section>
-        <a class="btn btn-secondary map-detail-library" href="team_technical_assets_library.html?domain=${encodeURIComponent(libraryDomain)}">
-            <i class="bx bx-folder-open" aria-hidden="true"></i> 관련 Library 보기
+                <a class="btn btn-secondary map-detail-library" href="team_technical_assets_wiki.html?domain=${encodeURIComponent(libraryDomain)}">
+                    <i class="bx bx-folder-open" aria-hidden="true"></i> 관련 Wiki 보기
         </a>
         <details class="map-previous-record">
             <summary>이전 기록</summary>
@@ -2829,7 +2829,7 @@ function getLearningLibraryConnections(capabilityId) {
 function renderLearningLibraryConnection({ item, link, role }) {
     const publicationStatus = publicationStatusMeta[item.publicationStatus] ?? publicationStatusMeta["초안"];
     return `
-        <a class="learning-linked-asset" href="team_technical_assets_library.html?asset=${encodeURIComponent(item.id)}">
+        <a class="learning-linked-asset" href="team_technical_assets_wiki.html#${encodeURIComponent(item.id)}">
             <span class="learning-linked-asset-top">
                 <span class="learning-linked-role">${escapeHtml(role.label)}</span>
                 <span class="badge ${publicationStatus.className}">${escapeHtml(item.publicationStatus ?? "초안")}</span>
@@ -2837,7 +2837,7 @@ function renderLearningLibraryConnection({ item, link, role }) {
             <strong>${escapeHtml(item.title)}</strong>
             <p>${escapeHtml(item.summary ?? "요약 정보가 없습니다.")}</p>
             ${link.note ? `<small>${escapeHtml(link.note)}</small>` : ""}
-            <span class="learning-linked-open">Library에서 전체 보기 <i class="bx bx-right-arrow-alt" aria-hidden="true"></i></span>
+            <span class="learning-linked-open">Wiki에서 전체 보기 <i class="bx bx-right-arrow-alt" aria-hidden="true"></i></span>
         </a>
     `;
 }

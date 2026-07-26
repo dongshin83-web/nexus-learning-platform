@@ -15,6 +15,8 @@ test("Overview pairs monthly rankings and discovery cards in two equal grids", (
   assert.match(html, /overview-paired-grid overview-discovery-grid[\s\S]*overview-daily-panel[\s\S]*overview-gap-panel/);
   assert.match(css, /\.overview-paired-grid\s*\{[\s\S]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /@media \(max-width: 60rem\)[\s\S]*\.overview-paired-grid\s*\{[\s\S]*grid-template-columns:\s*1fr/);
+  assert.match(css, /\.overview-ranked-item > strong\s*\{[\s\S]*display:\s*inline-flex;[\s\S]*white-space:\s*nowrap;/);
+  assert.match(css, /\.contributor-count\s*\{[\s\S]*display:\s*inline-flex;[\s\S]*white-space:\s*nowrap;/);
 });
 
 test("Overview monthly rankings are capped at five and contributors include credited participants", () => {

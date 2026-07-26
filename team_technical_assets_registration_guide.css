@@ -213,7 +213,7 @@ body[data-page="registration"] .topnav,
 
 .registration-flow-with-tooltip {
     z-index: 2;
-    cursor: help;
+    cursor: pointer;
     transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
@@ -275,8 +275,32 @@ body[data-page="registration"] .topnav,
 }
 
 .registration-flow-with-tooltip:hover .registration-tooltip,
-.registration-flow-with-tooltip:focus-visible .registration-tooltip {
+.registration-flow-with-tooltip:focus-visible .registration-tooltip,
+.registration-flow-with-tooltip.is-tooltip-open .registration-tooltip {
     display: block;
+}
+
+.registration-tooltip-cue {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    width: fit-content;
+    align-items: center;
+    gap: var(--spacing-1, 0.25rem);
+    margin-top: var(--spacing-3, 0.75rem);
+    border: 1px solid rgba(var(--accent-rgb), 0.28);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 0.34rem 0.58rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.registration-flow-with-tooltip:hover .registration-tooltip-cue,
+.registration-flow-with-tooltip:focus-visible .registration-tooltip-cue,
+.registration-flow-with-tooltip.is-tooltip-open .registration-tooltip-cue {
+    border-color: var(--accent-strong);
+    background: var(--paper);
 }
 
 .registration-workspace {
@@ -7318,6 +7342,23 @@ body[data-page="registration"] .registration-guide-block.is-purpose {
 body[data-page="registration"] .registration-guide-block.is-completion {
     border-color: #a8c9ae;
     background: #edf7ef;
+}
+
+body[data-page="registration"] .registration-guide-block.is-search-metadata {
+    border-color: rgba(var(--accent-rgb), 0.28);
+    background: color-mix(in srgb, var(--accent-soft) 48%, var(--paper));
+}
+
+body[data-page="registration"] .registration-guide-block.is-search-metadata .registration-guide-checklist {
+    counter-reset: registration-search-question;
+}
+
+body[data-page="registration"] .registration-guide-block.is-search-metadata .registration-guide-checklist li {
+    counter-increment: registration-search-question;
+}
+
+body[data-page="registration"] .registration-guide-block.is-search-metadata .registration-guide-checklist li::before {
+    content: counter(registration-search-question);
 }
 
 body[data-page="registration"] .registration-guide-block.is-caution,
