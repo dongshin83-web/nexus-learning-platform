@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weeks 7-8 | Structural Mechanics Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="structural_mechanics_detail.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-shape-square'></i>
+                <span>StructSim</span>
+            </div>
+
+            <p class="sidebar-category">LEARNING</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#objective-section'">
+                    <i class='bx bx-compass'></i>
+                    <span>Learning Objective</span>
+                </li>
+                <li class="active" onclick="location.href='structural_mechanics.html#roadmap-section'">
+                    <i class='bx bx-map-alt'></i>
+                    <span>12-Week Plan</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#workflow-section'">
+                    <i class='bx bx-git-merge'></i>
+                    <span>Tool Workflow</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">EVIDENCE</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#review-section'">
+                    <i class='bx bx-check-shield'></i>
+                    <span>Evidence Checklist</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#cases-section'">
+                    <i class='bx bx-test-tube'></i>
+                    <span>Capstone Cases</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#terms-section'">
+                    <i class='bx bx-book-content'></i>
+                    <span>Key Terms</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#prompt-section'">
+                    <i class='bx bx-brain'></i>
+                    <span>NotebookLM Prompt</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>Nonlinear Diagnostics</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1>Weeks 7-8 Nonlinear Risk Structure</h1>
+                    <p>contact, plasticity, large deformation, convergence log를 분리해서 읽는 2주</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section class="detail-hero">
+                    <div class="detail-topline">
+                        <h2>비선형 해석을 “안 돈다”가 아니라 원인 후보로 분해하기</h2>
+                        <a href="structural_mechanics.html#roadmap-section" class="detail-back-btn"><i class='bx bx-arrow-back'></i> 12-Week Plan</a>
+                    </div>
+                    <p>7~8주차의 목표는 Abaqus nonlinear option을 외우는 것이 아닙니다. contact, plasticity, large deformation, constraint, instability가 각각 어떤 증거를 남기는지 읽고, 실패 로그를 다음 실험으로 바꾸는 능력을 만듭니다.</p>
+                </section>
+
+                <div class="section-kicker">Nonlinearity Map</div>
+                <p class="section-copy">비선형성은 한 덩어리가 아닙니다. 물성, 접촉, 기하, 경계조건, 불안정성 중 어느 것이 지배하는지 먼저 분리해야 solver setting을 의미 있게 바꿀 수 있습니다.</p>
+                <div class="workflow-grid">
+                    <article class="workflow-card">
+                        <span class="tag">Material</span>
+                        <h3><i class='bx bx-line-chart'></i>plasticity와 tangent stiffness</h3>
+                        <p>응력-변형률 곡선이 선형을 벗어나면 tangent stiffness가 변하고 하중 증가에 대한 반응이 달라집니다.</p>
+                        <ul class="clean-list">
+                            <li>engineering stress-strain과 true stress-strain을 구분합니다.</li>
+                            <li>yield 이후 hardening law가 실제 재료 범위를 대표하는지 확인합니다.</li>
+                            <li>plastic strain contour와 Mises contour를 함께 봅니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Contact</span>
+                        <h3><i class='bx bx-transfer'></i>붙고, 미끄러지고, 떨어지는 조건</h3>
+                        <p>contact는 상태가 바뀌는 비선형입니다. 수렴 실패의 상당 부분은 접촉 pair, normal behavior, tangential behavior에서 시작됩니다.</p>
+                        <ul class="clean-list">
+                            <li>contact pressure, penetration, status output을 요청합니다.</li>
+                            <li>friction coefficient sensitivity를 최소 2개 값으로 비교합니다.</li>
+                            <li>small sliding과 finite sliding 선택 이유를 기록합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Geometry</span>
+                        <h3><i class='bx bx-rotate-right'></i>large deformation과 NLGEOM</h3>
+                        <p>변형이 커지면 강성 행렬과 하중 방향이 현재 형상 기준으로 바뀝니다.</p>
+                        <ul class="clean-list">
+                            <li>변위가 characteristic length의 몇 %인지 먼저 봅니다.</li>
+                            <li>load direction이 follower load인지 고정 방향인지 구분합니다.</li>
+                            <li>NLGEOM on/off 결과가 크게 다르면 small displacement 가정은 위험합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Constraint</span>
+                        <h3><i class='bx bx-lock-alt'></i>overconstraint와 rigid body motion</h3>
+                        <p>구속은 solver를 안정화하기도 하지만 실제 load path를 바꾸기도 합니다.</p>
+                        <ul class="clean-list">
+                            <li>zero pivot은 constraint 누락과 과구속 둘 다 의심합니다.</li>
+                            <li>coupling, tie, connector가 중복 구속을 만들지 않는지 봅니다.</li>
+                            <li>reaction force가 예상 fixture로 흐르는지 확인합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Instability</span>
+                        <h3><i class='bx bx-collapse-alt'></i>buckling, snap-through, softening</h3>
+                        <p>불안정성은 단순 수렴 실패가 아니라 구조 response 자체가 급격히 바뀌는 현상일 수 있습니다.</p>
+                        <ul class="clean-list">
+                            <li>load-displacement curve의 slope 변화와 limit point를 봅니다.</li>
+                            <li>linear buckling mode는 imperfection 후보로만 사용합니다.</li>
+                            <li>softening material은 mesh dependency 가능성을 별도 관리합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Solver Controls</span>
+                        <h3><i class='bx bx-slider-alt'></i>increment, stabilization, tolerance</h3>
+                        <p>solver control은 결과를 고치는 버튼이 아니라 원인 후보를 테스트하는 실험 조건입니다.</p>
+                        <ul class="clean-list">
+                            <li>initial/min/max increment 변경은 로그 변화와 함께 기록합니다.</li>
+                            <li>stabilization energy가 의미 있는 수준인지 확인합니다.</li>
+                            <li>tolerance 완화는 마지막 수단으로 다룹니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Abaqus Standard Evidence</div>
+                <p class="section-copy">비선형 해석은 정상 종료 메시지만으로 충분하지 않습니다. increment history, residual, contact status, energy, plastic strain, reaction trend를 함께 봅니다.</p>
+                <div class="evidence-grid">
+                    <article class="evidence-card">
+                        <span class="tag">Increment History</span>
+                        <h3><i class='bx bx-time-five'></i>cutback과 step progress</h3>
+                        <p>increment cutback이 반복되는 위치는 모델이 어려워지는 물리 사건을 알려줍니다.</p>
+                        <ul class="clean-list">
+                            <li>cutback이 contact onset, yielding onset, instability와 맞물리는지 봅니다.</li>
+                            <li>min increment 도달은 단순 실패가 아니라 원인 분류의 시작입니다.</li>
+                            <li>step time과 physical time을 혼동하지 않습니다.</li>
+                        </ul>
+                        <div class="rule-box">기준: 실패한 increment 번호와 그 직전의 contact/plasticity/constraint 상태를 함께 기록합니다.</div>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Residual</span>
+                        <h3><i class='bx bx-pulse'></i>force residual과 correction</h3>
+                        <p>residual은 “얼마나 안 맞는가”이고 correction은 “얼마나 고쳐야 하는가”입니다.</p>
+                        <ul class="clean-list">
+                            <li>특정 node/region에 residual이 몰리면 local modeling issue를 의심합니다.</li>
+                            <li>contact chattering은 residual 위치가 접촉 경계에 반복해서 나타납니다.</li>
+                            <li>constraint 문제는 rigid body mode 또는 zero pivot 메시지와 같이 봅니다.</li>
+                        </ul>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Energy</span>
+                        <h3><i class='bx bx-battery'></i>stabilization과 artificial energy</h3>
+                        <p>수치 안정화를 넣으면 해석이 돌 수 있지만, 그 에너지가 결과를 지배하면 판단 근거가 약해집니다.</p>
+                        <ul class="clean-list">
+                            <li>stabilization energy를 strain energy와 비교합니다.</li>
+                            <li>viscous regularization은 물리 damping인지 수치 장치인지 분리합니다.</li>
+                            <li>energy ratio trend가 특정 구간에서 튀는지 봅니다.</li>
+                        </ul>
+                        <div class="warning-box">주의: 정상 종료보다 stabilization이 결과를 얼마나 밀었는지가 더 중요할 수 있습니다.</div>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Failure Log Triage</div>
+                <p class="section-copy">에러 메시지는 결론이 아니라 증상입니다. 아래처럼 증상을 원인 후보와 다음 실험으로 바꾸는 표를 남깁니다.</p>
+                <div class="matrix-grid">
+                    <article class="matrix-card">
+                        <span class="tag">Zero Pivot</span>
+                        <h3><i class='bx bx-error-circle'></i>구속 누락 또는 과구속</h3>
+                        <p>자유도가 떠 있거나 중복 constraint가 생겼을 때 나타날 수 있습니다.</p>
+                        <ul class="clean-list">
+                            <li>rigid body mode 후보 node와 component를 찾습니다.</li>
+                            <li>tie, coupling, connector, BC 중복을 점검합니다.</li>
+                            <li>temporary weak spring은 원인 파악용으로만 씁니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Too Many Cutbacks</span>
+                        <h3><i class='bx bx-repeat'></i>진행 불능 구간</h3>
+                        <p>contact onset, plastic localization, instability, bad element distortion이 후보입니다.</p>
+                        <ul class="clean-list">
+                            <li>cutback 직전 field output을 저장합니다.</li>
+                            <li>load ramp를 부드럽게 하고 결과 변화가 줄어드는지 봅니다.</li>
+                            <li>contact와 material을 한 번에 바꾸지 않습니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Excessive Distortion</span>
+                        <h3><i class='bx bx-shape-triangle'></i>element quality 또는 물리 붕괴</h3>
+                        <p>mesh가 문제인지 실제 large deformation인지 분리해야 합니다.</p>
+                        <ul class="clean-list">
+                            <li>distorted element 위치와 mesh quality report를 연결합니다.</li>
+                            <li>local contact pressure 또는 plastic strain 집중을 확인합니다.</li>
+                            <li>remesh, element type 변경, Explicit 전환 후보를 분리합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Contact Chattering</span>
+                        <h3><i class='bx bx-transfer-alt'></i>반복 접촉 상태 변화</h3>
+                        <p>접촉이 붙었다 떨어지기를 반복하면 increment가 작아지고 residual이 흔들립니다.</p>
+                        <ul class="clean-list">
+                            <li>surface normal, initial clearance, contact pair 정의를 봅니다.</li>
+                            <li>friction과 penalty stiffness sensitivity를 비교합니다.</li>
+                            <li>contact status history를 output으로 남깁니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Two-Week Work Plan</div>
+                <div class="agenda-table">
+                    <div class="agenda-row"><div class="agenda-day">Day 1</div><div><h3>비선형성 분류표 만들기</h3><p>material, contact, geometry, constraint, instability를 증상과 evidence로 분리합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 2</div><div><h3>plasticity 단순 coupon 모델</h3><p>elastic-plastic stress-strain curve, yielding onset, plastic strain output을 확인합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 3</div><div><h3>contact block benchmark</h3><p>normal behavior, friction, contact pressure, penetration, status output을 비교합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 4</div><div><h3>large deformation on/off 비교</h3><p>NLGEOM 설정에 따른 load-displacement curve와 stress trend 차이를 기록합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 5</div><div><h3>increment와 cutback 읽기</h3><p>.msg/.sta에서 cutback 구간을 찾고 물리 사건과 연결합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 6</div><div><h3>constraint failure case 분해</h3><p>zero pivot, rigid body motion, overconstraint 메시지를 node/DOF 관점으로 정리합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 7</div><div><h3>stabilization sensitivity</h3><p>stabilization을 켰을 때 에너지 비율과 결과 변화가 허용 가능한지 확인합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 8</div><div><h3>failed log 3개 triage</h3><p>실패 로그를 원인 후보, 증거, 다음 실험으로 표준 분류합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 9</div><div><h3>비선형 결과 report rule</h3><p>정상 종료, plastic strain, contact evidence, energy evidence, caveat를 한 장으로 묶습니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 10</div><div><h3>Nonlinear Evidence Memo 작성</h3><p>비선형 해석을 신뢰하거나 보류하는 기준을 memo 형식으로 정리합니다.</p></div></div>
+                </div>
+
+                <div class="section-kicker">Deliverables</div>
+                <div class="detail-grid">
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 1</span>
+                        <h3><i class='bx bx-sitemap'></i>Nonlinear Decision Tree</h3>
+                        <p>비선형 원인을 material/contact/geometry/constraint/instability로 분기하는 표입니다.</p>
+                        <ul class="clean-list">
+                            <li>증상: warning, cutback, residual, distorted element.</li>
+                            <li>후보 원인: contact, plasticity, BC, mesh.</li>
+                            <li>다음 실험: output 추가, ramp 변경, contact sensitivity.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 2</span>
+                        <h3><i class='bx bx-file-find'></i>Log Triage Sheet</h3>
+                        <p>.msg, .sta, .dat 로그에서 실패 지점을 추적하는 sheet입니다.</p>
+                        <ul class="clean-list">
+                            <li>실패 increment와 step time.</li>
+                            <li>직전 contact/plasticity 상태.</li>
+                            <li>수정 후보와 수정 후 결과 변화.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 3</span>
+                        <h3><i class='bx bx-transfer'></i>Contact Setup Note</h3>
+                        <p>contact pair, friction, clearance, pressure, status output을 묶어 검토합니다.</p>
+                        <ul class="clean-list">
+                            <li>surface normal과 initial gap.</li>
+                            <li>normal/tangential behavior.</li>
+                            <li>penetration과 contact pressure trend.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 4</span>
+                        <h3><i class='bx bx-line-chart'></i>Plasticity Evidence Note</h3>
+                        <p>yield 이후 결과가 material curve 범위 안에서 해석되는지 정리합니다.</p>
+                        <ul class="clean-list">
+                            <li>true stress-strain 변환 여부.</li>
+                            <li>plastic strain localization.</li>
+                            <li>hardening law와 실험 범위의 일치 여부.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Evidence Checklist</div>
+                <div class="detail-grid">
+                    <article class="review-card">
+                        <span class="tag">Setup</span>
+                        <h3><i class='bx bx-check-shield'></i>해석 설정 확인</h3>
+                        <ul class="clean-list">
+                            <li>비선형 원인이 material/contact/geometry 중 무엇인지 분류되어 있는가?</li>
+                            <li>필요한 history output이 실패 구간을 설명할 수 있는가?</li>
+                            <li>load ramp와 boundary condition이 물리 상황을 왜곡하지 않는가?</li>
+                        </ul>
+                    </article>
+                    <article class="review-card">
+                        <span class="tag">Solve</span>
+                        <h3><i class='bx bx-search'></i>수렴 증거 확인</h3>
+                        <ul class="clean-list">
+                            <li>cutback 반복 위치가 물리 사건과 연결되는가?</li>
+                            <li>stabilization energy가 결과를 지배하지 않는가?</li>
+                            <li>warning을 결과 영향 관점에서 설명할 수 있는가?</li>
+                        </ul>
+                    </article>
+                    <article class="review-card">
+                        <span class="tag">Decision</span>
+                        <h3><i class='bx bx-bulb'></i>판단 기준 확인</h3>
+                        <ul class="clean-list">
+                            <li>정상 종료와 신뢰 가능성을 분리해서 말할 수 있는가?</li>
+                            <li>결과를 보류해야 할 uncertainty가 남아 있는가?</li>
+                            <li>다음 실험이 가장 큰 원인 후보를 줄이는 방향인가?</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

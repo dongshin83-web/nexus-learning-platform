@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Mechanics Simulation Learning Plan Export</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --panel-soft: #172033;
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #a8b3c7;
+            --accent: #f59e0b;
+            --cyan: #38bdf8;
+            --green: #34d399;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, "Noto Sans KR", sans-serif;
+            line-height: 1.65;
+        }
+        main {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 48px 24px 72px;
+        }
+        header {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 28px;
+            margin-bottom: 28px;
+        }
+        .eyebrow {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        h1, h2, h3 {
+            line-height: 1.25;
+            margin: 0;
+        }
+        h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+        h2 {
+            font-size: 22px;
+            margin: 34px 0 14px;
+            color: #fff;
+        }
+        h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        p { margin: 0 0 12px; color: var(--muted); }
+        a { color: var(--cyan); }
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .chip {
+            display: inline-flex;
+            border: 1px solid rgba(245, 158, 11, 0.32);
+            background: rgba(245, 158, 11, 0.12);
+            color: #fde68a;
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .hero-note {
+            border: 1px solid rgba(245, 158, 11, 0.32);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(56, 189, 248, 0.08));
+            border-radius: 8px;
+            padding: 22px;
+            margin: 22px 0 8px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 14px;
+        }
+        .card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .card strong {
+            color: #fff;
+        }
+        ul {
+            margin: 10px 0 0;
+            padding-left: 19px;
+            color: var(--muted);
+        }
+        li { margin: 6px 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            border-bottom: 1px solid var(--line);
+            padding: 12px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: rgba(245, 158, 11, 0.13);
+            color: #fde68a;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        td { color: var(--muted); }
+        tr:last-child td { border-bottom: none; }
+        .section-kicker {
+            color: var(--cyan);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 28px 0 10px;
+        }
+        .checklist {
+            display: grid;
+            gap: 10px;
+        }
+        .check-row {
+            border-left: 3px solid var(--cyan);
+            background: rgba(56, 189, 248, 0.07);
+            border-radius: 6px;
+            padding: 12px 14px;
+            color: #dbeafe;
+        }
+        pre {
+            white-space: pre-wrap;
+            background: #0b1020;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 18px;
+            color: #d1d5db;
+            overflow-x: auto;
+            line-height: 1.55;
+        }
+        .footer {
+            margin-top: 44px;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        @media print {
+            body { background: #fff; color: #111827; }
+            main { max-width: none; padding: 22px; }
+            p, td, li, .footer { color: #374151; }
+            .card, .hero-note, table, pre { border-color: #d1d5db; background: #fff; }
+            .chip { color: #92400e; }
+            h1, h2, h3 { color: #111827; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <div class="eyebrow">Nexus Learning Platform Export</div>
+            <h1>Structural Mechanics Simulation Learning Plan</h1>
+            <p>Abaqus와 HyperMesh를 기반으로 구조역학 해석 모델, 결과 검토, evidence reading을 정리한 학습 계획입니다.</p>
+            <div class="meta">
+                <span class="chip">Abaqus</span>
+                <span class="chip">HyperMesh</span>
+                <span class="chip">FEA Evidence</span>
+                <span class="chip">12-Week Plan</span>
+            </div>
+        </header>
+
+        <section class="hero-note">
+            <h2>학습 목표</h2>
+            <p>목표는 모델을 빠르게 만드는 기술보다, 해석을 읽고 판단하는 기준을 갖추는 것입니다.</p>
+            <p>Abaqus와 HyperMesh의 모든 버튼을 외우는 과정이 아닙니다. 외부 기술 상황과 고객 요구를 simulation campaign으로 정리하고, 모델의 핵심 가정과 약한 고리를 빠르게 확인하는 데 초점을 둡니다.</p>
+            <p><strong>North Star:</strong> 결과를 볼 때, 핵심 확인 항목만으로 모델의 물리 가정, 수치 리스크, 판단 가능 범위를 정리합니다.</p>
+        </section>
+
+        <section>
+            <h2>핵심 기준</h2>
+            <div class="grid">
+                <article class="card">
+                    <h3>학습 목표의 중심</h3>
+                    <p>직접 모델링 속도보다 해석 목적, 모델 가정, 수치 리스크, 판단 가능 범위를 정리하는 능력을 우선합니다.</p>
+                    <ul>
+                        <li>외부 요구를 failure mode와 simulation question으로 바꿉니다.</li>
+                        <li>Abaqus/HyperMesh 선택과 해석 workflow가 문제에 맞는지 확인합니다.</li>
+                        <li>결과 그림보다 reaction, energy, convergence, correlation evidence를 먼저 봅니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>필요한 최소 이해 범위</h3>
+                    <p>element, material, contact, boundary condition, nonlinear step, solver log를 읽고 모델의 약한 연결고리를 토론할 수 있는 수준을 목표로 합니다.</p>
+                    <ul>
+                        <li>Standard와 Explicit의 선택 이유를 설명할 수 있습니다.</li>
+                        <li>mesh convergence와 singularity를 구분할 수 있습니다.</li>
+                        <li>경계조건이 실제 load path를 왜곡하는지 확인할 수 있습니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>우선순위를 낮춰도 되는 영역</h3>
+                    <p>모든 GUI 조작, 모든 deck option, 모든 contact parameter 암기는 우선순위를 낮춥니다. 대신 옵션이 쓰이는 상황과 검증 기준을 정리합니다.</p>
+                    <ul>
+                        <li>버튼 위치보다 input deck의 구조를 읽는 능력을 우선합니다.</li>
+                        <li>UMAT/VUMAT을 직접 구현하기보다 언제 필요한지 판단합니다.</li>
+                        <li>HyperMesh 작업 속도보다 mesh quality 기준을 검토합니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>해석 검토 대화 기준</h3>
+                    <p>정답을 바로 찾기보다, 모델에 숨어 있는 가정과 evidence의 빈틈을 선명하게 드러내는 대화를 목표로 합니다.</p>
+                    <ul>
+                        <li>이 결과를 믿어도 되는 가장 강한 근거는 무엇인가?</li>
+                        <li>이 모델이 현실을 가장 크게 단순화한 지점은 어디인가?</li>
+                        <li>의사결정에 쓰기 전에 하나만 더 검증한다면 무엇인가?</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>12주 로드맵</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>구간</th>
+                        <th>주제</th>
+                        <th>학습 초점</th>
+                        <th>산출물</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Weeks 1-2</td>
+                        <td>구조역학과 FEA 판단 언어 정렬</td>
+                        <td>continuum mechanics, 선형 탄성, plane stress/strain, beam/shell/solid element</td>
+                        <td>benchmark 3개에 대한 해석 목적, 지배 가정, 예상 결과 1페이지 정리</td>
+                    </tr>
+                    <tr>
+                        <td>Weeks 3-4</td>
+                        <td>Abaqus 기본 workflow와 evidence 읽기</td>
+                        <td>part, property, assembly, step, interaction, load, BC, job, visualization, reaction balance</td>
+                        <td>cantilever, plate with hole, simple bracket 결과를 mesh refinement별로 비교</td>
+                    </tr>
+                    <tr>
+                        <td>Weeks 5-6</td>
+                        <td>HyperMesh 모델 빌드와 mesh quality 검토</td>
+                        <td>CAD import, topology cleanup, midsurface, shell/solid mesh, connector, deck export</td>
+                        <td>Geometry Cleanup Log, Mesh Quality Report, Abaqus Handoff Checklist 초안</td>
+                    </tr>
+                    <tr>
+                        <td>Weeks 7-8</td>
+                        <td>비선형 해석의 리스크 구조</td>
+                        <td>contact, plasticity, large deformation, convergence diagnostics</td>
+                        <td>Nonlinear Decision Tree와 Log Triage Sheet</td>
+                    </tr>
+                    <tr>
+                        <td>Weeks 9-10</td>
+                        <td>동역학, Explicit, thermal stress 판단</td>
+                        <td>stable time increment, mass scaling, energy ratio, thermal expansion, residual stress</td>
+                        <td>Solver Selection Matrix, Explicit Energy Memo, Thermal Stress Assumption Note</td>
+                    </tr>
+                    <tr>
+                        <td>Weeks 11-12</td>
+                        <td>검토 시스템과 capstone synthesis</td>
+                        <td>Abaqus Python scripting, 반복 실행 자동화, 결과 extraction, V&amp;V, decision memo</td>
+                        <td>Simulation Evidence Memo v1, Capstone Campaign Pack, 자동화 script plan</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Tool Workflow</h2>
+            <div class="grid">
+                <article class="card">
+                    <h3>1. External Need</h3>
+                    <p>시장, 고객, 제품 리스크를 구조역학 계산 문제로 정리합니다.</p>
+                    <p><strong>Check:</strong> 우리가 알고 싶은 것은 최대 응력인가, 변형량인가, 수명인가, 접촉 안정성인가?</p>
+                </article>
+                <article class="card">
+                    <h3>2. HyperMesh Model Build</h3>
+                    <p>CAD cleanup, mesh topology, element type, connector, part organization을 정리해 solver가 읽을 수 있는 모델을 만듭니다.</p>
+                    <p><strong>Check:</strong> 이 mesh는 물리 현상을 보기 위한 mesh인가, 단지 보기 좋은 mesh인가?</p>
+                </article>
+                <article class="card">
+                    <h3>3. Abaqus Physics Setup</h3>
+                    <p>material, contact, load, BC, step, nonlinear option을 실제 물리 상황에 맞게 배치합니다.</p>
+                    <p><strong>Check:</strong> 경계조건이 실제 load path를 대체하고 있는가, 아니면 왜곡하고 있는가?</p>
+                </article>
+                <article class="card">
+                    <h3>4. Solve Evidence</h3>
+                    <p>수렴 로그, reaction balance, energy balance, increment history, warning 메시지를 결과 그림보다 먼저 확인합니다.</p>
+                    <p><strong>Check:</strong> 이 해석은 정상 종료되었는가, 아니면 운 좋게 숫자가 나온 것인가?</p>
+                </article>
+                <article class="card">
+                    <h3>5. Decision Memo</h3>
+                    <p>결과를 의사결정 가능한 언어로 바꿉니다. 신뢰 가능한 범위, 남은 리스크, 다음 해석을 명확히 적습니다.</p>
+                    <p><strong>Check:</strong> 이 결과로 지금 결정할 수 있는 것과 결정하면 안 되는 것은 무엇인가?</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>Evidence Checklist</h2>
+            <div class="checklist">
+                <div class="check-row"><strong>Problem Framing:</strong> 해석의 의사결정 질문이 한 문장으로 정의되어 있는가?</div>
+                <div class="check-row"><strong>Model Fidelity:</strong> geometry simplification, element 선택, material model이 문제 스케일과 맞는가?</div>
+                <div class="check-row"><strong>Numerical Reliability:</strong> mesh convergence 또는 최소한 mesh sensitivity가 확인되었는가?</div>
+                <div class="check-row"><strong>Result Evidence:</strong> reaction force와 applied load가 균형을 이루는가?</div>
+                <div class="check-row"><strong>Decision Readiness:</strong> 현재 결과로 가능한 결정과 불가능한 결정이 분리되어 있는가?</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>1~12주차 실행 포인트</h2>
+            <div class="grid">
+                <article class="card">
+                    <h3>Weeks 1-2 Foundation</h3>
+                    <ul>
+                        <li>stress, strain, stiffness, load path, element, DOF를 같은 의미로 말할 수 있게 정리합니다.</li>
+                        <li>cantilever, plate with hole, simple bracket benchmark로 손계산, mesh sensitivity, Abaqus output을 연결합니다.</li>
+                        <li>결과 검토에 바로 쓸 확인 항목을 남깁니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>Weeks 3-4 Abaqus Evidence</h3>
+                    <ul>
+                        <li>선형 정적 모델의 구조를 읽고 결과가 판단에 쓸 수 있는지 확인합니다.</li>
+                        <li>.inp, .odb, .msg, .sta, reaction balance, field/history output을 결과 그림보다 먼저 봅니다.</li>
+                        <li>Abaqus Evidence Memo에는 결과 이미지, RF balance, input deck map, warning 해석을 포함합니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>Weeks 5-6 HyperMesh Model Quality</h3>
+                    <ul>
+                        <li>CAD import, topology cleanup, midsurface, shell/solid mesh, connector를 solver-readable model 관점으로 읽습니다.</li>
+                        <li>aspect, skew, warpage, jacobian 같은 mesh quality metric을 결과 리스크와 연결합니다.</li>
+                        <li>Geometry Cleanup Log, Mesh Quality Report, Abaqus Handoff Checklist를 남깁니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>Weeks 7-8 Nonlinear Risk Structure</h3>
+                    <ul>
+                        <li>contact, plasticity, large deformation, constraint, instability를 각각 다른 원인 후보로 분리합니다.</li>
+                        <li>.msg/.sta의 cutback, residual, zero pivot, excessive distortion을 다음 실험으로 바꿉니다.</li>
+                        <li>Nonlinear Decision Tree, Log Triage Sheet, Contact Setup Note를 작성합니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>Weeks 9-10 Solver Strategy</h3>
+                    <ul>
+                        <li>Standard, Explicit, modal, transient dynamic, thermal stress 문제를 solver 선택 matrix로 정리합니다.</li>
+                        <li>Explicit에서는 stable time increment, mass scaling, kinetic/internal energy, artificial energy를 먼저 봅니다.</li>
+                        <li>thermal stress는 CTE, reference temperature, temperature mapping, 구속 조건을 함께 검토합니다.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3>Weeks 11-12 Capstone Synthesis</h3>
+                    <ul>
+                        <li>대표 문제 하나를 baseline과 variant가 있는 simulation campaign으로 설계합니다.</li>
+                        <li>Abaqus Python은 job 반복 실행, ODB extraction, result table 생성 같은 반복 evidence 생산에 사용합니다.</li>
+                        <li>Simulation Evidence Memo v1, Capstone Campaign Pack, Operating Checklist를 완성합니다.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>Capstone Cases</h2>
+            <div class="grid">
+                <article class="card">
+                    <h3>Cantilever Benchmark</h3>
+                    <p>Euler-Bernoulli beam hand calculation과 Abaqus 결과를 비교해 FEA 기본 신뢰도 감각을 만듭니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Plate With Hole</h3>
+                    <p>stress concentration factor, mesh density, stress averaging option의 영향을 확인합니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Bolted or Contact Assembly</h3>
+                    <p>friction, preload, contact pressure sensitivity를 확인하고 수렴 실패 원인을 분류합니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Thermal Stress Model</h3>
+                    <p>CTE mismatch로 발생하는 응력 방향을 예측하고 온도장 입력 방식과 structural step을 연결합니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Impact or Quasi-static Explicit</h3>
+                    <p>kinetic/internal energy ratio와 mass scaling의 물리 왜곡 가능성을 검토합니다.</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>Key Terms</h2>
+            <div class="grid">
+                <article class="card">
+                    <h3>Element</h3>
+                    <p>구조물을 나누는 계산 단위입니다. formulation, integration, aspect ratio가 결과 신뢰도에 어떤 영향을 주는지 확인합니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Boundary Condition</h3>
+                    <p>현실의 지지, 구속, 하중 전달을 수학적으로 대체하는 조건입니다. 잘못된 BC는 실제 load path를 없앨 수 있습니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Contact</h3>
+                    <p>부품 사이의 닿음, 미끄러짐, 분리, 마찰을 표현합니다. contact pressure와 penetration을 함께 봅니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Convergence</h3>
+                    <p>비선형 해석에서 평형 방정식을 만족하는 해를 찾는 과정입니다. residual, increment cutback, warning의 의미가 중요합니다.</p>
+                </article>
+                <article class="card">
+                    <h3>Energy Balance</h3>
+                    <p>Explicit에서는 internal, kinetic, artificial, hourglass energy를 비교해 물리 문제와 수치 문제를 구분합니다.</p>
+                </article>
+                <article class="card">
+                    <h3>V&V</h3>
+                    <p>Verification은 방정식을 제대로 풀었는가, Validation은 현실을 제대로 대표하는가의 질문입니다.</p>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>NotebookLM Deep Research Prompt</h2>
+            <pre>NotebookLM의 Deep Research 기능을 켜고, 아래 목적에 맞춰 구조역학 Simulation 학습 자료를 만들어줘.
+
+목적:
+나는 DFT와 MD 기반 지식이 있고, CFD와 DSMC Tool, Boltzmann 방정식 기반 입자 유동 계산을 직접 다뤄본 경험이 있다. 이제 Abaqus와 HyperMesh를 사용하는 구조역학 Simulation의 모델 구성과 결과 검토를 깊이 있게 이해하고 싶다.
+
+내 목표는 Abaqus/HyperMesh의 최고 숙련자가 되는 것이 아니라, 모델과 결과를 보고 물리 가정, 수치 리스크, 모델 신뢰도, 다음 해석 방향을 판단할 수 있는 실무적 이해를 갖추는 것이다.
+
+다음 목차로 조사하고 정리해줘.
+
+1. 구조역학 FEA의 핵심 원리
+- continuum mechanics, weak form, element, DOF, stiffness, stress/strain, load path
+- DFT/MD/CFD/DSMC 경험자가 이해하기 쉬운 대응 관계
+
+2. Abaqus 학습 우선순위
+- Abaqus/CAE workflow
+- input deck과 ODB에서 반드시 읽어야 할 정보
+- Abaqus/Standard와 Abaqus/Explicit 선택 기준
+- nonlinear, contact, plasticity, large deformation, convergence diagnostics
+
+3. HyperMesh 학습 우선순위
+- CAD cleanup, topology, midsurface, shell/solid mesh
+- mesh quality 기준과 나쁜 mesh가 만드는 결과 왜곡
+- Abaqus solver profile, deck export, connector, model organization
+
+4. Simulation Evidence Checklist
+- problem framing
+- model fidelity
+- boundary condition and load path
+- mesh convergence and sensitivity
+- solver log and warning
+- result interpretation and decision readiness
+
+5. 12주 학습 로드맵
+- 주차별 학습 목표
+- 직접 해볼 benchmark case
+- 해석 검토 질문
+- 산출물 형식
+
+6. 반드시 피해야 할 오해
+- 예쁜 contour plot을 신뢰도로 착각하는 경우
+- singularity와 실제 hot spot을 혼동하는 경우
+- 정상 종료를 검증 완료로 착각하는 경우
+- contact stabilization, mass scaling, artificial energy를 과소평가하는 경우
+
+7. 최종 산출물
+- 매주 누적할 learning memo template
+- 해석 검토 agenda template
+- capstone simulation campaign 예시
+
+가능하면 공식 문서와 산업 실무 관점의 키워드를 함께 제시하고, 각 항목마다 "검토 질문"을 별도로 정리해줘.</pre>
+        </section>
+
+        <div class="footer">
+            Source page: structural_mechanics.html. Export target: standalone HTML document for offline review and sharing.
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weeks 9-10 | Structural Mechanics Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="structural_mechanics_detail.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-shape-square'></i>
+                <span>StructSim</span>
+            </div>
+
+            <p class="sidebar-category">LEARNING</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#objective-section'">
+                    <i class='bx bx-compass'></i>
+                    <span>Learning Objective</span>
+                </li>
+                <li class="active" onclick="location.href='structural_mechanics.html#roadmap-section'">
+                    <i class='bx bx-map-alt'></i>
+                    <span>12-Week Plan</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#workflow-section'">
+                    <i class='bx bx-git-merge'></i>
+                    <span>Tool Workflow</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">EVIDENCE</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#review-section'">
+                    <i class='bx bx-check-shield'></i>
+                    <span>Evidence Checklist</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#cases-section'">
+                    <i class='bx bx-test-tube'></i>
+                    <span>Capstone Cases</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#terms-section'">
+                    <i class='bx bx-book-content'></i>
+                    <span>Key Terms</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#prompt-section'">
+                    <i class='bx bx-brain'></i>
+                    <span>NotebookLM Prompt</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>Solver Strategy</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1>Weeks 9-10 Solver Strategy</h1>
+                    <p>Standard, Explicit, dynamics, thermal stress를 solver 선택 기준으로 정리하는 2주</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section class="detail-hero">
+                    <div class="detail-topline">
+                        <h2>solver를 고르는 기준과 energy evidence 읽기</h2>
+                        <a href="structural_mechanics.html#roadmap-section" class="detail-back-btn"><i class='bx bx-arrow-back'></i> 12-Week Plan</a>
+                    </div>
+                    <p>9~10주차는 Abaqus/Standard와 Abaqus/Explicit를 기능명으로 외우는 구간이 아닙니다. 문제의 시간 스케일, 접촉 강도, 관성 효과, 큰 변형, 열팽창, 잔류응력이 어떤 solver evidence를 요구하는지 분리해 봅니다.</p>
+                </section>
+
+                <div class="section-kicker">Solver Selection Map</div>
+                <p class="section-copy">solver 선택은 계산 속도 선택이 아니라 물리 문제의 성격 선택입니다. 같은 형상이라도 quasi-static, impact, thermal gradient, preload history가 다르면 필요한 evidence가 달라집니다.</p>
+                <div class="workflow-grid">
+                    <article class="workflow-card">
+                        <span class="tag">Standard Static</span>
+                        <h3><i class='bx bx-balance-scale'></i>평형을 직접 찾는 문제</h3>
+                        <p>관성이 중요하지 않고 최종 평형 상태가 관심이면 Abaqus/Standard의 Static step이 기본 후보입니다.</p>
+                        <ul class="clean-list">
+                            <li>하중 증가 경로가 물리적으로 의미 있는지 확인합니다.</li>
+                            <li>reaction balance와 residual history를 기본 evidence로 봅니다.</li>
+                            <li>contact와 plasticity가 강해지면 increment cutback이 핵심 신호가 됩니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Explicit</span>
+                        <h3><i class='bx bx-bolt-circle'></i>접촉, 충격, 큰 변형이 지배하는 문제</h3>
+                        <p>짧은 시간 충격, 복잡한 접촉, element distortion이 큰 문제에서는 Explicit가 자연스러운 후보가 됩니다.</p>
+                        <ul class="clean-list">
+                            <li>stable time increment가 계산 비용을 지배합니다.</li>
+                            <li>quasi-static으로 쓰려면 kinetic energy가 internal energy를 지배하지 않아야 합니다.</li>
+                            <li>mass scaling은 시간 비용을 줄이지만 물리 스케일을 바꿀 수 있습니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Modal / Frequency</span>
+                        <h3><i class='bx bx-wave'></i>고유진동수와 mode shape</h3>
+                        <p>동적 응답의 출발점은 구조가 어떤 주파수에서 쉽게 움직이는지 파악하는 것입니다.</p>
+                        <ul class="clean-list">
+                            <li>BC가 고유진동수를 과도하게 올리거나 낮추지 않는지 봅니다.</li>
+                            <li>mode shape가 실제 관심 변형 모드와 연결되는지 확인합니다.</li>
+                            <li>mass modeling, connector stiffness, contact 상태가 민감 변수입니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Transient Dynamic</span>
+                        <h3><i class='bx bx-time-five'></i>시간 이력이 결과를 바꾸는 문제</h3>
+                        <p>load duration, damping, inertia가 결과를 바꾸면 정적 해석이 아니라 transient dynamic 관점이 필요합니다.</p>
+                        <ul class="clean-list">
+                            <li>하중 지속 시간이 구조 고유주기와 비교해 짧은지 긴지 봅니다.</li>
+                            <li>damping 가정은 결과 진폭과 잔류 진동을 크게 바꿉니다.</li>
+                            <li>output frequency가 peak response를 놓치지 않는지 확인합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Thermal Stress</span>
+                        <h3><i class='bx bx-thermometer'></i>온도장이 만든 변형 구속</h3>
+                        <p>열응력은 온도 자체보다 열팽창이 구속되는 방식이 핵심입니다. CTE, reference temperature, thermal gradient를 함께 봅니다.</p>
+                        <ul class="clean-list">
+                            <li>temperature field가 균일장인지 gradient인지 구분합니다.</li>
+                            <li>reference temperature와 CTE 단위가 맞는지 확인합니다.</li>
+                            <li>free expansion이면 응력이 작고, 구속되면 응력이 커지는 구조를 먼저 예상합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">Residual Stress</span>
+                        <h3><i class='bx bx-layer-plus'></i>공정 history가 남긴 초기 응력</h3>
+                        <p>용접, 성형, 열처리, 조립 preload처럼 이전 단계의 history가 현재 구조 응답을 바꿀 수 있습니다.</p>
+                        <ul class="clean-list">
+                            <li>초기응력을 입력값으로 둘지, 이전 step에서 만들어 넘길지 정합니다.</li>
+                            <li>잔류응력과 외부하중 응력을 단순 합산해도 되는지 검토합니다.</li>
+                            <li>validation data가 없으면 판단 가능 범위를 보수적으로 제한합니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Explicit Energy Evidence</div>
+                <p class="section-copy">Explicit 결과는 정상 종료 여부보다 energy history가 먼저입니다. 특히 quasi-static Explicit에서는 kinetic energy, internal energy, artificial energy, hourglass energy의 상대 크기를 읽어야 합니다.</p>
+                <div class="evidence-grid">
+                    <article class="evidence-card">
+                        <span class="tag">Stable Time Increment</span>
+                        <h3><i class='bx bx-timer'></i>가장 작은 element가 시간을 지배</h3>
+                        <p>Explicit의 시간 증분은 wave speed와 element characteristic length에 의해 제한됩니다. 아주 작은 element 하나가 전체 비용을 지배할 수 있습니다.</p>
+                        <div class="rule-box">기준: stable time increment가 급격히 작아진 구간과 element distortion 위치를 함께 봅니다.</div>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Mass Scaling</span>
+                        <h3><i class='bx bx-slider-alt'></i>계산 시간을 사는 대신 물리를 빌리는 선택</h3>
+                        <p>mass scaling은 계산 비용을 줄일 수 있지만, 관성 효과와 응답 속도를 바꿀 수 있습니다. 설정값보다 energy 변화가 더 중요합니다.</p>
+                        <ul class="clean-list">
+                            <li>mass increase ratio를 기록합니다.</li>
+                            <li>mass scaling 전후 displacement, force, energy trend를 비교합니다.</li>
+                            <li>impact 문제에서는 mass scaling이 더 위험할 수 있습니다.</li>
+                        </ul>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Energy Ratio</span>
+                        <h3><i class='bx bx-line-chart'></i>kinetic/internal energy</h3>
+                        <p>quasi-static Explicit에서는 kinetic energy가 internal energy보다 충분히 작아야 합니다. 절대 기준 하나보다 trend와 peak 구간을 함께 봅니다.</p>
+                        <div class="rule-box">기준: kinetic energy spike가 contact onset이나 load ramp와 연결되는지 표시합니다.</div>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Artificial Energy</span>
+                        <h3><i class='bx bx-error-circle'></i>hourglass와 수치 에너지</h3>
+                        <p>reduced integration element에서는 hourglass mode가 생길 수 있습니다. artificial energy가 커지면 물리 결과보다 수치 장치가 결과를 만들 수 있습니다.</p>
+                        <div class="warning-box">주의: 예쁜 contour라도 artificial energy가 결과 에너지의 큰 비중이면 판단 근거가 약합니다.</div>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Thermal Stress Evidence</div>
+                <p class="section-copy">열응력 해석은 재료 지식과 구조 경계조건이 만나는 구간입니다. 온도 의존 물성, CTE mismatch, 구속 조건, sequential coupling의 mapping 품질을 함께 검토합니다.</p>
+                <div class="matrix-grid">
+                    <article class="matrix-card">
+                        <span class="tag">Material</span>
+                        <h3><i class='bx bx-certification'></i>CTE와 reference temperature</h3>
+                        <p>열팽창 변형률은 기준 온도와 CTE 정의에 민감합니다.</p>
+                        <ul class="clean-list">
+                            <li>CTE 단위와 온도 단위를 함께 확인합니다.</li>
+                            <li>온도 의존 E, yield stress가 필요한 범위인지 봅니다.</li>
+                            <li>multi-material assembly는 CTE mismatch 방향을 먼저 예상합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Mapping</span>
+                        <h3><i class='bx bx-transfer-alt'></i>temperature field 전달</h3>
+                        <p>thermal analysis 결과를 structural step으로 넘길 때 mesh, 시간점, 좌표계가 맞아야 합니다.</p>
+                        <ul class="clean-list">
+                            <li>temperature field가 구조 mesh에 잘 mapping되었는지 확인합니다.</li>
+                            <li>peak temperature보다 gradient와 constraint 위치를 같이 봅니다.</li>
+                            <li>thermal step time과 structural load step의 의미를 구분합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Constraint</span>
+                        <h3><i class='bx bx-lock-alt'></i>free expansion과 구속 응력</h3>
+                        <p>열은 자유롭게 팽창하면 큰 응력을 만들지 않습니다. 응력은 팽창이 막히는 곳에서 생깁니다.</p>
+                        <ul class="clean-list">
+                            <li>fixture, symmetry, contact가 열팽창을 막는 위치를 표시합니다.</li>
+                            <li>반력 변화가 thermal load path를 설명하는지 봅니다.</li>
+                            <li>완전 구속 BC가 열응력을 과대평가하지 않는지 확인합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Superposition</span>
+                        <h3><i class='bx bx-layer'></i>thermal + mechanical load</h3>
+                        <p>선형 범위에서는 중첩이 가능할 수 있지만, contact, plasticity, large deformation이 있으면 history가 중요해집니다.</p>
+                        <ul class="clean-list">
+                            <li>load 순서가 결과를 바꾸는지 비교합니다.</li>
+                            <li>잔류응력과 외부 하중 stress를 단순 합산하지 않습니다.</li>
+                            <li>decision memo에는 thermal-only와 combined 결과를 분리합니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Two-Week Work Plan</div>
+                <div class="agenda-table">
+                    <div class="agenda-row"><div class="agenda-day">Day 1</div><div><h3>solver selection matrix 초안</h3><p>static, dynamic, explicit, thermal stress 문제를 시간 스케일, 비선형성, evidence 기준으로 분류합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 2</div><div><h3>Standard와 Explicit 비교 benchmark</h3><p>간단한 contact/compression 모델을 Standard와 Explicit로 풀고 결과와 log 차이를 봅니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 3</div><div><h3>stable time increment 해석</h3><p>element size, material wave speed, distortion이 time increment에 미치는 영향을 기록합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 4</div><div><h3>mass scaling sensitivity</h3><p>mass scaling 전후 force-displacement, kinetic/internal energy, peak stress를 비교합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 5</div><div><h3>Explicit energy memo 작성</h3><p>internal, kinetic, artificial, hourglass energy를 한 그래프로 묶고 판단 가능 범위를 적습니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 6</div><div><h3>modal/frequency 최소 모델</h3><p>BC와 connector stiffness를 바꿔 고유진동수와 mode shape가 어떻게 움직이는지 확인합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 7</div><div><h3>thermal expansion benchmark</h3><p>free expansion, fully constrained, partial constraint 조건에서 thermal stress 차이를 비교합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 8</div><div><h3>temperature field mapping 검토</h3><p>thermal result를 structural step으로 넘기는 흐름과 mapping evidence를 정리합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 9</div><div><h3>residual stress handoff 판단</h3><p>공정 history를 초기응력으로 넣을지, 별도 step으로 누적할지 기준을 세웁니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 10</div><div><h3>solver strategy review note</h3><p>문제 유형별 solver 선택, 핵심 evidence, 판단 보류 조건을 한 장으로 정리합니다.</p></div></div>
+                </div>
+
+                <div class="section-kicker">Deliverables</div>
+                <div class="detail-grid">
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 1</span>
+                        <h3><i class='bx bx-table'></i>Solver Selection Matrix</h3>
+                        <p>문제 유형별 solver 후보와 핵심 evidence를 표로 정리합니다.</p>
+                        <ul class="clean-list">
+                            <li>quasi-static, impact, modal, thermal stress, residual stress.</li>
+                            <li>Standard/Explicit 선택 이유.</li>
+                            <li>필수 output과 보류 조건.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 2</span>
+                        <h3><i class='bx bx-line-chart'></i>Explicit Energy Memo</h3>
+                        <p>energy history로 Explicit 결과의 신뢰 가능 범위를 판단합니다.</p>
+                        <ul class="clean-list">
+                            <li>internal, kinetic, artificial, hourglass energy trend.</li>
+                            <li>mass scaling 전후 비교.</li>
+                            <li>contact onset과 energy spike 연결.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 3</span>
+                        <h3><i class='bx bx-thermometer'></i>Thermal Stress Assumption Note</h3>
+                        <p>열팽창 해석에서 반드시 확인할 물성, 온도장, 구속 조건을 기록합니다.</p>
+                        <ul class="clean-list">
+                            <li>CTE, reference temperature, temperature-dependent property.</li>
+                            <li>temperature mapping 방식.</li>
+                            <li>free expansion과 constrained stress 비교.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 4</span>
+                        <h3><i class='bx bx-layer-plus'></i>Residual Stress Handoff Note</h3>
+                        <p>공정 history를 structural 해석으로 넘길 때의 판단 기준을 정리합니다.</p>
+                        <ul class="clean-list">
+                            <li>초기응력 입력 또는 previous step handoff.</li>
+                            <li>외부하중과의 중첩 가능성.</li>
+                            <li>validation data 부족 시 caveat.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Evidence Checklist</div>
+                <div class="detail-grid">
+                    <article class="review-card">
+                        <span class="tag">Solver Choice</span>
+                        <h3><i class='bx bx-check-shield'></i>선택 기준 확인</h3>
+                        <ul class="clean-list">
+                            <li>관성이 중요한 문제인지, 최종 평형만 중요한 문제인지 구분했는가?</li>
+                            <li>contact/impact/large deformation 때문에 Explicit가 필요한가?</li>
+                            <li>thermal load와 mechanical load의 순서가 결과를 바꾸는가?</li>
+                        </ul>
+                    </article>
+                    <article class="review-card">
+                        <span class="tag">Energy</span>
+                        <h3><i class='bx bx-search-alt'></i>energy evidence 확인</h3>
+                        <ul class="clean-list">
+                            <li>kinetic energy가 결과 판단을 지배하지 않는가?</li>
+                            <li>mass scaling이 결과 trend를 바꾸지 않았는가?</li>
+                            <li>artificial/hourglass energy가 허용 가능한 수준인가?</li>
+                        </ul>
+                    </article>
+                    <article class="review-card">
+                        <span class="tag">Decision</span>
+                        <h3><i class='bx bx-bulb'></i>결론 범위 확인</h3>
+                        <ul class="clean-list">
+                            <li>현재 solver로 말할 수 있는 결론과 다른 solver가 필요한 결론을 분리했는가?</li>
+                            <li>thermal/residual stress의 가정과 data 출처가 명시되어 있는가?</li>
+                            <li>다음 해석이 solver choice uncertainty를 줄이는 방향인가?</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

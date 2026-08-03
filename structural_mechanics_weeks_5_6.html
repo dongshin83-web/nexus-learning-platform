@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weeks 5-6 | Structural Mechanics Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="structural_mechanics_detail.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <a href="index.html" class="back-link"><i class='bx bx-arrow-back'></i> Back to Platform</a>
+            <div class="logo mt-3">
+                <i class='bx bx-shape-square'></i>
+                <span>StructSim</span>
+            </div>
+
+            <p class="sidebar-category">LEARNING</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#objective-section'">
+                    <i class='bx bx-compass'></i>
+                    <span>Learning Objective</span>
+                </li>
+                <li class="active" onclick="location.href='structural_mechanics.html#roadmap-section'">
+                    <i class='bx bx-map-alt'></i>
+                    <span>12-Week Plan</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#workflow-section'">
+                    <i class='bx bx-git-merge'></i>
+                    <span>Tool Workflow</span>
+                </li>
+            </ul>
+
+            <p class="sidebar-category mt-2">EVIDENCE</p>
+            <ul class="nav-links">
+                <li onclick="location.href='structural_mechanics.html#review-section'">
+                    <i class='bx bx-check-shield'></i>
+                    <span>Evidence Checklist</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#cases-section'">
+                    <i class='bx bx-test-tube'></i>
+                    <span>Capstone Cases</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#terms-section'">
+                    <i class='bx bx-book-content'></i>
+                    <span>Key Terms</span>
+                </li>
+                <li onclick="location.href='structural_mechanics.html#prompt-section'">
+                    <i class='bx bx-brain'></i>
+                    <span>NotebookLM Prompt</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-bottom">
+                <div class="user-info">
+                    <p>Learning Dashboard</p>
+                    <small>HyperMesh Handoff</small>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-text">
+                    <h1>Weeks 5-6 HyperMesh Model Quality</h1>
+                    <p>geometry cleanup, mesh quality, Abaqus deck handoff를 읽는 2주</p>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <section class="detail-hero">
+                    <div class="detail-topline">
+                        <h2>HyperMesh 모델을 solver-readable evidence로 정리하기</h2>
+                        <a href="structural_mechanics.html#roadmap-section" class="detail-back-btn"><i class='bx bx-arrow-back'></i> 12-Week Plan</a>
+                    </div>
+                    <p>5~6주차의 목표는 HyperMesh 조작 속도가 아니라, Abaqus로 넘어가기 전 모델 품질과 handoff 리스크를 읽는 것입니다. CAD cleanup, midsurface, shell/solid mesh, connector, set/surface, solver profile export가 최종 해석 결과에 어떤 제약을 거는지 확인합니다.</p>
+                </section>
+
+                <div class="section-kicker">HyperMesh Workflow Map</div>
+                <p class="section-copy">HyperMesh는 geometry를 예쁘게 정리하는 도구가 아니라 solver가 해석 가능한 구조를 만드는 전처리 환경입니다. 각 단계의 결과가 `.inp` deck과 Abaqus 결과 신뢰도에 직접 반영됩니다.</p>
+                <div class="workflow-grid">
+                    <article class="workflow-card">
+                        <span class="tag">1. CAD Import</span>
+                        <h3><i class='bx bx-import'></i>형상 수입과 단위계</h3>
+                        <p>CAD가 들어오는 순간 단위, 좌표계, part 분할, 작은 feature의 의미가 결정됩니다.</p>
+                        <ul class="clean-list">
+                            <li>확인 기준: mm-tonne-MPa 계열인지, m-kg-Pa 계열인지 명확한가?</li>
+                            <li>좌표계와 하중 방향이 Abaqus 결과 component와 일관적인가?</li>
+                            <li>불필요한 작은 edge가 mesh seed를 과도하게 지배하지 않는가?</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">2. Topology Cleanup</span>
+                        <h3><i class='bx bx-wrench'></i>연결성 정리</h3>
+                        <p>free edge, duplicate surface, gap, overlap은 solver 단계에서 contact 누락이나 local stiffness 오류로 나타납니다.</p>
+                        <ul class="clean-list">
+                            <li>free edge가 의도한 경계인지, geometry 결함인지 분리합니다.</li>
+                            <li>shared topology가 필요한 부위와 contact surface로 남겨야 할 부위를 구분합니다.</li>
+                            <li>cleanup 기록에는 삭제한 feature와 삭제 이유를 남깁니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">3. Idealization</span>
+                        <h3><i class='bx bx-layer'></i>midsurface와 element 차원</h3>
+                        <p>shell, solid, beam 선택은 mesh 편의가 아니라 물리 현상 표현 방식의 선택입니다.</p>
+                        <ul class="clean-list">
+                            <li>thin wall은 midsurface와 thickness/orientation이 핵심 evidence입니다.</li>
+                            <li>local bearing, fillet stress, contact pressure가 중요하면 solid 유지가 필요할 수 있습니다.</li>
+                            <li>beam idealization은 joint stiffness와 offset 정의가 같이 확인되어야 합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">4. Mesh Strategy</span>
+                        <h3><i class='bx bx-grid'></i>mesh density와 transition</h3>
+                        <p>좋은 mesh는 균일한 mesh가 아니라 stress gradient와 load path를 읽을 수 있는 mesh입니다.</p>
+                        <ul class="clean-list">
+                            <li>hole, notch, contact edge, load introduction 부위는 refinement 근거가 필요합니다.</li>
+                            <li>coarse-to-fine transition이 stiffness jump를 만들지 않는지 확인합니다.</li>
+                            <li>결과 관심 부위와 mesh refinement 부위가 일치해야 합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">5. Connector</span>
+                        <h3><i class='bx bx-link'></i>fastener, weld, RBE</h3>
+                        <p>connector는 실제 조립을 단순화한 모델입니다. 과도하게 강한 연결은 load path를 바꿉니다.</p>
+                        <ul class="clean-list">
+                            <li>RBE2는 강체 연결, RBE3는 분산 연결로 읽습니다.</li>
+                            <li>bolt preload, weld line, adhesive area는 force path와 함께 검토합니다.</li>
+                            <li>connector failure를 볼 것인지, 주변 구조 stiffness만 볼 것인지 분리합니다.</li>
+                        </ul>
+                    </article>
+                    <article class="workflow-card">
+                        <span class="tag">6. Solver Export</span>
+                        <h3><i class='bx bx-export'></i>Abaqus profile handoff</h3>
+                        <p>최종 기준은 HyperMesh 화면이 아니라 Abaqus input deck입니다. property, set, surface, contact, load 이름이 해석 의도를 담아야 합니다.</p>
+                        <ul class="clean-list">
+                            <li>material/section/property 이름이 deck에서 추적 가능한가?</li>
+                            <li>surface, elset, nset 이름이 contact와 output request에 연결되는가?</li>
+                            <li>export 후 Abaqus datacheck 또는 input scan 기준을 둡니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Mesh Quality Metrics</div>
+                <p class="section-copy">mesh quality 숫자는 절대 합격/불합격표가 아니라 결과 리스크를 가리키는 계기판입니다. 어떤 metric이 어떤 물리 오해를 만들 수 있는지 연결해서 봅니다.</p>
+                <div class="matrix-grid">
+                    <article class="matrix-card">
+                        <span class="tag">Shape</span>
+                        <h3><i class='bx bx-shape-square'></i>aspect, skew, angle</h3>
+                        <p>길쭉하거나 비틀린 element는 stress gradient와 local stiffness를 왜곡할 수 있습니다.</p>
+                        <ul class="clean-list">
+                            <li>critical hot spot 주변 quality를 전체 평균보다 우선 확인합니다.</li>
+                            <li>transition zone에서 skew가 몰리면 stiffness path를 의심합니다.</li>
+                            <li>mesh quality plot과 stress contour를 나란히 봅니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Shell</span>
+                        <h3><i class='bx bx-layer-plus'></i>warpage, normals, thickness</h3>
+                        <p>shell 모델은 두께와 법선 방향이 결과 해석의 출발점입니다.</p>
+                        <ul class="clean-list">
+                            <li>normal direction이 pressure, contact, top/bottom stress 해석과 맞는지 봅니다.</li>
+                            <li>midsurface offset이 assembly gap과 contact 조건을 바꾸지 않는지 확인합니다.</li>
+                            <li>warpage가 큰 부위는 bending stress 해석이 흔들릴 수 있습니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Solid</span>
+                        <h3><i class='bx bx-cube-alt'></i>jacobian, tet/hex quality</h3>
+                        <p>solid element는 volume distortion과 integration 안정성이 중요합니다.</p>
+                        <ul class="clean-list">
+                            <li>Jacobian 저하는 distorted element와 negative volume risk를 뜻합니다.</li>
+                            <li>first-order tet는 bending dominated 문제에서 stiffness가 과도해질 수 있습니다.</li>
+                            <li>reduced integration solid는 hourglass 가능성을 Abaqus evidence와 함께 봅니다.</li>
+                        </ul>
+                    </article>
+                    <article class="matrix-card">
+                        <span class="tag">Connectivity</span>
+                        <h3><i class='bx bx-network-chart'></i>free edge, equivalence, duplicate</h3>
+                        <p>겉보기 mesh가 좋아도 connectivity가 잘못되면 구조물은 다른 물체가 됩니다.</p>
+                        <ul class="clean-list">
+                            <li>equivalence가 필요한 node와 분리되어야 할 contact pair를 구분합니다.</li>
+                            <li>duplicate element는 local stiffness와 mass를 동시에 바꿉니다.</li>
+                            <li>free edge 리스트는 의도한 경계와 오류 후보로 분류합니다.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Abaqus Handoff Evidence</div>
+                <p class="section-copy">HyperMesh 작업이 끝났다는 기준은 mesh 화면이 아니라 Abaqus에서 읽을 수 있는 deck evidence입니다. 아래 항목은 handoff 전에 반드시 남겨야 합니다.</p>
+                <pre class="deck-block">*Shell Section, elset=BRACKET_SHELL, material=AL6061
+2.0
+*Elset, elset=LOAD_ZONE
+...
+*Nset, nset=FIXTURE_BOLTS
+...
+*Surface, type=ELEMENT, name=CONTACT_PAD
+PAD_ELSET, S3
+*Connector Section, elset=BOLT_CONNECTORS
+...</pre>
+                <div class="evidence-grid">
+                    <article class="evidence-card">
+                        <span class="tag">Deck Names</span>
+                        <h3><i class='bx bx-purchase-tag-alt'></i>이름이 의도를 담는가</h3>
+                        <p>elset, nset, surface, property 이름은 검토 가능한 모델 문서입니다.</p>
+                        <div class="rule-box">기준: 이름만 보고 fixture, load zone, contact pair, material group을 추적할 수 있어야 합니다.</div>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Mesh Report</span>
+                        <h3><i class='bx bx-bar-chart-alt-2'></i>quality summary</h3>
+                        <p>전체 element count보다 관심 부위의 worst quality와 위치가 더 중요합니다.</p>
+                        <div class="rule-box">기준: worst element를 숨기지 말고, 결과 관심 부위와 겹치는지 먼저 봅니다.</div>
+                    </article>
+                    <article class="evidence-card">
+                        <span class="tag">Assumption Log</span>
+                        <h3><i class='bx bx-list-check'></i>삭제한 것과 남긴 것</h3>
+                        <p>geometry cleanup은 모델 가정을 바꾸는 작업입니다. 삭제한 feature와 이유가 남아야 재검토가 가능합니다.</p>
+                        <div class="warning-box">주의: 작은 fillet 삭제가 전체 stiffness에는 작아도 local stress에는 클 수 있습니다.</div>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Two-Week Work Plan</div>
+                <div class="agenda-table">
+                    <div class="agenda-row"><div class="agenda-day">Day 1</div><div><h3>HyperMesh model tree 읽기</h3><p>component, property, material, set, surface 구조를 한 장으로 정리합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 2</div><div><h3>CAD import와 단위계 점검</h3><p>좌표계, 단위, part 분할, small feature 후보를 표시합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 3</div><div><h3>Topology cleanup log 작성</h3><p>free edge, gap, overlap, duplicate surface를 오류와 의도된 경계로 분류합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 4</div><div><h3>midsurface와 thickness 확인</h3><p>shell 대상 부위의 midsurface offset, normal direction, thickness assignment를 검토합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 5</div><div><h3>mesh quality 기준표 만들기</h3><p>aspect, skew, warpage, jacobian 기준을 부품군과 관심 결과별로 정리합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 6</div><div><h3>critical zone mesh refinement</h3><p>hole, notch, contact edge, load introduction 부위의 mesh density 근거를 남깁니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 7</div><div><h3>connector와 load path 점검</h3><p>RBE, bolt, weld, adhesive 단순화가 구조 stiffness를 어떻게 바꾸는지 정리합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 8</div><div><h3>Abaqus solver profile export</h3><p>export된 `.inp`에서 material, section, set, surface, contact 이름을 추적합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 9</div><div><h3>mesh sensitivity mini test</h3><p>같은 geometry에서 coarse/medium/fine mesh를 비교하고 U, Mises, RF trend를 기록합니다.</p></div></div>
+                    <div class="agenda-row"><div class="agenda-day">Day 10</div><div><h3>Handoff checklist 완성</h3><p>HyperMesh 모델에서 Abaqus deck로 넘어갈 때 필요한 evidence 항목을 표준화합니다.</p></div></div>
+                </div>
+
+                <div class="section-kicker">Deliverables</div>
+                <div class="detail-grid">
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 1</span>
+                        <h3><i class='bx bx-file'></i>Geometry Cleanup Log</h3>
+                        <p>삭제/병합/수정한 feature와 그 이유를 기록합니다.</p>
+                        <ul class="clean-list">
+                            <li>삭제한 fillet, hole, chamfer 목록.</li>
+                            <li>load path 영향 가능성.</li>
+                            <li>local stress 해석 보류 여부.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 2</span>
+                        <h3><i class='bx bx-table'></i>Mesh Quality Report</h3>
+                        <p>전체 품질 요약과 critical zone의 worst quality 위치를 함께 둡니다.</p>
+                        <ul class="clean-list">
+                            <li>element count와 element type.</li>
+                            <li>aspect, skew, warpage, jacobian worst list.</li>
+                            <li>stress hot spot과 quality issue의 겹침 여부.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 3</span>
+                        <h3><i class='bx bx-export'></i>Abaqus Handoff Checklist</h3>
+                        <p>solver profile export 후 Abaqus에서 읽을 evidence를 정리합니다.</p>
+                        <ul class="clean-list">
+                            <li>material, section, property 이름.</li>
+                            <li>nset, elset, surface, contact pair.</li>
+                            <li>load, BC, connector mapping.</li>
+                        </ul>
+                    </article>
+                    <article class="deliverable-card">
+                        <span class="tag">Deliverable 4</span>
+                        <h3><i class='bx bx-line-chart'></i>Mesh Sensitivity Decision Note</h3>
+                        <p>mesh를 조이면 수렴하는 결과와 계속 움직이는 결과를 분리합니다.</p>
+                        <ul class="clean-list">
+                            <li>U, RF, Mises, Max Principal trend.</li>
+                            <li>peak stress와 averaged hot spot 분리.</li>
+                            <li>현재 mesh로 판단 가능한 범위.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="section-kicker">Evidence Checklist</div>
+                <div class="detail-grid">
+                    <article class="review-card">
+                        <span class="tag">Model Build</span>
+                        <h3><i class='bx bx-search-alt'></i>구성 확인</h3>
+                        <ul class="clean-list">
+                            <li>geometry cleanup이 관심 load path를 바꾸지 않는가?</li>
+                            <li>shell/solid/beam idealization 선택 이유가 결과 목적과 맞는가?</li>
+                            <li>connector가 실제 연결 stiffness를 과도하게 단순화하지 않는가?</li>
+                        </ul>
+                    </article>
+                    <article class="review-card">
+                        <span class="tag">Mesh Quality</span>
+                        <h3><i class='bx bx-check-shield'></i>품질 확인</h3>
+                        <ul class="clean-list">
+                            <li>worst element가 critical hot spot과 겹치는가?</li>
+                            <li>free edge와 duplicate element가 의도된 상태인가?</li>
+                            <li>mesh refinement trend가 판단에 충분한가?</li>
+                        </ul>
+                    </article>
+                    <article class="review-card">
+                        <span class="tag">Handoff</span>
+                        <h3><i class='bx bx-code-block'></i>deck 확인</h3>
+                        <ul class="clean-list">
+                            <li>Abaqus input deck에서 material, section, set, surface가 추적되는가?</li>
+                            <li>load/BC/contact 이름이 모델 의도를 설명하는가?</li>
+                            <li>datacheck 또는 최소 input scan 결과가 남아 있는가?</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

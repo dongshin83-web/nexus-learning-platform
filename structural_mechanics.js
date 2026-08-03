@@ -487,28 +487,32 @@ const roadmap = [
         title: "HyperMesh 모델 빌드와 mesh quality 검토",
         goal: "HyperMesh 모델을 보고 geometry cleanup, element type, mesh quality issue를 토론한다.",
         learn: "CAD import, topology cleanup, midsurface, shell/solid mesh, connector, Abaqus solver profile, deck export.",
-        output: "HyperMesh에서 Abaqus input deck로 넘기는 체크리스트 초안 작성."
+        output: "Geometry Cleanup Log, Mesh Quality Report, Abaqus Handoff Checklist 초안 작성.",
+        detailHref: "structural_mechanics_weeks_5_6.html"
     },
     {
         phase: "Weeks 7-8",
         title: "비선형 해석의 리스크 구조",
         goal: "contact, plasticity, large deformation, convergence issue가 어디에서 생기는지 구분한다.",
         learn: "Abaqus/Standard nonlinear step, increment, contact stabilization, material plasticity, convergence diagnostics.",
-        output: "비선형 해석 실패 로그 3개를 원인 후보와 다음 실험으로 분류."
+        output: "Nonlinear Decision Tree와 Log Triage Sheet 작성.",
+        detailHref: "structural_mechanics_weeks_7_8.html"
     },
     {
         phase: "Weeks 9-10",
         title: "동역학, Explicit, thermal stress 판단",
         goal: "quasi-static, transient, impact, thermal-structural 문제를 solver 전략으로 분기한다.",
         learn: "Abaqus/Explicit, stable time increment, mass scaling, kinetic/internal energy ratio, thermal expansion, residual stress.",
-        output: "Standard와 Explicit 선택 기준표 및 thermal stress 해석 검토 기준 작성."
+        output: "Solver Selection Matrix, Explicit Energy Memo, Thermal Stress Assumption Note 작성.",
+        detailHref: "structural_mechanics_weeks_9_10.html"
     },
     {
         phase: "Weeks 11-12",
         title: "검토 시스템과 capstone synthesis",
         goal: "실제 문제 하나를 simulation campaign으로 설계하고, 결과 검토 흐름을 정리한다.",
         learn: "Abaqus Python scripting, 반복 실행 자동화, 결과 extraction, V&V, decision memo 작성.",
-        output: "Simulation Evidence Memo v1과 capstone 발표 자료."
+        output: "Simulation Evidence Memo v1, Capstone Campaign Pack, 자동화 script plan.",
+        detailHref: "structural_mechanics_weeks_11_12.html"
     }
 ];
 
