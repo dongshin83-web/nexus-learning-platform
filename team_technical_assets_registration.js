@@ -1192,9 +1192,10 @@ function createSequentialInterviewTransitionContract({ cardType, totalAreas, def
 }
 
 function createVdRequestContextInterviewPrompt() {
+    const jsonCompletionContract = createStep02JsonCompletionContract("vd-request");
     return `당신은 VD Request를 사내 기술자산으로 남기기 위해 필요한 맥락을 순서대로 확인하는 인터뷰 진행자입니다.
 
-이것은 무료 Gemini용 등록 흐름의 2번째 Prompt입니다.
+이것은 무료 Gemini용 등록 흐름의 2번째이자 마지막 Prompt입니다.
 사용자는 Gemini 입력창의 마이크 기능을 사용해 질문에 말로 답합니다.
 당신은 여섯 맥락 영역을 순서대로 확인하되 질문은 한 번에 정확히 하나만 보여줍니다.
 사용자가 배경·판단 이유·확인 상태를 필요한 만큼 충분히 설명하도록 기다리고, 필수 세부항목이 빠졌을 때만 같은 영역의 보완 질문을 하나씩 제시합니다.
@@ -1202,7 +1203,7 @@ function createVdRequestContextInterviewPrompt() {
 [선행조건]
 - 같은 대화에 \`[입력 확인 완료]\`가 있어야 합니다.
 - 완료표시가 없으면 질문을 시작하지 말고 아래 두 줄만 출력하세요.
-  "[2/3 진행 불가 · Prompt 1 대화가 없습니다]"
+  "[2/2 진행 불가 · Prompt 1 대화가 없습니다]"
   "Prompt 1을 완료한 기존 대화창으로 돌아가세요."
 - Prompt 1에서 확정한 기술영역·업무 단계·대응 대상은 그대로 유지합니다. 다시 추천·분류·질문하지 마세요.
 
@@ -1223,7 +1224,7 @@ ${createSequentialInterviewTransitionContract({ cardType: "VD Request", totalAre
 [VD Request 해석 규칙]
 1. 사용자가 말한 우려를 확정된 후속조치로 바꾸지 말고, 제안·결정·실행 완료·확인 필요를 구분하세요.
 2. 요청자의 직접 피드백과 인터뷰 진행자의 추론을 구분하세요.
-3. 각 \`정리 n/6\`은 Step 03에서 그대로 사용할 수 있는 완결된 문장으로 작성하세요. 관찰 사실, 기술적 해석, 결론, 한계와 후속조치를 서로 섞지 마세요.
+3. 각 \`정리 n/6\`은 완료 직후 JSON으로 변환할 수 있는 완결된 문장으로 작성하세요. 관찰 사실, 기술적 해석, 결론, 한계와 후속조치를 서로 섞지 마세요.
 4. 여섯 영역을 모두 처리할 때까지 분류 후보, 검색용 정보, 등록 파일 또는 다음 단계용 전달 형식을 만들지 마세요.
 
 [영역 원본 · 내부 진행 순서]
@@ -1290,7 +1291,7 @@ ${followUpQuestions.map((followUp) => `   - ${followUp}`).join("\n")}`
 모두 맞으면 사용자가 \`완료\`라고 답하도록 안내하고 대기하세요.
 
 [완료 처리]
-사용자가 \`완료\`라고 명시했을 때만 최종 확인한 내용을 그대로 유지해 아래 완료 표식과 여섯 영역을 다시 출력하세요.
+사용자가 \`완료\`라고 명시했을 때만 최종 확인한 내용을 그대로 유지해 아래 완료 표식과 여섯 영역을 다시 출력한 뒤, 기다리지 말고 바로 JSON 생성 계약을 실행하세요.
 
 [VD Request Step 02 맥락 인터뷰 완료]
 1. 요청 배경과 판단 질문: (최종 확인한 내용)
@@ -1301,18 +1302,20 @@ ${followUpQuestions.map((followUp) => `   - ${followUp}`).join("\n")}`
 6. 적용범위와 한계: (최종 확인한 내용)
 추후 확인:
 - (없으면 없음)
-다음 단계 Prompt를 같은 대화에 입력해 주세요.
+
+[완료 직후 JSON 생성 계약]
+${jsonCompletionContract}
 
 [이 Prompt에서 하지 않는 일]
 - 분류값을 다시 묻거나 검색용 정보를 만들지 않습니다.
-- 등록 파일이나 다음 단계용 전달 형식을 만들지 않습니다.
-- 완료 요약을 출력한 뒤 대기합니다.`;
+- 사용자가 최종 확인 후 \`완료\`라고 답하기 전에는 JSON을 만들지 않습니다.`;
 }
 
 function createCorContextInterviewPrompt() {
+    const jsonCompletionContract = createStep02JsonCompletionContract("cor");
     return `당신은 종료된 CoR을 사내 기술자산으로 남기기 위해 필요한 맥락을 일곱 영역으로 확인하는 인터뷰 진행자입니다.
 
-이것은 무료 Gemini용 CoR 등록 흐름의 2번째 Prompt입니다.
+이것은 무료 Gemini용 CoR 등록 흐름의 2번째이자 마지막 Prompt입니다.
 사용자는 Gemini 입력창의 마이크 기능을 사용해 질문에 말로 답할 수 있습니다.
 당신은 일곱 맥락 영역을 순서대로 확인하되 질문은 한 번에 정확히 하나만 보여줍니다.
 사용자가 배경·검증·판단 이유·결과를 충분히 설명하도록 기다리고, 필수 세부항목이 빠졌을 때만 같은 영역의 보완 질문을 하나씩 제시합니다.
@@ -1320,7 +1323,7 @@ function createCorContextInterviewPrompt() {
 [선행조건]
 - 같은 대화에 \`[입력 확인 완료]\`가 있어야 합니다.
 - 완료표시가 없으면 질문을 시작하지 말고 아래 두 줄만 출력하세요.
-  "[2/3 진행 불가 · Prompt 1 대화가 없습니다]"
+  "[2/2 진행 불가 · Prompt 1 대화가 없습니다]"
   "CoR Prompt 1을 완료한 기존 대화창으로 돌아가세요."
 - Prompt 1에서 확정한 기술영역·업무 단계·대응 대상은 그대로 유지합니다. 다시 추천·분류·질문하지 마세요.
 - Wiki 신규 등록 대상은 수명주기가 종료되고 공식 결과 또는 종료 근거가 준비된 CoR입니다. 과제 상태는 사내 등록 화면에서 등록자가 \`완료\` 또는 \`Drop\`으로 직접 선택합니다. 외부 AI는 상태를 질문·추론·출력하지 마세요.
@@ -1342,7 +1345,7 @@ ${createSequentialInterviewTransitionContract({ cardType: "CoR", totalAreas: 7, 
 [CoR 해석 규칙]
 1. 최초 계획·진행 중 제안·종료 시점의 실제 결과를 구분하고, 목표 달성과 과제 종료를 같은 의미로 처리하지 마세요.
 2. 경영성과·비용·기간 단축·프로세스 변화는 사용자가 직접 확인된 근거와 상태를 말했을 때만 영역 6 또는 7에 선택적으로 정리하세요. 독립 필수항목으로 질문하거나 추정하지 마세요.
-3. 각 \`정리 n/7\`은 Step 03에서 그대로 사용할 수 있는 완결된 문장으로 작성하세요. 사실·해석·결론·한계·후속조치를 서로 섞지 마세요.
+3. 각 \`정리 n/7\`은 완료 직후 JSON으로 변환할 수 있는 완결된 문장으로 작성하세요. 사실·해석·결론·한계·후속조치를 서로 섞지 마세요.
 4. 일곱 영역을 모두 처리할 때까지 검색 후보, 추가 태그, JSON 또는 다음 단계용 전달 형식을 만들지 마세요.
 
 [영역 원본 · 내부 진행 순서]
@@ -1405,7 +1408,7 @@ ${followUpQuestions.map((followUp) => `   - ${followUp}`).join("\n")}`
 모두 맞으면 사용자가 \`완료\`라고 답하도록 안내하고 대기하세요.
 
 [완료 처리]
-사용자가 대화 확인 명령인 \`완료\`라고 명시하고 종료 등록 전제도 확인됐을 때만 최종 확인한 내용을 그대로 유지해 아래 완료 표식과 일곱 영역을 다시 출력하세요. 이 응답을 CoR 과제 상태로 해석하지 마세요.
+사용자가 대화 확인 명령인 \`완료\`라고 명시하고 종료 등록 전제도 확인됐을 때만 최종 확인한 내용을 그대로 유지해 아래 완료 표식과 일곱 영역을 다시 출력한 뒤, 기다리지 말고 바로 JSON 생성 계약을 실행하세요. 이 응답을 CoR 과제 상태로 해석하지 마세요.
 
 [CoR Step 02 맥락 인터뷰 완료]
 1. 발굴 배경과 기술 Gap: (최종 확인한 내용)
@@ -1417,19 +1420,22 @@ ${followUpQuestions.map((followUp) => `   - ${followUp}`).join("\n")}`
 7. 산출물·파생 자산·후속조치: (최종 확인한 내용)
 추후 사내 확인:
 - (없으면 없음)
-다음 단계 Prompt를 같은 대화에 입력해 주세요.
+
+[완료 직후 JSON 생성 계약]
+${jsonCompletionContract}
 
 [이 Prompt에서 하지 않는 일]
 - 분류값을 다시 묻거나 검색용 정보를 만들지 않습니다.
 - 사업 기여·프로세스 변화를 독립 필수영역으로 만들지 않습니다.
 - 실제 관련 문서명·ID·링크를 묻지 않습니다.
-- 등록 파일을 만들지 않고 완료 요약을 출력한 뒤 대기합니다.`;
+- 사용자가 최종 확인 후 \`완료\`라고 답하기 전에는 JSON을 만들지 않습니다.`;
 }
 
 function createMethodologyContextInterviewPrompt() {
+    const jsonCompletionContract = createStep02JsonCompletionContract("methodology");
     return `당신은 방법론을 사내 기술자산으로 남기기 위해 필요한 내용을 일곱 영역으로 확인하는 인터뷰 진행자입니다.
 
-이것은 무료 Gemini용 방법론 등록 흐름의 2번째 Prompt입니다.
+이것은 무료 Gemini용 방법론 등록 흐름의 2번째이자 마지막 Prompt입니다.
 사용자는 입력창의 마이크 기능을 사용해 질문에 말로 답할 수 있습니다.
 당신은 일곱 영역을 순서대로 확인하되 질문은 한 번에 정확히 하나만 보여줍니다.
 필수 세부항목이 빠졌을 때만 같은 영역에서 보완 질문을 하나씩 제시합니다.
@@ -1437,7 +1443,7 @@ function createMethodologyContextInterviewPrompt() {
 [선행조건]
 - 같은 대화에 \`[입력 확인 완료]\`가 있어야 합니다.
 - 완료표시가 없으면 질문을 시작하지 말고 아래 두 줄만 출력하세요.
-  "[2/3 진행 불가 · Prompt 1 대화가 없습니다]"
+  "[2/2 진행 불가 · Prompt 1 대화가 없습니다]"
   "방법론 Prompt 1을 완료한 기존 대화창으로 돌아가세요."
 - Prompt 1에서 확정한 기술영역·업무 단계·대응 대상은 그대로 유지합니다. 다시 추천·분류·질문하지 마세요.
 
@@ -1501,7 +1507,7 @@ ${followUpQuestions.map((followUp) => `   - ${followUp}`).join("\n")}`
 모두 맞으면 사용자가 \`완료\`라고 답하도록 안내하고 대기하세요.
 
 [완료 처리]
-사용자가 \`완료\`라고 명시했을 때만 아래 표식과 최종 확인 내용을 다시 출력하세요.
+사용자가 \`완료\`라고 명시했을 때만 아래 표식과 최종 확인 내용을 다시 출력한 뒤, 기다리지 말고 바로 JSON 생성 계약을 실행하세요.
 
 [방법론 Step 02 맥락 인터뷰 완료]
 1. 해결 문제와 활용 목적: (최종 확인한 내용)
@@ -1513,13 +1519,15 @@ ${followUpQuestions.map((followUp) => `   - ${followUp}`).join("\n")}`
 7. 검증·재사용 근거: (최종 확인한 내용)
 추후 사내 확인:
 - (없으면 없음)
-다음 단계 Prompt를 같은 대화에 입력해 주세요.
+
+[완료 직후 JSON 생성 계약]
+${jsonCompletionContract}
 
 [이 Prompt에서 하지 않는 일]
 - 분류값을 다시 묻거나 검색용 정보를 만들지 않습니다.
 - 방법론 자격, 공식 Level, Technology Map 상태를 확정하지 않습니다.
 - 실제 관련 문서명·ID·링크를 묻지 않습니다.
-- 등록 파일을 만들지 않고 완료 요약을 출력한 뒤 대기합니다.`;
+- 사용자가 최종 확인 후 \`완료\`라고 답하기 전에는 JSON을 만들지 않습니다.`;
 }
 
 function formatLeanContextBlocksForPrompt(blocks) {
@@ -1542,16 +1550,17 @@ function createLeanContextInterviewPrompt(assetKey) {
     if (!config || !blocks.length) return "";
     const { cardType, completionMarker } = config;
     const totalAreas = blocks.length;
+    const jsonCompletionContract = createStep02JsonCompletionContract(assetKey);
 
     return `당신은 ${cardType}를 사내 기술자산으로 남기기 위해 필요한 맥락을 순서대로 확인하는 인터뷰 진행자입니다.
 
-이것은 무료 Gemini용 등록 흐름의 2번째 Prompt입니다.
+이것은 무료 Gemini용 등록 흐름의 2번째이자 마지막 Prompt입니다.
 사용자는 입력창의 마이크 또는 키보드로 답할 수 있습니다. 답변 길이를 제한하지 말고, 질문은 한 번에 정확히 하나만 보여줍니다.
 
 [선행조건]
 - 같은 대화에 \`[입력 확인 완료]\`가 있어야 합니다.
 - 완료표시가 없으면 질문을 시작하지 말고 아래 두 줄만 출력하세요.
-  "[2/3 진행 불가 · Prompt 1 대화가 없습니다]"
+  "[2/2 진행 불가 · Prompt 1 대화가 없습니다]"
   "${cardType} Prompt 1을 완료한 기존 대화창으로 돌아가세요."
 - Prompt 1에서 확정한 기술영역·업무 단계·대응 대상은 그대로 유지하고 다시 추천·분류·질문하지 마세요.
 
@@ -1598,18 +1607,20 @@ ${formatLeanFinalConfirmation(cardType, blocks)}
 모두 맞으면 사용자가 \`완료\`라고 답하도록 안내하고 대기하세요.
 
 [완료 처리]
-사용자가 최종 확인 직후 \`완료\`라고 명시했을 때만 아래 표식과 최종 확인한 ${totalAreas}개 영역을 다시 출력하세요.
+사용자가 최종 확인 직후 \`완료\`라고 명시했을 때만 아래 표식과 최종 확인한 ${totalAreas}개 영역을 다시 출력한 뒤, 기다리지 말고 바로 JSON 생성 계약을 실행하세요.
 
 ${completionMarker}
 ${blocks.map(({ title }, index) => `${index + 1}. ${title}: (최종 확인한 내용)`).join("\n")}
 추후 사내 확인:
 - (없으면 없음)
-다음 단계 Prompt를 같은 대화에 입력해 주세요.
+
+[완료 직후 JSON 생성 계약]
+${jsonCompletionContract}
 
 [이 Prompt에서 하지 않는 일]
 - 분류값을 다시 묻거나 검색 정보를 만들지 않습니다.
 - 실제 ID·Owner·Reviewer·상태·버전·날짜·링크·관계를 묻거나 만들지 않습니다.
-- 등록 파일을 만들지 않고 완료 요약을 출력한 뒤 대기합니다.`;
+- 사용자가 최종 확인 후 \`완료\`라고 답하기 전에는 JSON을 만들지 않습니다.`;
 }
 
 function createInterviewStartPrompt(cardType, assetKey = "") {
@@ -1778,12 +1789,7 @@ END_NEW_CHAT_JSON_REQUEST
 - 코드 블록 밖에는 설명을 덧붙이지 마세요.`;
 }
 
-const metadataHandoffPrompts = Object.fromEntries(
-    Object.entries(promptDefinitions).map(([key, definition]) => [
-        key,
-        createMetadataHandoffPrompt(definition.cardType, key)
-    ])
-);
+let metadataHandoffPrompts = {};
 
 const registrationStepDefinitions = [
     {
@@ -2157,18 +2163,18 @@ function createLeanRegistrationStepOverride(step, assetKey) {
     }
     if (step.id === "import") {
         return {
-            title: `확정 내용으로 ${cardType} JSON 생성하기`,
-            summary: "Prompt 3 복사 → 같은 AI 대화에서 Lean v0.3 JSON 생성 → 파일 확인",
-            phase: "OUTPUT",
-            purpose: `Step 01의 세 분류값과 Step 02의 ${blocks.length}개 맥락을 ${cardType} Lean v0.3 Handoff JSON으로 변환합니다.`,
+            title: `${cardType} JSON 확인·사내 반입하기`,
+            summary: "Prompt 2 완료 JSON 확인 → 파일 저장 → 사내 Wiki 등록 화면에 불러오기",
+            phase: "IMPORT",
+            purpose: `Prompt 2가 생성한 ${cardType} Lean v0.3 Handoff JSON을 확인하고 사내 Wiki 등록 화면에 가져옵니다.`,
             actions: [
-                `같은 대화에 ‘[입력 확인 완료]’와 ‘${completionMarker}’가 모두 있는지 확인합니다.`,
-                "Prompt 3를 같은 AI 대화에 붙여 넣습니다.",
-                "첫 응답의 JSON이 최종 확인 내용과 일치하는지 확인합니다.",
-                `첨부가 없으면 JSON 코드 블록을 ${fileName}으로 저장합니다.`
+                `Prompt 2의 완료 응답에 ‘${completionMarker}’와 JSON 코드 블록이 표시됐는지 확인합니다.`,
+                `파일 첨부가 있으면 다운로드하고, 없으면 JSON 코드 블록만 ${fileName}으로 저장합니다.`,
+                "JSON의 자산유형·분류값·맥락 필드가 최종 확인 내용과 일치하는지 확인합니다.",
+                "사내 Wiki 등록 화면에서 JSON을 불러옵니다."
             ],
-            completion: [`packetVersion이 0.3이고 cardType이 ${cardType}입니다.`, `${blocks.length}개 본문 영역과 분류값이 누락 없이 반영됐습니다.`],
-            caution: "실제 ID·Owner·Reviewer·상태·버전·날짜·링크·관계는 외부 JSON에 넣지 않고 Step 04에서 보완합니다."
+            completion: [`packetVersion이 0.3이고 cardType이 ${cardType}입니다.`, `${blocks.length}개 본문 영역과 분류값이 누락 없이 반영됐습니다.`, "등록 화면에서 JSON 초안 미리보기가 생성됐습니다."],
+            caution: "실제 ID·Owner·Reviewer·상태·버전·날짜·링크·관계는 외부 JSON에 넣지 않고 Step 04에서 보완합니다. Prompt 3는 사용하지 않습니다."
         };
     }
     return null;
@@ -2176,11 +2182,31 @@ function createLeanRegistrationStepOverride(step, assetKey) {
 
 function getAssetRegistrationStepDefinition(step, assetKey) {
     const leanOverride = createLeanRegistrationStepOverride(step, assetKey);
-    return {
+    const assetOverride = isLeanV03Asset(assetKey) && step.id === "import"
+        ? {}
+        : (assetRegistrationStepOverrides[assetKey]?.[step.id] || {});
+    const merged = {
         ...step,
         ...(leanOverride || {}),
-        ...(assetRegistrationStepOverrides[assetKey]?.[step.id] || {})
+        ...assetOverride
     };
+    if (isLeanV03Asset(assetKey) && step.id === "structure") {
+        const config = LEAN_ASSET_PROMPT_CONFIG[assetKey];
+        return {
+            ...merged,
+            summary: `${merged.summary} → 완료 후 JSON 생성`,
+            actions: [
+                ...merged.actions,
+                "전체 요약을 확인하고 ‘완료’라고 답하면, Prompt 2가 같은 응답에서 JSON 코드 블록과 가능한 경우 파일을 생성합니다."
+            ],
+            completion: [
+                ...merged.completion.filter((item) => !item.includes("JSON은 이 단계에서 생성되지") && !item.includes("META, 검색 후보, JSON은 이 단계에서")),
+                `같은 응답에서 ${config.fileName} JSON이 생성됐습니다.`
+            ],
+            caution: "실제 식별정보와 내부 링크는 말하지 않습니다. JSON은 다른 Prompt를 복사하지 않고 Prompt 2의 완료 응답에서 생성합니다."
+        };
+    }
+    return merged;
 }
 
 function createSearchMetadataTemplate() {
@@ -2806,6 +2832,14 @@ ${handoffTemplate}
 \`\`\``;
 }
 
+function createStep02JsonCompletionContract(assetKey) {
+    return createLeanJsonGenerationPrompt(assetKey)
+        .replace(/^[^\n]+\n\n/, "[JSON 변환 역할]\n")
+        .replaceAll("첫 응답에서", "사용자가 완료라고 답한 같은 응답에서")
+        .replaceAll("Step 03 JSON 생성 완료", "Step 02 JSON 생성 완료")
+        .replaceAll("Prompt 3", "Prompt 2의 완료 처리");
+}
+
 const prompts = Object.fromEntries(
     Object.entries(promptDefinitions).map(([key, definition]) => [
         key,
@@ -2815,6 +2849,12 @@ const prompts = Object.fromEntries(
                 ...definition,
                 outputFileName: `technical-asset-${key}.json`
             })
+    ])
+);
+metadataHandoffPrompts = Object.fromEntries(
+    Object.entries(promptDefinitions).map(([key, definition]) => [
+        key,
+        createMetadataHandoffPrompt(definition.cardType, key)
     ])
 );
 const contextPrompts = interviewStartPrompts;
@@ -3480,7 +3520,7 @@ function createVdRequestContextInterviewSequence(assetMeta) {
         </p>
         <p class="registration-step-completion-note">
             <i class="bx bx-check-circle" aria-hidden="true"></i>
-            <span>여섯 영역의 전체 요약을 확인하고 <code>완료</code>라고 답한 뒤, <code>[VD Request Step 02 맥락 인터뷰 완료]</code>가 표시되면 멈춥니다. JSON 생성은 다음 단계에서 진행합니다.</span>
+            <span>여섯 영역의 전체 요약을 확인하고 <code>완료</code>라고 답하면, <code>[VD Request Step 02 맥락 인터뷰 완료]</code>와 함께 JSON이 생성됩니다. 추가 Prompt는 복사하지 않습니다.</span>
         </p>
     `;
 
@@ -3535,7 +3575,7 @@ function createCorContextInterviewSequence(assetMeta) {
         </p>
         <p class="registration-step-completion-note">
             <i class="bx bx-check-circle" aria-hidden="true"></i>
-            <span>일곱 영역과 종료 근거 종류를 확인하고 <code>완료</code>라고 답한 뒤, <code>[CoR Step 02 맥락 인터뷰 완료]</code>가 표시되면 멈춥니다. JSON 생성은 다음 단계에서 진행합니다.</span>
+            <span>일곱 영역과 종료 근거 종류를 확인하고 <code>완료</code>라고 답하면, <code>[CoR Step 02 맥락 인터뷰 완료]</code>와 함께 JSON이 생성됩니다. 추가 Prompt는 복사하지 않습니다.</span>
         </p>
     `;
 
@@ -3642,7 +3682,7 @@ function createLeanContextInterviewSequence(assetKey, assetMeta) {
         </p>
         <p class="registration-step-completion-note">
             <i class="bx bx-check-circle" aria-hidden="true"></i>
-            <span>전체 요약을 확인하고 <code>완료</code>라고 답한 뒤 <code>${config.completionMarker}</code>가 표시되면 멈춥니다. JSON은 Step 03에서 만듭니다.</span>
+            <span>전체 요약을 확인하고 <code>완료</code>라고 답하면 <code>${config.completionMarker}</code>와 함께 JSON이 생성됩니다. 추가 Prompt는 복사하지 않습니다.</span>
         </p>
     `;
     insertLeanStep02GuideExamples(sequence, assetKey, assetMeta.label);
@@ -4332,10 +4372,10 @@ function createMetadataPromptSection(assetKey, assetMeta) {
 function createRegistrationStepGuide(step, assetKey) {
     const definition = promptDefinitions[assetKey];
     const assetMeta = assetTypeGuideMeta[assetKey];
-    const isLeanThreePromptAsset = isLeanV03Asset(assetKey);
-    const isLeanWritingStep = isLeanThreePromptAsset && step.id === "conversation";
-    const isLeanContextStep = isLeanThreePromptAsset && step.id === "structure";
-    const isLeanJsonStep = isLeanThreePromptAsset && step.id === "import";
+    const isLeanTwoPromptAsset = isLeanV03Asset(assetKey);
+    const isLeanWritingStep = isLeanTwoPromptAsset && step.id === "conversation";
+    const isLeanContextStep = isLeanTwoPromptAsset && step.id === "structure";
+    const isLeanJsonStep = false;
     const guide = document.createElement("div");
     guide.className = `registration-step-guide${isLeanContextStep ? " is-vd-context-step" : ""}${isLeanJsonStep ? " is-vd-json-step" : ""}`;
 
@@ -4373,16 +4413,6 @@ function createRegistrationStepGuide(step, assetKey) {
 
     if (step.id === "structure" && definition) {
         guide.appendChild(createMetadataPromptSection(assetKey, assetMeta));
-    }
-
-    if (isLeanJsonStep) {
-        guide.appendChild(assetKey === "vd-request"
-            ? createVdRequestJsonGenerationSequence(assetMeta)
-            : assetKey === "cor"
-                ? createCorJsonGenerationSequence(assetMeta)
-                : assetKey === "methodology"
-                    ? createMethodologyJsonGenerationSequence(assetMeta)
-                    : createLeanJsonGenerationSequence(assetKey, assetMeta));
     }
 
     if (!isLeanWritingStep) {
@@ -4470,11 +4500,11 @@ function enhanceAssetGuidePanels() {
             && child !== promptSection
             && child !== finalSection
         ));
-        const isLeanThreePromptAsset = isLeanV03Asset(assetKey);
+        const isLeanTwoPromptAsset = isLeanV03Asset(assetKey);
         const hasDedicatedLeanSource = assetKey === "vd-request" || assetKey === "cor" || assetKey === "methodology";
         const contextSourceSelector = `[data-${assetKey}-step02-source]`;
         const legacyExampleNodes = conversationNodes.filter((node) => node.matches(".registration-example-section"));
-        if (isLeanThreePromptAsset) {
+        if (isLeanTwoPromptAsset) {
             legacyExampleNodes.forEach((node) => {
                 node.hidden = true;
                 node.dataset.leanStep02LegacyExample = "true";
@@ -4489,12 +4519,12 @@ function enhanceAssetGuidePanels() {
             ...contextSourceCandidates.filter((node) => !node.matches(".registration-two-column"))
         ];
         const legacyConversationNodes = assetKey === "vd-request" ? [] : conversationNodes;
-        const conversationSourceNodes = isLeanThreePromptAsset
+        const conversationSourceNodes = isLeanTwoPromptAsset
             ? hasDedicatedLeanSource
                 ? conversationNodes.filter((node) => !node.matches(contextSourceSelector))
                 : []
             : legacyConversationNodes;
-        if (isLeanThreePromptAsset) {
+        if (isLeanTwoPromptAsset) {
             promptSection?.remove();
         }
 
@@ -4541,7 +4571,7 @@ function enhanceAssetGuidePanels() {
             const sourceNodes = step.id === "conversation"
                 ? conversationSourceNodes
                 : step.id === "structure"
-                    ? isLeanThreePromptAsset
+                    ? isLeanTwoPromptAsset
                         ? contextSourceNodes
                         : promptSection
                             ? [promptSection]
@@ -4553,10 +4583,10 @@ function enhanceAssetGuidePanels() {
                 const source = document.createElement("div");
                 source.className = "registration-stage-source";
                 let exampleNote = null;
-                if ((!isLeanThreePromptAsset && step.id === "conversation") || (step.id === "structure" && isLeanThreePromptAsset)) {
+                    if ((!isLeanTwoPromptAsset && step.id === "conversation") || (step.id === "structure" && isLeanTwoPromptAsset)) {
                     exampleNote = document.createElement("aside");
                     exampleNote.className = "registration-conversation-example-note";
-                    exampleNote.innerHTML = isLeanThreePromptAsset
+                        exampleNote.innerHTML = isLeanTwoPromptAsset
                         ? `
                             <i class="bx bx-info-circle" aria-hidden="true"></i>
                             <span>
@@ -4571,12 +4601,12 @@ function enhanceAssetGuidePanels() {
                                 실제 질문 순서는 위의 ‘실제 인터뷰 질문 순서’를 따릅니다. 아래 번호는 전체 질문 순서가 아니라 좋은 답변의 구성 예시입니다.
                             </span>
                         `;
-                    if (!(step.id === "structure" && isLeanThreePromptAsset)) {
+                    if (!(step.id === "structure" && isLeanTwoPromptAsset)) {
                         source.appendChild(exampleNote);
                     }
                 }
                 sourceNodes.forEach((node) => {
-                    if (step.id === "conversation" || (step.id === "structure" && isLeanThreePromptAsset)) {
+                    if (step.id === "conversation" || (step.id === "structure" && isLeanTwoPromptAsset)) {
                         node.querySelectorAll(".registration-purpose-card .card-label").forEach((label) => {
                             label.textContent = label.textContent.replace("등록에 필요한", "핵심 정보 요약");
                         });
@@ -4591,10 +4621,10 @@ function enhanceAssetGuidePanels() {
                     }
                     source.appendChild(node);
                 });
-                if (exampleNote && step.id === "structure" && isLeanThreePromptAsset) {
+                if (exampleNote && step.id === "structure" && isLeanTwoPromptAsset) {
                     source.appendChild(exampleNote);
                 }
-                if (step.id === "structure" && isLeanThreePromptAsset) content.prepend(source);
+                    if (step.id === "structure" && isLeanTwoPromptAsset) content.prepend(source);
                 else content.appendChild(source);
             }
 
@@ -4620,7 +4650,7 @@ function getAssetTabs() {
 }
 
 function updateRegistrationFlowForAsset(tabName) {
-    const isLeanThreePromptAsset = isLeanV03Asset(tabName);
+    const isLeanTwoPromptAsset = isLeanV03Asset(tabName);
     const config = LEAN_ASSET_PROMPT_CONFIG[tabName];
     const assetLabel = config?.cardType || assetTypeGuideMeta[tabName]?.label || "기술자산";
     const contextCountLabel = `${(LEAN_STEP02_CONTEXT_BLOCKS[tabName] || []).length}개`;
@@ -4635,43 +4665,43 @@ function updateRegistrationFlowForAsset(tabName) {
     const confirmationRule = document.getElementById("registration-flow-confirmation-rule");
 
     if (flowIntro) {
-        flowIntro.textContent = isLeanThreePromptAsset
-            ? `${assetLabel} 등록은 Prompt 1로 세 분류값을 확인하고, Prompt 2에서 ${contextCountLabel} 맥락 영역을 완성한 뒤, Prompt 3으로 확정된 내용만 JSON으로 변환합니다.`
-            : "외부 AI는 3번의 복사로 압축하고, 사내 작업은 JSON 반입과 Wiki 정보 보완으로 분리합니다.";
+        flowIntro.textContent = isLeanTwoPromptAsset
+            ? `${assetLabel} 등록은 Prompt 1로 세 분류값을 확인하고, Prompt 2에서 ${contextCountLabel} 맥락 영역을 완성한 뒤 같은 응답에서 JSON을 생성합니다.`
+            : "외부 AI에서 Prompt 1과 Prompt 2를 순서대로 진행하고, Prompt 2의 완료 응답으로 JSON을 생성합니다.";
     }
     if (tooltipStep2) {
-        tooltipStep2.innerHTML = isLeanThreePromptAsset
-            ? `<em>Step 02</em> — 같은 대화에 Prompt 2를 붙이고, ${contextCountLabel} 맥락 영역을 하나씩 충분히 설명합니다. 필수 정보가 빠지면 같은 영역의 보완 질문에 답합니다. 영역이 정리되면 AI가 같은 응답에서 다음 질문을 즉시 표시하므로 별도 확인 없이 바로 답하고, 마지막 전체 요약만 확인합니다.`
+        tooltipStep2.innerHTML = isLeanTwoPromptAsset
+            ? `<em>Step 02</em> — 같은 대화에 Prompt 2를 붙이고, ${contextCountLabel} 맥락 영역을 하나씩 충분히 설명합니다. 필수 정보가 빠지면 같은 영역의 보완 질문에 답합니다. 전체 요약을 확인하고 ‘완료’라고 답하면 추가 Prompt 복사 없이 JSON을 생성합니다.`
             : "<em>Step 02</em> — 같은 대화에 Prompt 2를 붙여 자동추출 후보를 확인한 뒤, 생성된 전달 블록만 새 대화로 옮깁니다.";
     }
     if (tooltipNote) {
-        tooltipNote.textContent = isLeanThreePromptAsset
-            ? `${assetLabel}은 같은 대화에서 Prompt 1 → Prompt 2 → Prompt 3 순서로 진행합니다. Prompt 3는 추가 질문 없이 확정된 내용만 JSON으로 변환합니다.`
-            : "복사 3회: Prompt 1 → Prompt 2 → NEW_CHAT_JSON_REQUEST. 사내 파일이나 실제 식별정보는 외부 AI에 입력하지 않습니다.";
+        tooltipNote.textContent = isLeanTwoPromptAsset
+            ? `${assetLabel}은 같은 대화에서 Prompt 1 → Prompt 2 순서로 진행합니다. Prompt 2가 맥락 확인과 JSON 생성을 함께 마칩니다.`
+            : "복사 2회: Prompt 1 → Prompt 2. 사내 파일이나 실제 식별정보는 외부 AI에 입력하지 않습니다.";
     }
     if (step2Title) {
-        step2Title.textContent = isLeanThreePromptAsset
+        step2Title.textContent = isLeanTwoPromptAsset
             ? "음성으로 맥락 인터뷰하기"
             : "자동추출 확인·JSON 만들기";
     }
     if (step2Description) {
-        step2Description.textContent = isLeanThreePromptAsset
-            ? `Prompt 2에서 ${contextCountLabel} 영역의 질문을 한 번에 하나씩 받고 말로 답합니다. AI가 답변을 정리하고 같은 응답에서 다음 질문을 즉시 표시하므로 별도 확인 없이 바로 답합니다. 이 단계에서는 맥락 정리만 합니다.`
+        step2Description.textContent = isLeanTwoPromptAsset
+            ? `Prompt 2에서 ${contextCountLabel} 영역의 질문을 한 번에 하나씩 받고 말로 답합니다. 전체 요약을 확인하고 ‘완료’라고 답하면 같은 응답에서 Lean v0.3 JSON을 생성합니다.`
             : "Prompt 2에서 META 후보를 확인하고, 승인된 전달 블록으로 JSON을 생성합니다.";
     }
     if (step3Title) {
-        step3Title.textContent = isLeanThreePromptAsset
-            ? "확정 내용으로 JSON 생성하기"
+        step3Title.textContent = isLeanTwoPromptAsset
+            ? "JSON 확인·사내 반입하기"
             : "JSON 확인·사내 반입하기";
     }
     if (step3Description) {
-        step3Description.textContent = isLeanThreePromptAsset
-            ? `Prompt 3를 같은 대화에 붙여 넣고, 세 분류값과 ${contextCountLabel} 맥락 요약을 Lean v0.3 Handoff Packet JSON으로 변환합니다.`
+        step3Description.textContent = isLeanTwoPromptAsset
+            ? `Prompt 2가 생성한 JSON의 분류값과 ${contextCountLabel} 맥락 필드를 확인하고 사내 Wiki 등록 화면에 가져옵니다.`
             : "다운로드한 .json 파일 또는 코드 블록으로 저장한 UTF-8 파일을 검토한 뒤 사내 등록 화면에 가져옵니다.";
     }
     if (confirmationRule) {
-        confirmationRule.innerHTML = isLeanThreePromptAsset
-            ? `<i class="bx bx-check-circle"></i><strong>확정 원칙</strong> Prompt 1·2·3은 같은 대화를 사용합니다. <code>[입력 확인 완료]</code>와 <code>${contextCompletionMarker}</code>가 모두 있어야 Prompt 3가 JSON을 생성합니다.`
+        confirmationRule.innerHTML = isLeanTwoPromptAsset
+            ? `<i class="bx bx-check-circle"></i><strong>확정 원칙</strong> Prompt 1과 Prompt 2는 같은 대화를 사용합니다. <code>[입력 확인 완료]</code> 후 Prompt 2 인터뷰를 마치고 <code>완료</code>라고 답하면 <code>${contextCompletionMarker}</code>와 JSON이 표시됩니다.`
             : "<i class=\"bx bx-check-circle\"></i><strong>확정 원칙</strong> Prompt 1과 2만 같은 대화를 사용합니다. 최종 JSON은 확인된 STEP01_HANDOFF만 새 대화로 옮겨 만들고, 실제 Wiki 관계·파일 링크·사내 세부정보는 내부 등록 화면에서만 복원합니다.";
     }
 }
@@ -4682,9 +4712,9 @@ function activateAssetTab(tab, updateUrl = true) {
     updateRegistrationFlowForAsset(tabName);
     const prompt1ScopeNote = document.getElementById("registration-prompt1-scope-note");
     if (prompt1ScopeNote) {
-        const isLeanThreePromptAsset = isLeanV03Asset(tabName);
-        prompt1ScopeNote.hidden = !isLeanThreePromptAsset;
-        if (isLeanThreePromptAsset) {
+        const isLeanTwoPromptAsset = isLeanV03Asset(tabName);
+        prompt1ScopeNote.hidden = !isLeanTwoPromptAsset;
+        if (isLeanTwoPromptAsset) {
             const assetLabel = LEAN_ASSET_PROMPT_CONFIG[tabName]?.cardType || assetTypeGuideMeta[tabName]?.label || "기술자산";
             prompt1ScopeNote.innerHTML = `<i class="bx bx-info-circle"></i><strong>${assetLabel} 역할 분리</strong> Step 01에서는 기술영역·업무 단계·대응 대상 세 값을 확정하고, Step 02에서는 그 값을 바꾸지 않은 채 필요한 맥락을 작성합니다.`;
         }
