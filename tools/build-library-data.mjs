@@ -28,7 +28,7 @@ export function validateLibrary(cards) {
     const ids = new Set();
 
     cards.forEach((card) => {
-        const result = validateCard(card);
+        const result = validateCard(card, { requireFrameworkLinks: true });
         result.errors.forEach((message) => errors.push(`${card.id ?? "unknown"}: ${message}`));
         result.warnings.forEach((message) => warnings.push(`${card.id ?? "unknown"}: ${message}`));
         if (ids.has(card.id)) errors.push(`${card.id}: 중복 card id`);

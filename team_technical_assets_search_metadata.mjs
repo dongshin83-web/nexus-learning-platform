@@ -12,6 +12,12 @@ export const WORKFLOW_STAGE_VALUES = ["연구", "설계", "개발", "공정", "�
 export const RESPONSE_TARGET_VALUES = ["고객", "사업부", "CTO", "AX", "품질경영", "생산기술"];
 
 const DOMAIN_IDS = new Set(SEARCH_DOMAIN_OPTIONS.map((domain) => domain.id));
+const DOMAIN_LABEL_TO_ID = new Map(
+    SEARCH_DOMAIN_OPTIONS.flatMap(({ id, label }) => {
+        const koreanLabel = label.replace(/^\d+\.\s*/, "");
+        return [[label, id], [koreanLabel, id]];
+    })
+);
 const STAGE_VALUES = new Set(WORKFLOW_STAGE_VALUES);
 const TARGET_VALUES = new Set(RESPONSE_TARGET_VALUES);
 const RATIONALE_CATEGORIES = new Set([
@@ -21,8 +27,7 @@ const RATIONALE_CATEGORIES = new Set([
     "responseTargetCandidates",
     "visibleTags",
     "aliases",
-    "expectedQueries",
-    "excludedTerms"
+    "expectedQueries"
 ]);
 
 export function asSearchList(value) {
@@ -36,7 +41,10 @@ export function uniqueSearchValues(value) {
 }
 
 export function normalizeSearchDomain(value) {
-    const normalized = value === "thermal" ? "thermal-flow" : String(value ?? "").trim();
+    const rawValue = String(value ?? "").trim();
+    const normalized = rawValue === "thermal"
+        ? "thermal-flow"
+        : DOMAIN_LABEL_TO_ID.get(rawValue) || rawValue;
     return DOMAIN_IDS.has(normalized) ? normalized : "";
 }
 
@@ -65,13 +73,21 @@ export function normalizeSearchMetadata(packet = {}) {
     const metadata = packet.searchMetadata && typeof packet.searchMetadata === "object" && !Array.isArray(packet.searchMetadata)
         ? packet.searchMetadata
         : {};
-    const hasStructuredSearchMetadata = ["visibleTags", "aliases", "primaryDomainCandidate", "workflowStageCandidates", "responseTargetCandidates"]
+    const classification = metadata.classification && typeof metadata.classification === "object" && !Array.isArray(metadata.classification)
+        ? metadata.classification
+        : {};
+    const isLeanV03 = String(packet.packetVersion ?? "").trim() === "0.3"
+        && ["VD Request", "CoR"].includes(String(packet.cardType ?? "").trim());
+    const hasStructuredSearchMetadata = [
+        "visibleTags", "additionalTags", "aliases", "primaryDomainCandidate",
+        "workflowStageCandidates", "responseTargetCandidates", "classification", "facets"
+    ]
         .some((key) => Object.hasOwn(metadata, key));
     const primaryDomainCandidate = normalizeSearchDomain(
-        metadata.primaryDomainCandidate ?? packet.primaryDomainCandidate ?? packet.domain
+        classification.primaryDomain ?? metadata.primaryDomainCandidate ?? packet.primaryDomainCandidate ?? packet.domain
     );
     const secondaryDomainCandidates = uniqueSearchValues(
-        metadata.secondaryDomainCandidates ?? packet.secondaryDomainCandidates ?? packet.secondaryDomains
+        classification.secondaryDomains ?? metadata.secondaryDomainCandidates ?? packet.secondaryDomainCandidates ?? packet.secondaryDomains
     )
         .map(normalizeSearchDomain)
         .filter((domain) => domain && domain !== primaryDomainCandidate)
@@ -79,24 +95,46 @@ export function normalizeSearchMetadata(packet = {}) {
     const packetContexts = uniqueSearchValues(packet.contexts);
 
     return {
-        candidateStatus: String(metadata.candidateStatus ?? packet.candidateStatus ?? "needs_user_confirmation").trim(),
+        candidateStatus: String(
+            metadata.candidateStatus
+            ?? packet.candidateStatus
+            ?? (isLeanV03 ? "user_confirmed_candidate" : "needs_user_confirmation")
+        ).trim(),
         primaryDomainCandidate,
         secondaryDomainCandidates,
         workflowStageCandidates: controlledValues(
-            metadata.workflowStageCandidates ?? packet.workflowStageCandidates ?? packetContexts,
+            classification.workflowStages ?? metadata.workflowStageCandidates ?? packet.workflowStageCandidates ?? packetContexts,
             STAGE_VALUES
         ),
         responseTargetCandidates: controlledValues(
-            metadata.responseTargetCandidates ?? packet.responseTargetCandidates ?? packetContexts,
+            classification.responseTargets ?? metadata.responseTargetCandidates ?? packet.responseTargetCandidates ?? packetContexts,
             TARGET_VALUES
         ),
-        visibleTags: uniqueSearchValues(metadata.visibleTags ?? packet.visibleTags ?? packet.tags),
+        visibleTags: uniqueSearchValues(metadata.additionalTags ?? metadata.visibleTags ?? packet.visibleTags ?? packet.tags),
         aliases: uniqueSearchValues(metadata.aliases ?? packet.aliases),
         expectedQueries: uniqueSearchValues(metadata.expectedQueries ?? packet.expectedQueries),
-        excludedTerms: uniqueSearchValues(metadata.excludedTerms ?? packet.excludedTerms),
         candidateRationale: normalizeCandidateRationale(metadata.candidateRationale ?? packet.candidateRationale),
         legacyUnclassifiedTerms: hasStructuredSearchMetadata ? [] : uniqueSearchValues(packet.searchTerms),
         internalFinalizationRequired: metadata.internalFinalizationRequired !== false
+    };
+}
+
+export function normalizeSearchFacets(packet = {}) {
+    const metadata = packet.searchMetadata && typeof packet.searchMetadata === "object" && !Array.isArray(packet.searchMetadata)
+        ? packet.searchMetadata
+        : {};
+    const facets = (metadata.facets ?? metadata.searchFacets);
+    const structuredFacets = facets && typeof facets === "object" && !Array.isArray(facets)
+        ? facets
+        : {};
+    const searchTags = packet.searchTags && typeof packet.searchTags === "object" && !Array.isArray(packet.searchTags)
+        ? packet.searchTags
+        : {};
+
+    return {
+        problemPhenomena: uniqueSearchValues(structuredFacets.problemPhenomena ?? searchTags.problems).slice(0, 3),
+        productStructureProcess: uniqueSearchValues(structuredFacets.productStructureProcess ?? searchTags.productsProcesses),
+        toolModelData: uniqueSearchValues(structuredFacets.toolModelData ?? searchTags.toolsModelsData)
     };
 }
 
@@ -129,7 +167,6 @@ export function resolveSearchMetadata(packet = {}, internal = {}) {
     const tags = finalOrCandidate(internal.tags, candidates.visibleTags, hasInternal("tags"));
     const aliases = finalOrCandidate(internal.aliases, candidates.aliases, hasInternal("aliases"));
     const expectedQueries = finalOrCandidate(internal.expectedQueries, candidates.expectedQueries, hasInternal("expectedQueries"));
-    const excludedTerms = finalOrCandidate(internal.excludedTerms, candidates.excludedTerms, hasInternal("excludedTerms"));
 
     return {
         domain,
@@ -146,15 +183,13 @@ export function resolveSearchMetadata(packet = {}, internal = {}) {
                 responseTargetCandidates: candidates.responseTargetCandidates,
                 visibleTags: candidates.visibleTags,
                 aliases: candidates.aliases,
-                expectedQueries: candidates.expectedQueries,
-                excludedTerms: candidates.excludedTerms
+                expectedQueries: candidates.expectedQueries
             },
             workflowStages,
             responseTargets,
             visibleTags: tags,
             aliases,
             expectedQueries,
-            excludedTerms,
             candidateRationale: candidates.candidateRationale,
             legacyUnclassifiedTerms: candidates.legacyUnclassifiedTerms,
             internalFinalizationRequired: candidates.internalFinalizationRequired,

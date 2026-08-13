@@ -1,0 +1,47 @@
+{
+  "packetVersion": "0.3",
+  "cardType": "BP",
+  "workingTitle": "설계안 상대 비교를 통한 선행 의사결정 단축 사례",
+  "content": {
+    "businessContext": "상세 설계 확정 전에 구조 대안의 우선순위를 정해야 했고, 요청 조직은 시험 제작 전에 위험이 낮은 방향을 선택할 근거가 필요했습니다.",
+    "simulationResponse": "동일한 입력과 경계조건에서 대안별 취약 위치와 상대 경향을 비교하여 절대 예측이 아닌 우선순위 판단 근거를 제공했습니다.",
+    "businessFeedback": {
+      "status": "피드백 대기",
+      "summary": "검토 결과는 설계 협의에 전달됐으며 최종 사용 피드백은 사내 등록 후 확인할 예정입니다.",
+      "evidence": "현재 확인된 근거는 결과 공유와 후속 설계 협의 진행 사실입니다."
+    },
+    "businessImpact": {
+      "areas": ["의사결정 리드타임", "재작업 위험"],
+      "pathway": "시험 제작 전에 대안의 상대 위험을 비교해 검토 순서를 좁히는 방식으로 기여했습니다.",
+      "confirmationLevel": "기대효과"
+    },
+    "reproductionConditions": [
+      "대안 간 입력과 평가 관점을 동일하게 유지할 것",
+      "절대값 보증이 아니라 상대 경향 판단에 사용할 것",
+      "조건이 달라지면 경향을 다시 검증할 것"
+    ],
+    "evidence": [
+      "대안별 결과 비교표는 상대 우선순위의 근거 역할을 합니다.",
+      "설계 협의 기록은 결과가 의사결정 과정에 전달됐음을 보여줍니다."
+    ]
+  },
+  "searchMetadata": {
+    "classification": {
+      "primaryDomain": "impact",
+      "secondaryDomains": ["deformation"],
+      "workflowStages": ["설계", "개발"],
+      "responseTargets": ["사업부"]
+    },
+    "facets": {
+      "problemPhenomena": ["설계 대안 우선순위", "취약 위치"],
+      "productStructureProcess": ["구조 설계"],
+      "toolModelData": ["대안별 상대 비교"]
+    },
+    "additionalTags": ["설계안 비교", "판단 기준"],
+    "aliases": ["business practice", "설계 의사결정 사례"],
+    "expectedQueries": ["시험 전 설계안의 상대 위험을 비교한 사례", "Simulation으로 의사결정 시간을 줄인 사례"]
+  },
+  "internalCompletion": {
+    "factsToConfirm": ["최종 요청자 피드백과 실제 의사결정 반영 수준"]
+  }
+}

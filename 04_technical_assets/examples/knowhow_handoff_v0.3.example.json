@@ -1,0 +1,52 @@
+{
+  "packetVersion": "0.3",
+  "cardType": "노하우",
+  "workingTitle": "비선형 해석 초기 수렴 실패를 진단하는 노하우",
+  "content": {
+    "knowhowCategory": "기술 수행",
+    "symptomAndConditions": {
+      "situationAndGoal": "비선형 해석이 초기 증분에서 반복 종료될 때 원인을 좁히고 안정적인 기준 모델을 만드는 상황에 사용합니다.",
+      "triggerOrFrequency": "접촉 조건 또는 초기 강성 변화가 큰 모델에서 반복적으로 발생합니다."
+    },
+    "causeAndDiagnosis": {
+      "keyDifficulty": "모델 오류와 실제 비선형 거동의 신호가 비슷하게 나타나는 점이 핵심 난점입니다.",
+      "checksBeforeAction": ["경계조건과 단위 확인", "초기 간극과 접촉 방향 확인", "첫 실패 증분의 에너지와 잔차 위치 확인"],
+      "ineffectiveAttempts": ["원인 확인 없이 증분 수만 과도하게 늘리는 방식"]
+    },
+    "resolution": [
+      {"step": 1, "action": "선형 또는 접촉 단순화 기준 모델로 입력 오류를 분리합니다.", "judgment": "단순 모델이 수렴하면 입력보다 비선형 조건을 우선 점검합니다."},
+      {"step": 2, "action": "접촉과 하중을 한 조건씩 복원합니다.", "judgment": "수렴이 무너지는 최초 조건을 원인 후보로 봅니다."},
+      {"step": 3, "action": "해당 조건의 물리적 타당성과 수치 설정을 함께 조정합니다.", "judgment": "결과 경향이 유지되고 잔차가 국부적으로 감소하면 다음 검증으로 이동합니다."}
+    ],
+    "effectAndEvidence": {
+      "completionCriteria": ["기준 모델과 전체 모델의 거동 차이를 설명할 수 있음", "중단 원인과 조치 이유가 기록됨"],
+      "result": "무작정 설정을 바꾸지 않고 실패 조건을 단계적으로 분리할 수 있습니다.",
+      "evidenceLevel": "반복 적용 사례와 결과 로그로 확인된 실무 노하우"
+    },
+    "risksAndRecovery": {
+      "doNotApply": ["물리적으로 불안정한 문제를 단순 수치 문제로 간주하는 경우"],
+      "risksOrFailureSignals": ["에너지 불균형 증가", "비현실적 침투 또는 변형"],
+      "escalationOrRecovery": ["물리 거동이 불명확하면 모델 담당자와 조건을 재정의", "기준 모델로 돌아가 변경 이력을 재검토"]
+    },
+    "versionsAndSources": ["공식 Solver Manual은 설정 근거 역할", "팀 Checklist는 실행 순서 확인 역할"]
+  },
+  "searchMetadata": {
+    "classification": {
+      "primaryDomain": "deformation",
+      "secondaryDomains": [],
+      "workflowStages": ["개발"],
+      "responseTargets": ["CTO"]
+    },
+    "facets": {
+      "problemPhenomena": ["초기 수렴 실패"],
+      "productStructureProcess": ["비선형 해석"],
+      "toolModelData": ["접촉", "증분"]
+    },
+    "additionalTags": ["수렴/안정화", "판단 기준"],
+    "aliases": ["nonlinear convergence troubleshooting"],
+    "expectedQueries": ["비선형 해석 초기 수렴 실패 진단 방법"]
+  },
+  "internalCompletion": {
+    "factsToConfirm": []
+  }
+}

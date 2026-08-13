@@ -1,0 +1,39 @@
+{
+  "packetVersion": "0.3",
+  "cardType": "교육자료",
+  "workingTitle": "설계안 상대 비교 결과 해석 기초 교육자료",
+  "content": {
+    "learningObjectives": ["동일 조건 상대 비교와 절대 예측의 차이를 설명한다.", "결과에서 취약 위치와 판단 한계를 구분한다.", "추가 검증이 필요한 조건을 식별한다."],
+    "audienceAndPrerequisites": {
+      "audience": "Simulation 결과를 설계 의사결정에 처음 활용하는 실무자",
+      "prerequisites": ["기본 응력·변형 개념", "결과 화면을 읽는 기초 경험"]
+    },
+    "outline": ["판단 질문 정의", "동일 비교 조건 확인", "관찰과 해석 분리", "유효 범위와 한계", "사례 실습"],
+    "activities": {
+      "methods": ["짧은 개념 설명", "두 설계안 비교 실습", "판단 근거 작성"],
+      "expectedDuration": "약 60분",
+      "materials": ["일반화된 결과 이미지", "판단 기록 Worksheet"]
+    },
+    "completionCriteria": ["관찰 사실과 기술 해석을 분리해 작성함", "지원 가능한 판단과 지원할 수 없는 판단을 각각 제시함"],
+    "sourcesAndVersion": ["기술보고서는 사례 근거 역할", "방법론 자산은 판단 절차의 학습 원본 역할"]
+  },
+  "searchMetadata": {
+    "classification": {
+      "primaryDomain": "deformation",
+      "secondaryDomains": ["impact"],
+      "workflowStages": ["연구", "설계"],
+      "responseTargets": ["CTO", "사업부"]
+    },
+    "facets": {
+      "problemPhenomena": ["결과 해석", "설계안 비교"],
+      "productStructureProcess": ["설계 의사결정 교육"],
+      "toolModelData": []
+    },
+    "additionalTags": ["판단 기준", "재사용 템플릿"],
+    "aliases": ["simulation result interpretation training"],
+    "expectedQueries": ["Simulation 상대 비교 결과 해석 교육자료"]
+  },
+  "internalCompletion": {
+    "factsToConfirm": ["현재 교육자료 버전과 마지막 검토일"]
+  }
+}

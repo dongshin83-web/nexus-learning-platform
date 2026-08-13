@@ -227,24 +227,44 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "context": "[제품군]의 설계동결 전에 [설계안 A·B] 중 충격 취약 가능성이 낮은 안을 선택해야 했으나 실물 평가 데이터가 없었다.",
         "primaryQuestion": "[설계동결 시점] 전에 두 설계안 중 충격 취약 가능성이 낮은 구조를 선택할 수 있는가?",
         "inputsAndConstraints": [
-          "후보 형상 2안",
-          "기존 충격 평가조건",
-          "변형률 속도 의존 물성 미확보",
-          "제한된 일정 안에 답변 필요"
+          "비교 대상은 후보 형상 2안입니다.",
+          "두 후보안에는 동일한 기존 충격 평가조건을 적용했습니다.",
+          "변형률 속도 의존 물성이 확보되지 않은 상태였습니다.",
+          "제한된 일정 안에 설계 우선순위를 판단해야 했습니다."
         ],
         "approach": "동일 충격조건에서 두 구조안의 결과 패턴과 민감도를 비교하고 취약부 Risk Ranking을 검토했다.",
-        "result": "한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다.",
-        "judgmentScope": "동일 충격조건에서 후보안 간 상대 비교와 Risk Ranking",
-        "limitations": [
-          "절대 파손수명 판단 불가",
-          "동적 물성 미확보",
-          "실험 상관 필요"
+        "evidenceSummary": [
+          "한 설계안에서 접합부 주변의 집중 경향이 반복해서 관찰되었습니다.",
+          "입력 민감도 검토에서도 두 후보안의 상대 위험 순서는 유지되었습니다."
         ],
+        "result": "한 설계안에서 접합부 주변의 집중 경향이 반복되어 상대적으로 높은 위험을 확인했다. 절대 파손 여부가 아닌 설계안 간 우선순위 판단 근거를 제공했다.",
+        "applicability": {
+          "judgmentScope": "동일 충격조건에서는 후보안 간 상대 위험과 후속 검증 우선순위를 판단할 수 있습니다. 절대 파손 여부나 수명은 판단할 수 없습니다.",
+          "validConditions": [
+            "동일한 충격조건과 같은 평가 기준을 적용한 후보안 간 비교에 재사용할 수 있습니다.",
+            "현재 확보한 재료모델의 범위 안에서 상대 경향을 비교하는 경우에 유효합니다."
+          ],
+          "limitations": [
+            "현재 결과만으로 절대 파손수명을 판단할 수 없습니다.",
+            "동적 물성이 확보되지 않아 절대값의 정확도를 보장할 수 없습니다.",
+            "후속 실물 평가와의 상관 검증이 필요합니다."
+          ]
+        },
         "followUp": [
-          "기존 충격 방법론 활용",
-          "후속 실물 평가 비교",
-          "사업부 피드백 후 BP 후보 여부 판단"
-        ]
+          "기존 충격 방법론을 후속 비교 평가에도 활용합니다.",
+          "후속 실물 평가 결과와 Simulation의 상대 경향을 비교합니다.",
+          "사업부 피드백을 확인한 뒤 BP 후보 여부를 판단합니다."
+        ],
+        "requesterFeedback": {
+          "channel": "샘플 설계 검토 회의",
+          "summary": "취약 위치와 상대 비교 근거를 후속 평가 항목 선정에 활용"
+        },
+        "decisionImpact": {
+          "outcomes": [
+            "추가 검증 결정"
+          ],
+          "summary": "설계안 우선순위 판단 근거를 제공하고 후속 실물 평가 범위를 구체화"
+        }
       },
       "changeLog": [
         {
@@ -459,7 +479,9 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "limitations": [
           "실험 상관 전"
         ],
-        "officialSource": "샘플 링크"
+        "sourceAndRelationRoles": [
+          "공식 원문은 사내 등록 단계에서 연결"
+        ]
       },
       "changeLog": [
         {
@@ -547,20 +569,29 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "humanConfirmed": true
       },
       "content": {
-        "context": "복합 Domain 협업 요청",
-        "primaryQuestion": "여러 결과를 어떤 기준으로 연결해 판단할 것인가",
+        "context": "복수 기술영역의 결과를 하나의 설계 판단으로 연결해야 했으나 Domain별 데이터 전달 시점과 책임 범위가 확정되지 않은 협업 요청입니다.",
+        "primaryQuestion": "각 Domain의 결과를 어떤 기준과 순서로 연결해야 공동 설계 판단에 사용할 수 있는가?",
         "inputsAndConstraints": [
-          "타 Domain 데이터",
-          "전달 시점"
+          "각 Domain에서 생성하는 입력·출력 데이터의 형식과 성숙도가 서로 다릅니다.",
+          "Domain별 결과 전달 시점과 담당자의 확인 책임을 함께 정해야 합니다."
         ],
-        "approach": "Domain별 입력·출력과 책임 구분",
-        "result": "진행 중",
-        "judgmentScope": "협업 범위",
-        "limitations": [
-          "결과 미확정"
+        "approach": "Domain별 입력·출력, 전달 조건, 확인 책임과 최종 판단 시점을 구분해 협업 흐름을 정리하고 있습니다.",
+        "evidenceSummary": [
+          "열유동 결과를 구조해석 입력으로 전달한 기존 VD Request에서 데이터 변환 조건을 확인했습니다.",
+          "현재 요청에서는 최종 결과가 아직 확정되지 않았음을 확인했습니다."
         ],
+        "result": "현재 단계에서는 복합 Domain 협업 범위와 데이터 전달 조건만 정의했습니다. 기술적 결론과 최종 설계 판단은 후속 검토에서 확정해야 합니다.",
+        "applicability": {
+          "judgmentScope": "각 Domain의 데이터 전달 순서와 협업 책임 범위를 판단할 수 있습니다. 기술 결과의 유효성과 최종 설계안은 아직 판단할 수 없습니다.",
+          "validConditions": [
+            "참여 Domain과 데이터 전달 관계가 동일한 협업 요청의 초기 범위 설정에 활용할 수 있습니다."
+          ],
+          "limitations": [
+            "각 Domain의 검토 결과와 최종 의사결정이 아직 확정되지 않았습니다."
+          ]
+        },
         "followUp": [
-          "추가 VD Request"
+          "각 Domain의 기술 질문과 판단 결과가 구체화되면 추가 VD Request로 연결합니다."
         ]
       },
       "changeLog": [
@@ -581,7 +612,7 @@ window.TECHNICAL_ASSET_LIBRARY = {
       "domain": "impact",
       "secondaryDomains": [],
       "publicationStatus": "초안",
-      "status": "수행 중",
+      "status": "Drop",
       "owner": "샘플 담당자",
       "registrant": "샘플 등록자",
       "reviewer": "",
@@ -612,7 +643,7 @@ window.TECHNICAL_ASSET_LIBRARY = {
       ],
       "links": [
         {
-          "label": "CoR 중간보고",
+          "label": "CoR 결과보고서",
           "href": "#",
           "type": "CoR",
           "status": "확인 필요"
@@ -667,11 +698,14 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "objectiveAndSuccessCriteria": "평가 피드백과 취약부 Ranking의 상관 확인",
         "scopeAndPlan": "조건별 해석과 평가 결과 비교",
         "validationDesign": "동일 조건의 Simulation·평가 취약위치 비교",
-        "progressDecisions": "중간 검증 수행 중",
-        "resultAndJudgment": "부분 조건에서 경향 일치",
+        "progressDecisions": [
+          "부분 조건의 불일치 원인을 확인한 뒤 평가와 동일한 접촉 조건으로 비교 기준을 변경했습니다."
+        ],
+        "resultAndJudgment": "확정한 비교 조건에서 Simulation 취약 위치와 평가 피드백의 상대 경향이 반복됐습니다. 동일 계열 구조의 우선순위 판단에는 사용할 수 있으나 절대 파손 예측에는 사용할 수 없습니다.",
         "outputsAndFollowUp": [
-          "중간보고",
-          "방법론 후보 보완"
+          "최종 결과보고서",
+          "충격 위험도 비교 방법론 보완",
+          "다른 구조 계열에 대한 재검증"
         ]
       },
       "changeLog": [
@@ -1023,7 +1057,7 @@ window.TECHNICAL_ASSET_LIBRARY = {
       "domain": "delamination",
       "secondaryDomains": [],
       "publicationStatus": "초안",
-      "status": "제안",
+      "status": "완료",
       "owner": "샘플 담당자",
       "registrant": "샘플 등록자",
       "reviewer": "",
@@ -1045,15 +1079,15 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "계면 박리 CoR",
         "Delamination 과제"
       ],
-      "summary": "계면 취약조건을 구조적으로 설명하기 위해 물성·실험·모델 검증 Gap을 과제화한 CoR 제안입니다.",
-      "useCase": "반복되는 박리 문제를 개별 요청이 아닌 선행 검증과제로 정의할 때 참고합니다.",
-      "contents": "발굴 배경, 기술 Gap, 성공기준, 수행계획, 검증설계, 예상 산출물",
+      "summary": "계면 취약조건을 구조적으로 설명하기 위해 물성·실험·모델 검증 Gap을 해소하고 판단 기준을 정리한 완료 CoR입니다.",
+      "useCase": "유사한 박리 문제에서 필요한 물성·검증 항목과 판단 가능한 범위를 확인할 때 참고합니다.",
+      "contents": "발굴 배경, 기술 Gap, 성공기준, 수행계획, 검증설계, 결과와 판단범위, 후속조치",
       "sourceIds": [
         "COR-DEMO-001"
       ],
       "links": [
         {
-          "label": "CoR 제안서",
+          "label": "CoR 결과보고서",
           "href": "#",
           "type": "CoR",
           "status": "확인 필요"
@@ -1100,11 +1134,14 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "objectiveAndSuccessCriteria": "박리 Risk Ranking과 검증조건 정립",
         "scopeAndPlan": "물성 확보, 모델 개발, 실험 상관",
         "validationDesign": "기준시편과 조건별 비교",
-        "progressDecisions": "제안 단계",
-        "resultAndJudgment": "결과 없음",
+        "progressDecisions": [
+          "초기 물성 민감도 결과를 바탕으로 핵심 검증 조건을 축소하고 기준시편 비교를 우선했습니다."
+        ],
+        "resultAndJudgment": "계면 조건에 따른 상대 위험 순서를 반복 확인했으며, 동일한 재료 조합에서는 설계안의 상대 비교에 사용할 수 있습니다. 다른 재료 조합에는 추가 검증이 필요합니다.",
         "outputsAndFollowUp": [
-          "기술보고서",
-          "방법론 후보"
+          "검증 결과보고서",
+          "박리 위험 비교 방법론 후보",
+          "다른 재료 조합에 대한 후속 검증"
         ]
       },
       "changeLog": [
@@ -1294,20 +1331,29 @@ window.TECHNICAL_ASSET_LIBRARY = {
         "humanConfirmed": true
       },
       "content": {
-        "context": "타 Domain 결과를 구조해석 입력으로 전환",
-        "primaryQuestion": "온도장과 시간축을 어떤 기준으로 전달할 것인가",
+        "context": "열유동 결과를 구조해석 입력으로 전환해야 했으나 서로 다른 Mesh와 시간축 때문에 온도장 전달 기준을 먼저 정해야 했습니다.",
+        "primaryQuestion": "열유동 결과의 온도장과 시간축을 어떤 기준으로 변환해야 구조해석 입력의 정합성을 유지할 수 있는가?",
         "inputsAndConstraints": [
-          "열유동 결과",
-          "서로 다른 Mesh와 시간축"
+          "열유동 해석에서 생성된 온도장 결과를 입력으로 사용합니다.",
+          "열유동 모델과 구조해석 모델의 Mesh 및 시간축이 서로 다릅니다."
         ],
-        "approach": "공간·시간 보간과 보수성 기준 비교",
-        "result": "전달 시 확인할 핵심 항목 정리",
-        "judgmentScope": "입력 변환 정합성",
-        "limitations": [
-          "절대 온도 예측의 검증은 별도"
+        "approach": "공간 보간과 시간 보간 방법을 비교하고, 변환 전후의 온도 범위와 에너지 보수성 확인 기준을 정리했습니다.",
+        "evidenceSummary": [
+          "Mesh 변환 전후의 온도 범위와 주요 위치별 온도 이력을 비교했습니다.",
+          "시간축 보간 간격에 따라 구조해석 입력의 급격한 변화가 발생하는 구간을 확인했습니다."
         ],
+        "result": "온도장 전달 시 확인해야 할 정합성 기준과 보수성 점검 순서를 정리했습니다. 이 기준은 입력 변환의 누락과 왜곡을 줄이는 판단 근거로 사용할 수 있습니다.",
+        "applicability": {
+          "judgmentScope": "열유동 결과를 구조해석 입력으로 변환할 때 데이터 전달 정합성을 판단할 수 있습니다. 절대 온도 예측의 정확도는 판단할 수 없습니다.",
+          "validConditions": [
+            "열유동 결과와 구조해석 입력의 위치 및 시간 대응 관계를 확인할 수 있는 경우에 적용할 수 있습니다."
+          ],
+          "limitations": [
+            "절대 온도 예측의 정확도와 실물 상관은 별도 검증이 필요합니다."
+          ]
+        },
         "followUp": [
-          "연계 Manual 후보"
+          "확정된 변환 기준을 열유동-구조 연계 Manual 후보로 정리합니다."
         ]
       },
       "changeLog": [

@@ -6,17 +6,17 @@
     <title>Wiki | 우리팀 기술자산화 Hub</title>
     <link rel="stylesheet" href="team_technical_assets_boxicons.css">
     <link rel="stylesheet" href="team_technical_assets.css?v=20260721-registration-5">
-    <link rel="stylesheet" href="team_technical_assets_wiki.css?v=20260724-type-badges-1">
-    <link rel="stylesheet" href="team_technical_assets_registration_modal.css?v=20260721-3">
+    <link rel="stylesheet" href="team_technical_assets_wiki.css?v=20260731-wiki-index-1">
+    <link rel="stylesheet" href="team_technical_assets_registration_modal.css?v=20260801-registration-compact-1">
 </head>
 <body data-page="wiki">
     <header class="topbar">
-        <a class="brand" href="team_technical_assets.html" aria-label="Hub Overview로 돌아가기">
+        <a class="brand" href="index.html" aria-label="Hub Overview로 돌아가기">
             <span class="brand-mark"><i class="bx bx-book-open"></i></span>
             <span><strong>Wiki</strong><span>찾고, 읽고, 바로 보완하는 기술자산 공간</span></span>
         </a>
         <nav class="topnav" aria-label="기술자산화 페이지">
-            <a href="team_technical_assets.html">Overview</a>
+            <a href="index.html">Overview</a>
             <a href="team_technical_assets_map.html">Technology Map</a>
             <a href="team_technical_assets_techtree.html">Learning Path</a>
             <a class="active" href="team_technical_assets_wiki.html">Wiki</a>
@@ -30,15 +30,17 @@
             <header class="wiki-hero-copy">
                 <span class="page-kicker">Technical Asset Wiki</span>
                 <h1 id="wiki-title">기술자산 Wiki</h1>
-                <p>아래 목록은 검색 구조를 확인하기 위한 예시입니다. 실제 기술자산은 AI Handoff JSON을 사내에서 확정한 뒤 GitLab 네이티브 Wiki 문서로 등록합니다.</p>
+                <p>AI Handoff JSON을 사내에서 확정해 GitLab Wiki에 등록하고, 검증된 Wiki Index에서 문제·판단 질문과 분류를 함께 검색합니다.</p>
             </header>
             <section class="wiki-hero-tools" aria-label="Wiki 현황과 주요 작업">
                 <dl class="wiki-stats" aria-label="Wiki 자산 현황">
                     <div><dt>전체</dt><dd id="wiki-total-count">0</dd></div>
-                    <div><dt>게시</dt><dd id="wiki-published-count">0</dd></div>
+                    <div><dt>Peer 확인</dt><dd id="wiki-published-count">0</dd></div>
                     <div><dt>재사용 자산</dt><dd id="wiki-reused-count">0</dd></div>
                 </dl>
                 <nav class="wiki-hero-actions" aria-label="Wiki 주요 작업">
+                    <button class="secondary-action-button" type="button" id="open-gitlab-connection"><i class="bx bx-link" aria-hidden="true"></i><span>GitLab 사용자 연결</span></button>
+                    <span class="wiki-current-user" id="wiki-current-user" role="status">연결 전</span>
                     <button class="asset-register-button" type="button" id="open-asset-registration"><i class="bx bx-plus" aria-hidden="true"></i><span>기술자산 등록</span></button>
                 </nav>
             </section>
@@ -46,7 +48,7 @@
 
         <p class="wiki-local-notice container" role="status">
             <i class="bx bx-laptop" aria-hidden="true"></i>
-            <span><strong>운영 기준</strong> 신규 기술자산은 GitLab 네이티브 Wiki 문서로 등록하고, 사내 댓글은 자산별 GitLab Issue Thread에 날짜와 작성자 정보가 자동 기록됩니다.</span>
+            <span><strong>운영 기준</strong> 신규 기술자산은 GitLab 네이티브 Wiki 문서로 등록하고, 사내 댓글은 자산별 GitLab Issue Thread에 날짜와 작성자 정보가 자동 기록됩니다. <small id="wiki-index-status">검색 데이터 확인 중</small></span>
         </p>
 
         <section class="wiki-workspace container" aria-label="기술자산 Wiki 탐색">
@@ -80,6 +82,30 @@
             <article class="wiki-article" id="wiki-article" aria-live="polite"><h2 class="visually-hidden" id="wiki-detail-title">Wiki 항목 상세</h2></article>
         </dialog>
 
+        <dialog class="gitlab-connection-dialog" id="gitlab-connection-dialog" aria-labelledby="gitlab-connection-title">
+            <form class="gitlab-connection-shell" id="gitlab-connection-form" method="dialog">
+                <header>
+                    <span><span class="page-kicker">Project member setup</span><h2 id="gitlab-connection-title">GitLab 사용자 연결</h2></span>
+                    <button class="icon-button" type="button" id="close-gitlab-connection" aria-label="GitLab 사용자 연결 닫기" title="닫기"><i class="bx bx-x"></i></button>
+                </header>
+                <section class="gitlab-connection-body">
+                    <p>프로젝트 참여 시 한 번 연결하면 이 탭에서 기술자산을 등록할 때 현재 사용자가 등록자와 Owner로 자동 적용됩니다.</p>
+                    <label class="registration-field">현재 사용자 Access Token
+                        <small>GitLab API에서 본인 계정만 확인하며 카드 JSON에는 저장하지 않습니다.</small>
+                        <input id="gitlab-connection-token" type="password" autocomplete="off" placeholder="현재 사용자 토큰" required>
+                    </label>
+                    <p class="gitlab-connection-security"><i class="bx bx-shield-quarter"></i>로컬 프로토타입은 토큰을 현재 탭 세션에만 보관합니다. 운영 환경은 GitLab OAuth 또는 사내 SSO 세션으로 교체합니다.</p>
+                    <p class="gitlab-connection-status" id="gitlab-connection-status" role="status" aria-live="polite"></p>
+                </section>
+                <footer>
+                    <button class="secondary-action-button" type="button" id="disconnect-gitlab-user" hidden>연결 해제</button>
+                    <span></span>
+                    <button class="secondary-action-button" type="button" id="cancel-gitlab-connection">취소</button>
+                    <button class="asset-register-button" type="submit" id="connect-gitlab-user"><i class="bx bx-user-check"></i>현재 사용자 연결</button>
+                </footer>
+            </form>
+        </dialog>
+
         <dialog class="asset-registration-dialog" id="asset-registration-dialog" aria-labelledby="asset-registration-title">
             <form class="asset-registration-shell" id="asset-registration-form" method="dialog">
                 <header class="asset-registration-header">
@@ -89,100 +115,459 @@
 
                 <ol class="asset-registration-steps" aria-label="등록 단계">
                     <li class="is-active" data-registration-step-indicator="1"><span>1</span>JSON 불러오기</li>
-                    <li data-registration-step-indicator="2"><span>2</span>분류·태그 확정</li>
-                    <li data-registration-step-indicator="3"><span>3</span>자산·근거 연결</li>
-                    <li data-registration-step-indicator="4"><span>4</span>검증·등록</li>
+                    <li data-registration-step-indicator="2"><span>2</span>내용 확인</li>
+                    <li data-registration-step-indicator="3"><span>3</span>사내 연결</li>
+                    <li data-registration-step-indicator="4"><span>4</span>등록</li>
                 </ol>
 
                 <div class="asset-registration-body">
                     <section class="asset-registration-step is-active" data-registration-step="1">
+                        <section class="registration-current-user" aria-labelledby="registration-current-user-title">
+                            <i class="bx bx-user-check" aria-hidden="true"></i>
+                            <span><strong id="registration-current-user-title">Owner는 연결된 현재 GitLab 사용자로 자동 지정합니다.</strong><small>프로젝트 참여 시 사용자 연결을 한 번 완료하면 등록 과정에서 다시 입력하지 않습니다.</small></span>
+                            <span class="registration-current-user-status" id="registration-current-user-status">GitLab 연결 전</span>
+                        </section>
                         <div class="json-drop-zone" id="registration-drop-zone">
                             <i class="bx bx-file-blank" aria-hidden="true"></i>
                             <strong>외부 JSON 파일을 놓거나 선택하세요.</strong>
-                            <p>AI Handoff Packet v0.2 또는 기존 카드 JSON을 불러올 수 있습니다. 외부 AI에는 사내 고유정보를 입력하지 않습니다.</p>
+                            <p>VD Request·CoR·방법론 Lean v0.3, 기존 6개 유형의 Handoff v0.2 또는 기존 카드 JSON을 불러올 수 있습니다. 외부 AI에는 사내 고유정보를 입력하지 않습니다.</p>
                             <label class="secondary-action-button" for="registration-json-file"><i class="bx bx-upload"></i>JSON 파일 선택</label>
                             <input id="registration-json-file" type="file" accept="application/json,.json" hidden>
                             <span class="json-file-name" id="registration-file-name">선택된 파일 없음</span>
+                            <div class="registration-example-actions">
+                                <button class="secondary-action-button" type="button" id="registration-load-example"><i class="bx bx-show"></i>예시로 Step 02 보기</button>
+                                <a class="text-link" href="04_technical_assets/examples/vd_request_registration_screen.example.json" download>예시 JSON 다운로드 <i class="bx bx-download"></i></a>
+                            </div>
                             <a class="text-link" href="team_technical_assets_wiki_registration.html" target="_blank" rel="noopener">AI 질문과 Wiki 등록 방법 보기 <i class="bx bx-link-external"></i></a>
                         </div>
                         <div class="registration-message" id="registration-import-message" aria-live="polite"></div>
                     </section>
 
-                    <section class="asset-registration-step" data-registration-step="2" hidden>
-                        <div class="registration-id-banner"><div><span>등록 ID</span><strong id="registration-id-display">등록 전 생성</strong></div><p>AI는 후보를 제안하고, 아래 사내 최종값이 Wiki 검색에 실제 사용됩니다.</p></div>
-                        <p class="registration-example-notice"><i class="bx bx-info-circle"></i><strong>역할 구분</strong> AI 제안은 자동 확정되지 않습니다. 기존 분류와 중복 자산을 확인한 등록자가 최종값을 정합니다.</p>
+                    <section class="asset-registration-step registration-step-two" data-registration-step="2" hidden>
+                        <span id="registration-id-display" hidden>등록 전 생성</span>
+                        <p class="registration-preview-banner" id="registration-preview-banner" hidden><i class="bx bx-show" aria-hidden="true"></i><span><strong>예시 데이터로 Step 02 화면을 확인 중입니다.</strong> Owner의 <code>@preview_user</code>는 화면 점검용이며 실제 Wiki 등록에는 사용되지 않습니다.</span></p>
+                        <header class="registration-step-heading">
+                            <span class="page-kicker">STEP 02 · 내용 확인</span>
+                            <h3>AI가 채운 내용을 확인하고, 틀리거나 빠진 부분만 수정하세요.</h3>
+                            <p>본문과 검색 분류는 자동으로 채워집니다. 긴 본문은 접어 두었으며 Reviewer와 유형별 최소 결정만 먼저 확인합니다.</p>
+                        </header>
 
-                        <section class="registration-search-proposal" aria-labelledby="registration-search-proposal-title">
-                            <header><span><span class="page-kicker">AI suggested candidates</span><h3 id="registration-search-proposal-title">AI가 제안한 검색 분류</h3></span><small id="proposal-candidate-status">읽기 전용 후보</small></header>
-                            <dl>
-                                <div><dt>주 기술영역 후보</dt><dd id="proposal-primary-domain">제안 없음</dd></div>
-                                <div><dt>보조 기술영역 후보</dt><dd id="proposal-secondary-domains">제안 없음</dd></div>
-                                <div><dt>업무 단계 후보</dt><dd id="proposal-workflow-stages">제안 없음</dd></div>
-                                <div><dt>대응 대상 후보</dt><dd id="proposal-response-targets">제안 없음</dd></div>
-                                <div><dt>내용 기반 추가 태그 후보</dt><dd id="proposal-visible-tags">제안 없음</dd></div>
-                                <div><dt>검색 별칭 후보</dt><dd id="proposal-aliases">제안 없음</dd></div>
-                                <div><dt>예상 검색문장</dt><dd id="proposal-expected-queries">제안 없음</dd></div>
-                                <div><dt>검색 제외어 후보</dt><dd id="proposal-excluded-terms">제안 없음</dd></div>
-                                <div class="proposal-legacy-row"><dt>구버전 미분류 searchTerms</dt><dd id="proposal-legacy-terms">없음</dd></div>
-                            </dl>
-                            <details><summary>AI 제안 이유 보기</summary><ul id="proposal-rationale-list"><li><span>제안 이유가 없습니다.</span></li></ul></details>
+                        <section class="registration-step2-section registration-basic-section" aria-labelledby="registration-basic-title">
+                            <header>
+                                <span><strong class="registration-section-number">1</strong><span><h4 id="registration-basic-title">기본정보</h4><small>자료유형·제목·요약·Owner</small></span></span>
+                                <span class="registration-source-token">외부 JSON + 사내 입력</span>
+                            </header>
+                            <fieldset class="registration-basic-grid">
+                                <legend class="visually-hidden">기본 등록정보</legend>
+                                 <label class="registration-field">자료 유형 <small>외부 JSON · 선택한 Guide 기준</small><select name="type" required disabled></select></label>
+                                 <label class="registration-field">Owner <small>프로젝트 참여 시 연결한 현재 GitLab 계정 자동 적용</small><input name="owner" required readonly placeholder="GitLab 사용자 연결 후 자동 확인"></label>
+                                 <label class="registration-field">Reviewer <small>등록자와 다른 Peer의 GitLab Username</small><input name="reviewer" required placeholder="@peer_reviewer"></label>
+                                 <label class="registration-field registration-field-wide">자산 제목 <small>외부 JSON 자동 초안 · 필요한 경우에만 수정</small><input name="title" required></label>
+                                <label class="registration-field registration-field-wide">요약 <small>외부 JSON 자동 초안 · 요청 배경과 판단 근거를 확인</small><textarea name="summary" rows="3" required></textarea></label>
+                                <label class="registration-field registration-field-wide">Contributors <small>사내 선택 입력 · GitLab Username을 쉼표로 구분</small><input name="contributors" placeholder="@contributor_a, @contributor_b"></label>
+                            </fieldset>
                         </section>
 
-                        <fieldset class="registration-form-grid">
-                            <legend class="visually-hidden">사내 최종 등록정보</legend>
-                            <label class="registration-field registration-field-wide">자산 제목<input name="title" required></label>
-                            <label class="registration-field">자산 ID<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="impact-risk-ranking"></label>
-                            <label class="registration-field">자료 유형 <small>필수</small><select name="type" required></select></label>
-                            <label class="registration-field">주 기술영역 <small>필수</small><select name="domain" required></select></label>
-                            <label class="registration-field">보조 기술영역 <small>최대 2개</small><select name="secondaryDomains" multiple size="4"></select></label>
-                            <label class="registration-field">업무 단계 <small>필수·복수 선택</small><select name="workflowStages" multiple size="4" required></select></label>
-                            <label class="registration-field">대응 대상 <small>필수·복수 선택</small><select name="responseTargets" multiple size="4" required></select></label>
-                            <label class="registration-field">게시 상태<select name="publicationStatus" required></select></label>
-                            <label class="registration-field">유형별 상태<select name="status" required></select></label>
-                            <label class="registration-field">담당자<input name="owner" required></label>
-                            <label class="registration-field">등록자<input name="registrant" required></label>
-                            <label class="registration-field">검토자 <small>선택 입력</small><input name="reviewer" placeholder="별도 검토 이력을 남길 때만 입력"></label>
-                            <label class="registration-field registration-field-wide">요약<textarea name="summary" rows="3" required></textarea></label>
-                            <label class="registration-field registration-field-wide">활용 상황<textarea name="useCase" rows="3" required></textarea></label>
-                            <label class="registration-field registration-field-wide">핵심 내용<textarea name="contents" rows="4" required></textarea></label>
-                            <label class="registration-field registration-field-wide">유형별 상세 내용 JSON <small>AI가 만든 typeSpecific을 사내 사실·근거로 보완</small><textarea name="typeSpecificJson" rows="12" required spellcheck="false"></textarea></label>
-                            <label class="registration-field registration-field-wide">검색 별칭 <small>동의어·약어·과거 명칭</small><input name="aliases" placeholder="Drop, Risk Ranking, 충격 취약부"></label>
-                            <label class="registration-field registration-field-wide">예상 검색문장 <small>한 줄에 하나</small><textarea name="expectedQueries" rows="3" placeholder="설계안 충격 취약부 비교"></textarea></label>
-                            <label class="registration-field registration-field-wide">검색 제외어 <small>혼동되어 매칭되면 안 되는 표현</small><input name="excludedTerms" placeholder="쉼표로 구분"></label>
-                        </fieldset>
-                        <section class="registration-tag-panel registration-tag-confirmation" aria-labelledby="registration-tag-title">
-                            <header><div><h3 id="registration-tag-title">분류 태그·추가 추천 태그 확정</h3><p>AI는 실제 답변 근거가 있는 분류만 후보로 제안합니다. 후보가 비어 있거나 근거가 충분하지 않으면 자료유형·주 기술영역·업무단계·대응대상을 사내에서 모두 직접 선택해야 합니다.</p></div><span class="required-token">2단계 필수 확정</span></header>
+                        <section class="registration-step2-section registration-vd-content-review" id="registration-vd-content-review" aria-labelledby="registration-vd-content-title" hidden>
+                            <header>
+                                <span><strong class="registration-section-number">2</strong><span><h4 id="registration-vd-content-title">외부 AI 작성 내용 확인</h4><small>최종 Wiki에 그대로 배치할 완성 문장</small></span></span>
+                                <span class="registration-source-token">외부 JSON · 확인/수정</span>
+                            </header>
+                            <p class="registration-tag-note"><i class="bx bx-file-find"></i>AI가 대화 내용을 항목별 완성 문장으로 정리했습니다. 다시 작성하지 말고 사실과 다른 부분만 수정하세요. 등록 화면은 문장을 재작성하지 않고 아래 순서대로 Wiki Markdown에 배치합니다.</p>
+                            <details class="registration-ai-content-editor">
+                                <summary><span><strong>AI 작성 본문 5개 영역 보기·수정</strong><small>사실과 다른 내용이 있을 때만 펼쳐 수정합니다.</small></span><i class="bx bx-chevron-down" aria-hidden="true"></i></summary>
+                            <div class="registration-vd-area-grid">
+                                <section class="registration-vd-area-card" aria-labelledby="registration-vd-area-1-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 1</span>
+                                        <h5 id="registration-vd-area-1-title">요청 맥락과 판단 질문</h5>
+                                    </header>
+                                    <label class="registration-field">요청 맥락 <small>상황·필요 결정·시점을 포함한 2~4문장</small><textarea name="vdContext" rows="4" required></textarea></label>
+                                    <label class="registration-field">핵심 판단 질문 <small>Simulation으로 답하려던 질문 한 문장</small><textarea name="vdPrimaryQuestion" rows="2" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-vd-area-2-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 2</span>
+                                        <h5 id="registration-vd-area-2-title">입력·전제조건·제약</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>한 줄에 한 문장</small><textarea name="vdInputsAndConstraints" rows="7" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card registration-vd-system-area" aria-label="기존 기술자산 검색과 활용">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 3</span>
+                                        <h5>기존 기술자산 검색과 활용</h5>
+                                    </header>
+                                    <p>외부 AI가 작성하지 않습니다. Step 03 진입 시 현재 Wiki Index를 자동 검색하고, 등록자가 연결·활용 방식 또는 후보 없음만 확인합니다.</p>
+                                    <span class="registration-source-token">사내 자동 처리</span>
+                                </section>
+                                <section class="registration-vd-area-card registration-vd-area-wide" aria-labelledby="registration-vd-area-4-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 4</span>
+                                        <h5 id="registration-vd-area-4-title">Simulation 대응과 판단 결과</h5>
+                                    </header>
+                                    <div class="registration-vd-field-grid">
+                                        <label class="registration-field">검토 방법 <small>무엇을 어떻게 비교·검토했는지</small><textarea name="vdApproach" rows="4" required></textarea></label>
+                                        <label class="registration-field">관찰 근거 <small>해석 전 실제 관찰 사실 · 한 줄에 한 문장</small><textarea name="vdEvidenceSummary" rows="4" required></textarea></label>
+                                        <label class="registration-field">기술적 해석과 결론 <small>관찰을 어떻게 해석하고 무엇을 제안했는지</small><textarea name="vdResult" rows="4" required></textarea></label>
+                                        <label class="registration-field">판단 가능 범위 <small>판단 가능한 것과 불가능한 것</small><textarea name="vdJudgmentScope" rows="4" required></textarea></label>
+                                    </div>
+                                </section>
+                                <section class="registration-vd-area-card registration-vd-area-wide" aria-labelledby="registration-vd-area-5-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 5</span>
+                                        <h5 id="registration-vd-area-5-title">활용 범위·실제 영향·후속 연결</h5>
+                                    </header>
+                                    <div class="registration-vd-field-grid">
+                                        <label class="registration-field">유효조건 <small>한 줄에 한 문장</small><textarea name="vdValidConditions" rows="4" required></textarea></label>
+                                        <label class="registration-field">한계 <small>한 줄에 한 문장</small><textarea name="vdLimitations" rows="4" required></textarea></label>
+                                        <label class="registration-field registration-field-wide">후속조치 <small>확정·제안·미정을 구분해 한 줄에 한 문장 · 없으면 비워 둘 수 있음</small><textarea name="vdFollowUp" rows="3"></textarea></label>
+                                    </div>
+                                    <p>요청자 피드백·의사결정 영향의 완료 상태와 사내 원본 링크는 아래 사내 보완 영역 및 Step 03에서 채웁니다.</p>
+                                </section>
+                            </div>
+                            </details>
+                            <label class="registration-search-confirm registration-vd-content-confirm"><input name="vdContentConfirmed" type="checkbox" required><span><strong>외부 AI가 정리한 판단 맥락과 결론을 확인했습니다.</strong><small>틀린 부분은 위 항목에서 수정했으며, 확인한 문장만 최종 Wiki에 사용합니다.</small></span></label>
+                        </section>
+
+                        <section class="registration-step2-section registration-cor-content-review" id="registration-cor-content-review" aria-labelledby="registration-cor-content-title" hidden>
+                            <header>
+                                <span><strong class="registration-section-number">2</strong><span><h4 id="registration-cor-content-title">외부 AI 작성 내용 확인</h4><small>완료된 CoR의 실행·검증·판단 기록 7영역</small></span></span>
+                                <span class="registration-source-token">외부 JSON · 확인/수정</span>
+                            </header>
+                            <p class="registration-tag-note"><i class="bx bx-file-find"></i>외부 AI가 정리한 CoR 일곱 영역입니다. 등록자는 새 내용을 다시 작성하지 않고 사실과 다른 부분만 수정합니다. 아래 문장은 순서대로 Wiki Markdown에 배치됩니다.</p>
+                            <details class="registration-ai-content-editor">
+                                <summary><span><strong>AI 작성 본문 7개 영역 보기·수정</strong><small>사실과 다른 내용이 있을 때만 펼쳐 수정합니다.</small></span><i class="bx bx-chevron-down" aria-hidden="true"></i></summary>
+                            <div class="registration-vd-area-grid">
+                                <section class="registration-vd-area-card" aria-labelledby="registration-cor-area-1-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 1</span>
+                                        <h5 id="registration-cor-area-1-title">배경과 개선 필요성</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>기존 상태·문제·개선이 필요했던 이유</small><textarea name="corBackgroundAndGap" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-cor-area-2-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 2</span>
+                                        <h5 id="registration-cor-area-2-title">목표와 성공 기준</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>달성하려던 목표와 완료 판단 기준</small><textarea name="corObjectiveAndSuccessCriteria" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-cor-area-3-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 3</span>
+                                        <h5 id="registration-cor-area-3-title">범위와 실행 계획</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>포함·제외 범위와 실제 실행 순서</small><textarea name="corScopeAndPlan" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-cor-area-4-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 4</span>
+                                        <h5 id="registration-cor-area-4-title">검증 설계</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>비교 조건·지표·판정 방법과 근거</small><textarea name="corValidationDesign" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-cor-area-5-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 5</span>
+                                        <h5 id="registration-cor-area-5-title">진행 중 판단과 변경 결정</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>한 줄에 한 문장</small><textarea name="corProgressDecisions" rows="6" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-cor-area-6-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 6</span>
+                                        <h5 id="registration-cor-area-6-title">결과와 최종 판단</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>관찰 결과·성공 기준 대비 판단·남은 한계</small><textarea name="corResultAndJudgment" rows="6" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card registration-vd-area-wide" aria-labelledby="registration-cor-area-7-title">
+                                    <header class="registration-vd-area-heading">
+                                        <span class="registration-vd-area-index">영역 7</span>
+                                        <h5 id="registration-cor-area-7-title">산출물과 후속 조치</h5>
+                                    </header>
+                                    <label class="registration-field">확정 문장 <small>남긴 결과물과 확산·유지·추가 검증 계획 · 한 줄에 한 문장</small><textarea name="corOutputsAndFollowUp" rows="5" required></textarea></label>
+                                    <p>실제 사내 결과물과 과제 종료 근거는 Step 03에서 링크로 연결하고 접근 여부를 확인합니다.</p>
+                                </section>
+                            </div>
+                            </details>
+                            <div class="registration-cor-confirmations">
+                                <label class="registration-field registration-cor-status-field" id="registration-cor-status-field"><span><strong>과제 상태</strong><small>사내 공식 종료 근거를 확인한 뒤 완료 또는 Drop을 선택합니다.</small></span><select name="status" required></select></label>
+                                <label class="registration-search-confirm registration-vd-content-confirm"><input name="corContentConfirmed" type="checkbox" required><span><strong>외부 AI 작성 내용 확인</strong><small>일곱 영역의 사실과 판단을 확인했으며, 틀린 부분만 수정했습니다.</small></span></label>
+                            </div>
+                        </section>
+
+                        <section class="registration-step2-section registration-methodology-content-review" id="registration-methodology-content-review" aria-labelledby="registration-methodology-content-title" hidden>
+                            <header>
+                                <span><strong class="registration-section-number">2</strong><span><h4 id="registration-methodology-content-title">외부 AI 작성 내용 확인</h4><small>방법론의 7개 공식 영역과 사내 판정 3가지</small></span></span>
+                                <span class="registration-source-token">외부 JSON · 확인/수정</span>
+                            </header>
+                            <p class="registration-tag-note"><i class="bx bx-file-find"></i>외부 AI가 정리한 일곱 영역입니다. 새로 작성하지 말고 사실과 다른 부분만 수정하세요. 자격·Level·Technology Map은 아래에서 간단히 확정합니다.</p>
+                            <details class="registration-ai-content-editor">
+                                <summary><span><strong>AI 작성 본문 7개 영역 보기·수정</strong><small>사실과 다른 내용이 있을 때만 펼쳐 수정합니다.</small></span><i class="bx bx-chevron-down" aria-hidden="true"></i></summary>
+                            <div class="registration-vd-area-grid">
+                                <section class="registration-vd-area-card" aria-labelledby="registration-methodology-area-1-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 1</span><h5 id="registration-methodology-area-1-title">해결 문제와 활용 목적</h5></header>
+                                    <label class="registration-field">확정 문장 <small>어떤 문제에서 어떤 판단을 위해 사용하는지</small><textarea name="methodologyProblemAndPurpose" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-methodology-area-2-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 2</span><h5 id="registration-methodology-area-2-title">기술 원리와 가정</h5></header>
+                                    <label class="registration-field">확정 문장 <small>핵심 물리 원리·가정·적합한 해석 방식</small><textarea name="methodologyTechnicalPrinciples" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-methodology-area-3-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 3</span><h5 id="registration-methodology-area-3-title">입력과 전제조건</h5></header>
+                                    <label class="registration-field">확정 문장 <small>한 줄에 한 문장</small><textarea name="methodologyInputsAndPrerequisites" rows="6" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-methodology-area-4-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 4</span><h5 id="registration-methodology-area-4-title">표준 절차와 판단 흐름</h5></header>
+                                    <label class="registration-field">확정 문장 <small>수행 순서와 중간 판단·중단 조건 · 한 줄에 한 문장</small><textarea name="methodologyStandardProcedure" rows="6" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-methodology-area-5-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 5</span><h5 id="registration-methodology-area-5-title">결과와 판단기준</h5></header>
+                                    <label class="registration-field">확정 문장 <small>무엇을 보고 어디까지 판단할 수 있는지</small><textarea name="methodologyResultsAndCriteria" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card" aria-labelledby="registration-methodology-area-6-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 6</span><h5 id="registration-methodology-area-6-title">적용범위와 한계</h5></header>
+                                    <label class="registration-field">확정 문장 <small>한 줄에 한 문장</small><textarea name="methodologyScopeAndLimits" rows="5" required></textarea></label>
+                                </section>
+                                <section class="registration-vd-area-card registration-vd-area-wide" aria-labelledby="registration-methodology-area-7-title">
+                                    <header class="registration-vd-area-heading"><span class="registration-vd-area-index">영역 7</span><h5 id="registration-methodology-area-7-title">검증·재사용 근거</h5></header>
+                                    <label class="registration-field">확정 문장 <small>적용·재현·실패 근거를 한 줄에 한 문장</small><textarea name="methodologyValidationAndReuse" rows="5" required></textarea></label>
+                                    <p>실제 사내 근거 파일은 Step 03의 공통 내부 자산 링크에서 여러 개 연결하거나, 실제 자산이 없음을 명확히 선택합니다.</p>
+                                </section>
+                            </div>
+                            </details>
+                            <label class="registration-search-confirm registration-vd-content-confirm"><input name="methodologyContentConfirmed" type="checkbox" required><span><strong>외부 AI가 정리한 방법론 7개 영역을 확인했습니다.</strong><small>틀린 부분만 수정했으며, 확인한 문장만 최종 Wiki에 사용합니다.</small></span></label>
+
+                            <section class="registration-methodology-confirmation" aria-labelledby="registration-methodology-confirmation-title">
+                                <header>
+                                    <span><span class="page-kicker">Internal confirmation</span><h5 id="registration-methodology-confirmation-title">사내에서 세 가지만 확정합니다</h5></span>
+                                    <small>Reviewer는 기본정보에서, 실제 근거 링크는 Step 03에서 확인합니다.</small>
+                                </header>
+                                <div class="registration-methodology-confirm-grid">
+                                    <section class="registration-methodology-confirm-item" aria-labelledby="methodology-qualification-title">
+                                        <span class="registration-methodology-confirm-index">확인 A</span>
+                                        <label class="registration-field" id="methodology-qualification-title">방법론 자격<select name="methodologyQualification" required></select></label>
+                                        <small>재사용 자격이며 L1~L5와 별개입니다.</small>
+                                    </section>
+                                    <section class="registration-methodology-confirm-item registration-methodology-level-item" aria-labelledby="methodology-level-title">
+                                        <span class="registration-methodology-confirm-index">확인 B</span>
+                                        <strong id="methodology-level-title">Level 확인</strong>
+                                        <div class="registration-methodology-level-flow" aria-label="기존 Level, 외부 제안, 사내 확정">
+                                            <label class="registration-field">기존<input name="methodologyPreviousLevel" readonly value="미평가"></label>
+                                            <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+                                            <label class="registration-field">AI 제안<input name="methodologyProposedLevel" readonly placeholder="제안 없음"></label>
+                                            <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+                                            <label class="registration-field">사내 확정<select name="methodologyConfirmedLevel" required></select></label>
+                                        </div>
+                                        <p class="registration-methodology-level-source" id="methodology-level-source">기존 Wiki Level 자동조회 전 · 신규 등록은 미평가에서 시작합니다.</p>
+                                        <label class="registration-field">Level 근거 <small>AI 초안을 확인하고 틀린 부분만 수정</small><textarea name="methodologyLevelRationale" rows="3" placeholder="확정 Level을 뒷받침하는 검증·재사용 근거"></textarea></label>
+                                        <p class="registration-methodology-change"><span>변경 유형</span><strong id="methodology-change-type">미평가 유지</strong></p>
+                                    </section>
+                                    <section class="registration-methodology-confirm-item" aria-labelledby="methodology-map-title">
+                                        <span class="registration-methodology-confirm-index">확인 C</span>
+                                        <strong id="methodology-map-title">Technology Map</strong>
+                                        <p>Map에 없어도 등록과 Level 판정을 진행할 수 있습니다.</p>
+                                        <select class="registration-choice-native" name="methodologyTechnologyMapStatus" required tabindex="-1" aria-hidden="true"></select>
+                                        <div class="registration-choice-chips registration-methodology-map-choices" data-registration-choice="methodologyTechnologyMapStatus" data-choice-mode="single" role="group" aria-labelledby="methodology-map-title"></div>
+                                        <label class="registration-field" data-methodology-map-target hidden>Map 항목 ID<input name="methodologyTechnologyMapTargetId" placeholder="methodology-impact-risk-ranking"></label>
+                                        <label class="registration-field" data-methodology-map-note hidden>선택 메모 <small>생략·누락 또는 확인 계획이 있으면 간단히 입력</small><textarea name="methodologyTechnologyMapNote" rows="2"></textarea></label>
+                                    </section>
+                                </div>
+                            </section>
+                        </section>
+
+                        <section class="registration-step2-section registration-generic-content-review" id="registration-generic-content-review" aria-labelledby="registration-generic-content-title" hidden>
+                            <header>
+                                <span><strong class="registration-section-number">2</strong><span><h4 id="registration-generic-content-title">외부 AI 작성 내용 확인</h4><small id="registration-generic-content-subtitle">자산유형별 등록 본문</small></span></span>
+                                <span class="registration-source-token">외부 JSON · 확인/수정</span>
+                            </header>
+                            <p class="registration-tag-note"><i class="bx bx-file-find"></i>AI가 대화 내용을 자산유형별 항목으로 정리했습니다. 새로 작성하지 말고 사실과 다른 부분만 수정하세요.</p>
+                            <details class="registration-ai-content-editor" id="registration-generic-content-details">
+                                <summary><span><strong id="registration-generic-content-summary">AI 작성 본문 보기·수정</strong><small>항목별 완성 문장을 확인합니다.</small></span><i class="bx bx-chevron-down" aria-hidden="true"></i></summary>
+                                <div class="registration-generic-content-grid" id="registration-generic-content-fields"></div>
+                            </details>
+                            <label class="registration-search-confirm registration-vd-content-confirm"><input name="genericContentConfirmed" type="checkbox"><span><strong>외부 AI가 정리한 본문을 확인했습니다.</strong><small>틀린 부분만 수정했으며, 확인한 문장만 최종 Wiki에 사용합니다.</small></span></label>
+                        </section>
+
+                        <section class="registration-step2-section" aria-labelledby="registration-classification-title">
+                            <header>
+                                <span><strong class="registration-section-number">3</strong><span><h4 id="registration-classification-title">Prompt 1 분류 확인</h4><small>기술영역·업무 단계·대응 대상</small></span></span>
+                                <span class="registration-source-token">Prompt 1 + Wiki 표준값</span>
+                            </header>
+                            <div class="registration-classification-grid">
+                                <fieldset class="registration-classification-group">
+                                    <legend><strong>기술영역</strong><small>주 1개 · 보조 최대 2개</small></legend>
+                                    <section class="registration-choice-block" aria-labelledby="registration-domain-label">
+                                        <strong id="registration-domain-label">주 기술영역</strong>
+                                        <select class="registration-choice-native" name="domain" required tabindex="-1" aria-hidden="true"></select>
+                                        <div class="registration-choice-chips" data-registration-choice="domain" data-choice-mode="single" role="group" aria-labelledby="registration-domain-label"></div>
+                                    </section>
+                                    <section class="registration-choice-block" aria-labelledby="registration-secondary-domain-label">
+                                        <span><strong id="registration-secondary-domain-label">보조 기술영역</strong><small>최대 2개</small></span>
+                                        <select class="registration-choice-native" name="secondaryDomains" multiple tabindex="-1" aria-hidden="true"></select>
+                                        <div class="registration-choice-chips" data-registration-choice="secondaryDomains" data-choice-mode="multiple" data-max-selected="2" role="group" aria-labelledby="registration-secondary-domain-label"></div>
+                                    </section>
+                                </fieldset>
+                                <fieldset class="registration-classification-group">
+                                    <legend><strong>업무 단계</strong><small>결과가 실제 활용된 단계</small></legend>
+                                    <section class="registration-choice-block" aria-labelledby="registration-workflow-stage-label">
+                                        <strong class="visually-hidden" id="registration-workflow-stage-label">업무 단계</strong>
+                                        <select class="registration-choice-native" name="workflowStages" multiple required tabindex="-1" aria-hidden="true"></select>
+                                        <div class="registration-choice-chips" data-registration-choice="workflowStages" data-choice-mode="multiple" role="group" aria-labelledby="registration-workflow-stage-label"></div>
+                                    </section>
+                                </fieldset>
+                                <fieldset class="registration-classification-group">
+                                    <legend><strong>대응 대상</strong><small>결과를 사용해 판단하는 대상</small></legend>
+                                    <section class="registration-choice-block" aria-labelledby="registration-response-target-label">
+                                        <strong class="visually-hidden" id="registration-response-target-label">대응 대상</strong>
+                                        <select class="registration-choice-native" name="responseTargets" multiple required tabindex="-1" aria-hidden="true"></select>
+                                        <div class="registration-choice-chips" data-registration-choice="responseTargets" data-choice-mode="multiple" role="group" aria-labelledby="registration-response-target-label"></div>
+                                    </section>
+                                </fieldset>
+                            </div>
                             <div class="registration-classification-tags"><strong>자동 적용 분류 태그</strong><div id="registration-classification-tag-list" aria-live="polite"></div></div>
-                            <div class="registration-additional-tags"><strong>내용 기반 추가 추천</strong><div class="registration-tag-candidates" id="registration-tag-candidates" aria-live="polite"></div></div>
-                            <label class="registration-field registration-field-wide">추가 태그 <small>추천 태그 선택값과 직접 입력한 사내 기술 용어</small><input name="tags" placeholder="예: 설계안 비교, 실험 상관"></label>
-                            <p class="registration-tag-note"><i class="bx bx-info-circle"></i>최종 Wiki 태그는 자동 분류 태그와 여기서 선택한 추가 태그의 합집합으로 생성됩니다.</p>
                         </section>
-                        <label class="registration-search-confirm"><input name="searchMetadataConfirmed" type="checkbox" required><span><strong>AI 제안의 답변 근거와 사내 분류체계를 비교해 검색 분류를 최종 확인했습니다.</strong><small>체크된 사내 최종값만 Wiki 검색과 필터에 사용됩니다.</small></span></label>
+
+                        <section class="registration-step2-section registration-tag-panel" aria-labelledby="registration-tag-title">
+                            <header>
+                                <span><strong class="registration-section-number">4</strong><span><h4 id="registration-tag-title">분류 태그·추가 추천 태그 확정</h4><small>검색에 필요한 문제·현상과 내용을 확인</small></span></span>
+                                <span class="registration-source-token">외부 후보 + 사내 확정</span>
+                            </header>
+                            <div class="registration-search-facet-grid">
+                                <label class="registration-field">문제·현상 <small>필수 · 1~3개</small><input name="problems" required placeholder="예: 들뜸, 충격 취약부"></label>
+                                <label class="registration-field">제품·구조·공정 <small>해당 시 입력</small><input name="productsProcesses" placeholder="예: 접합부, 모서리 구조"></label>
+                                <label class="registration-field">Tool·모델·데이터 <small>해당 시 입력</small><input name="toolsModelsData" placeholder="예: 상대 응력 비교, 재료모델"></label>
+                            </div>
+                            <div class="registration-additional-tags"><strong>내용 기반 추가 추천</strong><div class="registration-tag-candidates" id="registration-tag-candidates" aria-live="polite"></div></div>
+                            <label class="registration-field registration-field-wide">추가 태그 <small>추천값을 선택하거나 사내 기술 용어를 직접 입력</small><input name="tags" placeholder="예: 설계안 비교, 실험 상관"></label>
+                            <p class="registration-tag-note"><i class="bx bx-info-circle"></i>외부 JSON 후보와 등록 화면이 본문에서 감지한 표준 태그를 함께 제시합니다. 같은 등록 화면을 사용하는 모든 등록자에게 동일하게 작동하며, 선택한 값만 자동 분류 태그와 합쳐 최종 Wiki 태그가 됩니다.</p>
+                        </section>
+
+                        <details class="registration-optional-details">
+                            <summary><span><strong>선택 입력 더 보기</strong><small>검색 별칭·예상 검색문장</small></span><i class="bx bx-chevron-down" aria-hidden="true"></i></summary>
+                            <div class="registration-optional-grid">
+                                <label class="registration-field">검색 별칭 <small>동의어·약어·과거 명칭</small><input name="aliases" placeholder="Drop, Risk Ranking"></label>
+                                <label class="registration-field registration-field-wide">예상 검색문장 <small>선택 입력 · 한 줄에 하나</small><textarea name="expectedQueries" rows="2" placeholder="설계안 충격 취약부 비교"></textarea></label>
+                            </div>
+                        </details>
+
+                        <section class="registration-step2-section registration-internal-completion" aria-labelledby="registration-internal-completion-title">
+                            <header>
+                                <span><strong class="registration-section-number">5</strong><span><h4 id="registration-internal-completion-title">사내 보완정보 확인</h4><small>외부 JSON에서 의도적으로 제외한 항목</small></span></span>
+                                <span class="registration-source-token">사내에서만 처리</span>
+                            </header>
+                            <p class="registration-tag-note"><i class="bx bx-check-shield"></i><strong>자동 입력</strong> 자산 ID·등록 ID·Owner·등록자·등록일·수정일은 시스템과 현재 GitLab 계정에서 만듭니다. Reviewer는 위에서 지정하고, 관계 자산·내부 원본 링크·Technology Map·Learning Path는 Step 03에서 확인합니다.</p>
+                            <section class="registration-required-evidence" id="registration-vd-required-evidence" aria-labelledby="registration-required-evidence-title" hidden>
+                                <h5 id="registration-required-evidence-title">요청자 피드백·의사결정 영향</h5>
+                                <p>두 항목 모두 처리 상태를 선택합니다. 아직 결과가 도착하지 않았다면 <strong>추후 확인</strong>을 선택하고 확인 계획을 남길 수 있습니다.</p>
+                                <section class="registration-required-evidence-grid">
+                                    <fieldset class="registration-evidence-field" data-required-evidence="requesterFeedback">
+                                        <legend>요청자 피드백</legend>
+                                        <label class="registration-field">처리 상태
+                                            <select name="requesterFeedbackStatus" required></select>
+                                        </label>
+                                        <label class="registration-field" data-evidence-confirmed="requesterFeedback">확인한 요청자 피드백 <small>도움이 된 점·아쉬운 점·추가 요청을 한두 문장으로 작성</small>
+                                            <textarea name="requesterFeedbackValue" rows="3" placeholder="예: 설계 방향을 좁히는 데 도움이 됐고, 보완안도 함께 비교해 달라는 요청이 있었습니다."></textarea>
+                                        </label>
+                                        <label class="registration-field" data-evidence-note="requesterFeedback">사유·후속 확인 계획
+                                            <textarea name="requesterFeedbackNote" rows="2" placeholder="피드백 수신 후 확인할 내용 또는 해당하지 않는 이유"></textarea>
+                                        </label>
+                                    </fieldset>
+                                    <fieldset class="registration-evidence-field" data-required-evidence="decisionImpact">
+                                        <legend>의사결정 영향</legend>
+                                        <label class="registration-field">처리 상태
+                                            <select name="decisionImpactStatus" required></select>
+                                        </label>
+                                        <label class="registration-field" data-evidence-confirmed="decisionImpact">확인한 의사결정 영향 <small>어떤 판단·행동이 달라졌는지 한두 문장으로 작성</small>
+                                            <textarea name="decisionImpactSummary" rows="3" placeholder="예: 비교 결과를 근거로 보완 설계안을 우선 검증하고 후속 신뢰성 시험을 진행하기로 했습니다."></textarea>
+                                        </label>
+                                        <label class="registration-field" data-evidence-note="decisionImpact">사유·후속 확인 계획
+                                            <textarea name="decisionImpactNote" rows="2" placeholder="반영 결과를 확인할 계획 또는 해당하지 않는 이유"></textarea>
+                                        </label>
+                                    </fieldset>
+                                </section>
+                            </section>
+                            <section aria-labelledby="registration-facts-title">
+                                <h5 id="registration-facts-title">외부 대화에서 확정하지 못한 사실</h5>
+                                <p id="registration-facts-empty">추가로 확인할 사실이 없습니다.</p>
+                                <p class="registration-reviewer-followup-note" id="registration-facts-followup-note" hidden><i class="bx bx-time-five" aria-hidden="true"></i>지금 확정하지 못한 값은 최초 등록을 막지 않으며 Reviewer 후속 확인 항목으로 남습니다.</p>
+                                <ul class="registration-facts-list" id="registration-facts-to-confirm"></ul>
+                            </section>
+                        </section>
+
+                        <details class="registration-imported-values">
+                            <summary>불러온 외부 후보 보기</summary>
+                            <p class="registration-example-notice"><i class="bx bx-info-circle"></i><strong>역할 구분</strong> Lean v0.3 분류값도 사내 최종값이 아닙니다. 화면에서 Wiki 표준값과 비교해 확인한 값만 검색에 사용합니다.</p>
+                            <section class="registration-search-proposal" aria-labelledby="registration-search-proposal-title">
+                                <header><span><span class="page-kicker">Imported values</span><h3 id="registration-search-proposal-title">불러온 검색 분류</h3></span><small id="proposal-candidate-status">읽기 전용 후보</small></header>
+                                <dl>
+                                    <div><dt>주 기술영역 후보</dt><dd id="proposal-primary-domain">제안 없음</dd></div>
+                                    <div><dt>보조 기술영역 후보</dt><dd id="proposal-secondary-domains">제안 없음</dd></div>
+                                    <div><dt>업무 단계 후보</dt><dd id="proposal-workflow-stages">제안 없음</dd></div>
+                                    <div><dt>대응 대상 후보</dt><dd id="proposal-response-targets">제안 없음</dd></div>
+                                    <div><dt>내용 기반 추가 태그 후보</dt><dd id="proposal-visible-tags">제안 없음</dd></div>
+                                    <div><dt>검색 별칭 후보</dt><dd id="proposal-aliases">제안 없음</dd></div>
+                                    <div><dt>예상 검색문장</dt><dd id="proposal-expected-queries">제안 없음</dd></div>
+                                    <div class="proposal-legacy-row"><dt>구버전 미분류 searchTerms</dt><dd id="proposal-legacy-terms">없음</dd></div>
+                                </dl>
+                                <details id="proposal-rationale-details"><summary>추가 태그 추천 근거 보기</summary><ul id="proposal-rationale-list"><li><span>제안 이유가 없습니다.</span></li></ul></details>
+                            </section>
+                        </details>
+
+                        <label class="registration-search-confirm"><input name="searchMetadataConfirmed" type="checkbox" required><span><strong>자동으로 채워진 기본정보와 검색 분류를 확인했습니다.</strong><small>체크된 사내 최종값만 Wiki 검색과 필터에 사용됩니다.</small></span></label>
+
+                        <div class="registration-compatibility-fields" hidden aria-hidden="true">
+                            <input name="id" required pattern="[a-z0-9][a-z0-9-]*">
+                            <select name="publicationStatus" required></select>
+                            <input name="registrant" required>
+                            <textarea name="useCase" rows="2" required></textarea>
+                            <textarea name="contents" rows="2" required></textarea>
+                            <textarea name="typeSpecificJson" rows="2" required spellcheck="false"></textarea>
+                        </div>
                     </section>
 
                     <section class="asset-registration-step" data-registration-step="3" hidden>
                         <div class="registration-connections">
                             <section class="registration-connection-panel">
-                                <header><div><h3>기존 Wiki 자산 추천·연결</h3><p>현재 등록 내용을 기준으로 자동 추천된 후보를 확인하거나 직접 검색합니다.</p></div><span class="required-token">등록 전 확인</span></header>
+                                <header><div><h3>기존 Wiki 자산 추천·연결</h3><p>현재 등록 내용을 현재 화면의 Wiki Index와 자동 비교합니다. 후보를 연결하거나 후보 없음만 확인하세요.</p></div><span class="required-token">자동 검색 + 확인</span></header>
+                                <p class="registration-index-status" id="relation-index-status" role="status" aria-live="polite">Step 03 진입 시 Wiki Index를 검색합니다.</p>
                                 <div class="relation-recommendation-group"><strong>자동 추천</strong><div class="relation-search-results" id="relation-recommendations" aria-live="polite"></div></div>
                                 <label class="registration-field">직접 검색<input name="relationSearch" id="relation-search" type="search" placeholder="제목, 현상, 태그, 활용 상황"></label>
                                 <div class="relation-search-results" id="relation-search-results" aria-live="polite"></div>
                                 <div class="selected-relations" id="selected-relations"></div>
                                 <label class="connection-none-option"><input type="checkbox" name="noRelationFound" id="no-relation-found">검색했지만 연결할 기존 자산이 없음</label>
-                                <label class="registration-field" id="no-relation-reason-field" hidden>연결 후보 없음 사유<textarea name="noRelationReason" rows="2" placeholder="검색한 표현과 동일 목적 자산이 없다고 판단한 이유"></textarea></label>
+                                <div id="no-relation-reason-field" class="registration-no-relation-reason" hidden>
+                                    <label class="registration-field">판단 사유<select name="noRelationReasonCode">
+                                        <option value="">사유 선택</option>
+                                        <option value="동일 판단 목적 자산 없음">동일 판단 목적 자산 없음</option>
+                                        <option value="적용조건 불일치">적용조건 불일치</option>
+                                        <option value="근거·신뢰도 부족">근거·신뢰도 부족</option>
+                                        <option value="버전·Tool 불일치">버전·Tool 불일치</option>
+                                        <option value="접근 불가">접근 불가</option>
+                                        <option value="기타">기타</option>
+                                    </select></label>
+                                    <label class="registration-field">보완 설명 <small>기타를 선택한 경우 필수</small><textarea name="noRelationReason" rows="2" placeholder="검색 범위와 연결하지 않은 이유를 간단히 기록"></textarea></label>
+                                </div>
                             </section>
                             <section class="registration-connection-panel">
-                                <header><div><h3>회사 내부 자산 링크</h3><p>원본·근거·결과물의 위치와 접근 범위를 구조화해 연결합니다.</p></div><span class="required-token">게시 시 필수</span></header>
-                                <div class="internal-link-form">
+                                <header><div><h3>회사 내부 자산 링크</h3><p id="registration-internal-link-guidance">원본·근거·결과물을 한 건씩 추가합니다. 필요한 만큼 여러 개 연결할 수 있습니다.</p></div><span class="required-token" id="registration-internal-link-requirement">복수 등록 또는 없음 확인</span></header>
+                                <div class="internal-link-form" id="internal-link-form">
                                     <label class="registration-field">링크 이름<input id="internal-link-label" placeholder="결과보고서"></label>
                                     <label class="registration-field">URL<input id="internal-link-url" type="url" placeholder="https://사내시스템/문서번호"></label>
                                     <label class="registration-field">자산 유형<select id="internal-link-type"></select></label>
                                     <label class="registration-field">원본 시스템<input id="internal-link-system" placeholder="VD Board, PLM, SharePoint"></label>
+                                    <label class="registration-field">정확 버전 <small>선택 · 사내에서 확인</small><input id="internal-link-version" placeholder="예: v2.3, Solver 2025R1"></label>
                                     <label class="registration-field">링크 역할<select id="internal-link-role"></select></label>
                                     <label class="registration-field">접근 범위<select id="internal-link-scope"></select></label>
                                 </div>
-                                <button class="secondary-action-button add-internal-link" type="button" id="add-internal-link"><i class="bx bx-link"></i>내부 링크 추가</button>
+                                <button class="secondary-action-button add-internal-link" type="button" id="add-internal-link"><i class="bx bx-link"></i>현재 링크 추가</button>
                                 <div class="selected-links" id="selected-links"></div>
+                                <div class="registration-source-link-decision">
+                                    <label class="connection-none-option"><input type="checkbox" name="noInternalLink" id="no-internal-link"><span><strong>연결할 회사 내부 자산 없음</strong><small>실제 원본·결과물·종료 근거가 존재하지 않는 경우에만 선택합니다.</small></span></label>
+                                    <div id="no-internal-link-reason-field" class="registration-no-internal-link-reason" hidden>
+                                        <label class="registration-field">없음 사유 <small>Reviewer가 판단할 수 있도록 간단히 기록</small><textarea name="noInternalLinkReason" rows="2" placeholder="예: Drop 결정만 남아 별도 결과보고서가 생성되지 않았습니다."></textarea></label>
+                                    </div>
+                                </div>
                             </section>
                             <section class="registration-connection-panel registration-framework-panel">
                                 <header><div><h3>Technology Map·Learning Path 연결 판단</h3><p>연결 대상이 있으면 ID와 관계를 기록하고, 없으면 사유를 남깁니다.</p></div><span class="required-token">등록 전 필수</span></header>
@@ -214,17 +599,25 @@
 
                     <section class="asset-registration-step" data-registration-step="4" hidden>
                         <div class="registration-review-layout">
-                            <div><h3>등록 전 검증</h3><div class="registration-validation" id="registration-validation" aria-live="polite"></div><section class="registration-final-tags" aria-labelledby="registration-final-tags-title"><h4 id="registration-final-tags-title">추천·확정 태그</h4><p>현재 Wiki 태그 기준으로 자동 추천된 값을 확인합니다.</p><div id="registration-final-tag-list"></div></section><p class="registration-static-note"><i class="bx bx-info-circle"></i>등록하면 GitLab 네이티브 Wiki에 Markdown 문서가 즉시 생성됩니다. Library 예시 데이터나 <code>data/cards</code>에는 추가하지 않습니다.</p></div>
-                            <div><h3>등록 JSON 미리보기</h3><pre class="registration-json-preview" id="registration-json-preview"></pre></div>
+                            <div><h3>등록 준비 확인</h3><div class="registration-validation" id="registration-validation" aria-live="polite"></div><section class="registration-reviewer-followups" id="registration-reviewer-followups" aria-labelledby="registration-reviewer-followups-title" hidden><h4 id="registration-reviewer-followups-title">Reviewer 후속 확인</h4><p>최초 등록 후 보완할 항목입니다. 등록을 막지 않습니다.</p><ul id="registration-reviewer-followup-list"></ul></section><section class="registration-final-tags" aria-labelledby="registration-final-tags-title"><h4 id="registration-final-tags-title">추천·확정 태그</h4><p>현재 Wiki 태그 기준으로 자동 추천된 값을 확인합니다.</p><div id="registration-final-tag-list"></div></section><p class="registration-static-note"><i class="bx bx-info-circle"></i>등록하면 GitLab 네이티브 Wiki에 <strong>등록됨 · Peer 확인 대기</strong> 상태의 Markdown 문서가 즉시 생성됩니다.</p></div>
+                            <div class="registration-output-preview">
+                                <h3>최종 Wiki 문서 미리보기</h3>
+                                <p>외부 AI가 작성한 문장과 사내 검색·링크 결과를 등록 화면이 정해진 영역에 배치한 결과입니다. 미리보기 자산 ID는 예시이며, 실제 등록 시 다음 5자리 번호로 자동 발급됩니다.</p>
+                                <pre class="registration-wiki-preview" id="registration-wiki-preview"></pre>
+                                <details>
+                                    <summary>등록 JSON 확인</summary>
+                                    <pre class="registration-json-preview" id="registration-json-preview"></pre>
+                                </details>
+                            </div>
                         </div>
                         <section class="registration-publish-settings" aria-labelledby="registration-publish-title">
-                            <header><div><span class="page-kicker">GitLab native Wiki registration</span><h3 id="registration-publish-title">GitLab Wiki 바로 등록</h3></div><span class="required-token">현재 창에서만 사용</span></header>
-                            <div class="registration-publish-grid">
-                                <label class="registration-field">GitLab 서버 주소<input name="gitlabBaseUrl" type="url" required placeholder="https://gitlab.company.com"></label>
-                                <label class="registration-field">프로젝트 ID 또는 경로<input name="gitlabProjectId" required placeholder="group/technical-assets"></label>
-                                <label class="registration-field">Access Token<input name="gitlabToken" type="password" required autocomplete="off" placeholder="현재 사용자 토큰"></label>
+                            <header><div><span class="page-kicker">GitLab native Wiki registration</span><h3 id="registration-publish-title">GitLab Wiki 바로 등록</h3></div><span class="required-token">프로젝트 설정 자동 적용</span></header>
+                            <div class="registration-gitlab-identity">
+                                <span><strong>등록자 · Owner</strong><small>프로젝트 참여 시 연결한 현재 GitLab 사용자가 자동 지정됩니다.</small></span>
+                                <strong id="registration-verified-user" role="status" aria-live="polite">GitLab 연결 필요</strong>
+                                <button class="secondary-action-button" type="button" id="registration-open-gitlab-connection">사용자 연결</button>
                             </div>
-                            <p><i class="bx bx-shield-quarter"></i>토큰은 저장하거나 카드 JSON에 포함하지 않으며 이 등록 요청에만 사용합니다.</p>
+                            <p><i class="bx bx-shield-quarter"></i>GitLab 서버와 프로젝트는 사이트 공통 설정을 사용합니다. 등록 화면에서는 서버·프로젝트·토큰을 다시 입력하지 않습니다.</p>
                             <div class="registration-publish-status" id="registration-publish-status" role="status" aria-live="polite"></div>
                         </section>
                     </section>
@@ -245,9 +638,9 @@
 
     <footer class="footer container"><span>Local Wiki Prototype · 기술자산 카드의 단일 탐색·등록 진입점</span></footer>
 
-    <script src="team_technical_assets_data.js?v=20260718-knowhow-1"></script>
+    <script src="team_technical_assets_data.js?v=20260731-cor-complete-1"></script>
     <script src="team_technical_assets_gitlab_config.js?v=20260721-gitlab-1"></script>
-    <script type="module" src="team_technical_assets_registration_modal.js?v=20260723-answer-evidence-1"></script>
-    <script type="module" src="team_technical_assets_wiki.js?v=20260724-type-badges-1"></script>
+        <script type="module" src="team_technical_assets_registration_modal.js?v=20260801-registration-compact-1"></script>
+    <script type="module" src="team_technical_assets_wiki.js?v=20260801-methodology-lean-1"></script>
 </body>
 </html>

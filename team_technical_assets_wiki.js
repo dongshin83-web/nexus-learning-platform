@@ -3,6 +3,20 @@ import {
     loadGitLabAssetDiscussionComments,
     normalizeGitLabRegistrationConfig
 } from "./team_technical_assets_gitlab.js";
+import {
+    deriveCorDisplayFields,
+    deriveLeanAssetDisplayFields,
+    deriveMethodologyDisplayFields,
+    deriveVdRequestDisplayFields,
+    handoffCardType,
+    isLeanHandoffPacket,
+    isLeanMethodologyPacket,
+    normalizeLeanAssetContent,
+    normalizeMethodologyContent,
+    normalizeVdRequestContent,
+    validateLeanHandoffPacket
+} from "./team_technical_assets_handoff.mjs";
+import { normalizeSearchMetadata } from "./team_technical_assets_search_metadata.mjs";
 
 export const WIKI_STORAGE_KEY = "team-technical-assets-wiki-entries-v1";
 export const WIKI_DISCUSSION_KEY = "team-technical-assets-wiki-discussions-v1";
@@ -90,6 +104,7 @@ const FIELD_LABELS = {
     errorsAndWarnings: "오류와 주의사항",
     objectiveAndSuccessCriteria: "목표와 성공 기준",
     officialSource: "공식 원본",
+    sourceAndRelationRoles: "원문·근거·관련 자산의 역할",
     outputsAndFollowUp: "산출물과 후속조치",
     progressDecisions: "진행 중 의사결정",
     resolution: "해결 방법",
@@ -186,26 +201,44 @@ function normalizeHttpUrl(value) {
 }
 
 function packetType(packet, fallback = "노하우") {
-    const candidate = text(packet?.cardTypeCandidate ?? packet?.type);
+    const candidate = handoffCardType(packet);
     return CARD_TYPES.includes(candidate) ? candidate : fallback;
 }
 
 export function buildWikiEntry(packet = {}, input = {}, existingEntries = [], now = new Date()) {
+    const candidates = normalizeSearchMetadata(packet);
+    const cardType = handoffCardType(packet);
+    const displayFields = isLeanHandoffPacket(packet)
+        ? deriveLeanAssetDisplayFields(packet)
+        : (cardType === "VD Request"
+        ? deriveVdRequestDisplayFields(packet)
+        : (cardType === "CoR"
+            ? deriveCorDisplayFields(packet)
+            : (isLeanMethodologyPacket(packet)
+                ? deriveMethodologyDisplayFields(packet)
+                : { summary: "", useCase: "", contents: "" })));
     const title = text(input.title ?? packet.workingTitle ?? packet.title) || "제목 없는 기술자산";
     const type = CARD_TYPES.includes(input.type) ? input.type : packetType(packet);
     const requestedDomain = normalizeDomainId(input.domain);
-    const packetDomain = normalizeDomainId(packet.domain);
+    const packetDomain = normalizeDomainId(candidates.primaryDomainCandidate || packet.domain);
     const domain = Object.hasOwn(DOMAIN_LABELS, requestedDomain) ? requestedDomain : (Object.hasOwn(DOMAIN_LABELS, packetDomain) ? packetDomain : "other");
-    const summary = text(input.summary ?? packet.abstractContext ?? packet.summary);
-    const useCase = text(input.useCase ?? packet.primaryQuestion ?? packet.useCase);
+    const summary = text(input.summary) || text(displayFields.summary) || text(packet.abstractContext ?? packet.summary);
+    const useCase = text(input.useCase) || text(displayFields.useCase) || text(packet.primaryQuestion ?? packet.useCase);
     const packetContents = [packet.approachOrContent, packet.observationsAndResult].map(text).filter(Boolean).join("\n\n");
-    const contents = text(input.contents ?? packet.contents) || packetContents;
+    const contents = text(input.contents ?? packet.contents) || displayFields.contents || packetContents;
     const registrant = text(input.registrant ?? packet.registrant) || "현재 사용자";
     const owner = text(input.owner ?? packet.owner) || registrant;
     const sourceLabel = text(input.sourceLabel);
     const sourceUrl = normalizeHttpUrl(input.sourceUrl);
     const date = toDateString(now);
-    const packetTags = asArray(packet.searchTerms ?? packet.tags);
+    const facets = packet.searchMetadata?.facets ?? packet.searchMetadata?.searchFacets ?? {};
+    const packetTags = unique([
+        ...candidates.visibleTags,
+        ...asArray(facets.problemPhenomena),
+        ...asArray(facets.productStructureProcess),
+        ...asArray(facets.toolModelData),
+        ...asArray(packet.searchTerms ?? packet.tags)
+    ]);
     const inputTags = String(input.tags ?? "").split(",");
     const packetRelations = Array.isArray(packet.relations)
         ? packet.relations
@@ -218,7 +251,13 @@ export function buildWikiEntry(packet = {}, input = {}, existingEntries = [], no
         relationKeys.add(key);
         return true;
     });
-    const baseContent = packet.typeSpecific && typeof packet.typeSpecific === "object" ? packet.typeSpecific : (packet.content ?? {});
+    const baseContent = isLeanHandoffPacket(packet)
+        ? normalizeLeanAssetContent(packet)
+        : (cardType === "VD Request"
+        ? normalizeVdRequestContent(packet)
+        : (isLeanMethodologyPacket(packet)
+            ? normalizeMethodologyContent(packet)
+            : (packet.typeSpecific && typeof packet.typeSpecific === "object" ? packet.typeSpecific : (packet.content ?? {}))));
     const content = baseContent && typeof baseContent === "object" && !Array.isArray(baseContent) ? { ...baseContent } : {};
     if (text(input.typeSpecificNotes)) content.internalSupplement = text(input.typeSpecificNotes);
     if (text(input.limitations)) content.internalLimitations = String(input.limitations).split("\n").map(text).filter(Boolean);
@@ -229,15 +268,23 @@ export function buildWikiEntry(packet = {}, input = {}, existingEntries = [], no
         type,
         title,
         domain,
-        secondaryDomains: unique(packet.secondaryDomains ?? []).map(normalizeDomainId),
+        secondaryDomains: unique(candidates.secondaryDomainCandidates ?? packet.secondaryDomains ?? []).map(normalizeDomainId),
         owner,
         registrant,
         contributors: unique(packet.contributors ?? []),
         createdAt: date,
         updatedAt: date,
         tags: unique([...packetTags, ...inputTags]),
-        contexts: unique([...asArray(packet.contexts), ...String(input.contexts ?? "").split(",")]),
-        aliases: unique(packet.aliases ?? []),
+        contexts: unique([
+            ...candidates.workflowStageCandidates,
+            ...candidates.responseTargetCandidates,
+            ...asArray(packet.contexts),
+            ...String(input.contexts ?? "").split(",")
+        ]),
+        aliases: unique(candidates.aliases ?? packet.aliases ?? []),
+        searchMetadata: {
+            expectedQueries: unique(candidates.expectedQueries)
+        },
         summary,
         useCase,
         contents,
@@ -290,8 +337,6 @@ export function getWikiSearchScore(entry, query) {
     const normalizedQuery = normalizeText(query);
     if (!normalizedQuery) return 0;
     const terms = normalizedQuery.split(/\s+/).filter(Boolean);
-    const excludedPhrases = unique(entry.searchMetadata?.excludedTerms ?? []).map(normalizeText).filter(Boolean);
-    if (excludedPhrases.some((phrase) => normalizedQuery.includes(phrase))) return 0;
     const fields = getSearchFields(entry);
     if (fields.id === normalizedQuery) return 1000;
     if (fields.title === normalizedQuery) return 900;
@@ -362,6 +407,7 @@ export function searchWikiEntries(entries, filters = {}) {
             const primaryDomain = normalizeDomainId(entry.domain);
             const secondaryDomains = asArray(entry.secondaryDomains).map(normalizeDomainId);
             return (!query || score > 0)
+                && (filters.includeRetired === true || !text(entry.retiredAt))
                 && (selectedType === "all" || entry.type === selectedType)
                 && (publication === "all" || (publication === "published" ? entry.publicationStatus === "게시" : entry.publicationStatus !== "게시"))
                 && (domains.size === 0 || domains.has(primaryDomain) || secondaryDomains.some((domain) => domains.has(domain)))
@@ -426,13 +472,36 @@ function contentToMarkdown(content) {
     return sections.length ? sections.map((entry) => `### ${entry.label}\n\n${entry.value}`).join("\n\n") : "기록된 유형별 세부 내용이 없습니다.";
 }
 
+const REQUIRED_EVIDENCE_STATUS_LABELS = {
+    confirmed: "확인 완료",
+    deferred: "추후 확인",
+    not_applicable: "해당 없음"
+};
+
+function requiredEvidenceToMarkdown(entry) {
+    if (text(entry.type) !== "VD Request") return "";
+    const requiredEvidence = entry.internalCompletion?.requiredEvidence || {};
+    const rows = [
+        ["요청자 피드백", requiredEvidence.requesterFeedback],
+        ["의사결정 영향", requiredEvidence.decisionImpact]
+    ].map(([label, decision]) => {
+        const status = REQUIRED_EVIDENCE_STATUS_LABELS[text(decision?.status)] || "미선택";
+        const note = text(decision?.note) || (status === "확인 완료" ? "실제 내용 확인" : "사유 미기록");
+        return `| ${label} | ${status} | ${note} |`;
+    }).join("\n");
+    return `## 요청자 피드백·의사결정 영향 확인 상태
+
+| 항목 | 상태 | 사유·후속 확인 계획 |
+| --- | --- | --- |
+${rows}`;
+}
+
 export function wikiEntryToMarkdown(entry) {
     const type = text(entry.type) || "기술자산";
     const domain = domainLabel(entry.domain);
     const tags = unique(entry.tags ?? []).join(", ") || "해당 없음";
     const aliases = unique(entry.aliases ?? []).join(", ") || "해당 없음";
     const expectedQueries = unique(entry.searchMetadata?.expectedQueries ?? []).join(" / ") || "해당 없음";
-    const excludedTerms = unique(entry.searchMetadata?.excludedTerms ?? []).join(", ") || "해당 없음";
     const links = (entry.links ?? []).length
         ? entry.links.map((link) => `| ${text(link.label)} | ${text(link.type) || "원본"} | ${text(link.href)} |`).join("\n")
         : "| 해당 없음 | - | - |";
@@ -472,12 +541,13 @@ ${text(entry.contents)}
 
 ${contentToMarkdown(entry.content)}
 
+${requiredEvidenceToMarkdown(entry)}
+
 ## 검색 정보
 
 - 검색 태그: ${tags}
 - 검색 별칭: ${aliases}
 - 예상 검색문장: ${expectedQueries}
-- 검색 제외어: ${excludedTerms}
 - 활용 맥락: ${unique(entry.contexts ?? []).join(", ") || "해당 없음"}
 
 ## 검색·재사용 기록
@@ -584,15 +654,21 @@ export function parseHandoffPacket(raw) {
     const packet = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : extractJson(raw);
     if (!packet || typeof packet !== "object" || Array.isArray(packet)) throw new Error("Handoff JSON 객체가 아닙니다.");
     if (!text(packet.packetVersion)) throw new Error("packetVersion이 없습니다.");
+    if (text(packet.packetVersion) === "0.3") {
+        const errors = validateLeanHandoffPacket(packet);
+        if (errors.length) throw new Error(`Lean v0.3 검증 실패: ${errors.join(" / ")}`);
+        return packet;
+    }
+    if (text(packet.packetVersion) !== "0.2") throw new Error("VD Request·CoR·방법론 Lean v0.3 또는 기존 v0.2 Handoff만 반입할 수 있습니다.");
     if (!CARD_TYPES.includes(text(packet.cardTypeCandidate))) throw new Error("지원하는 cardTypeCandidate가 아닙니다.");
-    if (packet.securitySelfCheck !== "pass") throw new Error("securitySelfCheck가 pass인 Handoff JSON만 반입할 수 있습니다.");
-    if (!packet.typeSpecific || typeof packet.typeSpecific !== "object" || Array.isArray(packet.typeSpecific)) throw new Error("typeSpecific 구조가 없습니다.");
+    if (packet.securitySelfCheck !== "pass") throw new Error("v0.2 securitySelfCheck가 pass인 Handoff JSON만 반입할 수 있습니다.");
+    if (!packet.typeSpecific || typeof packet.typeSpecific !== "object" || Array.isArray(packet.typeSpecific)) throw new Error("v0.2 typeSpecific 구조가 없습니다.");
     return packet;
 }
 
 export function handoffTypeMatches(packet, selectedType) {
     if (!packet) return true;
-    return text(packet.cardTypeCandidate) === text(selectedType);
+    return handoffCardType(packet) === text(selectedType);
 }
 
 function downloadText(filename, value, type) {
@@ -683,6 +759,20 @@ function initializeWiki() {
         document.getElementById("wiki-total-count").textContent = String(allEntries.length);
         document.getElementById("wiki-published-count").textContent = String(allEntries.filter((entry) => entry.publicationStatus === "게시").length);
         document.getElementById("wiki-reused-count").textContent = String(allEntries.filter((entry) => (incomingReuseCounts.get(entry.id) ?? 0) > 0).length);
+        const indexStatus = document.getElementById("wiki-index-status");
+        if (indexStatus) {
+            const generatedAt = text(window.TECHNICAL_ASSET_LIBRARY?.generatedAt);
+            const sourceCommit = text(window.TECHNICAL_ASSET_LIBRARY?.sourceWikiCommit);
+            if (generatedAt) {
+                const date = new Date(generatedAt);
+                const displayDate = Number.isNaN(date.getTime())
+                    ? generatedAt
+                    : date.toLocaleString("ko-KR", { hour12: false });
+                indexStatus.textContent = `마지막 Index ${displayDate}${sourceCommit ? ` · Wiki ${sourceCommit.slice(0, 8)}` : ""}`;
+            } else {
+                indexStatus.textContent = "현재는 로컬 예시 데이터 · 운영 전환 후 Wiki Index 시각 표시";
+            }
+        }
     }
 
     function renderFacetGroup(containerId, group, options, selected, candidates, matches) {
@@ -774,7 +864,6 @@ function initializeWiki() {
         const aliases = unique(entry.aliases ?? []);
         const tags = unique(entry.tags ?? []);
         const expectedQueries = unique(entry.searchMetadata?.expectedQueries ?? []);
-        const excludedTerms = unique(entry.searchMetadata?.excludedTerms ?? []);
         const sourceIds = unique(entry.sourceIds ?? []);
         const changes = asArray(entry.changeLog);
         const reuse = entry.searchReuse ?? {};
@@ -794,7 +883,7 @@ function initializeWiki() {
         </header>
         <section class="wiki-article-section" id="wiki-use-case"><h3>문제 상황과 판단 질문</h3><p>${escapeMultiline(entry.useCase || "기록된 판단 질문이 없습니다.")}</p></section>
         <section class="wiki-article-section" id="wiki-contents"><h3>접근 방법·핵심 내용</h3><p>${escapeMultiline(entry.contents || "기록된 핵심 내용이 없습니다.")}</p></section>
-        <section class="wiki-article-section" id="wiki-classification"><h3>분류와 검색 정보</h3><dl class="wiki-content-list"><dt>주 기술영역</dt><dd>${escapeHtml(domainLabel(entry.domain))}</dd><dt>보조 기술영역</dt><dd>${escapeHtml(secondaryDomains.join(", ") || "해당 없음")}</dd><dt>업무 단계·대응 대상</dt><dd>${escapeHtml(contexts.join(", ") || "해당 없음")}</dd><dt>검색 태그(자동 분류 + 선택 추가)</dt><dd>${escapeHtml(tags.join(", ") || "해당 없음")}</dd><dt>검색 별칭</dt><dd>${escapeHtml(aliases.join(", ") || "해당 없음")}</dd><dt>예상 검색문장</dt><dd>${escapeMultiline(expectedQueries.join("\n") || "해당 없음")}</dd><dt>검색 제외어</dt><dd>${escapeHtml(excludedTerms.join(", ") || "해당 없음")}</dd></dl></section>
+        <section class="wiki-article-section" id="wiki-classification"><h3>분류와 검색 정보</h3><dl class="wiki-content-list"><dt>주 기술영역</dt><dd>${escapeHtml(domainLabel(entry.domain))}</dd><dt>보조 기술영역</dt><dd>${escapeHtml(secondaryDomains.join(", ") || "해당 없음")}</dd><dt>업무 단계·대응 대상</dt><dd>${escapeHtml(contexts.join(", ") || "해당 없음")}</dd><dt>검색 태그(자동 분류 + 선택 추가)</dt><dd>${escapeHtml(tags.join(", ") || "해당 없음")}</dd><dt>검색 별칭</dt><dd>${escapeHtml(aliases.join(", ") || "해당 없음")}</dd><dt>예상 검색문장</dt><dd>${escapeMultiline(expectedQueries.join("\n") || "해당 없음")}</dd></dl></section>
         ${details.length ? `<section class="wiki-article-section" id="wiki-type-content"><h3>${escapeHtml(entry.type)} 세부 내용</h3><dl class="wiki-content-list">${details.map((detail) => `<dt>${escapeHtml(detail.label)}</dt><dd>${escapeMultiline(detail.value)}</dd>`).join("")}</dl></section>` : ""}
         <section class="wiki-article-section" id="wiki-reuse"><h3>검색·재사용 기록</h3><dl class="wiki-content-list"><dt>기존 자산 검색</dt><dd>${reuse.performed ? "수행" : "미기록"}</dd><dt>활용 유형·판단</dt><dd>${escapeHtml(reuse.usageType || reuse.decision || "미기록")}</dd><dt>결과·사유</dt><dd>${escapeHtml(reuse.outcome || reuse.reason || "미기록")}</dd><dt>연결된 기존 자산</dt><dd>${escapeHtml(unique(reuse.foundAssetIds ?? []).join(", ") || "해당 없음")}</dd><dt>이 자산의 재사용</dt><dd>${reuseCount}회</dd></dl></section>
         ${sourceIds.length ? `<section class="wiki-article-section" id="wiki-source-ids"><h3>원자료 ID</h3><ul class="wiki-tag-list">${sourceIds.map((id) => `<li>${escapeHtml(id)}</li>`).join("")}</ul></section>` : ""}

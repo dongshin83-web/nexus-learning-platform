@@ -42,9 +42,21 @@ body[data-page="wiki"].wiki-dialog-open {
 
 .wiki-hero-actions {
     display: flex;
+    align-items: center;
     gap: var(--spacing-2);
     flex-wrap: wrap;
     justify-content: flex-end;
+}
+
+.wiki-current-user {
+    padding: 0 var(--spacing-2);
+    color: var(--muted);
+    font-size: var(--text-supporting-size, 0.75rem);
+    font-weight: 800;
+}
+
+.wiki-current-user.is-connected {
+    color: var(--accent);
 }
 
 .wiki-hero-tools {
@@ -95,6 +107,13 @@ body[data-page="wiki"].wiki-dialog-open {
     margin-top: 0.1rem;
     color: var(--accent);
     font-size: 1.15rem;
+}
+
+.wiki-local-notice small {
+    display: block;
+    margin-top: var(--spacing-1);
+    color: var(--muted);
+    font-size: 0.72rem;
 }
 
 .wiki-workspace {
