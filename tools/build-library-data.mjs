@@ -51,6 +51,8 @@ export function serializeLibrary(cards) {
     });
     const payload = {
         schemaVersion: "1.1",
+        dataMode: "example",
+        dataLabel: "예시 데이터",
         cardCount: sorted.length,
         cards: sorted
     };

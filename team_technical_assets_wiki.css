@@ -116,6 +116,31 @@ body[data-page="wiki"].wiki-dialog-open {
     font-size: 0.72rem;
 }
 
+.wiki-example-dataset {
+    display: inline-flex;
+    gap: var(--spacing-2);
+    align-items: center;
+    flex: 0 0 auto;
+    border-radius: var(--radius-element);
+    background: var(--type-education);
+    padding: var(--spacing-2) var(--spacing-3);
+    color: var(--paper);
+    font-weight: 900;
+}
+
+.wiki-example-dataset[hidden] {
+    display: none;
+}
+
+.wiki-example-dataset strong {
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+}
+
+.wiki-example-dataset span {
+    font-size: 0.68rem;
+}
+
 .wiki-workspace {
     display: grid;
     gap: var(--spacing-5);
@@ -390,6 +415,17 @@ body[data-page="wiki"].wiki-dialog-open {
 .wiki-article-badges .wiki-type-badge {
     background: var(--wiki-type-color, var(--accent));
     color: var(--paper);
+}
+
+.wiki-result-card-badges > .wiki-example-badge,
+.wiki-article-badges .wiki-example-badge {
+    border: 0.12rem solid color-mix(in srgb, var(--type-education) 78%, var(--ink));
+    background: var(--type-education);
+    padding: 0.26rem 0.68rem;
+    color: var(--paper);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
 }
 
 .wiki-type-badge[data-asset-type="VD Request"] {

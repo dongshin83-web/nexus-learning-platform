@@ -686,7 +686,10 @@ function formatCommentDate(value) {
 }
 
 function initializeWiki() {
-    const allEntries = Array.isArray(window.TECHNICAL_ASSET_LIBRARY?.cards) ? window.TECHNICAL_ASSET_LIBRARY.cards : [];
+    const libraryMetadata = window.TECHNICAL_ASSET_LIBRARY ?? {};
+    const allEntries = Array.isArray(libraryMetadata.cards) ? libraryMetadata.cards : [];
+    const exampleDataset = libraryMetadata.dataMode === "example";
+    const isExampleEntry = (entry) => exampleDataset || entry?.isExample === true || entry?.dataMode === "example";
     const storedDiscussions = readStorage(WIKI_DISCUSSION_KEY, {});
     let discussions = storedDiscussions && typeof storedDiscussions === "object" && !Array.isArray(storedDiscussions) ? storedDiscussions : {};
     const incomingReuseCounts = buildIncomingReuseCounts(allEntries);
@@ -760,6 +763,10 @@ function initializeWiki() {
         document.getElementById("wiki-published-count").textContent = String(allEntries.filter((entry) => entry.publicationStatus === "게시").length);
         document.getElementById("wiki-reused-count").textContent = String(allEntries.filter((entry) => (incomingReuseCounts.get(entry.id) ?? 0) > 0).length);
         const indexStatus = document.getElementById("wiki-index-status");
+        const exampleStatus = document.getElementById("wiki-example-dataset");
+        const exampleCount = document.getElementById("wiki-example-count");
+        if (exampleStatus) exampleStatus.hidden = !exampleDataset;
+        if (exampleCount) exampleCount.textContent = `${allEntries.length}건 · 실제 운영 자산 아님`;
         if (indexStatus) {
             const generatedAt = text(window.TECHNICAL_ASSET_LIBRARY?.generatedAt);
             const sourceCommit = text(window.TECHNICAL_ASSET_LIBRARY?.sourceWikiCommit);
@@ -770,7 +777,9 @@ function initializeWiki() {
                     : date.toLocaleString("ko-KR", { hour12: false });
                 indexStatus.textContent = `마지막 Index ${displayDate}${sourceCommit ? ` · Wiki ${sourceCommit.slice(0, 8)}` : ""}`;
             } else {
-                indexStatus.textContent = "현재는 로컬 예시 데이터 · 운영 전환 후 Wiki Index 시각 표시";
+                indexStatus.textContent = exampleDataset
+                    ? "예시 데이터로 화면과 검색 동작을 확인 중"
+                    : "검색 Index 연결 정보 없음";
             }
         }
     }
@@ -840,7 +849,7 @@ function initializeWiki() {
             const matchedFields = getWikiMatchedFields(entry, search.value).slice(0, 4);
             const reuseCount = incomingReuseCounts.get(entry.id) ?? 0;
             return `<li class="wiki-result-card${entry.id === selectedId ? " is-selected" : ""}"><button type="button" data-wiki-entry="${escapeHtml(entry.id)}" aria-label="${escapeHtml(entry.title)} 상세 보기">
-                <span class="wiki-result-card-badges"><span class="wiki-type-badge" data-asset-type="${escapeHtml(entry.type)}">${escapeHtml(entry.type)}</span><span>${escapeHtml(domainLabel(entry.domain))}</span><span>${escapeHtml(entry.publicationStatus || "상태 미기록")}</span>${reuseCount ? `<span>재사용 ${reuseCount}</span>` : ""}</span>
+                <span class="wiki-result-card-badges">${isExampleEntry(entry) ? '<span class="wiki-example-badge">예시</span>' : ""}<span class="wiki-type-badge" data-asset-type="${escapeHtml(entry.type)}">${escapeHtml(entry.type)}</span><span>${escapeHtml(domainLabel(entry.domain))}</span><span>${escapeHtml(entry.publicationStatus || "상태 미기록")}</span>${reuseCount ? `<span>재사용 ${reuseCount}</span>` : ""}</span>
                 <strong class="wiki-result-title">${escapeHtml(entry.title)}</strong>
                 <span class="wiki-result-summary">${escapeHtml(entry.summary || entry.useCase || "요약이 없습니다.")}</span>
                 ${tags.length ? `<span class="wiki-result-tags">${tags.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join("")}</span>` : ""}
@@ -871,7 +880,7 @@ function initializeWiki() {
 
         article.innerHTML = `<header class="wiki-article-header">
             <p class="wiki-breadcrumb"><span>Wiki</span><i class="bx bx-chevron-right"></i><span>${escapeHtml(entry.type)}</span><i class="bx bx-chevron-right"></i><span>${escapeHtml(entry.id)}</span></p>
-            <span class="wiki-article-badges"><span class="wiki-type-badge" data-asset-type="${escapeHtml(entry.type)}">${escapeHtml(entry.type)}</span><span>${escapeHtml(domainLabel(entry.domain))}</span><span>${escapeHtml(entry.publicationStatus || "상태 미기록")}</span>${reuseCount ? `<span>재사용 ${reuseCount}회</span>` : ""}</span>
+            <span class="wiki-article-badges">${isExampleEntry(entry) ? '<span class="wiki-example-badge">예시</span>' : ""}<span class="wiki-type-badge" data-asset-type="${escapeHtml(entry.type)}">${escapeHtml(entry.type)}</span><span>${escapeHtml(domainLabel(entry.domain))}</span><span>${escapeHtml(entry.publicationStatus || "상태 미기록")}</span>${reuseCount ? `<span>재사용 ${reuseCount}회</span>` : ""}</span>
             <h2 id="wiki-detail-title" tabindex="-1">${escapeHtml(entry.title)}</h2>
             <p class="wiki-article-summary">${escapeHtml(entry.summary || "요약이 없습니다.")}</p>
             <nav class="wiki-article-actions" aria-label="현재 Wiki 항목 작업"><button class="secondary-action-button" type="button" data-copy-markdown="${escapeHtml(entry.id)}"><i class="bx bx-copy"></i><span>Issue용 Markdown 복사</span></button><button class="secondary-action-button" type="button" data-download-markdown="${escapeHtml(entry.id)}"><i class="bx bx-download"></i><span>Markdown 저장</span></button></nav>

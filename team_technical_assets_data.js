@@ -1,5 +1,7 @@
 window.TECHNICAL_ASSET_LIBRARY = {
   "schemaVersion": "1.1",
+  "dataMode": "example",
+  "dataLabel": "예시 데이터",
   "cardCount": 14,
   "cards": [
     {
