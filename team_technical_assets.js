@@ -1937,6 +1937,294 @@ function renderLandingGapSummary() {
     }
 }
 
+function initKnowledgeWireframe() {
+    const canvas = document.querySelector(".knowledge-wireframe-canvas");
+    const stage = canvas?.closest(".knowledge-graph");
+    const context = canvas?.getContext("2d");
+    if (!canvas || !stage || !context) return;
+
+    const tooltipNodes = [...stage.querySelectorAll("[data-ontology-node]")];
+    const heading = stage.querySelector(".knowledge-graph-heading");
+    const caption = stage.querySelector("figcaption");
+    const core = stage.querySelector(".knowledge-network-core");
+    const totalNodes = 72;
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+    const nodes = Array.from({ length: totalNodes }, (_, index) => {
+        const y = 1 - ((index / (totalNodes - 1)) * 2);
+        const radius = Math.sqrt(1 - (y * y));
+        const angle = goldenAngle * index;
+        return {
+            x: Math.cos(angle) * radius,
+            y,
+            z: Math.sin(angle) * radius
+        };
+    });
+    const tooltipTargets = [
+        { x: -0.68, y: -0.58, z: 0.18 },
+        { x: 0.68, y: -0.58, z: -0.18 },
+        { x: -0.92, y: 0, z: 0.12 },
+        { x: 0.92, y: 0, z: -0.12 },
+        { x: -0.58, y: 0.64, z: -0.12 },
+        { x: 0.58, y: 0.64, z: 0.12 }
+    ];
+    const highlightedNodeIndexes = tooltipTargets.map((target) => nodes.reduce((nearest, node, index) => {
+        const distance = ((node.x - target.x) ** 2) + ((node.y - target.y) ** 2) + ((node.z - target.z) ** 2);
+        return distance < nearest.distance ? { index, distance } : nearest;
+    }, { index: 0, distance: Number.POSITIVE_INFINITY }).index);
+    const highlightedNodeSet = new Set(highlightedNodeIndexes);
+    const edgeKeys = new Set();
+    const edges = [];
+
+    nodes.forEach((node, index) => {
+        const nearest = nodes
+            .map((candidate, candidateIndex) => ({
+                index: candidateIndex,
+                distance: ((node.x - candidate.x) ** 2) + ((node.y - candidate.y) ** 2) + ((node.z - candidate.z) ** 2)
+            }))
+            .filter((candidate) => candidate.index !== index)
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 3);
+        nearest.forEach((candidate) => {
+            const key = [index, candidate.index].sort((a, b) => a - b).join(":");
+            if (edgeKeys.has(key)) return;
+            edgeKeys.add(key);
+            edges.push([index, candidate.index]);
+        });
+    });
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const css = getComputedStyle(document.documentElement);
+    const accent = css.getPropertyValue("--color-accent").trim();
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
+    let animationFrame = 0;
+    let layoutBounds = null;
+    const tooltipStates = tooltipNodes.map(() => ({ x: null, y: null }));
+
+    function measureLayoutBounds() {
+        const outerGap = Math.max(16, Math.min(width, height) * 0.025);
+        layoutBounds = {
+            safeTop: (heading?.offsetTop ?? 0) + (heading?.offsetHeight ?? 0) + outerGap,
+            safeBottom: height - (caption?.offsetHeight ?? 0) - (caption ? outerGap * 2 : outerGap),
+            coreHalfWidth: (core?.offsetWidth ?? 0) / 2,
+            coreHalfHeight: (core?.offsetHeight ?? 0) / 2,
+            tooltipSizes: tooltipNodes.map((tooltip) => ({
+                halfWidth: tooltip.offsetWidth / 2,
+                halfHeight: tooltip.offsetHeight / 2
+            }))
+        };
+    }
+
+    function resizeCanvas() {
+        const bounds = canvas.getBoundingClientRect();
+        pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        width = Math.max(1, bounds.width);
+        height = Math.max(1, bounds.height);
+        canvas.width = Math.round(width * pixelRatio);
+        canvas.height = Math.round(height * pixelRatio);
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        measureLayoutBounds();
+    }
+
+    function projectNode(node, time) {
+        const organicTime = reducedMotion.matches ? 0 : time * 0.001575;
+        const organicWave = reducedMotion.matches
+            ? 1
+            : 1
+                + (Math.sin(organicTime + (node.x * 3.2) + (node.z * 2.4)) * 0.1)
+                + (Math.sin((organicTime * 0.63) + (node.y * 5.1)) * 0.055);
+        const organicShear = reducedMotion.matches ? 0 : Math.sin((organicTime * 0.78) + (node.y * 4.4)) * 0.07;
+        const organicNode = {
+            x: (node.x * organicWave) + (node.y * organicShear * 0.28),
+            y: (node.y * (1 + (Math.sin((organicTime * 0.82) + (node.z * 4.2)) * 0.07))) + (node.z * organicShear * 0.16),
+            z: (node.z * organicWave) - (node.x * organicShear * 0.22)
+        };
+        const rotationY = reducedMotion.matches ? 0.48 : (time * 0.00009) + 0.48;
+        const rotationX = 0.2 + (reducedMotion.matches ? 0 : Math.sin(time * 0.0001275) * 0.09);
+        const cosY = Math.cos(rotationY);
+        const sinY = Math.sin(rotationY);
+        const cosX = Math.cos(rotationX);
+        const sinX = Math.sin(rotationX);
+        const rotatedX = (organicNode.x * cosY) + (organicNode.z * sinY);
+        const rotatedZ = (-organicNode.x * sinY) + (organicNode.z * cosY);
+        const rotatedY = (organicNode.y * cosX) - (rotatedZ * sinX);
+        const depth = (organicNode.y * sinX) + (rotatedZ * cosX);
+        const cameraDistance = 3.4;
+        const perspective = cameraDistance / (cameraDistance - (depth * 0.72));
+        const scale = Math.min(width, height) * 0.36;
+        return {
+            x: (width / 2) + (rotatedX * scale * perspective),
+            y: (height * 0.56) + (rotatedY * scale * perspective),
+            z: depth,
+            perspective
+        };
+    }
+
+    function avoidCoreCollision(position, size, index) {
+        const centerX = width / 2;
+        const centerY = height * 0.56;
+        const gap = 18;
+        const overlapX = (layoutBounds.coreHalfWidth + size.halfWidth + gap) - Math.abs(position.x - centerX);
+        const overlapY = (layoutBounds.coreHalfHeight + size.halfHeight + gap) - Math.abs(position.y - centerY);
+        if (overlapX <= 0 || overlapY <= 0) return position;
+        if (overlapX < overlapY) {
+            position.x = centerX + ((position.x < centerX ? -1 : 1) * (layoutBounds.coreHalfWidth + size.halfWidth + gap));
+        } else {
+            const direction = position.y === centerY ? (index < 3 ? -1 : 1) : (position.y < centerY ? -1 : 1);
+            position.y = centerY + (direction * (layoutBounds.coreHalfHeight + size.halfHeight + gap));
+        }
+        return position;
+    }
+
+    function resolveTooltipCollisions(positions) {
+        const gap = 10;
+        for (let pass = 0; pass < 3; pass += 1) {
+            for (let leftIndex = 0; leftIndex < positions.length; leftIndex += 1) {
+                for (let rightIndex = leftIndex + 1; rightIndex < positions.length; rightIndex += 1) {
+                    const left = positions[leftIndex];
+                    const right = positions[rightIndex];
+                    const leftSize = layoutBounds.tooltipSizes[leftIndex];
+                    const rightSize = layoutBounds.tooltipSizes[rightIndex];
+                    const requiredX = leftSize.halfWidth + rightSize.halfWidth + gap;
+                    const requiredY = leftSize.halfHeight + rightSize.halfHeight + gap;
+                    const distanceX = Math.abs(right.x - left.x);
+                    const distanceY = Math.abs(right.y - left.y);
+                    if (distanceX >= requiredX || distanceY >= requiredY) continue;
+                    const direction = right.y >= left.y ? 1 : -1;
+                    const shift = (requiredY - distanceY) / 2;
+                    left.y -= direction * shift;
+                    right.y += direction * shift;
+                }
+            }
+        }
+    }
+
+    function positionTooltips(projected) {
+        const centerX = width / 2;
+        const centerY = height * 0.56;
+        const compactLayout = width <= 720;
+        const positions = tooltipNodes.map((tooltip, index) => {
+            const point = projected[highlightedNodeIndexes[index]];
+            const size = layoutBounds.tooltipSizes[index];
+            const horizontalOffset = compactLayout ? Math.min(22, width * 0.055) : Math.min(52, width * 0.04);
+            const verticalOffset = compactLayout ? Math.min(10, height * 0.014) : Math.min(18, height * 0.025);
+            const edgePadding = compactLayout ? 10 : 16;
+            const outwardX = Math.sign(point.x - centerX || (index % 2 ? 1 : -1)) * horizontalOffset;
+            const outwardY = Math.sign(point.y - centerY || (index < 3 ? -1 : 1)) * verticalOffset;
+            const position = avoidCoreCollision({ x: point.x + outwardX, y: point.y + outwardY, point }, size, index);
+            position.x = Math.max(size.halfWidth + edgePadding, Math.min(width - size.halfWidth - edgePadding, position.x));
+            position.y = Math.max(layoutBounds.safeTop + size.halfHeight, Math.min(layoutBounds.safeBottom - size.halfHeight, position.y));
+            return position;
+        });
+
+        resolveTooltipCollisions(positions);
+        positions.forEach((position, index) => {
+            const tooltip = tooltipNodes[index];
+            const state = tooltipStates[index];
+            const size = layoutBounds.tooltipSizes[index];
+            avoidCoreCollision(position, size, index);
+            position.x = Math.max(size.halfWidth + 16, Math.min(width - size.halfWidth - 16, position.x));
+            position.y = Math.max(layoutBounds.safeTop + size.halfHeight, Math.min(layoutBounds.safeBottom - size.halfHeight, position.y));
+            const easing = state.x === null ? 1 : compactLayout ? 0.055 : 0.035;
+            state.x = state.x === null ? position.x : state.x + ((position.x - state.x) * easing);
+            state.y = state.y === null ? position.y : state.y + ((position.y - state.y) * easing);
+            const smoothedPosition = { x: state.x, y: state.y };
+            avoidCoreCollision(smoothedPosition, size, index);
+            state.x = Math.max(size.halfWidth + 10, Math.min(width - size.halfWidth - 10, smoothedPosition.x));
+            state.y = Math.max(layoutBounds.safeTop + size.halfHeight, Math.min(layoutBounds.safeBottom - size.halfHeight, smoothedPosition.y));
+            tooltip.style.setProperty("--tooltip-x", `${state.x}px`);
+            tooltip.style.setProperty("--tooltip-y", `${state.y}px`);
+            tooltip.style.setProperty("--tooltip-depth", String(Math.max(0.74, Math.min(1, 0.84 + (position.point.z * 0.12)))));
+            position.labelX = state.x;
+            position.labelY = state.y;
+        });
+        return positions;
+    }
+
+    function drawFrame(time = 0) {
+        context.clearRect(0, 0, width, height);
+        const projected = nodes.map((node) => projectNode(node, time));
+        const tooltipPositions = positionTooltips(projected);
+
+        edges.forEach(([fromIndex, toIndex]) => {
+            const from = projected[fromIndex];
+            const to = projected[toIndex];
+            const averageDepth = (from.z + to.z) / 2;
+            const highlightedEdge = highlightedNodeSet.has(fromIndex) || highlightedNodeSet.has(toIndex);
+            context.globalAlpha = highlightedEdge
+                ? Math.max(0.32, Math.min(0.72, 0.5 + (averageDepth * 0.18)))
+                : Math.max(0.14, Math.min(0.52, 0.3 + (averageDepth * 0.16)));
+            context.strokeStyle = accent;
+            context.lineWidth = highlightedEdge ? 1.35 : 0.9;
+            context.beginPath();
+            context.moveTo(from.x, from.y);
+            context.lineTo(to.x, to.y);
+            context.stroke();
+
+        });
+
+        const coreCenter = { x: width / 2, y: height * 0.56 };
+        highlightedNodeIndexes.forEach((nodeIndex) => {
+            const point = projected[nodeIndex];
+            context.globalAlpha = Math.max(0.58, Math.min(0.86, 0.7 + (point.z * 0.12)));
+            context.strokeStyle = accent;
+            context.lineWidth = 2.6;
+            context.beginPath();
+            context.moveTo(point.x, point.y);
+            context.lineTo(coreCenter.x, coreCenter.y);
+            context.stroke();
+        });
+
+        tooltipPositions.forEach((position, index) => {
+            const point = projected[highlightedNodeIndexes[index]];
+            context.globalAlpha = 0.42;
+            context.strokeStyle = accent;
+            context.lineWidth = 0.8;
+            context.beginPath();
+            context.moveTo(point.x, point.y);
+            context.lineTo(position.labelX, position.labelY);
+            context.stroke();
+        });
+
+        projected
+            .map((point, index) => ({ ...point, index }))
+            .sort((a, b) => a.z - b.z)
+            .forEach((point) => {
+                const highlighted = highlightedNodeSet.has(point.index);
+                const radius = (highlighted ? 6.2 : 3) * point.perspective;
+                context.globalAlpha = Math.max(0.28, Math.min(1, 0.62 + (point.z * 0.28)));
+                context.fillStyle = accent;
+                context.beginPath();
+                context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+                context.fill();
+                if (highlighted) {
+                    context.globalAlpha = 0.22;
+                    context.strokeStyle = accent;
+                    context.lineWidth = 1;
+                    context.beginPath();
+                    context.arc(point.x, point.y, radius + 6.5, 0, Math.PI * 2);
+                    context.stroke();
+                }
+            });
+
+        context.globalAlpha = 1;
+        if (!reducedMotion.matches) animationFrame = window.requestAnimationFrame(drawFrame);
+    }
+
+    resizeCanvas();
+    drawFrame(0);
+    const resizeObserver = new ResizeObserver(() => {
+        resizeCanvas();
+        if (reducedMotion.matches) drawFrame(0);
+    });
+    resizeObserver.observe(canvas);
+    reducedMotion.addEventListener("change", () => {
+        window.cancelAnimationFrame(animationFrame);
+        drawFrame(0);
+    });
+}
+
 function renderLanding() {
     const isExample = landingOverviewExampleMode;
     document.querySelectorAll(".overview-example-badge").forEach((badge) => { badge.hidden = !isExample; });
@@ -1951,6 +2239,7 @@ function renderLanding() {
     renderLandingContributors();
     renderLandingDailyAsset();
     renderLandingGapSummary();
+    initKnowledgeWireframe();
 }
 function renderMetrics() {
     setText("metric-total", libraryItems.length);

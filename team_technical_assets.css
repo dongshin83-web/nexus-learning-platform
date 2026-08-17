@@ -7561,6 +7561,7 @@ body[data-page="registration"] .registration-stage-content > * + * {
 
 /* Overview 2026-07: usage-first, minimal information hierarchy. */
 body[data-page="landing"] .overview-main {
+    padding-top: var(--spacing-8);
     padding-bottom: var(--spacing-8);
 }
 
@@ -9672,5 +9673,442 @@ body[data-page] .technical-page-header .technical-page-copy {
     body[data-page] .technical-page-header {
         padding-top: var(--spacing-8);
         padding-bottom: var(--spacing-6);
+    }
+}
+
+/* Overview: full-width knowledge story and slowly rotating 3D ontology wireframe. */
+body[data-page="landing"] .knowledge-ontology-card {
+    margin-bottom: var(--spacing-5);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-container);
+    background:
+        radial-gradient(circle at 0 0, rgba(var(--accent-rgb), 0.12), transparent 36%),
+        var(--color-background-surface);
+}
+
+body[data-page="landing"] .knowledge-ontology-copy {
+    padding: var(--spacing-8);
+}
+
+body[data-page="landing"] .knowledge-ontology-heading-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+}
+
+body[data-page="landing"] .knowledge-ontology-kicker {
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+body[data-page="landing"] .knowledge-ontology-visual-label {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--spacing-5);
+    padding: 0 var(--spacing-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-background-muted);
+    color: var(--color-text-secondary);
+    font-size: 0.66rem;
+    font-weight: 800;
+}
+
+body[data-page="landing"] .knowledge-ontology-copy h1 {
+    margin: var(--spacing-3) 0 0;
+    font-size: clamp(2.35rem, 3.2vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+}
+
+body[data-page="landing"] .knowledge-ontology-copy > p {
+    max-width: none;
+    margin: var(--spacing-4) 0 0;
+    color: var(--color-text-secondary);
+    font-size: clamp(0.9rem, 1.05vw, 1rem);
+    line-height: 1.7;
+    letter-spacing: -0.012em;
+    white-space: nowrap;
+}
+
+body[data-page="landing"] .knowledge-ontology-principles {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--spacing-4);
+    margin: var(--spacing-5) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+body[data-page="landing"] .knowledge-ontology-principles li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    color: var(--color-text-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body[data-page="landing"] .knowledge-ontology-principles i {
+    display: inline-grid;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: var(--radius-element);
+    background: var(--color-accent-muted);
+    color: var(--color-accent);
+    font-size: 0.95rem;
+}
+
+body[data-page="landing"] .knowledge-ontology-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-6);
+}
+
+body[data-page="landing"] .knowledge-graph {
+    position: relative;
+    isolation: isolate;
+    min-height: 54rem;
+    margin-bottom: var(--spacing-8);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-container);
+    background:
+        radial-gradient(circle at 50% 48%, rgba(var(--accent-rgb), 0.16), transparent 34%),
+        linear-gradient(145deg, var(--color-background-muted), var(--color-background-surface));
+}
+
+body[data-page="landing"] .knowledge-graph::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+        linear-gradient(rgba(var(--accent-rgb), 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), 0.035) 1px, transparent 1px);
+    background-size: var(--spacing-8) var(--spacing-8);
+    content: "";
+    mask-image: radial-gradient(circle at center, black 20%, transparent 76%);
+}
+
+body[data-page="landing"] .knowledge-graph-heading {
+    position: absolute;
+    top: var(--spacing-6);
+    right: var(--spacing-6);
+    left: var(--spacing-6);
+    z-index: 3;
+    text-align: center;
+}
+
+body[data-page="landing"] .knowledge-graph-heading > span {
+    color: var(--color-accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+body[data-page="landing"] .knowledge-graph-heading h2 {
+    margin: var(--spacing-2) 0 0;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+}
+
+body[data-page="landing"] .knowledge-graph-heading p {
+    max-width: 44rem;
+    margin: var(--spacing-2) auto 0;
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+body[data-page="landing"] .knowledge-wireframe-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+body[data-page="landing"] .knowledge-network-core-surface,
+body[data-page="landing"] .knowledge-network-core {
+    position: absolute;
+    top: 56%;
+    left: 50%;
+    width: 14rem;
+    min-height: 7rem;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+body[data-page="landing"] .knowledge-network-core-surface {
+    z-index: 1;
+    display: block;
+    border: 1px solid color-mix(in srgb, var(--color-background-surface) 34%, var(--color-accent));
+    border-radius: var(--radius-element);
+    background:
+        radial-gradient(circle at 50% 12%, color-mix(in srgb, var(--color-background-surface) 18%, transparent), transparent 42%),
+        color-mix(in srgb, var(--color-accent) 94%, var(--color-background-surface));
+    box-shadow:
+        0 0 0 var(--spacing-3) rgba(var(--accent-rgb), 0.08),
+        0 0 var(--spacing-9) rgba(var(--accent-rgb), 0.26),
+        inset 0 1px 0 color-mix(in srgb, var(--color-background-surface) 18%, transparent);
+}
+
+body[data-page="landing"] .knowledge-network-core {
+    z-index: 3;
+    display: grid;
+    padding: var(--spacing-4);
+    place-content: center;
+    justify-items: center;
+    color: var(--color-background-surface);
+    text-align: center;
+}
+
+body[data-page="landing"] .knowledge-network-core i {
+    font-size: 1.25rem;
+}
+
+body[data-page="landing"] .knowledge-network-core small {
+    margin-top: var(--spacing-1);
+    opacity: 0.78;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+body[data-page="landing"] .knowledge-network-core strong {
+    margin-top: var(--spacing-1);
+    font-size: 1rem;
+    line-height: 1.25;
+}
+
+body[data-page="landing"] .knowledge-graph-nodes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body[data-page="landing"] .knowledge-node {
+    --tooltip-x: 50%;
+    --tooltip-y: 50%;
+    --tooltip-depth: 1;
+    position: absolute;
+    top: var(--tooltip-y);
+    left: var(--tooltip-x);
+    z-index: 4;
+    display: grid;
+    min-width: 11rem;
+    max-width: 15rem;
+    padding: var(--spacing-3) var(--spacing-4);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 34%, var(--color-border));
+    border-radius: var(--radius-element);
+    background: color-mix(in srgb, var(--color-background-surface) 88%, transparent);
+    box-shadow: 0 var(--spacing-2) var(--spacing-5) rgba(var(--accent-rgb), 0.1);
+    opacity: var(--tooltip-depth);
+    backdrop-filter: blur(var(--spacing-2));
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: opacity 160ms linear;
+}
+
+body[data-page="landing"] .knowledge-node small {
+    color: var(--color-accent);
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+body[data-page="landing"] .knowledge-node strong {
+    margin-top: var(--spacing-1);
+    color: var(--color-text-primary);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+body[data-page="landing"] .knowledge-graph figcaption {
+    position: absolute;
+    z-index: 5;
+    right: var(--spacing-4);
+    bottom: var(--spacing-4);
+    left: var(--spacing-4);
+    display: grid;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-element);
+    background: color-mix(in srgb, var(--color-background-surface) 86%, transparent);
+    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+}
+
+body[data-page="landing"] .knowledge-graph-note,
+body[data-page="landing"] .knowledge-ai-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+}
+
+body[data-page="landing"] .knowledge-graph-note {
+    color: var(--color-text-secondary);
+}
+
+body[data-page="landing"] .knowledge-graph-note i,
+body[data-page="landing"] .knowledge-ai-flow > i {
+    color: var(--color-accent);
+}
+
+body[data-page="landing"] .knowledge-ai-flow {
+    min-height: var(--spacing-8);
+}
+
+body[data-page="landing"] .knowledge-ai-flow strong {
+    margin-right: var(--spacing-2);
+    color: var(--color-text-primary);
+}
+
+body[data-page="landing"] .knowledge-purpose-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: var(--spacing-8);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+body[data-page="landing"] .knowledge-purpose-strip article {
+    position: relative;
+    min-width: 0;
+    padding: var(--spacing-5) var(--spacing-6);
+}
+
+body[data-page="landing"] .knowledge-purpose-strip article + article {
+    border-left: 1px solid var(--color-border);
+}
+
+body[data-page="landing"] .knowledge-purpose-strip article > span {
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+body[data-page="landing"] .knowledge-purpose-strip h2 {
+    margin: var(--spacing-2) 0 0;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+body[data-page="landing"] .knowledge-purpose-strip p {
+    margin: var(--spacing-2) 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.65;
+}
+
+@media (max-width: 60rem) {
+    body[data-page="landing"] .knowledge-ontology-copy h1,
+    body[data-page="landing"] .knowledge-ontology-copy > p {
+        white-space: normal;
+    }
+
+    body[data-page="landing"] .knowledge-ontology-principles {
+        flex-wrap: wrap;
+        gap: var(--spacing-2);
+    }
+
+    body[data-page="landing"] .knowledge-purpose-strip {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page="landing"] .knowledge-purpose-strip article + article {
+        border-top: 1px solid var(--color-border);
+        border-left: 0;
+    }
+}
+
+@media (max-width: 45rem) {
+    body[data-page="landing"] .overview-main {
+        padding-top: var(--spacing-5);
+    }
+
+    body[data-page="landing"] .knowledge-ontology-card {
+        margin-bottom: var(--spacing-6);
+    }
+
+    body[data-page="landing"] .knowledge-ontology-copy {
+        padding: var(--spacing-5);
+    }
+
+    body[data-page="landing"] .knowledge-ontology-principles {
+        display: grid;
+    }
+
+    body[data-page="landing"] .knowledge-graph {
+        min-height: 44rem;
+    }
+
+    body[data-page="landing"] .knowledge-graph-heading {
+        top: var(--spacing-4);
+        right: var(--spacing-4);
+        left: var(--spacing-4);
+    }
+
+    body[data-page="landing"] .knowledge-graph-heading p {
+        display: none;
+    }
+
+    body[data-page="landing"] .knowledge-node {
+        min-width: 7.4rem;
+        max-width: 8.6rem;
+        padding: var(--spacing-2) var(--spacing-3);
+    }
+
+    body[data-page="landing"] .knowledge-network-core-surface,
+    body[data-page="landing"] .knowledge-network-core {
+        width: 10rem;
+        min-height: 5.5rem;
+    }
+
+    body[data-page="landing"] .knowledge-network-core {
+        padding: var(--spacing-3);
+    }
+
+    body[data-page="landing"] .knowledge-node strong {
+        display: none;
+    }
+
+    body[data-page="landing"] .knowledge-graph figcaption {
+        right: var(--spacing-3);
+        bottom: var(--spacing-3);
+        left: var(--spacing-3);
+        padding: var(--spacing-2);
+    }
+
+    body[data-page="landing"] .knowledge-ai-flow {
+        gap: var(--spacing-1);
+    }
+
+    body[data-page="landing"] .knowledge-ai-flow > span,
+    body[data-page="landing"] .knowledge-ai-flow > i {
+        display: none;
+    }
+
+    body[data-page="landing"] .knowledge-purpose-strip article {
+        padding: var(--spacing-4);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body[data-page="landing"] .knowledge-node {
+        transition: none;
     }
 }
