@@ -40,7 +40,9 @@ test("Overview leads with full-width purpose and a 3D wireframe team Knowledge O
   assert.match(script, /highlighted \? 6\.2 : 3/);
   assert.match(css, /\.overview-main\s*\{[\s\S]{0,120}padding-top:\s*var\(--spacing-8\)/);
   assert.match(css, /@media \(max-width: 45rem\)[\s\S]*\.overview-main\s*\{[\s\S]{0,120}padding-top:\s*var\(--spacing-5\)/);
-  assert.match(css, /\.knowledge-graph\s*\{[\s\S]{0,180}min-height:\s*54rem/);
+  assert.match(css, /\.knowledge-graph\s*\{[\s\S]{0,180}min-height:\s*clamp\(46rem, 88vh, 50rem\)/);
+  assert.match(css, /@media \(max-width: 45rem\)[\s\S]*\.knowledge-graph\s*\{[\s\S]{0,120}min-height:\s*40rem/);
+  assert.match(script, /scaleRatio = width <= 720 \? 0\.33 : 0\.36/);
   assert.match(script, /tooltipStates[\s\S]*resolveTooltipCollisions/);
   assert.doesNotMatch(script, /tooltip\.dataset\.tooltipSide/);
   assert.doesNotMatch(script, /const rowY =|index % 2 === 0 \? 0\.23/);

@@ -9778,7 +9778,7 @@ body[data-page="landing"] .knowledge-ontology-actions {
 body[data-page="landing"] .knowledge-graph {
     position: relative;
     isolation: isolate;
-    min-height: 54rem;
+    min-height: clamp(46rem, 88vh, 50rem);
     margin-bottom: var(--spacing-8);
     overflow: hidden;
     border: 1px solid var(--color-border);
@@ -10053,7 +10053,7 @@ body[data-page="landing"] .knowledge-purpose-strip p {
     }
 
     body[data-page="landing"] .knowledge-graph {
-        min-height: 44rem;
+        min-height: 40rem;
     }
 
     body[data-page="landing"] .knowledge-graph-heading {

@@ -2052,7 +2052,8 @@ function initKnowledgeWireframe() {
         const depth = (organicNode.y * sinX) + (rotatedZ * cosX);
         const cameraDistance = 3.4;
         const perspective = cameraDistance / (cameraDistance - (depth * 0.72));
-        const scale = Math.min(width, height) * 0.36;
+        const scaleRatio = width <= 720 ? 0.33 : 0.36;
+        const scale = Math.min(width, height) * scaleRatio;
         return {
             x: (width / 2) + (rotatedX * scale * perspective),
             y: (height * 0.56) + (rotatedY * scale * perspective),
